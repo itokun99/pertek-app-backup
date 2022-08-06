@@ -1,6 +1,6 @@
 import { alpha, createTheme, darken, lighten } from '@mui/material';
 const themeColors = {
-  primary: '#5569ff',
+  primary: '#0D30BB',
   secondary: '#6E759F',
   success: '#57CA22',
   warning: '#FFA319',
@@ -13,7 +13,7 @@ const themeColors = {
 
 const colors = {
   gradients: {
-    blue1: 'linear-gradient(135deg, #6B73FF 0%, #000DFF 100%)',
+    blue1: 'linear-gradient(to bottom right, rgb(0, 127, 255), rgb(0, 89, 178), 120%)',
     blue2: 'linear-gradient(135deg, #ABDCFF 0%, #0396FF 100%)',
     blue3: 'linear-gradient(127.55deg, #141E30 3.73%, #243B55 92.26%)',
     blue4: 'linear-gradient(-20deg, #2b5876 0%, #4e4376 100%)',
@@ -150,8 +150,7 @@ export const mytheme = createTheme({
         color: 'transparent',
         elevation: 0,
         sx: {
-          backgroundColor: alpha(themeColors.white, 0.25),
-          backdropFilter: 'blur(8px)',
+          backdropFilter: 'blur(5px)',
           borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
         },
       },

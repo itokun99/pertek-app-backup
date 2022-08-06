@@ -1,4 +1,4 @@
-import { Box, Button, Container, Grid, Icon, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Icon, IconButton, Paper, Typography } from '@mui/material';
 import { getCookies } from 'cookies-next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
@@ -58,14 +58,20 @@ export default function Dashboard({ isLoggedIn }: any) {
   return (
     <>
       <AppBarComponent />
-      <Container maxWidth='md'>
+      <Container maxWidth='md' sx={{ height: 1000 }}>
         <Grid container spacing={0}>
           {menus.map((menu: any) => (
             <Grid item xs={3} sm={3} md={2} key={menu.name}>
-              <Button href={menu.href} sx={{ padding: 0 }}>
+              <Button href={menu.href} sx={{ padding: 0, width: 120, height: 120 }}>
                 <Paper elevation={0} sx={{ width: 120, height: 120, borderRadius: 2 }} square>
                   <Typography variant='h6' align='center'>
-                    <Icon>{menu.icon}</Icon>
+                    <Icon
+                      sx={{
+                        fontSize: '120px',
+                      }}
+                    >
+                      {menu.icon}
+                    </Icon>
                   </Typography>
                 </Paper>
               </Button>

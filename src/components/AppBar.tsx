@@ -15,7 +15,12 @@ export const AppBarComponent = () => {
 
   return (
     <AppBar position='sticky'>
-      <Container maxWidth='xl'>
+      <Container
+        maxWidth='xl'
+        sx={{
+          backgroundColor: 'rgba(255,255,255,0.65)',
+        }}
+      >
         <Toolbar variant='dense' disableGutters>
           <IconButton>
             <AppsIcon />

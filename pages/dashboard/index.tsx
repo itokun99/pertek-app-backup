@@ -1,10 +1,9 @@
-import { Box, Button, Container, Grid, Icon, IconButton, Paper, Typography } from '@mui/material';
+import { Box, Button, Container, Fab, Grid, Icon, IconButton, Paper, Typography } from '@mui/material';
 import { getCookies } from 'cookies-next';
-import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
-import useSWR, { useSWRConfig } from 'swr';
 import { AppBarComponent } from '../../src/components/AppBar';
 import { AuthContext } from '../../src/context/AuthContext';
+import WithAppBar from '../../src/template/WithAppBar';
 
 export const getServerSideProps = async (context: any) => {
   const cookies = getCookies(context);
@@ -48,7 +47,7 @@ const menus = [
   },
 ];
 
-export default function Dashboard({ isLoggedIn }: any) {
+function Dashboard({ isLoggedIn }: any) {
   const { changeState } = useContext(AuthContext);
 
   useEffect(() => {
@@ -57,13 +56,15 @@ export default function Dashboard({ isLoggedIn }: any) {
 
   return (
     <>
-      <AppBarComponent />
+      <Fab color='primary'>
+        <Icon>apps</Icon>
+      </Fab>
       <Container maxWidth='md' sx={{ height: 1000 }}>
-        <Grid container spacing={0}>
+        <Grid container spacing={3}>
           {menus.map((menu: any) => (
-            <Grid item xs={3} sm={3} md={2} key={menu.name}>
-              <Button href={menu.href} sx={{ padding: 0, width: 120, height: 120 }}>
-                <Paper elevation={0} sx={{ width: 120, height: 120, borderRadius: 2 }} square>
+            <Grid item xs={3} sm={2} md={2} key={menu.name}>
+              <Button href={menu.href} sx={{ padding: 0, width: 150, height: 150 }}>
+                <Paper elevation={0} sx={{ width: 130, height: 130, borderRadius: 2 }} square>
                   <Typography variant='h6' align='center'>
                     <Icon
                       sx={{
@@ -82,3 +83,7 @@ export default function Dashboard({ isLoggedIn }: any) {
     </>
   );
 }
+
+Dashboard.getLayout = (page: any) => <WithAppBar>{page}</WithAppBar>;
+
+export default Dashboard;

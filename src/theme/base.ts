@@ -1,4 +1,4 @@
-import { alpha, createTheme, darken, lighten } from '@mui/material';
+import { alpha, createTheme, darken, lighten, colors } from '@mui/material';
 const themeColors = {
   primary: '#0D30BB',
   secondary: '#6E759F',
@@ -11,7 +11,7 @@ const themeColors = {
   primaryAlt: '#000C57',
 };
 
-const colors = {
+const theColors = {
   gradients: {
     blue1: 'linear-gradient(to bottom right, rgb(0, 127, 255), rgb(0, 89, 178), 120%)',
     blue2: 'linear-gradient(135deg, #ABDCFF 0%, #0396FF 100%)',
@@ -121,10 +121,13 @@ const colors = {
   },
 };
 export const mytheme = createTheme({
-  palette: {
-    primary: {
-      main: themeColors.primary,
-    },
+  //   palette: {
+  // primary: {
+  //   main: themeColors.primary,
+  // },
+  //   },
+  typography: {
+    fontFamily: '"Public Sans", sans-serif, "Inter", "Roboto", -apple-system',
   },
   components: {
     MuiIconButton: {
@@ -135,6 +138,17 @@ export const mytheme = createTheme({
     MuiButton: {
       defaultProps: {
         color: 'primary',
+      },
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+          fontSize: '0.95rem',
+          borderRadius: '10px',
+          boxShadow: '0px 5px 12px rgba(0, 127, 255, 0.4)',
+          '&:hover': {
+            boxShadow: 'none',
+          },
+        },
       },
     },
     MuiTypography: {
@@ -150,6 +164,7 @@ export const mytheme = createTheme({
         color: 'transparent',
         elevation: 0,
         sx: {
+          backgroundImage: 'linear-gradient(100.66deg, rgba(255,255,255,0.7) 6.56%, rgba(255,255,255,0.9) 93.57%)',
           backdropFilter: 'blur(5px)',
           borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
         },
@@ -158,7 +173,17 @@ export const mytheme = createTheme({
     MuiCssBaseline: {
       styleOverrides: {
         body: {
-          backgroundColor: '#f3F6F9',
+          //   backgroundColor: '#f3F6F9',
+        },
+      },
+    },
+    MuiFab: {
+      styleOverrides: {
+        root: {
+          position: 'fixed',
+          bottom: '1rem',
+          right: '1rem',
+          zIndex: '1000',
         },
       },
     },

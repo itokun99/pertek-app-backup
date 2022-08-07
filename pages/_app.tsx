@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import { mytheme } from '../src/theme/base';
+import { NextPage } from 'next';
+import { ReactElement, ReactNode } from 'react';
 
 export class MyError extends Error {
   statusCode?: number;
@@ -37,7 +39,17 @@ const _errorRetryHandler = (err: any, key: string, config: any, revalidate: any)
   }
 };
 
-function MyApp({ Component, pageProps }: AppProps) {
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+interface MyAppProps extends AppProps {
+  Component: NextPageWithLayout;
+}
+
+function MyApp({ Component, pageProps }: MyAppProps) {
+  const getLayout = Component.getLayout || ((page: ReactElement) => page);
+
   return (
     <SWRConfig
       value={{
@@ -57,7 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <link rel='icon' href='/favicon.ico' />
           </Head>
           <CssBaseline />
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </AuthProvider>
       </ThemeProvider>
     </SWRConfig>

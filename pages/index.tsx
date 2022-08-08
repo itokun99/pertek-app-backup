@@ -1,5 +1,5 @@
 import { LoadingButton } from '@mui/lab';
-import { Container, TextField } from '@mui/material';
+import { Box, Container, Grid, Stack, TextField } from '@mui/material';
 import styles from '../styles/Home.module.css';
 
 import { useContext, useState } from 'react';
@@ -26,17 +26,23 @@ const Home = () => {
   return (
     <div className={styles.container}>
       <main className={styles.main}>
-        <Container>
-          <TextField variant='outlined' label='Username' onChange={(e) => setUsername(e.target.value)} />
-          <TextField
-            variant='outlined'
-            label='Password'
-            onChange={(e) => setPassword(e.target.value)}
-            type={'password'}
-          />
-          <LoadingButton variant='contained' onClick={_handleLogin}>
-            Login
-          </LoadingButton>
+        <Container maxWidth='lg'>
+          <Grid container spacing={0} alignItems='center' alignContent='center' justifyContent='center'>
+            <Grid item xs={12} sm={8} md={4}>
+              <Stack rowGap={2}>
+                <TextField variant='outlined' label='Username' onChange={(e) => setUsername(e.target.value)} />
+                <TextField
+                  variant='outlined'
+                  label='Password'
+                  onChange={(e) => setPassword(e.target.value)}
+                  type={'password'}
+                />
+                <LoadingButton variant='contained' onClick={_handleLogin}>
+                  Login
+                </LoadingButton>
+              </Stack>
+            </Grid>
+          </Grid>
         </Container>
       </main>
 

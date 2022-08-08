@@ -1,4 +1,5 @@
 import { alpha, createTheme, darken, lighten, colors } from '@mui/material';
+import { blue } from '@mui/material/colors';
 const themeColors = {
   primary: '#0D30BB',
   secondary: '#6E759F',
@@ -11,7 +12,7 @@ const themeColors = {
   primaryAlt: '#000C57',
 };
 
-const theColors = {
+export const theColors = {
   gradients: {
     blue1: 'linear-gradient(to bottom right, rgb(0, 127, 255), rgb(0, 89, 178), 120%)',
     blue2: 'linear-gradient(135deg, #ABDCFF 0%, #0396FF 100%)',
@@ -37,6 +38,7 @@ const theColors = {
     primary: '0px 1px 4px rgba(85, 105, 255, 0.25), 0px 3px 12px 2px rgba(85, 105, 255, 0.35)',
     warning: '0px 1px 4px rgba(255, 163, 25, 0.25), 0px 3px 12px 2px rgba(255, 163, 25, 0.35)',
     card: '0px 9px 16px rgba(159, 162, 191, .18), 0px 2px 2px rgba(159, 162, 191, 0.32)',
+    paper: 'rgb(145 158 171 / 20%) 0px 0px 2px 0px, rgb(145 158 171 / 12%) 0px 12px 24px -4px',
     cardSm: '0px 2px 3px rgba(159, 162, 191, .18), 0px 1px 1px rgba(159, 162, 191, 0.32)',
     cardLg: '0 5rem 14rem 0 rgb(255 255 255 / 30%), 0 0.8rem 2.3rem rgb(0 0 0 / 60%), 0 0.2rem 0.3rem rgb(0 0 0 / 45%)',
   },
@@ -128,6 +130,11 @@ export const mytheme = createTheme({
   //   },
   typography: {
     fontFamily: '"Public Sans", sans-serif, "Inter", "Roboto", -apple-system',
+    h6: {
+      color: blue[800],
+      fontWeight: 600,
+      fontSize: '1.4rem',
+    },
   },
   components: {
     MuiIconButton: {
@@ -142,8 +149,9 @@ export const mytheme = createTheme({
       styleOverrides: {
         root: {
           textTransform: 'none',
-          fontSize: '0.95rem',
+          fontSize: '0.875rem',
           borderRadius: '10px',
+          fontWeight: '700',
           boxShadow: '0px 5px 12px rgba(0, 127, 255, 0.4)',
           '&:hover': {
             boxShadow: 'none',
@@ -156,7 +164,6 @@ export const mytheme = createTheme({
         variantMapping: {
           h6: 'div',
         },
-        color: themeColors.primary,
       },
     },
     MuiAppBar: {

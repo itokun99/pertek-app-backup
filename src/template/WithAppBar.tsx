@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
-import { Box, Container } from '@mui/material';
+import { Box, Container, Theme } from '@mui/material';
 import { AppBarComponent } from '../components/AppBar';
 
-const MainWrapper = styled(Container)(({ theme }) => ({
-  marginTop: theme.spacing(3),
+const MainWrapper = styled(Container)(({ theme }: { theme?: Theme }) => ({
+  marginTop: theme?.spacing(3),
 }));
 
 const WithAppBar = (props: any) => {

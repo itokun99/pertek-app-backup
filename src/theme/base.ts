@@ -12,6 +12,14 @@ const themeColors = {
   primaryAlt: '#000C57',
 };
 
+export const avatarBgColors = [
+  themeColors.primary,
+  themeColors.success,
+  themeColors.warning,
+  themeColors.error,
+  themeColors.info,
+];
+
 export const theColors = {
   gradients: {
     blue1: 'linear-gradient(to bottom right, rgb(0, 127, 255), rgb(0, 89, 178), 120%)',
@@ -123,17 +131,15 @@ export const theColors = {
   },
 };
 export const mytheme = createTheme({
-  //   palette: {
-  // primary: {
-  //   main: themeColors.primary,
-  // },
-  //   },
   typography: {
     fontFamily: '"Public Sans", sans-serif, "Inter", "Roboto", -apple-system',
     h6: {
       color: blue[800],
       fontWeight: 600,
       fontSize: '1.4rem',
+    },
+    caption: {
+      fontSize: '0.875rem',
     },
   },
   components: {
@@ -177,11 +183,14 @@ export const mytheme = createTheme({
         },
       },
     },
-    MuiCssBaseline: {
+    MuiTab: {
       styleOverrides: {
-        body: {
-          //   backgroundColor: '#f3F6F9',
+        root: {
+          textTransform: 'capitalize',
         },
+      },
+      defaultProps: {
+        disableRipple: true,
       },
     },
     MuiFab: {

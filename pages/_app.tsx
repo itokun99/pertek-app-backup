@@ -6,7 +6,7 @@ import { AuthProvider } from '../src/context/AuthContext';
 import { useRouter } from 'next/router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
-import { mytheme } from '../src/theme/base';
+import MyTheme from '../src/theme';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 
@@ -57,7 +57,7 @@ function MyApp({ Component, pageProps }: MyAppProps) {
         fetcher,
       }}
     >
-      <ThemeProvider theme={mytheme}>
+      <ThemeProvider theme={MyTheme}>
         <AuthProvider>
           <Head>
             <title>Propertek - Best Indonesia Property Management System</title>

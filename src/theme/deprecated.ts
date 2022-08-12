@@ -1,8 +1,8 @@
-import { alpha, createTheme, darken, lighten, colors } from '@mui/material';
-import { blue } from '@mui/material/colors';
+import { alpha, darken, lighten } from '@mui/material';
+
 const themeColors = {
   primary: '#0D30BB',
-  secondary: '#6E759F',
+  secondary: '#F2F5F9',
   success: '#57CA22',
   warning: '#FFA319',
   error: '#FF1943',
@@ -52,16 +52,16 @@ export const theColors = {
   },
   layout: {
     general: {
-      bodyBg: '#f2f5f9',
+      bodyBg: themeColors.secondary,
     },
     sidebar: {
       background: themeColors.white,
       textColor: themeColors.secondary,
-      dividerBg: '#f2f5f9',
+      dividerBg: themeColors.secondary,
       menuItemColor: '#242E6F',
       menuItemColorActive: themeColors.primary,
       menuItemBg: themeColors.white,
-      menuItemBgActive: '#f2f5f9',
+      menuItemBgActive: themeColors.secondary,
       menuItemIconColor: lighten(themeColors.secondary, 0.3),
       menuItemIconColorActive: themeColors.primary,
       menuItemHeadingColor: darken(themeColors.secondary, 0.3),
@@ -130,78 +130,3 @@ export const theColors = {
     dark: darken(themeColors.info, 0.2),
   },
 };
-export const mytheme = createTheme({
-  typography: {
-    fontFamily: '"Public Sans", sans-serif, "Inter", "Roboto", -apple-system',
-    h6: {
-      color: blue[800],
-      fontWeight: 600,
-      fontSize: '1.4rem',
-    },
-    caption: {
-      fontSize: '0.875rem',
-    },
-  },
-  components: {
-    MuiIconButton: {
-      defaultProps: {
-        color: 'primary',
-      },
-    },
-    MuiButton: {
-      defaultProps: {
-        color: 'primary',
-      },
-      styleOverrides: {
-        root: {
-          textTransform: 'none',
-          fontSize: '0.875rem',
-          borderRadius: '10px',
-          fontWeight: '700',
-          boxShadow: '0px 5px 12px rgba(0, 127, 255, 0.4)',
-          '&:hover': {
-            boxShadow: 'none',
-          },
-        },
-      },
-    },
-    MuiTypography: {
-      defaultProps: {
-        variantMapping: {
-          h6: 'div',
-        },
-      },
-    },
-    MuiAppBar: {
-      defaultProps: {
-        color: 'transparent',
-        elevation: 0,
-        sx: {
-          backgroundImage: 'linear-gradient(100.66deg, rgba(255,255,255,0.7) 6.56%, rgba(255,255,255,0.9) 93.57%)',
-          backdropFilter: 'blur(5px)',
-          borderBottom: '1px solid rgba(0, 0, 0, 0.05)',
-        },
-      },
-    },
-    MuiTab: {
-      styleOverrides: {
-        root: {
-          textTransform: 'capitalize',
-        },
-      },
-      defaultProps: {
-        disableRipple: true,
-      },
-    },
-    MuiFab: {
-      styleOverrides: {
-        root: {
-          position: 'fixed',
-          bottom: '1rem',
-          right: '1rem',
-          zIndex: '1000',
-        },
-      },
-    },
-  },
-});

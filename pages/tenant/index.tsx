@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material';
+import { Add, Label } from '@mui/icons-material';
 import { TabPanel } from '@mui/lab';
 import {
   Avatar,
@@ -8,26 +8,25 @@ import {
   Card,
   Chip,
   Container,
+  darken,
   Grid,
   IconButton,
+  Input,
   Paper,
   Stack,
   styled,
   Tab,
   Tabs,
+  TextField,
   Theme,
   Typography,
+  useTheme,
 } from '@mui/material';
-import { DataGrid, GridColDef, GridRenderCellParams, GridRowsProp } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ReactElement } from 'react';
-import { DataGridTable } from '../../src/components/DataGridTable';
 import WithAppBar from '../../src/template/WithAppBar';
-import { avatarBgColors, theColors } from '../../src/theme/base';
 
-const TableWrapper = styled(Paper)(({ theme }: { theme?: Theme }) => ({
-  borderRadius: theme?.spacing(2),
-  boxShadow: theColors.shadows.paper,
-}));
+import { PRIMARY, SECONDARY } from '../../src/theme/palette';
 
 interface TenantDataModel {
   id: number;
@@ -48,8 +47,8 @@ const columns: GridColDef[] = [
     field: 'name',
     flex: 1,
     minWidth: 200,
+    headerClassName: 'testing',
     renderCell(params) {
-      console.log(params);
       return (
         <>
           <Avatar
@@ -135,14 +134,7 @@ const columns: GridColDef[] = [
     field: 'tenantStatus',
     flex: 1,
     renderCell(params) {
-      return (
-        <Chip
-          color={params.value === 'Verified' ? 'success' : 'default'}
-          size='small'
-          variant='filled'
-          label={params.value}
-        />
-      );
+      return <Label></Label>;
     },
   },
 ];
@@ -151,7 +143,7 @@ const userData: TenantDataModel[] = [
   {
     id: 1,
     name: 'John Doe',
-    color: '#ff0000',
+    color: darken(PRIMARY.main, 0.05),
     unit: '2A-01-01',
     status: 'Pemilik',
     email: 'lombok.oc@gmail.com',
@@ -163,7 +155,7 @@ const userData: TenantDataModel[] = [
   {
     id: 2,
     name: 'John Doe',
-    color: '#ff0',
+    color: darken(SECONDARY.main, 0.05),
     unit: '2A-01-01',
     status: 'Pemilik',
     tenantStatus: 'Verified',
@@ -179,11 +171,12 @@ const rows = userData.map((user: TenantDataModel) => ({
 }));
 
 const TenantPage = () => {
+  const theme = useTheme();
   return (
     <Stack>
       <Box>
         <Grid container>
-          <Grid sx={{ flexGrow: 1 }}>
+          <Grid sx={{ flexGrow: 1, marginBottom: theme.spacing(4) }}>
             <Stack>
               <Typography variant='h6'>Tenant Management</Typography>
               <Typography variant='body2'>Kelola tenant properti</Typography>
@@ -197,22 +190,30 @@ const TenantPage = () => {
         </Grid>
       </Box>
       <Box>
-        <TableWrapper>
+        <Card>
           <Tabs
             sx={{
-              paddingLeft: '16px',
-              paddingRight: '16px',
+              paddingLeft: theme.spacing(2),
+              paddingRight: theme.spacing(2),
+              backgroundColor: theme.palette.grey[200],
               display: 'flex',
             }}
             value={0}
-            indicatorColor='primary'
-            textColor='primary'
           >
-            <Tab label='All' />
-            <Tab label='Active' />
+            <Tab disableRipple label='All' />
+            <Tab disableRipple label='Active' />
             <Tab label='Inactive' />
           </Tabs>
-          <DataGridTable
+          <Box
+            sx={{
+              paddingTop: theme.spacing(2),
+              paddingBottom: theme.spacing(2),
+              paddingLeft: theme.spacing(2),
+            }}
+          >
+            <TextField label='Cari tenant' variant='outlined' />
+          </Box>
+          <DataGrid
             columnVisibilityModel={{
               color: false,
               email: false,
@@ -229,7 +230,7 @@ const TenantPage = () => {
             columns={columns}
             rows={rows}
           />
-        </TableWrapper>
+        </Card>
       </Box>
     </Stack>
   );

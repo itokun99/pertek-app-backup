@@ -1,7 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { Theme, ThemeOptions } from '@mui/material';
-import { Component } from 'react';
+import { Theme } from '@mui/material';
 
 export default function Paper(theme: Theme) {
   theme.components;
@@ -10,8 +9,14 @@ export default function Paper(theme: Theme) {
     MuiPaper: {
       defaultProps: {
         elevation: 0,
-        borderRadius: theme.spacing(2),
       },
+
+      variants: [
+        {
+          props: { variant: 'outlined' },
+          style: { borderColor: theme.palette.grey[500_12] },
+        },
+      ],
 
       styleOverrides: {
         root: {
@@ -19,5 +24,5 @@ export default function Paper(theme: Theme) {
         },
       },
     },
-  } as ThemeOptions;
+  };
 }

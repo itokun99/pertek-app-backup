@@ -1,4 +1,14 @@
-import { alpha, createTheme, darken, lighten, colors, PaletteOptions, Palette, Color } from '@mui/material';
+import {
+  alpha,
+  createTheme,
+  darken,
+  lighten,
+  colors,
+  PaletteOptions,
+  Palette,
+  Color,
+  TypeBackground,
+} from '@mui/material';
 import palette, { PRIMARY } from './palette';
 import typography from './typography';
 
@@ -43,8 +53,17 @@ declare module '@mui/material/styles' {
     500_80: (color: string, opacity: number) => string;
   }
 
+  interface MyBackgroundColor extends TypeBackground {
+    neutral: string;
+  }
+
   interface MyPalette extends Palette {
     grey: MyColor;
+    background: MyBackgroundColor;
+  }
+
+  interface MyTypeBackground extends TypeBackground {
+    neutral: string;
   }
 
   interface MyColorPartial extends Partial<Color> {
@@ -60,6 +79,13 @@ declare module '@mui/material/styles' {
 
   interface MyPaletteOptions extends PaletteOptions {
     grey?: MyColorPartial;
+    background?: Partial<MyTypeBackground>;
+  }
+
+  interface BackgroundType {
+    default: string;
+    paper: string;
+    neutral: string;
   }
 
   interface ThemeOptions {

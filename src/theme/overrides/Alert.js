@@ -1,21 +1,12 @@
-import { Color, MyColor, Theme } from '@mui/material';
+import { Color, MyColor, MyPalette, MyPaletteOptions, Theme } from '@mui/material';
 import { ErrorIcon, InfoIcon, SuccessIcon, WarningIcon } from './CustomIcons';
 
 // ----------------------------------------------------------------------
 
-enum ColorOptions {
-  primary = 'primary',
-  secondary = 'secondary',
-  info = 'info',
-  success = 'success',
-  warning = 'warning',
-  error = 'error',
-}
-
-export default function Alert(theme: Theme) {
+export default function Alert(theme) {
   const isLight = theme.palette.mode === 'light';
 
-  const standardStyle = (color: ColorOptions) => ({
+  const standardStyle = (color) => ({
     color: theme.palette[color][isLight ? 'darker' : 'lighter'],
     backgroundColor: theme.palette[color][isLight ? 'lighter' : 'darker'],
     '& .MuiAlert-icon': {
@@ -23,11 +14,11 @@ export default function Alert(theme: Theme) {
     },
   });
 
-  const filledStyle = (color: ColorOptions) => ({
+  const filledStyle = (color) => ({
     color: theme.palette[color].contrastText,
   });
 
-  const outlinedStyle = (color: ColorOptions) => ({
+  const outlinedStyle = (color) => ({
     color: theme.palette[color][isLight ? 'darker' : 'lighter'],
     border: `solid 1px ${theme.palette[color][isLight ? 'light' : 'dark']}`,
     backgroundColor: theme.palette[color][isLight ? 'lighter' : 'darker'],
@@ -59,20 +50,20 @@ export default function Alert(theme: Theme) {
           },
         },
 
-        standardInfo: standardStyle(ColorOptions.info),
-        standardSuccess: standardStyle(ColorOptions.success),
-        standardWarning: standardStyle(ColorOptions.warning),
-        standardError: standardStyle(ColorOptions.error),
+        standardInfo: standardStyle('info'),
+        standardSuccess: standardStyle('success'),
+        standardWarning: standardStyle('warning'),
+        standardError: standardStyle('error'),
 
-        filledInfo: filledStyle(ColorOptions.info),
-        filledSuccess: filledStyle(ColorOptions.success),
-        filledWarning: filledStyle(ColorOptions.warning),
-        filledError: filledStyle(ColorOptions.error),
+        filledInfo: filledStyle('info'),
+        filledSuccess: filledStyle('success'),
+        filledWarning: filledStyle('warning'),
+        filledError: filledStyle('error'),
 
-        outlinedInfo: outlinedStyle(ColorOptions.info),
-        outlinedSuccess: outlinedStyle(ColorOptions.success),
-        outlinedWarning: outlinedStyle(ColorOptions.warning),
-        outlinedError: outlinedStyle(ColorOptions.error),
+        outlinedInfo: outlinedStyle('info'),
+        outlinedSuccess: outlinedStyle('success'),
+        outlinedWarning: outlinedStyle('warning'),
+        outlinedError: outlinedStyle('error'),
       },
     },
   };

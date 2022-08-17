@@ -6,13 +6,13 @@ import { Theme } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-interface RootStyleProps {
-  theme?: Theme;
-  ownStyle?: {
-    color?: string;
-    variant?: string;
-  };
-}
+// interface RootStyleProps {
+//   theme?: Theme;
+//   ownStyle?: {
+//     color?: string;
+//     variant?: string;
+//   };
+// }
 
 const RootStyle = styled('span')(({ theme, ownerState }) => {
   const isLight = theme.palette.mode === 'light';
@@ -73,36 +73,31 @@ const RootStyle = styled('span')(({ theme, ownerState }) => {
 
 // ----------------------------------------------------------------------
 
-export enum LabelColor {
-  'default',
-  'primary',
-  'secondary',
-  'info',
-  'success',
-  'warning',
-  'error',
-}
+// export enum LabelColor {
+//   'default',
+//   'primary',
+//   'secondary',
+//   'info',
+//   'success',
+//   'warning',
+//   'error',
+// }
 
-export enum LabelVariant {
-  'filled',
-  'outlined',
-  'ghost',
-}
+// export enum LabelVariant {
+//   'filled',
+//   'outlined',
+//   'ghost',
+// }
 
-export interface LabelProps {
-  children: ReactElement;
-  color: LabelColor;
-  variant: LabelVariant;
-}
+// export interface LabelProps {
+//   children: ReactElement;
+//   color: LabelColor;
+//   variant: LabelVariant;
+// }
 
-export default function Label({
-  color = LabelColor.default,
-  variant = LabelVariant.ghost,
-  children,
-  ...other
-}: LabelProps) {
+export default function Label({ color = LabelColor.default, variant = LabelVariant.ghost, children, ...other }) {
   return (
-    <RootStyle ownerState={{ color: color as unknown as string, variant: variant as unknown as string }} {...other}>
+    <RootStyle ownerState={{ color: color, variant: variant }} {...other}>
       {children}
     </RootStyle>
   );

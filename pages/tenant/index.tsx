@@ -1,29 +1,21 @@
-import { Add, Label } from '@mui/icons-material';
-import { TabPanel } from '@mui/lab';
+import { Add } from '@mui/icons-material';
 import {
   Avatar,
-  Badge,
   Box,
   Button,
   Card,
-  Chip,
-  Container,
   darken,
   Grid,
-  IconButton,
-  Input,
-  Paper,
   Stack,
-  styled,
   Tab,
   Tabs,
   TextField,
-  Theme,
   Typography,
   useTheme,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ReactElement } from 'react';
+import Label from '../../src/components/Label';
 import WithAppBar from '../../src/template/WithAppBar';
 
 import { PRIMARY, SECONDARY } from '../../src/theme/palette';
@@ -107,7 +99,7 @@ const columns: GridColDef[] = [
     flex: 1,
   },
   {
-    headerName: 'Masa Huni',
+    headerName: 'Periode Huni',
     field: 'occupyPeriod',
     flex: 1,
     renderCell(params) {
@@ -134,7 +126,11 @@ const columns: GridColDef[] = [
     field: 'tenantStatus',
     flex: 1,
     renderCell(params) {
-      return <Label></Label>;
+      return (
+        <Label variant='ghost' color={params.value === 'Verified' ? 'success' : 'default'}>
+          {params.value}
+        </Label>
+      );
     },
   },
 ];
@@ -221,6 +217,8 @@ const TenantPage = () => {
               checkInDate: false,
               checkOutDate: false,
             }}
+            headerHeight={40}
+            density={'comfortable'}
             disableColumnSelector
             checkboxSelection
             hideFooterSelectedRowCount

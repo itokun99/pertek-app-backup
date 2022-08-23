@@ -1,13 +1,55 @@
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 
-import { AppBar, Toolbar, Typography, Button, Box, Container, IconButton, Tooltip, Avatar } from '@mui/material';
-import AppsIcon from '@mui/icons-material/Apps';
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Box,
+  Container,
+  IconButton,
+  Tooltip,
+  Avatar,
+  Grid,
+  Theme,
+  useTheme,
+  StyledComponentProps,
+  Popover,
+  Divider,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from '@mui/material';
 import { AuthContext } from '../context/AuthContext';
+import { Inbox, Mail, Message, Notifications } from '@mui/icons-material';
+import styled from '@emotion/styled';
+import { motion } from 'framer-motion';
+
+const AppBarIconButton = styled(IconButton)(({ theme }: any) => ({
+  '& :hover': {},
+}));
+
+const AppBarBox = styled(Box)(({ theme }: any) => ({
+  '&': theme.spacing(2),
+}));
+
+const boxVariant = {
+  hover: {
+    scale: 1.1,
+  },
+  tap: {
+    scale: 0.95,
+  },
+};
 
 export const AppBarComponent = () => {
   const router = useRouter();
+  const theme = useTheme();
   const { isLoggedIn } = useContext(AuthContext);
+
+  const [anchor, setAnchor] = useState<HTMLButtonElement | null>(null);
 
   const handleLogout = () => {
     router.push('/');
@@ -15,24 +57,82 @@ export const AppBarComponent = () => {
 
   return (
     <AppBar position='sticky'>
-      <Container maxWidth='xl'>
+      <Grid
+        container
+        sx={{
+          justifyContent: 'flex-end',
+          paddingX: theme.spacing(4),
+          paddingY: theme.spacing(1),
+        }}
+      >
         <Toolbar variant='dense' disableGutters>
-          <IconButton>
-            <AppsIcon />
-          </IconButton>
-          <Typography variant='h6' sx={{ flexGrow: 1 }}>
-            Propertek
-          </Typography>
-
-          <Box>
-            <Tooltip title='My Menu'>
-              <IconButton>
-                <Avatar src='/static/images/4.jpg' />
-              </IconButton>
-            </Tooltip>
+          <Box
+            component={motion.div}
+            whileHover='hover'
+            whileTap='tap'
+            variants={boxVariant}
+            sx={{
+              display: 'inline-flex',
+            }}
+          >
+            <IconButton>
+              <Mail />
+            </IconButton>
           </Box>
+          <Box
+            component={motion.div}
+            whileTap='tap'
+            whileHover='hover'
+            variants={boxVariant}
+            sx={{ ml: theme.spacing(2) }}
+          >
+            <AppBarIconButton>
+              <Notifications />
+            </AppBarIconButton>
+          </Box>
+
+          <Box
+            sx={{ ml: theme.spacing(2) }}
+            component={motion.div}
+            whileTap='tap'
+            variants={boxVariant}
+            whileHover='hover'
+          >
+            <AppBarIconButton
+              sx={{
+                p: 0,
+              }}
+              onClick={(e: any) => setAnchor(e.currentTarget)}
+            >
+              <Avatar src='/static/images/4.jpg' />
+            </AppBarIconButton>
+          </Box>
+          <Popover
+            open={anchor !== null}
+            anchorEl={anchor}
+            onClose={() => setAnchor(null)}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'left',
+            }}
+          >
+            <Box
+              sx={{
+                width: 200,
+                padding: theme.spacing(2),
+              }}
+            >
+              <Typography variant='subtitle2'>My Menu</Typography>
+              <Divider variant='fullWidth' />
+              <List sx={{ p: 0 }}>
+                <ListItemButton sx={{ paddingX: 0 }}>
+                  <ListItemText primary='Inbox' />
+                </ListItemButton>
+              </List>
+            </Box>
+          </Popover>
         </Toolbar>
-      </Container>
+      </Grid>
     </AppBar>
   );
 };

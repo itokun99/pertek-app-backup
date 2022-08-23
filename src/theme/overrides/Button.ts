@@ -12,7 +12,7 @@ export default function Button(theme: Theme) {
           },
         },
         sizeLarge: {
-          height: 48,
+          height: theme.spacing(6),
         },
         // contained
         containedInherit: {

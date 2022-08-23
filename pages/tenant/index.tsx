@@ -14,7 +14,11 @@ import {
   useTheme,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
+import { motion } from 'framer-motion';
+
 import { ReactElement } from 'react';
+import { AnimatedButton } from '../../src/components/AnimatedButtton';
 import Label from '../../src/components/Label';
 import WithAppBar from '../../src/template/WithAppBar';
 
@@ -179,9 +183,9 @@ const TenantPage = () => {
             </Stack>
           </Grid>
           <Grid>
-            <Button startIcon={<Add />} variant='contained'>
-              Tenant Baru
-            </Button>
+            <Box>
+              <AnimatedButton startIcon={<Add />}>Tenant Baru</AnimatedButton>
+            </Box>
           </Grid>
         </Grid>
       </Box>
@@ -189,21 +193,20 @@ const TenantPage = () => {
         <Card>
           <Tabs
             sx={{
-              paddingLeft: theme.spacing(2),
-              paddingRight: theme.spacing(2),
+              paddingX: theme.spacing(2),
               backgroundColor: theme.palette.grey[200],
               display: 'flex',
             }}
             value={0}
           >
             <Tab disableRipple label='All' />
-            <Tab disableRipple label='Active' />
-            <Tab label='Inactive' />
+            <Tab disableRipple label='Verified' />
+            <Tab disableRipple label='Draft' />
+            <Tab disableRipple label='Banned' />
           </Tabs>
           <Box
             sx={{
-              paddingTop: theme.spacing(2),
-              paddingBottom: theme.spacing(2),
+              paddingY: theme.spacing(2),
               paddingLeft: theme.spacing(2),
             }}
           >

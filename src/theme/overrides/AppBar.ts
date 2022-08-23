@@ -12,7 +12,6 @@ export default function AppBar(theme: Theme) {
             0.9
           )} 93.57%)`,
           backdropFilter: 'blur(5px)',
-          borderBottom: `1px solid ${alpha(theme.palette.common.black, 0.05)}`,
         },
       },
     },

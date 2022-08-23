@@ -1,17 +1,28 @@
 import { LoadingButton } from '@mui/lab';
-import { Box, Container, Grid, InputAdornment, Stack, TextField, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  IconButton,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from '@mui/material';
 // import styles from '../styles/Home.module.css';
 
 import { useContext, useState } from 'react';
 import { AuthContext } from '../src/context/AuthContext';
 import { useLogin } from '../lib/login';
 import { useRouter } from 'next/router';
-import { AccountCircle, Key } from '@mui/icons-material';
+import { AccountCircle, Key, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import Link from 'next/link';
 
 const Home = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [isVisible, setVisibility] = useState(false);
 
   const { changeState } = useContext(AuthContext);
   const router = useRouter();
@@ -28,7 +39,6 @@ const Home = () => {
   };
 
   return (
-    // <Container maxWidth='xs'>
     <Grid
       container
       sx={{
@@ -38,9 +48,13 @@ const Home = () => {
         justifyItems: 'center',
       }}
     >
-      <Stack rowGap={2}>
-        <Typography variant='h4'>Propertek</Typography>
-        <Typography variant='body1'>Best Indonesia Property Management System</Typography>
+      <Stack rowGap={3}>
+        <Box sx={{ mb: theme.spacing(2) }}>
+          <Typography variant='h4'>PROPERTEK</Typography>
+          <Typography variant='body1' color={theme.palette.grey[600]}>
+            Best Indonesia Property Management System
+          </Typography>
+        </Box>
         <TextField
           InputProps={{
             startAdornment: (
@@ -57,31 +71,40 @@ const Home = () => {
           InputProps={{
             startAdornment: (
               <InputAdornment position='start'>
-                <Key />
+                <Lock />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position='end'>
+                <IconButton onClick={() => setVisibility(!isVisible)}>
+                  {isVisible ? <Visibility /> : <VisibilityOff />}
+                </IconButton>
               </InputAdornment>
             ),
           }}
           variant='outlined'
           label='Password'
           onChange={(e) => setPassword(e.target.value)}
-          type={'password'}
+          type={isVisible ? 'text' : 'password'}
         />
         <Box textAlign='right' sx={{ mb: theme.spacing(2) }}>
-          <Typography variant='body2' color='textSecondary'>
-            Lupa password? <Link href='/forgot-password'>Klik disini</Link>
+          <Typography color={theme.palette.primary.main} fontWeight={600}>
+            <Link href='/forgot-password'>Lupa password?</Link>
           </Typography>
         </Box>
-        <LoadingButton sx={{ height: theme.spacing(7) }} variant='contained' onClick={_handleLogin}>
+        <LoadingButton sx={{ height: theme.spacing(6) }} variant='contained' onClick={_handleLogin}>
           Login
         </LoadingButton>
       </Stack>
       <Grid container>
-        <Grid item xs textAlign='center' sx={{ mt: theme.spacing(3) }}>
-          <Typography variant='body2'> Propertek PMS - v3.0.0</Typography>
+        <Grid item xs textAlign='center' sx={{ mt: theme.spacing(5) }}>
+          <Typography variant='body2' color={theme.palette.grey[500]}>
+            {' '}
+            Propertek PMS - v3.0.0
+          </Typography>
         </Grid>
       </Grid>
     </Grid>
-    // </Container>
   );
 };
 

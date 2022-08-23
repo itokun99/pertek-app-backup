@@ -27,14 +27,6 @@ import { Inbox, Mail, Message, Notifications } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';
 
-const AppBarIconButton = styled(IconButton)(({ theme }: any) => ({
-  '& :hover': {},
-}));
-
-const AppBarBox = styled(Box)(({ theme }: any) => ({
-  '&': theme.spacing(2),
-}));
-
 const boxVariant = {
   hover: {
     scale: 1.1,
@@ -56,7 +48,7 @@ export const AppBarComponent = () => {
   };
 
   return (
-    <AppBar position='sticky'>
+    <AppBar position='fixed'>
       <Grid
         container
         sx={{
@@ -86,9 +78,9 @@ export const AppBarComponent = () => {
             variants={boxVariant}
             sx={{ ml: theme.spacing(2) }}
           >
-            <AppBarIconButton>
+            <IconButton>
               <Notifications />
-            </AppBarIconButton>
+            </IconButton>
           </Box>
 
           <Box
@@ -98,14 +90,14 @@ export const AppBarComponent = () => {
             variants={boxVariant}
             whileHover='hover'
           >
-            <AppBarIconButton
+            <IconButton
               sx={{
                 p: 0,
               }}
               onClick={(e: any) => setAnchor(e.currentTarget)}
             >
               <Avatar src='/static/images/4.jpg' />
-            </AppBarIconButton>
+            </IconButton>
           </Box>
           <Popover
             open={anchor !== null}

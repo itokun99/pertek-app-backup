@@ -14,7 +14,15 @@ import {
   CSSObject,
   Theme,
 } from '@mui/material';
-import { ArrowBackIos, Inbox, KeyboardDoubleArrowLeft, Mail } from '@mui/icons-material';
+import {
+  ArrowBackIos,
+  ChevronLeft,
+  ChevronRight,
+  Inbox,
+  KeyboardDoubleArrowLeft,
+  KeyboardDoubleArrowRight,
+  Mail,
+} from '@mui/icons-material';
 import { useState } from 'react';
 
 interface MyDrawerProps extends DrawerProps {
@@ -68,63 +76,71 @@ export interface SidebarProps {
   width?: number;
 }
 
-interface SidebarHeaderProps {
-  open: boolean;
-  setOpen: (state: boolean) => void;
-}
-
-const SidebarHeader = ({ open, setOpen }: SidebarHeaderProps) => {
-  const theme = useTheme();
-  return (
-    <Grid
-      container
-      sx={{
-        px: theme.spacing(3),
-      }}
-    >
-      <Grid item flex={1}>
-        Propertek
-      </Grid>
-      <Grid item>
-        <IconButton onClick={() => setOpen(!open)}>
-          <KeyboardDoubleArrowLeft />
-        </IconButton>
-      </Grid>
-    </Grid>
-  );
-};
-
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
 export const Sidebar = ({ width }: SidebarProps) => {
   const [open, setOpen] = useState(true);
   return (
-    <Drawer variant='permanent' open>
-      <Box>
-        <SidebarHeader open={open} setOpen={setOpen} />
-        <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-              <ListItemButton
+    <Drawer variant='permanent' open={open}>
+      <DrawerHeader>
+        <IconButton onClick={() => setOpen(!open)}>
+          {!open ? <KeyboardDoubleArrowRight /> : <KeyboardDoubleArrowLeft />}
+        </IconButton>
+      </DrawerHeader>
+      <List>
+        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
                 sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
                 }}
               >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  {index % 2 === 0 ? <Inbox /> : <Mail />}
-                </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
+                {index % 2 === 0 ? <Inbox /> : <Mail />}
+              </ListItemIcon>
+              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      <List>
+        {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? 'initial' : 'center',
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : 'auto',
+                  justifyContent: 'center',
+                }}
+              >
+                {index % 2 === 0 ? <Inbox /> : <Mail />}
+              </ListItemIcon>
+              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </Drawer>
   );
 };

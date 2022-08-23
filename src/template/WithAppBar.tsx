@@ -25,7 +25,11 @@ const MainWrapper = styled(Container)(({ theme }: { theme?: Theme }) => ({
 const WithAppBar = (props: any) => {
   const { children } = props;
   return (
-    <Box display='flex'>
+    <Box
+      sx={{
+        display: 'flex',
+      }}
+    >
       <AppBarComponent />
       <Sidebar />
       <MainWrapper>{children}</MainWrapper>

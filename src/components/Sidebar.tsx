@@ -13,6 +13,7 @@ import {
   DrawerProps,
   CSSObject,
   Theme,
+  Typography,
 } from '@mui/material';
 import {
   ArrowBackIos,
@@ -86,9 +87,21 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 export const Sidebar = ({ width }: SidebarProps) => {
   const [open, setOpen] = useState(true);
+  const theme = useTheme();
+
   return (
     <Drawer variant='permanent' open={open}>
       <DrawerHeader>
+        {open && (
+          <Box
+            flexGrow={1}
+            sx={{
+              pl: theme.spacing(2),
+            }}
+          >
+            <Typography variant='h6'>Propertek</Typography>
+          </Box>
+        )}
         <IconButton onClick={() => setOpen(!open)}>
           {!open ? <KeyboardDoubleArrowRight /> : <KeyboardDoubleArrowLeft />}
         </IconButton>

@@ -11,6 +11,8 @@ import {
   IconButton,
   useTheme,
   DrawerProps,
+  CSSObject,
+  Theme,
 } from '@mui/material';
 import { ArrowBackIos, Inbox, KeyboardDoubleArrowLeft, Mail } from '@mui/icons-material';
 import { useState } from 'react';
@@ -19,16 +21,46 @@ interface MyDrawerProps extends DrawerProps {
   width?: number;
 }
 
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: 280,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })<MyDrawerProps>(
-  ({ theme, open, width = 280 }) => ({
+  ({ theme, open }) => ({
     flexShrink: 0,
-    open,
     whiteSpace: 'nowrap',
     boxSizing: 'border-box',
-    '& .MuiDrawer-paper': {
-      width,
-      borderRight: `1px dashed ${theme.palette.grey[300]}`,
-    },
+    ...(open && {
+      ...openedMixin(theme),
+      '& .MuiDrawer-paper': {
+        ...openedMixin(theme),
+        borderRight: `1px dashed ${theme.palette.grey[300]}`,
+      },
+    }),
+    ...(!open && {
+      ...closedMixin(theme),
+      '& .MuiDrawer-paper': {
+        ...closedMixin(theme),
+        borderRight: `1px dashed ${theme.palette.grey[300]}`,
+      },
+    }),
   })
 );
 
@@ -36,7 +68,12 @@ export interface SidebarProps {
   width?: number;
 }
 
-const SidebarHeader = () => {
+interface SidebarHeaderProps {
+  open: boolean;
+  setOpen: (state: boolean) => void;
+}
+
+const SidebarHeader = ({ open, setOpen }: SidebarHeaderProps) => {
   const theme = useTheme();
   return (
     <Grid
@@ -49,7 +86,7 @@ const SidebarHeader = () => {
         Propertek
       </Grid>
       <Grid item>
-        <IconButton>
+        <IconButton onClick={() => setOpen(!open)}>
           <KeyboardDoubleArrowLeft />
         </IconButton>
       </Grid>
@@ -60,9 +97,9 @@ const SidebarHeader = () => {
 export const Sidebar = ({ width }: SidebarProps) => {
   const [open, setOpen] = useState(true);
   return (
-    <Drawer variant='permanent' open width={width}>
+    <Drawer variant='permanent' open>
       <Box>
-        <SidebarHeader />
+        <SidebarHeader open={open} setOpen={setOpen} />
         <List>
           {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>

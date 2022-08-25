@@ -15,23 +15,21 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
+import { PropsWithChildren, ReactPropTypes } from 'react';
+import useSWR from 'swr';
 import { AppBarComponent } from '../components/AppBar';
-import { Sidebar } from '../components/Sidebar';
+import { Sidebar, SidebarMenuGroup } from '../components/Sidebar';
 
 const MainWrapper = styled(Container)(({ theme }: { theme?: Theme }) => ({
   marginTop: theme?.spacing(10),
 }));
 
-const WithAppBar = (props: any) => {
-  const { children } = props;
+const WithAppBar = ({ children }: PropsWithChildren) => {
+  const { data } = useSWR('/api/menu');
   return (
-    <Box
-      sx={{
-        display: 'flex',
-      }}
-    >
+    <Box sx={{ display: 'flex' }}>
       <AppBarComponent />
-      <Sidebar />
+      <Sidebar menuGroups={data} />
       <MainWrapper>{children}</MainWrapper>
     </Box>
   );

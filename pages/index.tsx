@@ -1,5 +1,6 @@
 import { LoadingButton } from '@mui/lab';
 import {
+  alpha,
   Box,
   Container,
   Grid,
@@ -48,60 +49,62 @@ const Home = () => {
         justifyItems: 'center',
       }}
     >
-      <Stack rowGap={3}>
-        <Box sx={{ mb: theme.spacing(2) }}>
-          <Typography variant='h4'>PROPERTEK</Typography>
-          <Typography variant='body1' color={theme.palette.grey[600]}>
-            Best Indonesia Property Management System
-          </Typography>
-        </Box>
-        <TextField
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <AccountCircle />
-              </InputAdornment>
-            ),
-          }}
-          variant='outlined'
-          label='Username'
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <TextField
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position='start'>
-                <Lock />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position='end'>
-                <IconButton onClick={() => setVisibility(!isVisible)}>
-                  {isVisible ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-          variant='outlined'
-          label='Password'
-          onChange={(e) => setPassword(e.target.value)}
-          type={isVisible ? 'text' : 'password'}
-        />
-        <Box textAlign='right' sx={{ mb: theme.spacing(2) }}>
-          <Typography color={theme.palette.primary.main} fontWeight={600}>
-            <Link href='/forgot-password'>Lupa password?</Link>
-          </Typography>
-        </Box>
-        <LoadingButton sx={{ height: theme.spacing(6) }} variant='contained' onClick={_handleLogin}>
-          Login
-        </LoadingButton>
-      </Stack>
-      <Grid container>
-        <Grid item xs textAlign='center' sx={{ mt: theme.spacing(5) }}>
-          <Typography variant='body2' color={theme.palette.grey[500]}>
-            {' '}
-            Propertek PMS - v3.0.0
-          </Typography>
+      <Grid item width={350}>
+        <Stack rowGap={3}>
+          <Box sx={{ mb: theme.spacing(2) }}>
+            <Typography variant='h5'>PROPERTEK</Typography>
+            <Typography variant='body2' color={theme.palette.text.secondary}>
+              Best Indonesia Property Management System
+            </Typography>
+          </Box>
+          <TextField
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <AccountCircle />
+                </InputAdornment>
+              ),
+            }}
+            variant='outlined'
+            label='Username'
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <TextField
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position='start'>
+                  <Lock />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position='end'>
+                  <IconButton onClick={() => setVisibility(!isVisible)}>
+                    {isVisible ? <Visibility /> : <VisibilityOff />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            variant='outlined'
+            label='Password'
+            onChange={(e) => setPassword(e.target.value)}
+            type={isVisible ? 'text' : 'password'}
+          />
+          <Box textAlign='right' sx={{ mb: theme.spacing(2) }}>
+            <Typography color={theme.palette.primary.main} fontWeight={600}>
+              <Link href='/forgot-password'>Lupa password?</Link>
+            </Typography>
+          </Box>
+          <LoadingButton sx={{ height: theme.spacing(6) }} variant='contained' onClick={_handleLogin}>
+            Login
+          </LoadingButton>
+        </Stack>
+        <Grid container>
+          <Grid item xs textAlign='center' sx={{ mt: theme.spacing(5) }}>
+            <Typography variant='body2' color={alpha(theme.palette.grey[500], 0.8)}>
+              {' '}
+              Propertek PMS - v3.0.0
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

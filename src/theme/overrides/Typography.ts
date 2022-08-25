@@ -2,6 +2,12 @@
 
 import { Theme } from '@mui/material';
 
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    subtitle3: true;
+  }
+}
+
 export default function Typography(theme: Theme) {
   return {
     MuiTypography: {
@@ -11,6 +17,9 @@ export default function Typography(theme: Theme) {
         },
         gutterBottom: {
           marginBottom: theme.spacing(1),
+        },
+        subtitle3: {
+          color: theme.palette.grey[400],
         },
       },
     },

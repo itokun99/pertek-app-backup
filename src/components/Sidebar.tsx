@@ -194,7 +194,7 @@ export const Sidebar = ({ menuGroups }: SidebarProps) => {
               </ListSubheader>
               {group.menus.map((menu) => {
                 const uniqueButtonId = createUniqueId(menu);
-                const meShouldBeStyled = false;
+                let meShouldBeStyled = false;
 
                 return (
                   <RootGroupItem
@@ -210,7 +210,7 @@ export const Sidebar = ({ menuGroups }: SidebarProps) => {
                         in={hasSubMenu(menu) && currentButtonIsClicked(clickedButtonId, uniqueButtonId) && open}
                         unmountOnExit
                       >
-                        <SubMenuList parentShouldBeStyled={meShouldBeStyled} menus={menu.submenus} />
+                        <SubMenuList menus={menu.submenus} />
                       </Collapse>
                     )}
                   </RootGroupItem>
@@ -224,13 +224,13 @@ export const Sidebar = ({ menuGroups }: SidebarProps) => {
   );
 };
 
-const SubMenuList = ({ menus, parentShouldBeStyled }: { parentShouldBeStyled?: boolean; menus: SidebarSubMenu[] }) => {
+const SubMenuList = ({ menus }: { menus: SidebarSubMenu[] }) => {
   const router = useRouter();
   const theme = useTheme();
   return (
     <List>
       {menus.map((menu, key) => {
-        parentShouldBeStyled = shouldBeStyled(router.pathname, menu.url);
+        const shouldbeStyled = shouldBeStyled(router.pathname, menu.url);
         return (
           <ListItemButton key={key}>
             <ListItemIcon>
@@ -238,14 +238,14 @@ const SubMenuList = ({ menus, parentShouldBeStyled }: { parentShouldBeStyled?: b
                 sx={{
                   ml: 1,
                   fontSize: '10px',
-                  ...(parentShouldBeStyled && { color: theme.palette.primary.dark }),
+                  ...(shouldbeStyled && { color: theme.palette.primary.dark }),
                 }}
               />
             </ListItemIcon>
             <Typography
               variant='body1'
               sx={{
-                ...(parentShouldBeStyled && {
+                ...(shouldbeStyled && {
                   fontWeight: 600,
                   color: theme.palette.text.primary,
                 }),

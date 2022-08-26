@@ -1,45 +1,46 @@
-import { createContext, PropsWithChildren, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { SidebarMenuGroup } from '../components/sidebar';
 
 export interface SidebarContextInterface {
   menuGroups: SidebarMenuGroup[];
-  activeParentMenuId: string;
-  activeChildMenuId: string;
+  activeMenu: {
+    parentId?: string;
+    childId?: string;
+  };
   open: boolean;
   setOpen: (state: boolean) => void;
-  setActiveMenuId: (id: string, type: 'parent' | 'child') => void;
+  setActiveMenu: (data: { parentId: string; childId: string }) => void;
 }
 
-const initialContext: SidebarContextInterface = {
+export const SidebarContext = createContext<SidebarContextInterface>({
   menuGroups: [],
-  activeParentMenuId: '',
-  activeChildMenuId: '',
+  activeMenu: {
+    parentId: '',
+    childId: '',
+  },
   open: true,
   setOpen: (_) => null,
-  setActiveMenuId: (id, type) => null,
-};
-export const SidebarContext = createContext<SidebarContextInterface>(initialContext);
+  setActiveMenu: (data: { parentId: string; childId: string }) => {},
+});
 
 export const SidebarProvider = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(true);
-  const [activeChildMenuId, setActiveChildMenuId] = useState('');
-  const [activeParentMenuId, setActiveParentMenuId] = useState('');
+  const [activeMenu, setActiveMenu] = useState({
+    parentId: '',
+    childId: '',
+  });
   const { data } = useSWR('/api/menu');
-
-  const setActiveMenuId = (id: string, type: 'parent' | 'child') =>
-    type === 'parent' ? setActiveParentMenuId(id) : setActiveChildMenuId(id);
 
   const value = useMemo<SidebarContextInterface>(
     () => ({
       open,
       setOpen,
-      activeChildMenuId,
-      activeParentMenuId,
-      setActiveMenuId,
+      activeMenu,
+      setActiveMenu,
       menuGroups: data || [],
     }),
-    [open, activeChildMenuId, activeParentMenuId, data]
+    [open, activeMenu, data]
   );
 
   return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;

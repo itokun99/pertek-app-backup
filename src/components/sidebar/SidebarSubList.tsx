@@ -10,15 +10,15 @@ export interface SidebarSubListProps {
 
 export const SidebarSubList = ({ menus }: SidebarSubListProps) => {
   const theme = useTheme();
-  const { setActiveMenuId, activeChildMenuId } = useContext(SidebarContext);
+  const { setActiveMenu, activeMenu } = useContext(SidebarContext);
 
   return (
     <List>
       {menus.map((menu, key) => {
         const childMenuId = `${menu.url}-${menu.id}`;
-        const shouldbeStyled = activeChildMenuId === childMenuId;
+        const shouldbeStyled = activeMenu.childId === childMenuId;
         return (
-          <ListItemButton key={key} onClick={() => setActiveMenuId(childMenuId, 'child')}>
+          <ListItemButton key={key} onClick={() => setActiveMenu({ childId: childMenuId })}>
             <ListItemIcon>
               <FiberManualRecord
                 sx={{

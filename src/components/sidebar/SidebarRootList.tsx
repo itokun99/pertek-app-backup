@@ -12,7 +12,7 @@ import {
   Box,
   Collapse,
 } from '@mui/material';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { SidebarMenu } from '.';
 import { SidebarContext } from '../../provider/SidebarProvider';
 import { SidebarMenuGroup } from './Sidebar';
@@ -29,24 +29,26 @@ interface ListSubHeaderProps {
 }
 
 const RootListItem = ({ url, id, submenus, icon, name }: SidebarMenu) => {
-  const { setActiveMenuId, activeParentMenuId, open } = useContext(SidebarContext);
+  const { setActiveMenuId, activeParentMenuId, activeChildMenuId, open } = useContext(SidebarContext);
   const theme = useTheme();
 
-  const rootMenuItemId = `${url}-${id}`;
+  const rootMenuItemId = useMemo(() => `${url}-${id}`, [url, id]);
   const iconSpacing = open ? 0 : 2;
   const hasChildren = submenus && submenus.length > 0;
 
-  const isActive = activeParentMenuId === rootMenuItemId;
+  const isActive = activeParentMenuId === rootMenuItemId && activeChildMenuId !== '';
+  const [shouldExpand, setShouldExpand] = useState(false);
 
-  useEffect(() => {
-    console.log(activeParentMenuId, rootMenuItemId);
-  }, [activeParentMenuId]);
+  const handleClick = () => {
+    setShouldExpand(!shouldExpand);
+    setActiveMenuId(rootMenuItemId, 'parent');
+  };
 
   return (
     <>
       <ListItemButton
         key={rootMenuItemId}
-        onClick={() => setActiveMenuId(rootMenuItemId, 'parent')}
+        onClick={handleClick}
         sx={{
           minHeight: theme.spacing(6),
           justifyContent: open ? 'initial' : 'center',
@@ -77,7 +79,7 @@ const RootListItem = ({ url, id, submenus, icon, name }: SidebarMenu) => {
                     theme.transitions.create('transform', {
                       duration: theme.transitions.duration.shorter,
                     }),
-                  ...(isActive && {
+                  ...(shouldExpand && {
                     transform: 'rotate(90deg)',
                   }),
                 }}
@@ -89,7 +91,7 @@ const RootListItem = ({ url, id, submenus, icon, name }: SidebarMenu) => {
         )}
       </ListItemButton>
       {hasChildren && (
-        <Collapse in={isActive} unmountOnExit>
+        <Collapse in={shouldExpand} unmountOnExit>
           <SidebarSubList menus={submenus} />
         </Collapse>
       )}

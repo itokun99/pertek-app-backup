@@ -14,7 +14,7 @@ import {
 // import styles from '../styles/Home.module.css';
 
 import { useContext, useState } from 'react';
-import { AuthContext } from '../src/context/AuthContext';
+import { AuthContext } from '../src/provider/AuthProvider';
 import { useLogin } from '../lib/login';
 import { useRouter } from 'next/router';
 import { AccountCircle, Key, Lock, Visibility, VisibilityOff } from '@mui/icons-material';

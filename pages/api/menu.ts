@@ -19,7 +19,7 @@ const menus = [
           {
             id: 2,
             name: 'Tambah',
-            url: '/tenant/baru',
+            url: '/tenant/tambah',
           },
         ],
       },
@@ -32,12 +32,12 @@ const menus = [
           {
             id: 1,
             name: 'List',
-            url: '/tenant/list',
+            url: '/pengumuman/list',
           },
           {
             id: 2,
             name: 'Buat Baru',
-            url: '/tenant/baru',
+            url: '/pengumuman/baru',
           },
         ],
       },
@@ -50,12 +50,12 @@ const menus = [
           {
             id: 1,
             name: 'List',
-            url: '/tenant/list',
+            url: '/penerimaan-paket/list',
           },
           {
             id: 2,
             name: 'Tambah',
-            url: '/tenant/baru',
+            url: '/penerimaan-paket/baru',
           },
         ],
       },

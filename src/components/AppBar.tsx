@@ -22,7 +22,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from '../provider/AuthProvider';
 import { Inbox, Mail, Message, Notifications } from '@mui/icons-material';
 import styled from '@emotion/styled';
 import { motion } from 'framer-motion';

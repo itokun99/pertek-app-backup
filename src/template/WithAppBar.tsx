@@ -18,18 +18,21 @@ import {
 import { PropsWithChildren, ReactPropTypes } from 'react';
 import useSWR from 'swr';
 import { AppBarComponent } from '../components/AppBar';
-import { Sidebar, SidebarMenuGroup } from '../components/Sidebar';
+import { Sidebar } from '../components/sidebar';
+// import { Sidebar, SidebarMenuGroup } from '../components/sidebar/Sidebar';
+import { SidebarProvider } from '../provider/SidebarProvider';
 
 const MainWrapper = styled(Container)(({ theme }: { theme?: Theme }) => ({
   marginTop: theme?.spacing(10),
 }));
 
 const WithAppBar = ({ children }: PropsWithChildren) => {
-  const { data } = useSWR('/api/menu');
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBarComponent />
-      <Sidebar menuGroups={data} />
+      <SidebarProvider>
+        <Sidebar />
+      </SidebarProvider>
       <MainWrapper>{children}</MainWrapper>
     </Box>
   );

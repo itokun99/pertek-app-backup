@@ -2,7 +2,7 @@ import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
-import { AuthProvider } from '../src/context/AuthContext';
+import { AuthProvider } from '../src/provider/AuthProvider';
 import { useRouter } from 'next/router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 

@@ -2,7 +2,7 @@ import { Box, Button, Container, Fab, Grid, Icon, IconButton, Paper, Typography 
 import { getCookies } from 'cookies-next';
 import { useContext, useEffect } from 'react';
 import { AppBarComponent } from '../../src/components/AppBar';
-import { AuthContext } from '../../src/context/AuthContext';
+import { AuthContext } from '../../src/provider/AuthProvider';
 import WithAppBar from '../../src/template/WithAppBar';
 
 export const getServerSideProps = async (context: any) => {

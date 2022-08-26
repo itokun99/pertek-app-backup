@@ -2,6 +2,14 @@
 
 export default function List(theme) {
   return {
+    MuiListItemButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: theme.spacing(1),
+          fontSize: '0.875rem',
+        },
+      },
+    },
     MuiListItemIcon: {
       styleOverrides: {
         root: {

@@ -7,3 +7,5 @@ const PengumumanIndex = () => {
 };
 
 PengumumanIndex.getLayout = (page: ReactElement) => <WithAppBar>{page}</WithAppBar>;
+
+export default PengumumanIndex;

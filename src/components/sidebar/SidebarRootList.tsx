@@ -13,11 +13,16 @@ import {
   Collapse,
 } from '@mui/material';
 import { NextRouter, useRouter } from 'next/router';
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { SidebarMenu } from '.';
 import { SidebarContext } from '../../provider/SidebarProvider';
-import { SidebarMenuGroup } from './Sidebar';
 import { SidebarSubList } from './SidebarSubList';
+
+export interface SidebarMenuGroup {
+  id: number;
+  name: string;
+  menus: SidebarMenu[];
+}
 
 export interface SidebarRootListProps {
   menuGroup: SidebarMenuGroup;

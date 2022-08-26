@@ -1,3 +1,9 @@
-import { Box } from '@mui/system';
+import { Typography } from '@mui/material';
+import { ReactElement } from 'react';
+import WithAppBar from '../../src/template/WithAppBar';
 
-export const TenantIndex = () => <Box></Box>;
+const TenantIndex = () => <Typography>Tenant Index</Typography>;
+
+TenantIndex.getLayout = (page: ReactElement) => <WithAppBar>{page}</WithAppBar>;
+
+export default TenantIndex;

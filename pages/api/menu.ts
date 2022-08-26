@@ -44,18 +44,18 @@ const menus = [
       {
         id: 3,
         name: 'Penerimaan Paket',
-        url: '/penerimaan-paket',
+        url: '/paket',
         icon: 'widgets',
         submenus: [
           {
             id: 1,
             name: 'List',
-            url: '/penerimaan-paket/list',
+            url: '/paket/list',
           },
           {
             id: 2,
             name: 'Tambah',
-            url: '/penerimaan-paket/baru',
+            url: '/paket/baru',
           },
         ],
       },
@@ -68,7 +68,7 @@ const menus = [
       {
         id: 5,
         name: 'Token Listrik',
-        url: '/token-listrik',
+        url: '/token',
         icon: 'bolt',
       },
     ],

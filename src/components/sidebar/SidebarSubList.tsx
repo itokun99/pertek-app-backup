@@ -13,7 +13,7 @@ export interface SidebarSubListProps {
 export const SidebarSubList = ({ menus, parentId }: SidebarSubListProps) => {
   const theme = useTheme();
   const router = useRouter();
-  const { setActiveMenu, activeMenu } = useContext(SidebarContext);
+  const { setActiveMenu, activeMenu, setHasActiveChild } = useContext(SidebarContext);
 
   const handleClick = (parentId: string, childId: string, url: string) => {
     setActiveMenu({ parentId, childId });
@@ -24,7 +24,7 @@ export const SidebarSubList = ({ menus, parentId }: SidebarSubListProps) => {
     <List>
       {menus.map((menu, key) => {
         const childId = `${menu.url}-${menu.id}`;
-        const isActive = activeMenu.childId === childId || router.pathname === menu.url;
+        const isActive = router.pathname === menu.url;
         return (
           <ListItemButton key={key} onClick={() => handleClick(parentId, childId, menu.url)}>
             <ListItemIcon>

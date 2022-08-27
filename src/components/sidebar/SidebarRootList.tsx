@@ -35,14 +35,19 @@ interface ListSubHeaderProps {
 }
 
 const RootListItem = ({ url, id, submenus, icon, name, router }: SidebarMenu & { router: NextRouter }) => {
-  const { activeMenu, open } = useContext(SidebarContext);
+  const { activeMenu, open, hasActiveChild } = useContext(SidebarContext);
   const theme = useTheme();
 
   const parentId = useMemo(() => `${url}-${id}`, [url, id]);
   const iconSpacing = open ? 0 : 2;
   const hasChildren = submenus && submenus.length > 0;
 
-  const isActive = activeMenu.parentId === parentId || router.pathname === url;
+  const isActive = () => {
+    if (hasChildren) {
+      return router.pathname.split('/')[1] === url.split('/')[1];
+    }
+    return router.pathname === url;
+  };
 
   const [shouldExpand, setShouldExpand] = useState(false);
 
@@ -62,10 +67,11 @@ const RootListItem = ({ url, id, submenus, icon, name, router }: SidebarMenu & {
         sx={{
           minHeight: theme.spacing(6),
           justifyContent: open ? 'initial' : 'center',
-          ...(isActive && {
+          ...(isActive() && {
             backgroundColor: alpha(theme.palette.primary.light, 0.3),
             color: theme.palette.primary.dark,
           }),
+          ...(open && {}),
         }}
       >
         <ListItemIcon sx={{ ml: theme.spacing(iconSpacing) }}>

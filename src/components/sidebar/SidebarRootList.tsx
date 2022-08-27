@@ -11,6 +11,7 @@ import {
   ListItemText,
   Box,
   Collapse,
+  Theme,
 } from '@mui/material';
 import { NextRouter, useRouter } from 'next/router';
 import { useContext, useMemo, useState } from 'react';
@@ -34,22 +35,22 @@ interface ListSubHeaderProps {
   open?: boolean;
 }
 
-const RootListItem = ({ url, id, submenus, icon, name, router }: SidebarMenu & { router: NextRouter }) => {
-  const { activeMenu, open, hasActiveChild } = useContext(SidebarContext);
-  const theme = useTheme();
+export interface RootListItemProps {
+  theme: Theme;
+  item: SidebarMenu;
+  router: NextRouter;
+  open?: boolean;
+  isActive?: boolean;
+  hasChildren?: boolean;
+  iconSpacing?: number;
+}
+
+const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSpacing }: RootListItemProps) => {
+  const { url, id, submenus, icon, name } = item;
 
   const parentId = useMemo(() => `${url}-${id}`, [url, id]);
-  const iconSpacing = open ? 0 : 2;
-  const hasChildren = submenus && submenus.length > 0;
 
-  const isActive = () => {
-    if (hasChildren) {
-      return router.pathname.split('/')[1] === url.split('/')[1];
-    }
-    return router.pathname === url;
-  };
-
-  const [shouldExpand, setShouldExpand] = useState(false);
+  const [shouldExpand, setShouldExpand] = useState(isActive);
 
   const handleClick = () => {
     if (hasChildren) {
@@ -67,14 +68,14 @@ const RootListItem = ({ url, id, submenus, icon, name, router }: SidebarMenu & {
         sx={{
           minHeight: theme.spacing(6),
           justifyContent: open ? 'initial' : 'center',
-          ...(isActive() && {
+          ...(isActive && {
             backgroundColor: alpha(theme.palette.primary.light, 0.3),
             color: theme.palette.primary.dark,
           }),
           ...(open && {}),
         }}
       >
-        <ListItemIcon sx={{ ml: theme.spacing(iconSpacing) }}>
+        <ListItemIcon sx={{ ml: theme.spacing(iconSpacing || 0) }}>
           <Icon>{icon}</Icon>
         </ListItemIcon>
 
@@ -108,7 +109,7 @@ const RootListItem = ({ url, id, submenus, icon, name, router }: SidebarMenu & {
       </ListItemButton>
       {hasChildren && (
         <Collapse in={shouldExpand && open} unmountOnExit>
-          <SidebarSubList parentId={parentId} menus={submenus} />
+          <SidebarSubList parentId={parentId} menus={submenus || []} />
         </Collapse>
       )}
     </>
@@ -131,13 +132,32 @@ const ListSubheader = ({ title, color, open }: ListSubHeaderProps) => (
 export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
   const { open } = useContext(SidebarContext);
   const router = useRouter();
+  const theme = useTheme();
 
   return (
     <List>
       <ListSubheader title={menuGroup.name} open={open} />
-      {menuGroup.menus.map((item, key) => (
-        <RootListItem key={key} router={router} {...item} />
-      ))}
+      {menuGroup.menus.map((item, key) => {
+        const hasChildren = item.submenus && item.submenus.length > 0;
+        const isActive = () => {
+          if (hasChildren) {
+            return router.pathname.split('/')[1] === item.url.split('/')[1];
+          }
+          return router.pathname === item.url;
+        };
+
+        const params = {
+          theme,
+          item,
+          open,
+          router,
+          isActive: isActive(),
+          hasChildren,
+          iconSpacing: open ? 0 : 2,
+        };
+
+        return <RootListItem key={key} {...params} />;
+      })}
     </List>
   );
 };

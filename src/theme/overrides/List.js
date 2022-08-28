@@ -2,6 +2,16 @@
 
 export default function List(theme) {
   return {
+    MuiListItem: {
+      styleOverrides: {
+        root: {
+          paddingLeft: 0,
+          paddingRight: 0,
+          paddingTop: 5,
+          paddingBottom: 5,
+        },
+      },
+    },
     MuiListItemButton: {
       styleOverrides: {
         root: {

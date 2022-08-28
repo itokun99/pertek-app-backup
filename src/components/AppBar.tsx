@@ -67,7 +67,7 @@ export const AppBarComponent = () => {
               display: 'inline-flex',
             }}
           >
-            <IconButton>
+            <IconButton aria-label='inbox button'>
               <Mail />
             </IconButton>
           </Box>
@@ -78,7 +78,7 @@ export const AppBarComponent = () => {
             variants={boxVariant}
             sx={{ ml: theme.spacing(2) }}
           >
-            <IconButton>
+            <IconButton aria-label='Notification Button'>
               <Notifications />
             </IconButton>
           </Box>
@@ -91,12 +91,13 @@ export const AppBarComponent = () => {
             whileHover='hover'
           >
             <IconButton
+              aria-label='My Profile Button'
               sx={{
                 p: 0,
               }}
               onClick={(e: any) => setAnchor(e.currentTarget)}
             >
-              <Avatar src='/static/images/4.jpg' />
+              <Avatar src='/static/images/4.jpg' alt='profile avatar' />
             </IconButton>
           </Box>
           <Popover

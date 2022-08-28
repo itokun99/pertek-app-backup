@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { Theme } from '@mui/material';
+import { alpha, Theme } from '@mui/material';
 
 export default function Input(theme: Theme) {
   return {
@@ -10,6 +10,7 @@ export default function Input(theme: Theme) {
           '&.Mui-disabled': {
             '& svg': { color: theme.palette.text.disabled },
           },
+          backgroundColor: alpha(theme.palette.background.neutral, 0.5),
         },
         input: {
           '&::placeholder': {

@@ -1,6 +1,6 @@
-import { Drawer as MuiDrawer, styled, useTheme } from '@mui/material';
-import { Component, ComponentProps, PropsWithChildren, useContext } from 'react';
-import { SidebarContext, SidebarContextInterface } from '../../provider/SidebarProvider';
+import { useTheme } from '@mui/material';
+import { useContext } from 'react';
+import { SidebarContext } from '../../provider/SidebarProvider';
 import { Drawer } from './Drawer';
 import { SidebarContent } from './SidebarContent';
 import { SidebarHeader } from './SidebarHeader';
@@ -32,7 +32,7 @@ export const Sidebar = () => {
 
   return (
     <Drawer variant='permanent' width={280} open={open}>
-      <SidebarHeader title='propertek' buttonColor={theme.palette.primary.dark} />
+      <SidebarHeader buttonColor={theme.palette.primary.dark}>Propertek</SidebarHeader>
       <SidebarContent />
     </Drawer>
   );

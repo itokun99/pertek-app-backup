@@ -1,11 +1,10 @@
 import { KeyboardDoubleArrowLeft, KeyboardDoubleArrowRight } from '@mui/icons-material';
 import { Box, IconButton, styled, Typography, useTheme } from '@mui/material';
-import { useContext } from 'react';
+import { PropsWithChildren, useContext } from 'react';
 import { SidebarContext } from '../../provider/SidebarProvider';
 
-export type SidebarHeaderProps = {
+export type SidebarHeaderProps = PropsWithChildren & {
   buttonColor?: string;
-  title?: string;
 };
 
 const StyledDrawerHeader = styled('div')(({ theme }) => ({
@@ -17,7 +16,7 @@ const StyledDrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-export const SidebarHeader = ({ buttonColor, title }: SidebarHeaderProps) => {
+export const SidebarHeader = ({ buttonColor, children }: SidebarHeaderProps) => {
   const theme = useTheme();
 
   const { open, setOpen } = useContext(SidebarContext);
@@ -32,11 +31,13 @@ export const SidebarHeader = ({ buttonColor, title }: SidebarHeaderProps) => {
       {open && (
         <Box flexGrow={1} sx={{ pl: theme.spacing(2) }}>
           <Typography variant='subtitle1' textTransform='uppercase'>
-            {title}
+            {children}
           </Typography>
         </Box>
       )}
-      <IconButton onClick={() => setOpen(!open)}>{icon}</IconButton>
+      <IconButton onClick={() => setOpen(!open)} aria-label='sidebar toggle button'>
+        {icon}
+      </IconButton>
     </StyledDrawerHeader>
   );
 };

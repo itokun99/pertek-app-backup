@@ -1,5 +1,5 @@
 import { FiberManualRecord } from '@mui/icons-material';
-import { List, ListItemButton, ListItemIcon, Typography, useTheme } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemIcon, Typography, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { SidebarSubMenu } from '.';
@@ -26,28 +26,30 @@ export const SidebarSubList = ({ menus, parentId }: SidebarSubListProps) => {
         const childId = `${menu.url}-${menu.id}`;
         const isActive = router.pathname === menu.url;
         return (
-          <ListItemButton key={key} onClick={() => handleClick(parentId, childId, menu.url)}>
-            <ListItemIcon>
-              <FiberManualRecord
+          <ListItem key={key}>
+            <ListItemButton key={key} onClick={() => handleClick(parentId, childId, menu.url)}>
+              <ListItemIcon>
+                <FiberManualRecord
+                  sx={{
+                    ml: 1,
+                    fontSize: '10px',
+                    ...(isActive && { color: theme.palette.primary.dark }),
+                  }}
+                />
+              </ListItemIcon>
+              <Typography
+                variant='body1'
                 sx={{
-                  ml: 1,
-                  fontSize: '10px',
-                  ...(isActive && { color: theme.palette.primary.dark }),
+                  ...(isActive && {
+                    fontWeight: 600,
+                    color: theme.palette.text.primary,
+                  }),
                 }}
-              />
-            </ListItemIcon>
-            <Typography
-              variant='body1'
-              sx={{
-                ...(isActive && {
-                  fontWeight: 600,
-                  color: theme.palette.text.primary,
-                }),
-              }}
-            >
-              {menu.name}
-            </Typography>
-          </ListItemButton>
+              >
+                {menu.name}
+              </Typography>
+            </ListItemButton>
+          </ListItem>
         );
       })}
     </List>

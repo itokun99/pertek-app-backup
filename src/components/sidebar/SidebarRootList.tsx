@@ -67,6 +67,7 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
         onClick={handleClick}
         sx={{
           minHeight: theme.spacing(6),
+          my: theme.spacing(0.5),
           justifyContent: open ? 'initial' : 'center',
           ...(isActive && {
             backgroundColor: alpha(theme.palette.primary.light, 0.3),

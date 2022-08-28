@@ -10,7 +10,7 @@ export default function Input(theme: Theme) {
           '&.Mui-disabled': {
             '& svg': { color: theme.palette.text.disabled },
           },
-          backgroundColor: alpha(theme.palette.background.neutral, 0.5),
+          backgroundColor: alpha(theme.palette.background.neutral, 0.3),
         },
         input: {
           '&::placeholder': {

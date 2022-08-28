@@ -7,8 +7,8 @@ export default function List(theme) {
         root: {
           paddingLeft: 0,
           paddingRight: 0,
-          paddingTop: 5,
-          paddingBottom: 5,
+          paddingTop: 3,
+          paddingBottom: 3,
         },
       },
     },

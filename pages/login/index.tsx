@@ -14,13 +14,13 @@ import {
 // import styles from '../styles/Home.module.css';
 
 import { useContext, useState } from 'react';
-import { AuthContext } from '../src/provider/AuthProvider';
-import { useLogin } from '../lib/login';
 import { useRouter } from 'next/router';
 import { AccountCircle, Key, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import Link from 'next/link';
+import { AuthContext } from '../../src/provider/AuthProvider';
+import { useLogin } from '../../lib/login';
 
-const Home = () => {
+const LoginPage = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [isVisible, setVisibility] = useState(false);
@@ -78,7 +78,7 @@ const Home = () => {
               ),
               endAdornment: (
                 <InputAdornment position='end'>
-                  <IconButton aria-label='show password' onClick={() => setVisibility(!isVisible)}>
+                  <IconButton onClick={() => setVisibility(!isVisible)}>
                     {isVisible ? <Visibility /> : <VisibilityOff />}
                   </IconButton>
                 </InputAdornment>
@@ -111,4 +111,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LoginPage;

@@ -31,9 +31,9 @@ export const SidebarSubList = ({ menus, parentId }: SidebarSubListProps) => {
               <ListItemIcon>
                 <FiberManualRecord
                   sx={{
-                    ml: 1,
+                    ml: 0.7,
                     fontSize: '10px',
-                    ...(isActive && { color: theme.palette.primary.dark }),
+                    ...(isActive && { color: theme.palette.primary.main }),
                   }}
                 />
               </ListItemIcon>

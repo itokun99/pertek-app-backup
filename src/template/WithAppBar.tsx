@@ -16,10 +16,8 @@ import {
   Typography,
 } from '@mui/material';
 import { PropsWithChildren, ReactPropTypes } from 'react';
-import useSWR from 'swr';
 import { AppBarComponent } from '../components/AppBar';
 import { Sidebar } from '../components/sidebar';
-// import { Sidebar, SidebarMenuGroup } from '../components/sidebar/Sidebar';
 import { SidebarProvider } from '../provider/SidebarProvider';
 
 const MainWrapper = styled(Container)(({ theme }: { theme?: Theme }) => ({

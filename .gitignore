@@ -33,3 +33,8 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# PWA Ignore
+**/public/sw.js
+**/public/workbox-*.js
+**/public/icon-*.png

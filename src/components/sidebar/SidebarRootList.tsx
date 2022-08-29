@@ -14,7 +14,7 @@ import {
   Theme,
 } from '@mui/material';
 import { NextRouter, useRouter } from 'next/router';
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useMemo, useRef, useState } from 'react';
 import { SidebarMenu } from '.';
 import { SidebarContext } from '../../provider/SidebarProvider';
 import { SidebarSubList } from './SidebarSubList';
@@ -54,6 +54,8 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
 
   const handleClick = () => {
     if (hasChildren) {
+      if (!open) {
+      }
       setShouldExpand(!shouldExpand);
       return;
     }
@@ -140,19 +142,20 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
       <ListSubheader title={menuGroup.name} open={open} />
       {menuGroup.menus.map((item, key) => {
         const hasChildren = item.submenus && item.submenus.length > 0;
-        const isActive = () => {
+
+        const isActive = (() => {
           if (hasChildren) {
             return router.pathname.split('/')[1] === item.url.split('/')[1];
           }
           return router.pathname === item.url;
-        };
+        })();
 
         const params = {
           theme,
           item,
           open,
           router,
-          isActive: isActive(),
+          isActive,
           hasChildren,
           iconSpacing: open ? 0 : 2,
         };

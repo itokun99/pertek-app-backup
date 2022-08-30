@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@mui/material';
 import { PropsWithChildren, ReactPropTypes } from 'react';
-import { AppBarComponent } from '../components/AppBar';
+import { AppBarComponent } from '../components/appbar/AppBar';
 import { Sidebar } from '../components/sidebar';
 import { SidebarProvider } from '../provider/SidebarProvider';
 

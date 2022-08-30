@@ -1,7 +1,7 @@
 import { Box, Button, Container, Fab, Grid, Icon, IconButton, Paper, Typography } from '@mui/material';
 import { getCookies } from 'cookies-next';
 import { useContext, useEffect } from 'react';
-import { AppBarComponent } from '../../src/components/AppBar';
+import { AppBarComponent } from '../../src/components/appbar/AppBar';
 import { AuthContext } from '../../src/provider/AuthProvider';
 import WithAppBar from '../../src/template/WithAppBar';
 

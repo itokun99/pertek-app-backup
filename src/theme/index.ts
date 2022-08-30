@@ -1,22 +1,12 @@
-import {
-  alpha,
-  createTheme,
-  darken,
-  lighten,
-  colors,
-  PaletteOptions,
-  Palette,
-  Color,
-  TypeBackground,
-} from '@mui/material';
-import palette, { PRIMARY } from './palette';
+import { createTheme, PaletteOptions, Palette, Color, TypeBackground } from '@mui/material';
+import palette from './palette';
 import typography from './typography';
 
 import ComponentsOverrides from './overrides';
-import shadows, { createShadow, customShadows, LIGHT_MODE } from './shadows';
+import shadows, { customShadows, LIGHT_MODE } from './shadows';
 
 import type {} from '@mui/x-data-grid/themeAugmentation';
-import { TypographyOptions, TypographyStyleOptions } from '@mui/material/styles/createTypography';
+import { TypographyOptions } from '@mui/material/styles/createTypography';
 
 declare module '@mui/material/styles' {
   interface Theme {

@@ -72,8 +72,8 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
           my: theme.spacing(0.5),
           justifyContent: open ? 'initial' : 'center',
           ...(isActive && {
-            backgroundColor: alpha(theme.palette.primary.light, 0.3),
-            color: theme.palette.primary.dark,
+            backgroundColor: alpha(theme.palette.info.light, 0.3),
+            color: theme.palette.info.dark,
           }),
           ...(open && {}),
         }}

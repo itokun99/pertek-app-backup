@@ -21,6 +21,7 @@ export default function Paper(theme: Theme) {
       styleOverrides: {
         root: {
           backgroundImage: 'none',
+          scrollbarGutter: 'stable both-edges',
         },
       },
     },

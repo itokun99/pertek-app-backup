@@ -33,7 +33,7 @@ export const SidebarSubList = ({ menus, parentId }: SidebarSubListProps) => {
                   sx={{
                     ml: 0.7,
                     fontSize: '10px',
-                    ...(isActive && { color: theme.palette.primary.main }),
+                    ...(isActive && { color: theme.palette.info.main }),
                   }}
                 />
               </ListItemIcon>

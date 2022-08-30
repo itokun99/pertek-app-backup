@@ -7,7 +7,7 @@ export const SidebarContent = () => {
   const { open, menuGroups } = useContext(SidebarContext);
   const theme = useTheme();
   const boxSx = {
-    px: open ? theme.spacing(2) : theme.spacing(1),
+    px: 0.5,
     color: theme.palette.text.secondary,
   };
 

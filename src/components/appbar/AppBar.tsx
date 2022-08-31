@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { PropsWithChildren, useContext, useState } from 'react';
 
-import { AppBar, Toolbar, Box, IconButton, Avatar, Grid, useTheme } from '@mui/material';
+import { AppBar, Toolbar, Box, IconButton, Avatar, Grid, useTheme, Badge } from '@mui/material';
 import { AuthContext } from '../../provider/AuthProvider';
 import { Mail, Notifications } from '@mui/icons-material';
 import { motion } from 'framer-motion';
@@ -81,7 +81,9 @@ export const AppBarComponent = () => {
                 mountPopover(e, 'inbox');
               }}
             >
-              <Mail />
+              <Badge badgeContent={3} max={9} overlap='circular' color='error'>
+                <Mail />
+              </Badge>
             </IconButton>
           </Box>
           <InboxPopover open={popover?.name === 'inbox'} anchorEl={popover?.anchor} onClose={unmountPopover} />
@@ -98,7 +100,9 @@ export const AppBarComponent = () => {
                 mountPopover(e, 'notif');
               }}
             >
-              <Notifications />
+              <Badge badgeContent={9} max={9} overlap='circular' color='error'>
+                <Notifications />
+              </Badge>
             </IconButton>
           </Box>
           <NotificationPopover anchorEl={popover?.anchor} open={popover?.name === 'notif'} onClose={unmountPopover} />

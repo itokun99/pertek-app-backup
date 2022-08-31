@@ -1,21 +1,5 @@
-import styled from '@emotion/styled';
-import { Inbox, Mail } from '@mui/icons-material';
-import {
-  AppBar,
-  Box,
-  Container,
-  Divider,
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Theme,
-  Toolbar,
-  Typography,
-} from '@mui/material';
-import { PropsWithChildren, ReactPropTypes } from 'react';
+import { Box, Container, Theme, styled } from '@mui/material';
+import { PropsWithChildren } from 'react';
 import { AppBarComponent } from '../components/appbar/AppBar';
 import { Sidebar } from '../components/sidebar';
 import { SidebarProvider } from '../provider/SidebarProvider';
@@ -31,7 +15,7 @@ const WithAppBar = ({ children }: PropsWithChildren) => {
       <SidebarProvider>
         <Sidebar />
       </SidebarProvider>
-      <MainWrapper>{children}</MainWrapper>
+      <MainWrapper maxWidth='xl'>{children}</MainWrapper>
     </Box>
   );
 };

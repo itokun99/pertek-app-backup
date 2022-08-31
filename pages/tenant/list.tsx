@@ -17,9 +17,10 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import { motion } from 'framer-motion';
 
-import { ReactElement } from 'react';
+import { MouseEvent, ReactElement, useState } from 'react';
 import useSWR from 'swr';
 import { AnimatedButton } from '../../src/components/AnimatedButtton';
+import NotificationPopover from '../../src/components/appbar/NotificationPopover';
 import Label from '../../src/components/Label';
 import WithAppBar from '../../src/template/WithAppBar';
 
@@ -144,6 +145,7 @@ const TenantPage = () => {
   const theme = useTheme();
 
   const { data } = useSWR('/api/tenant');
+  const [anchor, setAnchor] = useState<Element | null>(null);
 
   return (
     <Stack>
@@ -159,7 +161,19 @@ const TenantPage = () => {
           </Grid>
           <Grid>
             <Box>
-              <AnimatedButton startIcon={<Add />}>Tenant Baru</AnimatedButton>
+              <AnimatedButton onClick={(e: MouseEvent) => setAnchor(e.currentTarget)} startIcon={<Add />}>
+                Tenant Baru
+              </AnimatedButton>
+              <NotificationPopover
+                transformOrigin={{
+                  horizontal: 'right',
+                  vertical: 'top',
+                }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+                open={anchor !== null}
+                anchorEl={anchor}
+                onClose={() => setAnchor(null)}
+              />
             </Box>
           </Grid>
         </Grid>

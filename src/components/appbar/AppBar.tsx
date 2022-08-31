@@ -74,13 +74,11 @@ export const AppBarComponent = () => {
             sx={{
               display: 'inline-flex',
             }}
+            onClick={(e: any) => {
+              mountPopover(e, 'inbox');
+            }}
           >
-            <IconButton
-              aria-label='inbox button'
-              onClick={(e: any) => {
-                mountPopover(e, 'inbox');
-              }}
-            >
+            <IconButton aria-label='inbox button'>
               <Badge badgeContent={3} max={9} overlap='circular' color='error'>
                 <Mail />
               </Badge>

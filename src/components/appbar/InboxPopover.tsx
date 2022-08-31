@@ -2,7 +2,7 @@ import { Popover, PopoverProps, Typography } from '@mui/material';
 
 const InboxPopover = (props: PopoverProps) => {
   return (
-    <Popover {...props}>
+    <Popover {...props} sx={{ mt: 2 }}>
       <Typography>Notifications</Typography>
     </Popover>
   );
@@ -11,7 +11,11 @@ const InboxPopover = (props: PopoverProps) => {
 InboxPopover.defaultProps = {
   anchorOrigin: {
     vertical: 'bottom',
-    horizontal: 'left',
+    horizontal: 'right',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'right',
   },
 };
 

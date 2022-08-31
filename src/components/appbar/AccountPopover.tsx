@@ -6,18 +6,8 @@ const AccountPopover = (props: PopoverProps) => {
   const theme = useTheme();
 
   return (
-    <Popover
-      {...props}
-      sx={{
-        mt: 2,
-      }}
-    >
-      <Box
-        sx={{
-          minWidth: 200,
-          maxWidth: 300,
-        }}
-      >
+    <Popover {...props} sx={{ mt: 2 }}>
+      <Box sx={{ width: 200 }}>
         <PopoverHeaderBox>
           <Typography variant='body2' sx={{ fontWeight: 500 }}>
             Syamsul
@@ -47,7 +37,11 @@ const AccountPopover = (props: PopoverProps) => {
 AccountPopover.defaultProps = {
   anchorOrigin: {
     vertical: 'bottom',
-    horizontal: 'left',
+    horizontal: 'right',
+  },
+  transformOrigin: {
+    vertical: 'top',
+    horizontal: 'right',
   },
 };
 

@@ -171,7 +171,7 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
           iconSpacing: open ? 0 : 2,
         };
 
-        return <RootListItem key={key} {...params} />;
+        return <RootListItem {...params} key={key} />;
       })}
     </List>
   );

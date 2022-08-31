@@ -1,7 +1,11 @@
-import { Popover, PopoverProps } from '@mui/material';
+import { Popover, PopoverProps, Typography } from '@mui/material';
 
 const InboxPopover = (props: PopoverProps) => {
-  return <Popover {...props}></Popover>;
+  return (
+    <Popover {...props}>
+      <Typography>Notifications</Typography>
+    </Popover>
+  );
 };
 
 InboxPopover.defaultProps = {

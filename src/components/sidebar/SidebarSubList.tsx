@@ -32,13 +32,13 @@ export const SidebarSubList = ({ menus, parentId }: SidebarSubListProps) => {
                 <FiberManualRecord
                   sx={{
                     ml: 0.7,
-                    fontSize: '10px',
-                    ...(isActive && { color: theme.palette.info.main }),
+                    fontSize: '8px',
+                    ...(isActive && { color: theme.palette.info.main, fontSize: '10px' }),
                   }}
                 />
               </ListItemIcon>
               <Typography
-                variant='body1'
+                variant='body2'
                 sx={{
                   ...(isActive && {
                     fontWeight: 600,

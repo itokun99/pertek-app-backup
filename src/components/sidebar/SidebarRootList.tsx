@@ -12,6 +12,7 @@ import {
   Box,
   Collapse,
   Theme,
+  Typography,
 } from '@mui/material';
 import { NextRouter, useRouter } from 'next/router';
 import { useContext, useMemo, useRef, useState } from 'react';
@@ -62,17 +63,20 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
     router.push(url);
   };
 
+  const activeBgColor = alpha(theme.palette.info.light, 0.3);
+
   return (
     <>
       <ListItemButton
         key={parentId}
         onClick={handleClick}
         sx={{
+          pr: open ? 1 : 2,
           minHeight: theme.spacing(6),
           my: theme.spacing(0.5),
           justifyContent: open ? 'initial' : 'center',
           ...(isActive && {
-            backgroundColor: alpha(theme.palette.info.light, 0.3),
+            backgroundColor: activeBgColor,
             color: theme.palette.info.dark,
           }),
           ...(open && {}),
@@ -91,7 +95,7 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
               justifyContent: 'space-between',
             }}
           >
-            <ListItemText>{name}</ListItemText>
+            <Typography variant='body2'>{name}</Typography>
             {hasChildren && (
               <Box
                 sx={{
@@ -104,7 +108,14 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
                   }),
                 }}
               >
-                <KeyboardArrowRight style={{ display: 'block' }} />
+                <KeyboardArrowRight
+                  sx={{
+                    display: 'block',
+                    fontSize: '1.4rem',
+                    stroke: isActive ? activeBgColor : 'white',
+                    strokeWidth: 0.7,
+                  }}
+                />
               </Box>
             )}
           </Stack>
@@ -124,7 +135,7 @@ const ListSubheader = ({ title, color, open }: ListSubHeaderProps) => (
     sx={{
       opacity: open ? 1 : 0,
       textTransform: 'uppercase',
-      fontSize: '0.85rem',
+      fontSize: '0.8rem',
       color: color,
     }}
   >

@@ -20,8 +20,14 @@ export default function Paper(theme: Theme) {
 
       styleOverrides: {
         root: {
+          overflow: 'auto !important',
           backgroundImage: 'none',
           scrollbarGutter: 'stable',
+          ':hover': {
+            '::-webkit-scrollbar-thumb': {
+              backgroundColor: theme.palette.grey[500_32],
+            },
+          },
         },
       },
     },

@@ -17,6 +17,11 @@ export default function CssBaseline() {
           WebkitOverflowScrolling: 'touch',
           scrollbarGutter: 'stable both-edges',
         },
+        ':hover': {
+          '::-webkit-scrollbar-thumb': {
+            backgroundColor: GREY[500_48],
+          },
+        },
         body: {
           width: '100%',
           height: '100%',
@@ -26,11 +31,11 @@ export default function CssBaseline() {
           height: '100%',
         },
         '::-webkit-scrollbar': {
-          width: '8px',
+          width: '6px',
         },
         '::-webkit-scrollbar-thumb': {
           position: 'absolute',
-          backgroundColor: GREY[500_32],
+          backgroundColor: 'transparent',
           borderRadius: '16px',
         },
         input: {

@@ -20,7 +20,6 @@ export default function Paper(theme: Theme) {
 
       styleOverrides: {
         root: {
-          overflow: 'auto !important',
           backgroundImage: 'none',
           scrollbarGutter: 'stable',
           ':hover': {

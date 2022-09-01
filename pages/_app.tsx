@@ -9,6 +9,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 import MyTheme from '../src/theme';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
+import 'simplebar-react/dist/simplebar.min.css';
 
 export class MyError extends Error {
   statusCode?: number;

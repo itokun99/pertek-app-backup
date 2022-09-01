@@ -18,6 +18,8 @@ import Divider from '../Divider';
 import { createModuleAvatar } from '../../utils/createAvatar';
 import { AccessTimeTwoTone, DoneAll } from '@mui/icons-material';
 import { fToNow } from '../../utils/formatTime';
+import SimpleBar from 'simplebar-react';
+// import 'simplebar-react/dist/simplebar.min.css';
 
 interface NotificationList {
   module: string;
@@ -50,44 +52,70 @@ const NotificationPopover = (props: PopoverProps) => {
         </Box>
         <Divider />
         <Box p={0} m={0}>
-          <List disablePadding>
-            {[
-              {
-                module: 'token',
-                title: 'Token Listrik',
-                content: 'Permintaan pembelian token baru',
-                time: new Date('2022-08-30'),
-              },
-            ].map((item, key) => {
-              const avatar = createModuleAvatar(item.module);
-              return (
-                <ListItemButton key={key} sx={{ borderRadius: 0 }}>
-                  <Stack direction='row' alignItems='center'>
-                    <Avatar sx={{ mr: 2, backgroundColor: theme.palette.grey[200] }}>
-                      <Icon sx={{ color: avatar.color }}>{avatar.icon}</Icon>
-                    </Avatar>
-                    <Stack>
-                      <Typography variant='subtitle2'>{item.title}</Typography>
-                      <Typography variant='body2' color={theme.palette.text.secondary} fontSize='0.875rem'>
-                        {item.content}
-                      </Typography>
-                      <Stack direction='row' alignItems='center'>
-                        <AccessTimeTwoTone style={{ justifyItems: 'center' }} sx={{ fontSize: 16 }} />
-                        <Typography
-                          mt={1}
-                          variant='caption'
-                          sx={{ backgroundColor: '#ff0' }}
-                          color={theme.palette.text.secondary}
-                        >
-                          {fToNow(item.time.toString())}
+          <SimpleBar style={{ maxHeight: 200 }}>
+            <List disablePadding>
+              {[
+                {
+                  module: 'token',
+                  title: 'Token Listrik',
+                  content: 'Permintaan pembelian token baru',
+                  time: new Date('2022-08-30'),
+                },
+                {
+                  module: 'token',
+                  title: 'Token Listrik',
+                  content: 'Permintaan pembelian token baru',
+                  time: new Date('2022-08-30'),
+                },
+                {
+                  module: 'token',
+                  title: 'Token Listrik',
+                  content: 'Permintaan pembelian token baru',
+                  time: new Date('2022-08-30'),
+                },
+                {
+                  module: 'token',
+                  title: 'Token Listrik',
+                  content: 'Permintaan pembelian token baru',
+                  time: new Date('2022-08-30'),
+                },
+                {
+                  module: 'token',
+                  title: 'Token Listrik',
+                  content: 'Permintaan pembelian token baru',
+                  time: new Date('2022-08-30'),
+                },
+              ].map((item, key) => {
+                const avatar = createModuleAvatar(item.module);
+                return (
+                  <ListItemButton key={key} sx={{ borderRadius: 0 }}>
+                    <Stack direction='row' alignItems='center'>
+                      <Avatar sx={{ mr: 2, backgroundColor: theme.palette.grey[200] }}>
+                        <Icon sx={{ color: avatar.color }}>{avatar.icon}</Icon>
+                      </Avatar>
+                      <Stack>
+                        <Typography variant='subtitle2'>{item.title}</Typography>
+                        <Typography variant='body2' color={theme.palette.text.secondary} fontSize='0.875rem'>
+                          {item.content}
                         </Typography>
+                        <Stack direction='row' alignItems='center'>
+                          <AccessTimeTwoTone style={{ justifyItems: 'center' }} sx={{ fontSize: 16 }} />
+                          <Typography
+                            mt={1}
+                            variant='caption'
+                            sx={{ backgroundColor: '#ff0' }}
+                            color={theme.palette.text.secondary}
+                          >
+                            {fToNow(item.time.toString())}
+                          </Typography>
+                        </Stack>
                       </Stack>
                     </Stack>
-                  </Stack>
-                </ListItemButton>
-              );
-            })}
-          </List>
+                  </ListItemButton>
+                );
+              })}
+            </List>
+          </SimpleBar>
         </Box>
         <Divider />
         <Box p={1}>

@@ -6,7 +6,6 @@ import { SidebarContent } from './SidebarContent';
 import { SidebarHeader } from './SidebarHeader';
 
 import SimpleBar from 'simplebar-react';
-import 'simplebar-react/dist/simplebar.min.css';
 
 export interface SidebarMenuGroup {
   id: number;
@@ -35,7 +34,7 @@ export const Sidebar = () => {
 
   return (
     <Drawer variant='permanent' width={280} open={open}>
-      <SimpleBar style={{ maxHeight: '100vh' }}>
+      <SimpleBar style={{ maxHeight: '100vh', overflowX: 'hidden' }}>
         <SidebarHeader buttonColor={theme.palette.primary.dark}>Propertek</SidebarHeader>
         <SidebarContent />
       </SimpleBar>

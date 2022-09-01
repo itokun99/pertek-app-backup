@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { Theme } from '@mui/material';
+import { alpha, Theme } from '@mui/material';
 
 export default function Button(theme: Theme) {
   return {
@@ -50,6 +50,12 @@ export default function Button(theme: Theme) {
         textInherit: {
           '&:hover': {
             backgroundColor: theme.palette.action.hover,
+          },
+        },
+        textPrimary: {
+          color: theme.palette.info.main,
+          '&:hover': {
+            backgroundColor: alpha(theme.palette.info.light, 0.2),
           },
         },
       },

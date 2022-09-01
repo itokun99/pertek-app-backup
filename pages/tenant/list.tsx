@@ -1,29 +1,13 @@
 import { Add } from '@mui/icons-material';
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  darken,
-  Grid,
-  Stack,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Theme } from '@mui/material';
+import { Avatar, Box, Card, Grid, Stack, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import { motion } from 'framer-motion';
-
-import { ReactElement } from 'react';
+import { PropsWithChildren, ReactElement } from 'react';
 import useSWR from 'swr';
 import { AnimatedButton } from '../../src/components/AnimatedButtton';
 import Label from '../../src/components/Label';
 import WithAppBar from '../../src/template/WithAppBar';
-
-import { PRIMARY, SECONDARY } from '../../src/theme/palette';
 
 interface TenantDataModel {
   id: number;
@@ -140,6 +124,27 @@ const columns: GridColDef[] = [
   },
 ];
 
+const LeftSideHeader = ({ theme }: PropsWithChildren & { theme: Theme }) => (
+  <Grid item flexGrow={1}>
+    <Stack>
+      <Typography variant='h6'>Tenant Management</Typography>
+      <Typography variant='body2' color={theme.palette.text.secondary}>
+        Kelola tenant properti
+      </Typography>
+    </Stack>
+  </Grid>
+);
+
+const RightSideHeader = () => {
+  return (
+    <Grid item>
+      <Box>
+        <AnimatedButton startIcon={<Add />}>Tenant Baru</AnimatedButton>
+      </Box>
+    </Grid>
+  );
+};
+
 const TenantPage = () => {
   const theme = useTheme();
 
@@ -147,42 +152,18 @@ const TenantPage = () => {
 
   return (
     <Stack>
-      <Box>
+      <Box mb={5}>
         <Grid container>
-          <Grid sx={{ flexGrow: 1, marginBottom: theme.spacing(4) }}>
-            <Stack>
-              <Typography variant='h6'>Tenant Management</Typography>
-              <Typography variant='body2' color={theme.palette.text.secondary}>
-                Kelola tenant properti
-              </Typography>
-            </Stack>
-          </Grid>
-          <Grid>
-            <Box>
-              <AnimatedButton startIcon={<Add />}>Tenant Baru</AnimatedButton>
-            </Box>
-          </Grid>
+          <LeftSideHeader theme={theme} />
+          <RightSideHeader />
         </Grid>
       </Box>
       <Box>
         <Card>
-          <Tabs
-            sx={{
-              paddingX: theme.spacing(2),
-              backgroundColor: theme.palette.grey[200],
-              display: 'flex',
-            }}
-            value={0}
-          >
-            <Tab disableRipple label='All' />
-            <Tab disableRipple label='Verified' />
-            <Tab disableRipple label='Draft' />
-            <Tab disableRipple label='Banned' />
-          </Tabs>
+          <TabBar theme={theme} tabs={['All', 'Draft', 'Unpaid']} />
           <Box
             sx={{
               paddingY: theme.spacing(2),
-              paddingLeft: theme.spacing(2),
             }}
           >
             <TextField label='Cari tenant' variant='outlined' />
@@ -211,6 +192,28 @@ const TenantPage = () => {
         </Card>
       </Box>
     </Stack>
+  );
+};
+
+type TabBarProps = PropsWithChildren & {
+  theme: Theme;
+  tabs: string[];
+};
+
+const TabBar = ({ theme, tabs }: TabBarProps) => {
+  return (
+    <Tabs
+      sx={{
+        paddingX: theme.spacing(2),
+        backgroundColor: theme.palette.grey[200],
+        display: 'flex',
+      }}
+      value={0}
+    >
+      {tabs.map((label, key) => (
+        <Tab key={key} disableRipple label={label} />
+      ))}
+    </Tabs>
   );
 };
 

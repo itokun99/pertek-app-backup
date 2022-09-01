@@ -5,6 +5,9 @@ import { Drawer } from './Drawer';
 import { SidebarContent } from './SidebarContent';
 import { SidebarHeader } from './SidebarHeader';
 
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
+
 export interface SidebarMenuGroup {
   id: number;
   name: string;
@@ -32,8 +35,10 @@ export const Sidebar = () => {
 
   return (
     <Drawer variant='permanent' width={280} open={open}>
-      <SidebarHeader buttonColor={theme.palette.primary.dark}>Propertek</SidebarHeader>
-      <SidebarContent />
+      <SimpleBar style={{ maxHeight: '100vh' }}>
+        <SidebarHeader buttonColor={theme.palette.primary.dark}>Propertek</SidebarHeader>
+        <SidebarContent />
+      </SimpleBar>
     </Drawer>
   );
 };

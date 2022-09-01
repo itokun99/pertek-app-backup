@@ -1,7 +1,6 @@
 //
 import { Theme, SvgIcon } from '@mui/material';
-// import { CloseRounded } from '@mui/icons-material'
-// import { CloseIcon } from './CustomIcons';
+import { CloseRounded } from '@mui/icons-material';
 
 // ----------------------------------------------------------------------
 
@@ -9,7 +8,7 @@ export default function Chip(theme: Theme) {
   return {
     MuiChip: {
       defaultProps: {
-        // deleteIcon: <SvgIcon fontSize="small" component={CloseRounded} />,
+        deleteIcon: <SvgIcon fontSize='small' component={CloseRounded} />,
       },
 
       styleOverrides: {

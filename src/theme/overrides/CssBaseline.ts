@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { GREY, INFO } from '../palette';
+import { GREY, INFO, PRIMARY } from '../palette';
 
 export default function CssBaseline() {
   return {
@@ -15,12 +15,6 @@ export default function CssBaseline() {
           width: '100%',
           height: '100%',
           WebkitOverflowScrolling: 'touch',
-          scrollbarGutter: 'stable both-edges',
-        },
-        ':hover': {
-          '::-webkit-scrollbar-thumb': {
-            backgroundColor: GREY[500_48],
-          },
         },
         body: {
           width: '100%',
@@ -30,13 +24,8 @@ export default function CssBaseline() {
           width: '100%',
           height: '100%',
         },
-        '::-webkit-scrollbar': {
-          width: '6px',
-        },
-        '::-webkit-scrollbar-thumb': {
-          position: 'absolute',
-          backgroundColor: 'transparent',
-          borderRadius: '16px',
+        '.simplebar-track.simplebar-vertical .simplebar-scrollbar:before': {
+          backgroundImage: `linear-gradient(${PRIMARY.light}, ${PRIMARY.dark})`,
         },
         input: {
           '&[type=number]': {

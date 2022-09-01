@@ -160,7 +160,7 @@ const TenantPage = () => {
       </Box>
       <Box>
         <Card>
-          <TabBar theme={theme} tabs={['All', 'Draft', 'Unpaid']} />
+          {/* <TabBar theme={theme} tabs={['All', 'Draft', 'Unpaid']} /> */}
           <Box
             sx={{
               paddingY: theme.spacing(2),

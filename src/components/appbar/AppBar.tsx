@@ -36,7 +36,7 @@ interface PopoverState {
 export const AppBarComponent = () => {
   const router = useRouter();
   const theme = useTheme();
-  const { isLoggedIn } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const [popover, setPopover] = useState<PopoverState | null>(null);
 
@@ -115,10 +115,16 @@ export const AppBarComponent = () => {
                 mountPopover(e, 'account');
               }}
             >
-              <Avatar src='/static/images/4.jpg' alt='profile avatar' />
+              <Avatar src={user?.avatar ?? '/static/images/4.jpg'} alt='profile avatar' />
             </IconButton>
           </Box>
-          <AccountPopover anchorEl={popover?.anchor} open={popover?.name === 'account'} onClose={unmountPopover} />
+          <AccountPopover
+            username={user?.username ?? ''}
+            phoneNumber={user?.phoneNumber ?? ''}
+            anchorEl={popover?.anchor}
+            open={popover?.name === 'account'}
+            onClose={unmountPopover}
+          />
         </Toolbar>
       </Grid>
     </AppBar>

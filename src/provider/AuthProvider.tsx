@@ -1,9 +1,15 @@
 import { useRouter } from 'next/router';
-import { createContext, ReactNode, useEffect, useState } from 'react';
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
+
+export interface UserModel {
+  username: string;
+  phoneNumber: string;
+  avatar?: string;
+}
 
 type AuthContext = {
-  isLoggedIn: boolean;
-  changeState: (state: boolean) => void;
+  user?: UserModel;
+  setUser: (use: UserModel) => void;
 };
 
 export const AuthContext = createContext<AuthContext>({} as AuthContext);
@@ -13,11 +19,18 @@ type Props = {
 };
 
 export function AuthProvider({ children }: Props) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState<UserModel>({
+    username: 'Syamsul',
+    phoneNumber: '081803663156',
+  });
 
-  const changeState = (state: boolean) => {
-    setIsLoggedIn(state);
-  };
+  const value = useMemo(
+    () => ({
+      user,
+      setUser,
+    }),
+    [user]
+  );
 
-  return <AuthContext.Provider value={{ isLoggedIn, changeState }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

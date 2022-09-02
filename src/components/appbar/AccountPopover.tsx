@@ -1,17 +1,23 @@
 import { Box, List, ListItemButton, Popover, PopoverProps, Typography, useTheme } from '@mui/material';
+import { UserModel } from '../../provider/AuthProvider';
 import Divider from '../Divider';
 import { PopoverButtonBox, PopoverHeaderBox } from './AppBar';
 
-const AccountPopover = (props: PopoverProps) => {
+export type AccountPopoverProps = PopoverProps & {
+  username: string;
+  phoneNumber: string;
+};
+
+const AccountPopover = ({ username, phoneNumber, ...rest }: AccountPopoverProps) => {
   const theme = useTheme();
 
   return (
-    <Popover {...props} sx={{ mt: 2 }}>
+    <Popover {...rest} sx={{ mt: 2 }}>
       <Box sx={{ width: 200 }}>
         <PopoverHeaderBox>
-          <Typography variant='subtitle1'>Syamsul</Typography>
+          <Typography variant='subtitle1'>{username}</Typography>
           <Typography variant='subtitle3' color={theme.palette.text.secondary}>
-            081803663156
+            {phoneNumber}
           </Typography>
         </PopoverHeaderBox>
         <Divider />

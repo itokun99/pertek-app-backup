@@ -20,7 +20,7 @@
     "**/*.ts",
     "**/*.tsx",
     "src/theme/overrides/ToggleButton.js",
-    "src/theme/overrides/Alert.js"
+    "src/theme/overrides/Alert.tsx"
   ],
   "exclude": ["node_modules"]
 }

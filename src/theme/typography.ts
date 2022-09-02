@@ -1,3 +1,5 @@
+import { responsiveFontSizes } from '../utils/getFontValue';
+import { GREY } from './palette';
 // ----------------------------------------------------------------------
 
 function pxToRem(value: number) {
@@ -5,7 +7,6 @@ function pxToRem(value: number) {
 }
 
 const FONT_PRIMARY = 'Public Sans, sans-serif'; // Google Font
-// const FONT_SECONDARY = 'CircularStd, sans-serif'; // Local Font
 
 const typography = {
   fontFamily: FONT_PRIMARY,
@@ -58,6 +59,9 @@ const typography = {
     fontWeight: 600,
     lineHeight: 22 / 14,
     // fontSize: pxToRem(14),
+  },
+  subtitle3: {
+    fontSize: '0.8rem',
   },
   body1: {
     lineHeight: 1.5,

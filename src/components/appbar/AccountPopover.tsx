@@ -9,10 +9,8 @@ const AccountPopover = (props: PopoverProps) => {
     <Popover {...props} sx={{ mt: 2 }}>
       <Box sx={{ width: 200 }}>
         <PopoverHeaderBox>
-          <Typography variant='body2' sx={{ fontWeight: 500 }}>
-            Syamsul
-          </Typography>
-          <Typography variant='body2' sx={{ fontSize: '0.8rem', color: theme.palette.text.secondary }}>
+          <Typography variant='subtitle1'>Syamsul</Typography>
+          <Typography variant='subtitle3' color={theme.palette.text.secondary}>
             081803663156
           </Typography>
         </PopoverHeaderBox>

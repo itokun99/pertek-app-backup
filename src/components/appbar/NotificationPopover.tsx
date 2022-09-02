@@ -43,7 +43,7 @@ const NotificationPopover = (props: PopoverProps) => {
             </Grid>
             <Grid>
               <Tooltip title='Tandai semua'>
-                <IconButton sx={{ backgroundColor: theme.palette.grey[100] }}>
+                <IconButton sx={{ backgroundColor: theme.palette.grey[100], color: theme.palette.success.main }}>
                   <DoneAll />
                 </IconButton>
               </Tooltip>
@@ -52,7 +52,7 @@ const NotificationPopover = (props: PopoverProps) => {
         </Box>
         <Divider />
         <Box p={0} m={0}>
-          <SimpleBar style={{ maxHeight: 200 }}>
+          <SimpleBar style={{ maxHeight: 260 }}>
             <List disablePadding>
               {[
                 {

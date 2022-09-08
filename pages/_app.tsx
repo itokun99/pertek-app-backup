@@ -6,8 +6,10 @@ import { AuthProvider } from '../src/provider/AuthProvider';
 import { useRouter } from 'next/router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
+import { SessionProvider } from 'next-auth/react';
+
 import MyTheme from '../src/theme';
-import { NextPage } from 'next';
+import { NextPage, NextPageContext } from 'next';
 import { ReactElement, ReactNode } from 'react';
 import 'simplebar-react/dist/simplebar.min.css';
 
@@ -59,19 +61,17 @@ function MyApp({ Component, pageProps }: MyAppProps) {
       }}
     >
       <ThemeProvider theme={MyTheme}>
-        <AuthProvider>
-          <Head>
-            <title>Propertek - Best Indonesia Property Management System</title>
-            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
-            <meta
-              name='description'
-              content='The best property management system that suit Indonesia property management business'
-            />
-            <link rel='icon' href='/favicon.ico' />
-          </Head>
-          <CssBaseline />
-          {getLayout(<Component {...pageProps} />)}
-        </AuthProvider>
+        <Head>
+          <title>Propertek - Best Indonesia Property Management System</title>
+          <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+          <meta
+            name='description'
+            content='The best property management system that suit Indonesia property management business'
+          />
+          <link rel='icon' href='/favicon.ico' />
+        </Head>
+        <CssBaseline />
+        {getLayout(<Component {...pageProps} />)}
       </ThemeProvider>
     </SWRConfig>
   );

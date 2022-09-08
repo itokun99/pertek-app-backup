@@ -1,6 +1,7 @@
 import { LoadingButton } from '@mui/lab';
 import { alpha, Box, Grid, IconButton, InputAdornment, Stack, TextField, Typography, useTheme } from '@mui/material';
-// import styles from '../styles/Home.module.css';
+
+import { useSession, signIn, getSession } from 'next-auth/react';
 
 import { useContext, useState } from 'react';
 import { AuthContext } from '../src/provider/AuthProvider';
@@ -14,19 +15,9 @@ const Home = () => {
   const [password, setPassword] = useState('');
   const [isVisible, setVisibility] = useState(false);
 
-  const { changeState } = useContext(AuthContext);
   const router = useRouter();
 
   const theme = useTheme();
-
-  const _handleLogin = async (e: any) => {
-    e.preventDefault();
-    const ok = await useLogin(username, password);
-    if (ok) {
-      changeState(true);
-      router.replace('/dashboard');
-    }
-  };
 
   return (
     <Grid
@@ -83,7 +74,7 @@ const Home = () => {
               <Link href='/forgot-password'>Lupa password?</Link>
             </Typography>
           </Box>
-          <LoadingButton sx={{ height: theme.spacing(6) }} variant='contained' onClick={_handleLogin}>
+          <LoadingButton sx={{ height: theme.spacing(6) }} variant='contained'>
             Login
           </LoadingButton>
         </Stack>

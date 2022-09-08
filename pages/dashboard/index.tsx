@@ -47,13 +47,7 @@ const menus = [
   },
 ];
 
-function Dashboard({ isLoggedIn }: any) {
-  const { changeState } = useContext(AuthContext);
-
-  useEffect(() => {
-    changeState(isLoggedIn);
-  }, [isLoggedIn, changeState]);
-
+function Dashboard() {
   return (
     <>
       <Fab color='primary'>

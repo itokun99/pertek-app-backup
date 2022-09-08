@@ -1,43 +1,71 @@
 import { LoadingButton } from '@mui/lab';
 import {
+  Alert as MuiAlert,
+  AlertProps,
   alpha,
   Box,
-  Container,
   Grid,
   IconButton,
   InputAdornment,
+  Snackbar,
   Stack,
   TextField,
   Typography,
   useTheme,
 } from '@mui/material';
-// import styles from '../styles/Home.module.css';
 
-import { useContext, useState } from 'react';
-import { useRouter } from 'next/router';
-import { AccountCircle, Key, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
+import { FormEvent, forwardRef, useState } from 'react';
+import { AccountCircle, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import Link from 'next/link';
-import { AuthContext } from '../../src/provider/AuthProvider';
-import { useLogin } from '../../lib/login';
+import { useRouter } from 'next/router';
+
+type MessageType = {
+  type: 'error' | 'success' | 'warning' | 'info';
+  message: string;
+};
 
 const LoginPage = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isVisible, setVisibility] = useState(false);
-
-  const { changeState } = useContext(AuthContext);
+  const theme = useTheme();
   const router = useRouter();
 
-  const theme = useTheme();
+  const [identity, setIdentity] = useState('');
+  const [password, setPassword] = useState('');
+  const [alert, setAlert] = useState<MessageType | null>(null);
+  const [isVisible, setVisibility] = useState(false);
 
-  const _handleLogin = async (e: any) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const ok = await useLogin(username, password);
-    if (ok) {
-      changeState(true);
-      router.replace('/dashboard');
+
+    if (identity === '' && password === '') {
+      setAlert({
+        type: 'warning',
+        message: 'Identitas dan atau passwork tidak boleh kosong!',
+      });
+      return;
     }
+
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        identity,
+        password,
+      }),
+    });
+
+    if (!response.ok) {
+      setAlert({ type: 'error', message: 'Login gagal! Periksa kembali identitas dan password Anda' });
+      return;
+    }
+
+    router.replace('/dashboard');
   };
+
+  const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
+  });
 
   return (
     <Grid
@@ -50,62 +78,73 @@ const LoginPage = () => {
       }}
     >
       <Grid item width={350}>
-        <Stack rowGap={3}>
-          <Box sx={{ mb: theme.spacing(2) }}>
-            <Typography variant='h5'>PROPERTEK</Typography>
-            <Typography variant='body2' color={theme.palette.text.secondary}>
-              Best Indonesia Property Management System
-            </Typography>
-          </Box>
-          <TextField
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <AccountCircle />
-                </InputAdornment>
-              ),
-            }}
-            variant='outlined'
-            label='Username'
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <Lock />
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position='end'>
-                  <IconButton onClick={() => setVisibility(!isVisible)}>
-                    {isVisible ? <Visibility /> : <VisibilityOff />}
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            variant='outlined'
-            label='Password'
-            onChange={(e) => setPassword(e.target.value)}
-            type={isVisible ? 'text' : 'password'}
-          />
-          <Box textAlign='right' sx={{ mb: theme.spacing(2) }}>
-            <Typography color={theme.palette.primary.main} fontWeight={600}>
-              <Link href='/forgot-password'>Lupa password?</Link>
-            </Typography>
-          </Box>
-          <LoadingButton sx={{ height: theme.spacing(6) }} variant='contained' onClick={_handleLogin}>
-            Login
-          </LoadingButton>
-        </Stack>
-        <Grid container>
-          <Grid item xs textAlign='center' sx={{ mt: theme.spacing(5) }}>
-            <Typography variant='body2' color={alpha(theme.palette.grey[500], 0.8)}>
-              {' '}
-              Propertek PMS - v3.0.0
-            </Typography>
+        <form onSubmit={handleSubmit}>
+          <Stack rowGap={3}>
+            <Box sx={{ mb: theme.spacing(2) }}>
+              <Typography variant='h5'>PROPERTEK</Typography>
+              <Typography variant='body2' color={theme.palette.text.secondary}>
+                Best Indonesia Property Management System
+              </Typography>
+            </Box>
+            {alert !== null && (
+              <Snackbar
+                onClose={() => setAlert(null)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                open={alert !== null}
+              >
+                <Alert severity={alert.type}>{alert.message}</Alert>
+              </Snackbar>
+            )}
+            <TextField
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <AccountCircle />
+                  </InputAdornment>
+                ),
+              }}
+              variant='outlined'
+              label='Identitas'
+              onChange={(e) => setIdentity(e.target.value)}
+            />
+            <TextField
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Lock />
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment position='end'>
+                    <IconButton onClick={() => setVisibility(!isVisible)}>
+                      {isVisible ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+              variant='outlined'
+              label='Password'
+              onChange={(e) => setPassword(e.target.value)}
+              type={isVisible ? 'text' : 'password'}
+            />
+            <Box textAlign='right' sx={{ mb: theme.spacing(2) }}>
+              <Typography color={theme.palette.primary.main} fontWeight={600}>
+                <Link href='/forgot-password'>Lupa password?</Link>
+              </Typography>
+            </Box>
+            <LoadingButton type='submit' sx={{ height: theme.spacing(6) }} variant='contained'>
+              Login
+            </LoadingButton>
+          </Stack>
+          <Grid container>
+            <Grid item xs textAlign='center' sx={{ mt: theme.spacing(5) }}>
+              <Typography variant='body2' color={alpha(theme.palette.grey[500], 0.8)}>
+                {' '}
+                Propertek PMS - v3.0.0
+              </Typography>
+            </Grid>
           </Grid>
-        </Grid>
+        </form>
       </Grid>
     </Grid>
   );

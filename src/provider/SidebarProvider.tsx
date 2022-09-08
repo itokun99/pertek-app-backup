@@ -1,3 +1,4 @@
+import { getCookie } from 'cookies-next';
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { SidebarMenuGroup } from '../components/sidebar';
@@ -30,6 +31,7 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
     parentId: '',
     childId: '',
   });
+
   const { data } = useSWR('/api/menu');
 
   const value = useMemo<SidebarContextInterface>(

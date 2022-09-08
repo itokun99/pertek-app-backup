@@ -27,7 +27,7 @@ export const SidebarSubList = ({ menus, parentId }: SidebarSubListProps) => {
         const isActive = router.pathname === menu.url;
         return (
           <ListItem key={key}>
-            <ListItemButton key={key} onClick={() => handleClick(parentId, childId, menu.url)}>
+            <ListItemButton key={key} href={menu.url}>
               <ListItemIcon>
                 <FiberManualRecord
                   sx={{

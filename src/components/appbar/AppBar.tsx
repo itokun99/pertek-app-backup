@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import NotificationPopover from './NotificationPopover';
 import InboxPopover from './InboxPopover';
 import AccountPopover from './AccountPopover';
+import { NotificationContext } from '../../provider/NotificationProvider';
 
 export const popoverDefaultProps = {
   anchorOrigin: {
@@ -37,6 +38,7 @@ export const AppBarComponent = () => {
   const router = useRouter();
   const theme = useTheme();
   const { user } = useContext(AuthContext);
+  const { unreadCount } = useContext(NotificationContext);
 
   const [popover, setPopover] = useState<PopoverState | null>(null);
 
@@ -79,7 +81,7 @@ export const AppBarComponent = () => {
             }}
           >
             <IconButton aria-label='inbox button'>
-              <Badge badgeContent={3} max={9} overlap='circular' color='error'>
+              <Badge max={9} overlap='circular' color='error'>
                 <Mail />
               </Badge>
             </IconButton>
@@ -98,7 +100,7 @@ export const AppBarComponent = () => {
                 mountPopover(e, 'notif');
               }}
             >
-              <Badge badgeContent={9} max={9} overlap='circular' color='error'>
+              <Badge invisible={unreadCount <= 0} badgeContent={unreadCount} max={9} overlap='circular' color='error'>
                 <Notifications />
               </Badge>
             </IconButton>

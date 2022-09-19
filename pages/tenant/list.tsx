@@ -8,7 +8,7 @@ import { PropsWithChildren, ReactElement } from 'react';
 import useSWR from 'swr';
 import { AnimatedButton } from '../../src/components/AnimatedButtton';
 import Label from '../../src/components/Label';
-import WithAppBar from '../../src/template/WithAppBar';
+import ProtectedPage from '../../src/template/ProtectedPage';
 
 interface TenantDataModel {
   id: number;
@@ -229,6 +229,6 @@ const TabBar = ({ theme, tabs }: TabBarProps) => {
   );
 };
 
-TenantPage.getLayout = (page: ReactElement) => <WithAppBar>{page}</WithAppBar>;
+TenantPage.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default TenantPage;

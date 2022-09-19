@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
 import { ReactElement } from 'react';
-import WithAppBar from '../../src/template/WithAppBar';
+import ProtectedPage from '../../src/template/ProtectedPage';
 
 const TokenList = () => {
   return <Typography>Token List</Typography>;
 };
 
-TokenList.getLayout = (page: ReactElement) => <WithAppBar>{page}</WithAppBar>;
+TokenList.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default TokenList;

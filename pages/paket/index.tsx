@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
 import { ReactElement } from 'react';
-import WithAppBar from '../../src/template/WithAppBar';
+import ProtectedPage from '../../src/template/ProtectedPage';
 
 const PaketIndex = () => {
   return <Typography>Paket Index</Typography>;
 };
 
-PaketIndex.getLayout = (page: ReactElement) => <WithAppBar>{page}</WithAppBar>;
+PaketIndex.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default PaketIndex;

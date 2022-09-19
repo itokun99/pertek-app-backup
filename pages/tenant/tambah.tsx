@@ -1,11 +1,11 @@
 import { Typography } from '@mui/material';
 import { ReactElement } from 'react';
-import WithAppBar from '../../src/template/WithAppBar';
+import ProtectedPage from '../../src/template/ProtectedPage';
 
 const AddNewTenant = () => {
   return <Typography>Tambah tenant</Typography>;
 };
 
-AddNewTenant.getLayout = (page: ReactElement) => <WithAppBar>{page}</WithAppBar>;
+AddNewTenant.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default AddNewTenant;

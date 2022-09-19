@@ -10,6 +10,7 @@ import MyTheme from '../src/theme';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 import 'simplebar-react/dist/simplebar.min.css';
+import { withSessionSsr } from '../lib/withSession';
 
 export class MyError extends Error {
   statusCode?: number;

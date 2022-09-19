@@ -5,7 +5,6 @@ function clearSession(req: NextApiRequest) {
 }
 
 export const post = async (req: NextApiRequest, url: string) => {
-  console.log(req.body);
   const response = await fetch(url, {
     method: 'POST',
     headers: {

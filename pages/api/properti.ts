@@ -9,7 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log(res.json());
     return await res.json();
   }
 }

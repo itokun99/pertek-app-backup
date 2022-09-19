@@ -23,15 +23,15 @@ export const getServerSideProps = withSessionSsr(async function getServerSidePro
 
 const TokenIndex = ({ user }: any) => {
   const context = useContext(AuthContext);
-  const router = useRouter();
+  const { replace } = useRouter();
 
   useEffect(() => {
     if (user) {
       context.setUser(user.profile);
-    } else {
-      router.replace('/login');
+      return;
     }
-  }, [user, context, router]);
+    replace('/login');
+  }, [user, context, replace]);
 
   return <Typography>Token Index</Typography>;
 };

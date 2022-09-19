@@ -1,7 +1,5 @@
 import { Box, List, ListItemButton, Popover, PopoverProps, Typography, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
-import { AuthContext } from '../../provider/AuthProvider';
 import Divider from '../Divider';
 import { PopoverButtonBox, PopoverHeaderBox } from './AppBar';
 

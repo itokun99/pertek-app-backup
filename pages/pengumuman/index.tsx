@@ -25,12 +25,12 @@ const PengumumanIndex = ({ user }: any) => {
   const { replace } = useRouter();
 
   useEffect(() => {
-    if (user) {
-      context.setUser(user.profile);
+    if (!user) {
+      replace('/login');
       return;
     }
 
-    replace('/login');
+    context.setUser(user.profile);
   }, [replace, context, user]);
 
   return <Typography>Pengumuman Index</Typography>;

@@ -146,21 +146,10 @@ const RightSideHeader = () => {
   );
 };
 
-export async function getInitialProps(ctx: NextPageContext) {
-  console.log('called');
-  return {
-    props: {
-      hello: 'world',
-    },
-  };
-}
-
-const TenantPage = ({ hello }: any) => {
+const TenantPage = () => {
   const theme = useTheme();
 
   const { data } = useSWR('/api/tenant');
-
-  console.log(hello);
 
   return (
     <Stack>

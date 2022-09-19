@@ -1,35 +1,24 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import cookie from 'cookie';
+import { post } from '../../lib/apiCall';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(400).json({ message: 'Bad Request' });
+import { withSessionRoute } from '../../lib/withSession';
+
+export default withSessionRoute(loginHandler);
+
+async function loginHandler(req: NextApiRequest, res: NextApiResponse) {
+  const apiResponse = await post(req, 'https://xrqr-haey-y7wc.n7.xano.io/api:xG61OBxf/auth/login');
+
+  const responseBody = await apiResponse.json();
+
+  if (!apiResponse.ok) {
+    return res.status(apiResponse.status).json({ message: responseBody.message });
   }
 
-  const { identity, password } = req.body;
-  const response = await fetch('https://x8ki-letl-twmt.n7.xano.io/api:xG61OBxf/auth/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: req.body.identity,
-      password: req.body.password,
-    }),
-  });
+  req.session.user = {
+    token: responseBody.session.token,
+    profile: responseBody.user,
+  };
 
-  if (!response.ok) {
-    return res.status(401).json({ message: 'Login gagal! periksa kembali identitas dan password Anda' });
-  }
-
-  const payload = await response.json();
-
-  const serializedCookie = cookie.serialize('token', payload.authToken, {
-    httpOnly: true,
-    path: '/',
-    secure: false,
-    maxAge: 60 * 60 * 100,
-  });
-
-  return res.setHeader('Set-Cookie', serializedCookie).status(200).json({ message: 'OK' });
+  await req.session.save();
+  return res.status(200).json({ message: 'Login Success' });
 }

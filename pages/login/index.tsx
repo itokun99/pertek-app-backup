@@ -55,8 +55,10 @@ const LoginPage = () => {
       }),
     });
 
+    const payload = await response.json();
+
     if (!response.ok) {
-      setAlert({ type: 'error', message: 'Login gagal! Periksa kembali identitas dan password Anda' });
+      setAlert({ type: 'error', message: payload.message || 'Unknown error occurs' });
       return;
     }
 

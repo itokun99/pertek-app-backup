@@ -1,28 +1,29 @@
 import { useRouter } from 'next/router';
-import { createContext, ReactNode, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, ReactNode, useEffect, useMemo, useState } from 'react';
 
 export interface UserModel {
   id: string;
   username: string;
-  phoneNumber: string;
+  phone_number: string;
+  role: string;
+  registration_stats: string;
   avatar?: string;
 }
 
 type AuthContextInterface = {
-  user?: UserModel;
-  setUser: (user?: UserModel) => void;
+  user: UserModel | null;
+  // token: string | null;
+  setUser: (user: UserModel) => void;
 };
 
 export const AuthContext = createContext<AuthContextInterface>({
-  setUser: () => {},
+  user: null,
+  // token: null,
+  setUser: (user?: UserModel) => {},
 });
 
-type Props = {
-  children: ReactNode;
-};
-
-export function AuthProvider({ children }: Props) {
-  const [user, setUser] = useState<UserModel | undefined>();
+export function AuthProvider({ children }: PropsWithChildren) {
+  const [user, setUser] = useState({} as UserModel);
 
   const value = useMemo(
     () => ({

@@ -1,5 +1,7 @@
 import { Box, List, ListItemButton, Popover, PopoverProps, Typography, useTheme } from '@mui/material';
-import { UserModel } from '../../provider/AuthProvider';
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+import { AuthContext } from '../../provider/AuthProvider';
 import Divider from '../Divider';
 import { PopoverButtonBox, PopoverHeaderBox } from './AppBar';
 
@@ -10,6 +12,18 @@ export type AccountPopoverProps = PopoverProps & {
 
 const AccountPopover = ({ username, phoneNumber, ...rest }: AccountPopoverProps) => {
   const theme = useTheme();
+  const router = useRouter();
+
+  const handleLogout = async (e: any) => {
+    e.preventDefault();
+    const res = await fetch('/api/logout', {
+      method: 'POST',
+    });
+
+    if (res.ok) {
+      router.replace('/login');
+    }
+  };
 
   return (
     <Popover {...rest} sx={{ mt: 2 }}>
@@ -30,7 +44,7 @@ const AccountPopover = ({ username, phoneNumber, ...rest }: AccountPopoverProps)
         <Divider />
         <PopoverButtonBox>
           <List>
-            <ListItemButton>Logout</ListItemButton>
+            <ListItemButton onClick={handleLogout}>Logout</ListItemButton>
           </List>
         </PopoverButtonBox>
       </Box>

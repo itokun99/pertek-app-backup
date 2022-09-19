@@ -2,6 +2,7 @@ import { Add } from '@mui/icons-material';
 import { Theme } from '@mui/material';
 import { Avatar, Box, Card, Grid, Stack, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { NextPageContext } from 'next';
 
 import { PropsWithChildren, ReactElement } from 'react';
 import useSWR from 'swr';
@@ -145,10 +146,21 @@ const RightSideHeader = () => {
   );
 };
 
-const TenantPage = () => {
+export async function getInitialProps(ctx: NextPageContext) {
+  console.log('called');
+  return {
+    props: {
+      hello: 'world',
+    },
+  };
+}
+
+const TenantPage = ({ hello }: any) => {
   const theme = useTheme();
 
   const { data } = useSWR('/api/tenant');
+
+  console.log(hello);
 
   return (
     <Stack>
@@ -160,7 +172,7 @@ const TenantPage = () => {
       </Box>
       <Box>
         <Card>
-          {/* <TabBar theme={theme} tabs={['All', 'Draft', 'Unpaid']} /> */}
+          <TabBar theme={theme} tabs={['All', 'Draft', 'Unpaid']} />
           <Box
             sx={{
               paddingY: theme.spacing(2),

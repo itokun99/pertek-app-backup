@@ -1,18 +1,18 @@
-import { Box, Button, Container, Fab, Grid, Icon, IconButton, Paper, Typography } from '@mui/material';
-import { getCookies } from 'cookies-next';
+import { Box, Button, Container, Fab, Grid, Icon, Paper, Typography } from '@mui/material';
+import { NextPageContext } from 'next';
+import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
-import { AppBarComponent } from '../../src/components/appbar/AppBar';
+import { withSessionSsr } from '../../lib/withSession';
 import { AuthContext } from '../../src/provider/AuthProvider';
 import WithAppBar from '../../src/template/WithAppBar';
 
-export const getServerSideProps = async (context: any) => {
-  const cookies = getCookies(context);
+export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req }) {
   return {
     props: {
-      isLoggedIn: cookies.token === 'admin',
+      user: req.session.user || null,
     },
   };
-};
+});
 
 const menus = [
   {
@@ -47,7 +47,15 @@ const menus = [
   },
 ];
 
-function Dashboard() {
+function Dashboard({ user }: any) {
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user === null) {
+      router.replace('/login');
+    }
+  }, [user, router]);
+
   return (
     <>
       <Fab color='primary'>

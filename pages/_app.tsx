@@ -6,10 +6,8 @@ import { AuthProvider } from '../src/provider/AuthProvider';
 import { useRouter } from 'next/router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
-import { SessionProvider } from 'next-auth/react';
-
 import MyTheme from '../src/theme';
-import { NextPage, NextPageContext } from 'next';
+import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 import 'simplebar-react/dist/simplebar.min.css';
 
@@ -34,7 +32,7 @@ const _errorRetryHandler = (err: any, key: string, config: any, revalidate: any)
   const router = useRouter();
 
   if (err.statusCode === 401) {
-    router.replace('/');
+    router.replace('/login');
   }
 
   if (err.statusCode === 404) {
@@ -54,26 +52,28 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const getLayout = Component.getLayout || ((page: ReactElement) => page);
 
   return (
-    <SWRConfig
-      value={{
-        onErrorRetry: _errorRetryHandler,
-        fetcher,
-      }}
-    >
-      <ThemeProvider theme={MyTheme}>
-        <Head>
-          <title>Propertek - Best Indonesia Property Management System</title>
-          <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
-          <meta
-            name='description'
-            content='The best property management system that suit Indonesia property management business'
-          />
-          <link rel='icon' href='/favicon.ico' />
-        </Head>
-        <CssBaseline />
-        {getLayout(<Component {...pageProps} />)}
-      </ThemeProvider>
-    </SWRConfig>
+    <AuthProvider>
+      <SWRConfig
+        value={{
+          onErrorRetry: _errorRetryHandler,
+          fetcher,
+        }}
+      >
+        <ThemeProvider theme={MyTheme}>
+          <Head>
+            <title>Propertek - Best Indonesia Property Management System</title>
+            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+            <meta
+              name='description'
+              content='The best property management system that suit Indonesia property management business'
+            />
+            <link rel='icon' href='/favicon.ico' />
+          </Head>
+          <CssBaseline />
+          {getLayout(<Component {...pageProps} />)}
+        </ThemeProvider>
+      </SWRConfig>
+    </AuthProvider>
   );
 }
 

@@ -9,7 +9,6 @@ export type AccountPopoverProps = PopoverProps & {
 };
 
 const AccountPopover = ({ user, ...rest }: AccountPopoverProps) => {
-  console.log('account re-render');
   const theme = useTheme();
   const router = useRouter();
   const { username, phone_number } = user!;

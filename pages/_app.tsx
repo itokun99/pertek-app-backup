@@ -3,7 +3,6 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
 import { AuthProvider } from '../src/provider/AuthProvider';
-import { useRouter } from 'next/router';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import MyTheme from '../src/theme';

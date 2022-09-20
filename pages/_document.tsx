@@ -16,6 +16,7 @@ export default class MyDocument extends Document {
           <meta name='msapplication-tap-highlight' content='no' />
           <meta name='theme-color' content='#000000' />
           <link rel='manifest' href='/manifest.json' />
+          <link rel='apple-touch-icon' href='/static/icons/icon-144x144.png' />
           <link rel='shortcut icon' href='/favicon.ico' />
           <link rel='preconnect' href='https://fonts.googleapis.com' />
           <link rel='preconnect' href='https://fonts.gstatic.com' />

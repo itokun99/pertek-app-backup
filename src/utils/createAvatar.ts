@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { ERROR, GRADIENTS, PRIMARY, WARNING } from '../theme/palette';
+import { ERROR, GRADIENTS, INFO, PRIMARY, SUCCESS, WARNING } from '../theme/palette';
 
 const PRIMARY_NAME = ['A', 'N', 'H', 'L', 'Q', '9', '8'];
 const INFO_NAME = ['F', 'G', 'T', 'I', 'J', '1', '2', '3'];
@@ -13,12 +13,12 @@ function getFirstCharacter(name: string) {
 }
 
 function getAvatarColor(name: string) {
-  if (PRIMARY_NAME.includes(getFirstCharacter(name))) return 'primary';
-  if (INFO_NAME.includes(getFirstCharacter(name))) return 'info';
-  if (SUCCESS_NAME.includes(getFirstCharacter(name))) return 'success';
-  if (WARNING_NAME.includes(getFirstCharacter(name))) return 'warning';
-  if (ERROR_NAME.includes(getFirstCharacter(name))) return 'error';
-  return 'default';
+  if (PRIMARY_NAME.includes(getFirstCharacter(name))) return PRIMARY.main;
+  if (INFO_NAME.includes(getFirstCharacter(name))) return INFO.main;
+  if (SUCCESS_NAME.includes(getFirstCharacter(name))) return SUCCESS.main;
+  if (WARNING_NAME.includes(getFirstCharacter(name))) return WARNING.main;
+  if (ERROR_NAME.includes(getFirstCharacter(name))) return ERROR.main;
+  return PRIMARY.main;
 }
 
 function getAvatarModuleColor(name: string) {

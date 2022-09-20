@@ -1,4 +1,4 @@
-import { Box, List, ListSubheader as MuiListSubheader, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { useContext } from 'react';
 import { SidebarContext } from '../../provider/SidebarProvider';
 import { SidebarRootList } from './SidebarRootList';

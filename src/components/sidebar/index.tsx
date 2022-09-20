@@ -28,7 +28,7 @@ export interface SidebarMenu {
   submenus?: SidebarSubMenu[];
 }
 
-export const Sidebar = () => {
+const Sidebar = () => {
   const theme = useTheme();
   const { open } = useContext(SidebarContext);
 
@@ -41,3 +41,5 @@ export const Sidebar = () => {
     </Drawer>
   );
 };
+
+export default Sidebar;

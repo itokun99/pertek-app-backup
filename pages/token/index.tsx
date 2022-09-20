@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { ReactElement, useContext, useEffect } from 'react';
 import { AuthContext } from '../../src/provider/AuthProvider';
 
-import { withSessionSsr } from '../../lib/withSession';
-import { redirectToAuth } from '../../lib/useRedirect';
+import { withSessionSsr } from '../../src/lib/withSession';
+import { redirectToAuth } from '../../src/lib/useRedirect';
 import ProtectedPage from '../../src/template/ProtectedPage';
 
 export const getServerSideProps = withSessionSsr(async function getServerSideProps({ req, res }) {

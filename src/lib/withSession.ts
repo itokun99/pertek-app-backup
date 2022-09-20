@@ -11,7 +11,6 @@ export const sessionOptions = {
 } as IronSessionOptions;
 
 export function withSessionRoute(handler: NextApiHandler) {
-  console.log(sessionOptions);
   return withIronSessionApiRoute(handler, sessionOptions);
 }
 

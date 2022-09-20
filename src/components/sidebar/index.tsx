@@ -34,7 +34,7 @@ export const Sidebar = () => {
 
   return (
     <Drawer variant='permanent' width={280} open={open}>
-      <SimpleBar style={{ maxHeight: '100vh', overflowX: 'hidden' }}>
+      <SimpleBar style={{ maxHeight: '100vh', ...{ width: open ? 280 : 65 }, overflowX: 'hidden' }}>
         <SidebarHeader buttonColor={theme.palette.primary.dark}>Propertek</SidebarHeader>
         <SidebarContent />
       </SimpleBar>

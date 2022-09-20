@@ -2,7 +2,7 @@ import { Box, Button, Container, Fab, Grid, Icon, Paper, Typography } from '@mui
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
-import { withSessionSsr } from '../../lib/withSession';
+import { withSessionSsr } from '../../src/lib/withSession';
 import { AuthContext } from '../../src/provider/AuthProvider';
 import ProtectedPage from '../../src/template/ProtectedPage';
 

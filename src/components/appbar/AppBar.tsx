@@ -121,8 +121,7 @@ export const AppBarComponent = () => {
             </IconButton>
           </Box>
           <AccountPopover
-            username={user?.username ?? ''}
-            phoneNumber={user?.phone_number!}
+            user={user!}
             anchorEl={popover?.anchor}
             open={popover?.name === 'account'}
             onClose={unmountPopover}

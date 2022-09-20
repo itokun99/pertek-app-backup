@@ -1,16 +1,18 @@
 import { Box, List, ListItemButton, Popover, PopoverProps, Typography, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
+import { UserModel } from '../../provider/AuthProvider';
 import Divider from '../Divider';
 import { PopoverButtonBox, PopoverHeaderBox } from './AppBar';
 
 export type AccountPopoverProps = PopoverProps & {
-  username: string;
-  phoneNumber: string;
+  user: UserModel;
 };
 
-const AccountPopover = ({ username, phoneNumber, ...rest }: AccountPopoverProps) => {
+const AccountPopover = ({ user, ...rest }: AccountPopoverProps) => {
+  console.log('account re-render');
   const theme = useTheme();
   const router = useRouter();
+  const { username, phone_number } = user!;
 
   const handleLogout = async (e: any) => {
     e.preventDefault();
@@ -23,13 +25,18 @@ const AccountPopover = ({ username, phoneNumber, ...rest }: AccountPopoverProps)
     }
   };
 
+  let name = '';
+  if (username) {
+    name = `${username.charAt(0).toLocaleUpperCase()}${username.substring(1, username.length)}`;
+  }
+
   return (
     <Popover {...rest} sx={{ mt: 2 }}>
       <Box sx={{ width: 200 }}>
         <PopoverHeaderBox>
-          <Typography variant='subtitle1'>{username}</Typography>
+          <Typography variant='subtitle1'>{name}</Typography>
           <Typography variant='subtitle3' color={theme.palette.text.secondary}>
-            {phoneNumber}
+            {phone_number}
           </Typography>
         </PopoverHeaderBox>
         <Divider />

@@ -1,4 +1,4 @@
-import '../styles/globals.css';
+// import '../styles/globals.css';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
@@ -29,15 +29,18 @@ const fetcher = async (url: string) => {
 };
 
 const _errorRetryHandler = (err: any, key: string, config: any, revalidate: any) => {
-  const router = useRouter();
+  // const router = useRouter();
+  console.log('error message from error handler', err);
+  window.location.replace('/login');
+  return;
 
-  if (err.statusCode === 401) {
-    router.replace('/login');
-  }
+  // if (err.statusCode === 401) {
+  //   router.replace('/login');
+  // }
 
-  if (err.statusCode === 404) {
-    return;
-  }
+  // if (err.statusCode === 404) {
+  //   return;
+  // }
 };
 
 type NextPageWithLayout = NextPage & {

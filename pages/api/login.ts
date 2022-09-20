@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { post } from '../../lib/apiCall';
+import { post } from '../../src/lib/apiCall';
 
-import { withSessionRoute } from '../../lib/withSession';
+import { withSessionRoute } from '../../src/lib/withSession';
 
 export default withSessionRoute(loginHandler);
 

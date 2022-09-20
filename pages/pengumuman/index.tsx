@@ -1,8 +1,8 @@
 import { Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { ReactElement, useContext, useEffect } from 'react';
-import { redirectToAuth } from '../../lib/useRedirect';
-import { withSessionSsr } from '../../lib/withSession';
+import { redirectToAuth } from '../../src/lib/useRedirect';
+import { withSessionSsr } from '../../src/lib/withSession';
 import { AuthContext } from '../../src/provider/AuthProvider';
 import ProtectedPage from '../../src/template/ProtectedPage';
 

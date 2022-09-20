@@ -1,8 +1,8 @@
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../src/provider/AuthProvider';
 import { useRouter } from 'next/router';
-import { withSessionSsr } from '../lib/withSession';
-import { redirectToAuth } from '../lib/useRedirect';
+import { withSessionSsr } from '../src/lib/withSession';
+import { redirectToAuth } from '../src/lib/useRedirect';
 
 export const getServerSideProps = withSessionSsr(({ req, res }) => {
   const session = req?.session;

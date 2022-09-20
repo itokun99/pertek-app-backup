@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { SidebarMenuGroup } from '../components/sidebar';
 

@@ -10,3 +10,6 @@ const createResponse = (res: NextApiResponse, status: number, message: string) =
 
 export const unauthorized = (res: NextApiResponse) => createResponse(res, 401, 'Unauthorized Access');
 export const methodNotAlowed = (res: NextApiResponse) => createResponse(res, 401, 'Method not allowed');
+export const clearSession = (req: NextApiRequest) => {
+  req.session.destroy();
+};

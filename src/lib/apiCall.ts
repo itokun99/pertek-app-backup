@@ -1,8 +1,5 @@
 import { NextApiRequest } from 'next';
-
-function clearSession(req: NextApiRequest) {
-  req.session.destroy();
-}
+import { clearSession } from './apiAuthHelpers';
 
 export const post = async (req: NextApiRequest, url: string, headers?: {}) => {
   const res = await fetch(url, {

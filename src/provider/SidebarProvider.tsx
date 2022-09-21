@@ -32,7 +32,6 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
   });
 
   const { data } = useSWR('/api/menu');
-  // const data = [];
 
   const value = useMemo<SidebarContextInterface>(
     () => ({

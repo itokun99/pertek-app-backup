@@ -32,15 +32,18 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [alert, setAlert] = useState<MessageType | null>(null);
   const [isVisible, setVisibility] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (identity === '' && password === '') {
       setAlert({
         type: 'warning',
         message: 'Identitas dan atau passwork tidak boleh kosong!',
       });
+      setIsLoading(false);
       return;
     }
 
@@ -59,8 +62,11 @@ const LoginPage = () => {
 
     if (!response.ok) {
       setAlert({ type: 'error', message: payload.message || 'Unknown error occurs' });
+      setIsLoading(false);
       return;
     }
+
+    setIsLoading(false);
 
     router.replace('/dashboard');
   };
@@ -118,7 +124,7 @@ const LoginPage = () => {
                 ),
                 endAdornment: (
                   <InputAdornment position='end'>
-                    <IconButton onClick={() => setVisibility(!isVisible)}>
+                    <IconButton aria-label='show password' onClick={() => setVisibility(!isVisible)}>
                       {isVisible ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
                   </InputAdornment>
@@ -134,7 +140,7 @@ const LoginPage = () => {
                 <Link href='/forgot-password'>Lupa password?</Link>
               </Typography>
             </Box>
-            <LoadingButton type='submit' sx={{ height: theme.spacing(6) }} variant='contained'>
+            <LoadingButton loading={isLoading} type='submit' sx={{ height: theme.spacing(6) }} variant='contained'>
               Login
             </LoadingButton>
           </Stack>

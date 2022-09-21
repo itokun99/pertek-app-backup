@@ -1,16 +1,34 @@
-import { Avatar, Box, Link, Typography, useTheme } from '@mui/material';
+import { Cached } from '@mui/icons-material';
+import { Avatar, Box, Button, IconButton, Link, Skeleton, Typography, useTheme } from '@mui/material';
+import { Container } from '@mui/system';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { PropsWithChildren } from 'react';
 import useSWR from 'swr';
 import { createTextAvatar } from '../../utils/createAvatar';
 import { fDate } from '../../utils/formatTime';
 import Label from '../Label';
 
+const ErrorComponent = ({ message }: PropsWithChildren & { message?: string }) => (
+  <Container sx={{ py: 2, lineHeight: 3, width: '100%', textAlign: 'center' }}>
+    <Typography variant='body1'>{message ? message : 'Terjadi kesalahan.'}</Typography>
+    <Button variant='outlined' startIcon={<Cached />}>
+      Muat Ulang
+    </Button>
+  </Container>
+);
+
 const TenantTable = () => {
   const theme = useTheme();
 
   const { data, error } = useSWR('/api/tenant');
-  if (!data) return <>Loading</>;
-  if (error) return <>Error</>;
+  if (!data)
+    return (
+      <>
+        <Skeleton sx={{ mx: 1, lineHeight: 0.3, height: 100 }} />
+        <Skeleton sx={{ mx: 1 }} />
+      </>
+    );
+  if (error) return <ErrorComponent />;
 
   const columns = [
     {

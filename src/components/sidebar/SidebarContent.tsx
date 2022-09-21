@@ -1,6 +1,7 @@
 import { Box, useTheme } from '@mui/material';
 import { useContext } from 'react';
 import { SidebarContext } from '../../provider/SidebarProvider';
+import { ListLoader } from '../loader/ListLoader';
 import { SidebarRootList } from './SidebarRootList';
 
 export const SidebarContent = () => {
@@ -13,9 +14,11 @@ export const SidebarContent = () => {
 
   return (
     <Box sx={boxSx}>
-      {menuGroups.map((menuGroup, key) => (
-        <SidebarRootList key={key} menuGroup={menuGroup} />
-      ))}
+      {menuGroups.length > 0 ? (
+        menuGroups.map((menuGroup, key) => <SidebarRootList key={key} menuGroup={menuGroup} />)
+      ) : (
+        <ListLoader />
+      )}
     </Box>
   );
 };

@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { GREY, INFO, PRIMARY } from '../palette';
+import { PRIMARY } from '../palette';
 
 export default function CssBaseline() {
   return {
@@ -19,6 +19,8 @@ export default function CssBaseline() {
         body: {
           width: '100%',
           height: '100%',
+          padding: 0,
+          margin: 0,
         },
         '#__next': {
           width: '100%',

@@ -1,6 +1,6 @@
 import { Box, Container, Theme, styled } from '@mui/material';
-import dynamic from 'next/dynamic';
-import { PropsWithChildren, Suspense } from 'react';
+import { PropsWithChildren } from 'react';
+import SimpleBar from 'simplebar-react';
 import { AppBarComponent } from '../components/appbar/AppBar';
 import Sidebar from '../components/sidebar';
 import { NotificationProvider } from '../provider/NotificationProvider';
@@ -17,8 +17,10 @@ const ProtectedPage = ({ children }: PropsWithChildren) => {
         <AppBarComponent />
         <SidebarProvider>
           <Sidebar />
+          <SimpleBar style={{ height: '100vh', width: '100vw', overflowX: 'hidden' }}>
+            <MainWrapper maxWidth='xl'>{children}</MainWrapper>
+          </SimpleBar>
         </SidebarProvider>
-        <MainWrapper maxWidth='xl'>{children}</MainWrapper>
       </NotificationProvider>
     </Box>
   );

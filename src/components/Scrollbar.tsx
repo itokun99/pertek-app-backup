@@ -30,10 +30,10 @@ const SimpleBarStyle = styled(SimpleBarReact)(({ theme }) => ({
 
 export const Scrollbar = ({ sx, children }: MenuItemProps) => {
   return (
-    // <RootStyle>
-    <SimpleBarStyle timeout={500} clickOnTrack={false} sx={sx}>
+    <RootStyle>
+      {/* <SimpleBarStyle timeout={500} clickOnTrack={false} sx={sx}> */}
       {children}
-    </SimpleBarStyle>
-    // </RootStyle>
+      {/* </SimpleBarStyle> */}
+    </RootStyle>
   );
 };

@@ -24,7 +24,7 @@ const TenantTable = () => {
             <Avatar sx={{ backgroundColor: avatar.color }}>{avatar.name}</Avatar>
             <Box sx={{ ml: 1 }}>
               <Typography variant='body1' color={theme.palette.primary.main}>
-                <Link href='/profile'>{`${params.row.first_name} {params.row.last_name}`}</Link>
+                <Link href='/profile'>{`${params.row.first_name} ${params.row.last_name}`}</Link>
               </Typography>
               <Typography variant='caption' color={theme.palette.primary.main[300]}>
                 <Link href={`/unit/${params.row.unit.id}`}>{params.row.unit.name}</Link>

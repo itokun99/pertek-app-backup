@@ -1,5 +1,5 @@
-import { useRouter } from 'next/router';
-import { createContext, PropsWithChildren, ReactNode, useEffect, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import useSWR from 'swr';
 
 export interface UserModel {
   id: string;
@@ -12,18 +12,22 @@ export interface UserModel {
 
 type AuthContextInterface = {
   user: UserModel | null;
-  // token: string | null;
   setUser: (user: UserModel) => void;
 };
 
 export const AuthContext = createContext<AuthContextInterface>({
   user: null,
-  // token: null,
   setUser: (user?: UserModel) => {},
 });
 
 export function AuthProvider({ children }: PropsWithChildren) {
   const [user, setUser] = useState({} as UserModel);
+
+  const { data, error } = useSWR('/api/user');
+
+  useEffect(() => {
+    setUser(data);
+  }, [data]);
 
   const value = useMemo(
     () => ({

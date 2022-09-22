@@ -34,11 +34,10 @@ interface PopoverState {
   anchor: HTMLElement | null;
 }
 
-export const AppBarComponent = () => {
-  const router = useRouter();
+const AppBarComponent = () => {
   const theme = useTheme();
-  const { user } = useContext(AuthContext);
   const { unreadCount } = useContext(NotificationContext);
+  const { user } = useContext(AuthContext);
 
   const [popover, setPopover] = useState<PopoverState | null>(null);
 
@@ -49,13 +48,7 @@ export const AppBarComponent = () => {
     } as PopoverState);
   };
 
-  const unmountPopover = () => {
-    setPopover(null);
-  };
-
-  const handleLogout = () => {
-    router.push('/');
-  };
+  const unmountPopover = () => setPopover(null);
 
   return (
     <AppBar position='fixed'>
@@ -120,14 +113,11 @@ export const AppBarComponent = () => {
               <Avatar src={user?.avatar ?? '/static/images/4.jpg'} alt='profile avatar' />
             </IconButton>
           </Box>
-          <AccountPopover
-            user={user!}
-            anchorEl={popover?.anchor}
-            open={popover?.name === 'account'}
-            onClose={unmountPopover}
-          />
+          <AccountPopover anchorEl={popover?.anchor} open={popover?.name === 'account'} onClose={unmountPopover} />
         </Toolbar>
       </Grid>
     </AppBar>
   );
 };
+
+export default AppBarComponent;

@@ -30,6 +30,7 @@ const fetcher = async (url: string) => {
 const _errorRetryHandler = (err: MyError, key: string, config: any, revalidate: any) => {
   if (err.statusCode === 401) {
     window.location.replace('/login');
+    return;
   }
 };
 
@@ -45,13 +46,13 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const getLayout = Component.getLayout || ((page: ReactElement) => page);
 
   return (
-    <AuthProvider>
-      <SWRConfig
-        value={{
-          onErrorRetry: _errorRetryHandler,
-          fetcher,
-        }}
-      >
+    <SWRConfig
+      value={{
+        onErrorRetry: _errorRetryHandler,
+        fetcher,
+      }}
+    >
+      <AuthProvider>
         <ThemeProvider theme={MyTheme}>
           <Head>
             <title>Propertek - Best Indonesia Property Management System</title>
@@ -65,8 +66,8 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           <CssBaseline />
           {getLayout(<Component {...pageProps} />)}
         </ThemeProvider>
-      </SWRConfig>
-    </AuthProvider>
+      </AuthProvider>
+    </SWRConfig>
   );
 }
 

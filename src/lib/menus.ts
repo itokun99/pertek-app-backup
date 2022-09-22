@@ -30,7 +30,7 @@ export const menus = [
           {
             id: 1,
             name: 'List',
-            url: '/pengumuman/list',
+            url: '/pengumuman',
           },
           {
             id: 2,
@@ -48,7 +48,7 @@ export const menus = [
           {
             id: 1,
             name: 'List',
-            url: '/paket/list',
+            url: '/paket',
           },
           {
             id: 2,
@@ -83,7 +83,7 @@ export const menus = [
         submenus: [
           {
             name: 'Daftar',
-            url: '/properti/list',
+            url: '/properti',
           },
           {
             name: 'Tambah',
@@ -95,9 +95,10 @@ export const menus = [
   },
 ];
 
-export enum UserRole {}
+export enum UserRole {
+  SuperAdmin = 'Super Admin',
+}
 
 export const getMenus = (role: UserRole) => {
-  console.log(role);
   return menus;
 };

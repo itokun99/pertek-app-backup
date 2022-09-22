@@ -1,17 +1,24 @@
 import { Box, List, ListItemButton, Popover, PopoverProps, Typography, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
-import { UserModel } from '../../provider/AuthProvider';
+import { stringify } from 'querystring';
+import { useContext, useState } from 'react';
+import useSWR from 'swr';
+import { AuthContext, UserModel } from '../../provider/AuthProvider';
 import Divider from '../Divider';
 import { PopoverButtonBox, PopoverHeaderBox } from './AppBar';
 
-export type AccountPopoverProps = PopoverProps & {
-  user: UserModel;
+export type UserAccount = {
+  username?: string;
+  phoneNumber?: string;
 };
 
-const AccountPopover = ({ user, ...rest }: AccountPopoverProps) => {
+const AccountPopover = (props: PopoverProps) => {
   const theme = useTheme();
   const router = useRouter();
-  const { username, phone_number } = user!;
+
+  const { user } = useContext(AuthContext);
+
+  const [alert, setAlert] = useState(null);
 
   const handleLogout = async (e: any) => {
     e.preventDefault();
@@ -25,17 +32,17 @@ const AccountPopover = ({ user, ...rest }: AccountPopoverProps) => {
   };
 
   let name = '';
-  if (username) {
-    name = `${username.charAt(0).toLocaleUpperCase()}${username.substring(1, username.length)}`;
+  if (user?.username) {
+    name = `${user.username.charAt(0).toLocaleUpperCase()}${user.username.substring(1, user.username.length)}`;
   }
 
   return (
-    <Popover {...rest} sx={{ mt: 2 }}>
+    <Popover {...props} sx={{ mt: 2 }}>
       <Box sx={{ width: 200 }}>
         <PopoverHeaderBox>
           <Typography variant='subtitle1'>{name}</Typography>
           <Typography variant='subtitle3' color={theme.palette.text.secondary}>
-            {phone_number}
+            {user?.phone_number}
           </Typography>
         </PopoverHeaderBox>
         <Divider />

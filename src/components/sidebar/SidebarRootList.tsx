@@ -54,12 +54,11 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
   const [shouldExpand, setShouldExpand] = useState(isActive);
 
   const handleClick = () => {
-    if (hasChildren) {
-      if (!open) {
-      }
+    if (hasChildren && open) {
       setShouldExpand(!shouldExpand);
       return;
     }
+    setShouldExpand(true);
     router.push(url);
   };
 

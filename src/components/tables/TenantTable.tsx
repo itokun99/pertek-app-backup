@@ -200,7 +200,7 @@ const TabBar = ({ theme, tabs, value, onChange }: TabBarProps) => {
       {tabs.map((tab, key) => (
         <Tab
           key={key}
-          id={`tenant-table-tab-${value}`}
+          id={`tenant-table-tab-${key}`}
           disableRipple
           label={<Typography variant='subtitle2'>{tab}</Typography>}
         />

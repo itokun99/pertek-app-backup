@@ -90,9 +90,7 @@ const TenantTable = () => {
   const { query, push, isReady, asPath } = useRouter();
 
   const [tabIndex, setTabIndex] = useState<number>(0);
-  const [data, setData] = useState<any>({
-    items: [],
-  });
+  const [data, setData] = useState<any>(null);
   const [error, setError] = useState(false);
   const { setAlert } = useContext(AlertContext);
 
@@ -146,8 +144,8 @@ const TenantTable = () => {
           {error && <ErrorComponent />}
           {!data && !error && (
             <>
-              <Skeleton sx={{ mx: 1, lineHeight: 0.3, height: 100 }} />
-              <Skeleton sx={{ mx: 1 }} />
+              <Skeleton sx={{ lineHeight: 0.3, height: 80 }} />
+              <Skeleton />
             </>
           )}
           {data && !error && (
@@ -168,7 +166,7 @@ const TenantTable = () => {
               showCellRightBorder={false}
               autoHeight
               columns={generateTableColumns(theme)}
-              rows={data.items}
+              rows={data.items || []}
             />
           )}
         </Box>

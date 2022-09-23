@@ -9,6 +9,7 @@ import MyTheme from '../src/theme';
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
 import 'simplebar-react/dist/simplebar.min.css';
+import { AlertProvider } from '../src/provider/AlertProvider';
 
 export class MyError extends Error {
   statusCode?: number;
@@ -46,28 +47,30 @@ function MyApp({ Component, pageProps }: MyAppProps) {
   const getLayout = Component.getLayout || ((page: ReactElement) => page);
 
   return (
-    <SWRConfig
-      value={{
-        onErrorRetry: _errorRetryHandler,
-        fetcher,
-      }}
-    >
-      <AuthProvider>
-        <ThemeProvider theme={MyTheme}>
-          <Head>
-            <title>Propertek - Best Indonesia Property Management System</title>
-            <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
-            <meta
-              name='description'
-              content='The best property management system that suit Indonesia property management business'
-            />
-            <link rel='icon' href='/favicon.ico' />
-          </Head>
-          <CssBaseline />
-          {getLayout(<Component {...pageProps} />)}
-        </ThemeProvider>
-      </AuthProvider>
-    </SWRConfig>
+    <AlertProvider>
+      <SWRConfig
+        value={{
+          onErrorRetry: _errorRetryHandler,
+          fetcher,
+        }}
+      >
+        <AuthProvider>
+          <ThemeProvider theme={MyTheme}>
+            <Head>
+              <title>Propertek - Best Indonesia Property Management System</title>
+              <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+              <meta
+                name='description'
+                content='The best property management system that suit Indonesia property management business'
+              />
+              <link rel='icon' href='/favicon.ico' />
+            </Head>
+            <CssBaseline />
+            {getLayout(<Component {...pageProps} />)}
+          </ThemeProvider>
+        </AuthProvider>
+      </SWRConfig>
+    </AlertProvider>
   );
 }
 

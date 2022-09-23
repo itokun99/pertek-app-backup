@@ -13,7 +13,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const user = req.session.user;
 
-  const apiResponse = await get(req, Endpoint.Tenant, { ...buildAuthorization(user!.token) });
+  const params = new URLSearchParams(req.query as Record<string, string>).toString();
+
+  const apiResponse = await get(req, `${Endpoint.Tenant}?${params}`, { ...buildAuthorization(user!.token) });
 
   const payload = await apiResponse.json();
 

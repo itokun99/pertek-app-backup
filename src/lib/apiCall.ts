@@ -18,12 +18,13 @@ export const post = async (req: NextApiRequest, url: string, headers?: {}) => {
   return res;
 };
 
-export const get = async (req: NextApiRequest, url: string, headers?: {}) => {
+export const get = async (req: NextApiRequest, url: string, headers?: {}, body?: BodyInit) => {
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
       ...headers,
     },
+    body,
   });
 
   if (res.status === 401) {

@@ -1,4 +1,3 @@
-import { Color, MyColor, MyPalette, MyPaletteOptions, Theme } from '@mui/material';
 import { ErrorIcon, InfoIcon, SuccessIcon, WarningIcon } from './CustomIcons';
 
 // ----------------------------------------------------------------------
@@ -15,7 +14,8 @@ export default function Alert(theme) {
   });
 
   const filledStyle = (color) => ({
-    color: theme.palette[color].contrastText,
+    color: theme.palette[color][isLight ? 'darker' : 'lighter'],
+    backgroundColor: theme.palette[color][isLight ? 'main' : 'darker'],
   });
 
   const outlinedStyle = (color) => ({

@@ -1,7 +1,8 @@
-import { Box, Container, Theme, styled } from '@mui/material';
+import { Box, Container, Theme, styled, Snackbar, Alert } from '@mui/material';
 import dynamic from 'next/dynamic';
-import { PropsWithChildren, Suspense } from 'react';
+import { PropsWithChildren, Suspense, useContext } from 'react';
 import SimpleBar from 'simplebar-react';
+import { AlertContext } from '../provider/AlertProvider';
 import { NotificationProvider } from '../provider/NotificationProvider';
 import { SidebarProvider } from '../provider/SidebarProvider';
 
@@ -20,6 +21,8 @@ const DynamicAppBar = dynamic(() => import('../components/appbar/AppBar'), {
 });
 
 const ProtectedPage = ({ children }: PropsWithChildren) => {
+  const { alert, setAlert } = useContext(AlertContext);
+
   return (
     <Box sx={{ display: 'flex' }}>
       <NotificationProvider>
@@ -35,6 +38,18 @@ const ProtectedPage = ({ children }: PropsWithChildren) => {
           </SimpleBar>
         </SidebarProvider>
       </NotificationProvider>
+      {alert && (
+        <Snackbar
+          onClose={() => setAlert(null)}
+          // autoHideDuration={2000}
+          anchorOrigin={alert.position}
+          open={alert !== null}
+        >
+          <Alert severity={alert.severity} variant={alert.variant}>
+            {alert.message}
+          </Alert>
+        </Snackbar>
+      )}
     </Box>
   );
 };

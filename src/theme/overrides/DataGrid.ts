@@ -14,7 +14,7 @@ export default function DataGrid(theme: Theme) {
           },
 
           '& .MuiDataGrid-toolbarContainer': {
-            padding: theme.spacing(2),
+            // padding: theme.spacing(2),
             backgroundColor: theme.palette.background.default,
             '& .MuiButton-root': {
               marginRight: theme.spacing(1.5),
@@ -32,8 +32,8 @@ export default function DataGrid(theme: Theme) {
           },
           '& .MuiDataGrid-columnHeadersInner': {},
           '& .MuiDataGrid-row': {
-            paddingLeft: theme?.spacing(1),
-            paddingRight: theme?.spacing(1),
+            // paddingLeft: theme?.spacing(1),
+            // paddingRight: theme?.spacing(1),
           },
           '& .MuiDataGrid-columnHeaders, .MuiDataGrid-cell': {
             borderBottom: 'none',
@@ -41,8 +41,8 @@ export default function DataGrid(theme: Theme) {
           '& .MuiDataGrid-columnHeaders': {
             backgroundColor: theme.palette.grey[200],
             borderRadius: theme.shape.borderRadius,
-            marginLeft: theme?.spacing(1),
-            marginRight: theme?.spacing(1),
+            // marginLeft: theme?.spacing(1),
+            // marginRight: theme?.spacing(1),
           },
           '& .MuiDataGrid-columnSeparator': {
             color: 'transparent',

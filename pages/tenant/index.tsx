@@ -8,7 +8,7 @@ import { AnimatedButton } from '../../src/components/AnimatedButtton';
 import { AlertContext } from '../../src/provider/AlertProvider';
 import ProtectedPage from '../../src/template/ProtectedPage';
 
-const TenantTable = dynamic(() => import('../../src/components/tables/TenantTable'), {
+const TenantTable = dynamic(() => import('../../src/components/tables/TableTenant'), {
   ssr: false,
   suspense: true,
 });

@@ -1,36 +1,14 @@
-import { Cached } from '@mui/icons-material';
-import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Link,
-  Skeleton,
-  Tab,
-  Tabs,
-  TextField,
-  Theme,
-  Typography,
-  useTheme,
-} from '@mui/material';
-import { Container } from '@mui/system';
+import { Avatar, Box, Card, Link, Skeleton, Tab, Tabs, TextField, Theme, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { PropsWithChildren, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import useSWR from 'swr';
 import { AlertContext } from '../../provider/AlertProvider';
 import { createTextAvatar } from '../../utils/createAvatar';
 import { fDate } from '../../utils/formatTime';
+import { ErrorComponent } from '../error/ErrorComponent';
 import Label from '../Label';
-
-const ErrorComponent = ({ message }: PropsWithChildren & { message?: string }) => (
-  <Container sx={{ py: 2, lineHeight: 3, width: '100%', textAlign: 'center' }}>
-    <Typography variant='body1'>{message ? message : 'Terjadi kesalahan.'}</Typography>
-    <Button variant='outlined' startIcon={<Cached />}>
-      Muat Ulang
-    </Button>
-  </Container>
-);
+import { TableLoader } from '../loader/TableLoader';
+import { TabBar } from '../TabBar';
 
 const generateTableColumns = (theme: Theme) =>
   [
@@ -91,8 +69,7 @@ const TenantTable = () => {
 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
-  const [error, setError] = useState(false);
-  const { setAlert } = useContext(AlertContext);
+  const { setAlert, alert } = useContext(AlertContext);
 
   const status = useMemo(() => ['Semua', 'Pending', 'Verified', 'Blocked'], []);
 
@@ -108,11 +85,19 @@ const TenantTable = () => {
         setData(null);
         const res = await fetch(`/api${asPath}`);
         const payload = await res.json();
+
+        if (res.status !== 200) {
+          setAlert({
+            severity: 'error',
+            message: payload.message || 'Terjadi kesalahan',
+          });
+        }
+
         setData(payload);
       };
       fetcher();
     }
-  }, [isReady, asPath]);
+  }, [isReady, asPath, setAlert]);
 
   const handleChange = (e: SyntheticEvent<Element, Event>, v: number) => {
     e.preventDefault();
@@ -141,14 +126,13 @@ const TenantTable = () => {
           >
             <TextField label='Cari tenant' variant='outlined' />
           </Box>
-          {error && <ErrorComponent />}
-          {!data && !error && (
-            <>
-              <Skeleton sx={{ lineHeight: 0.3, height: 80 }} />
-              <Skeleton />
-            </>
+          {alert && <ErrorComponent />}
+          {!data && !alert && (
+            <Box mb={2}>
+              <TableLoader />
+            </Box>
           )}
-          {data && !error && (
+          {data && !alert && (
             <DataGrid
               columnVisibilityModel={{
                 color: false,
@@ -166,46 +150,12 @@ const TenantTable = () => {
               showCellRightBorder={false}
               autoHeight
               columns={generateTableColumns(theme)}
-              rows={data.items || []}
+              rows={(data && data.items) || []}
             />
           )}
         </Box>
       </Card>
     </Box>
-  );
-};
-
-type TabType = {
-  color: 'warning' | 'success' | 'info' | 'error' | 'default';
-  label: string;
-};
-type TabBarProps = PropsWithChildren & {
-  theme: Theme;
-  value: number;
-  tabs: string[];
-  onChange?: (e: SyntheticEvent<Element, Event>, value: number) => void;
-};
-
-const TabBar = ({ theme, tabs, value, onChange }: TabBarProps) => {
-  return (
-    <Tabs
-      sx={{
-        paddingX: theme.spacing(2),
-        backgroundColor: theme.palette.grey[200],
-        display: 'flex',
-      }}
-      value={value}
-      onChange={onChange}
-    >
-      {tabs.map((tab, key) => (
-        <Tab
-          key={key}
-          id={`tenant-table-tab-${key}`}
-          disableRipple
-          label={<Typography variant='subtitle2'>{tab}</Typography>}
-        />
-      ))}
-    </Tabs>
   );
 };
 

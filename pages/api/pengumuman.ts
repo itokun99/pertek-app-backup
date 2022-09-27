@@ -14,9 +14,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const user = req.session.user;
 
-  const params = createRequestParams(req.query);
-
-  const apiResponse = await get(req, `${Endpoint.Tenant}?${params}`, { ...buildAuthorization(user!.token) });
+  let endpoint = Endpoint.Announcement;
+  if (Object.keys(req.query).length > 0) {
+    const params = createRequestParams(req.query);
+    endpoint = `${Endpoint.Announcement}?${params}`;
+  }
+  const apiResponse = await get(req, endpoint, { ...buildAuthorization(user!.token) });
 
   const payload = await apiResponse.json();
 

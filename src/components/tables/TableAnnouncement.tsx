@@ -1,4 +1,5 @@
-import { Box, Card, Grid, Link, Skeleton, TextField, Typography, useTheme } from '@mui/material';
+import { Loop, Search } from '@mui/icons-material';
+import { Box, Card, Grid, InputAdornment, Link, Skeleton, TextField, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
@@ -66,11 +67,23 @@ export const AnnouncementTable = () => {
         <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
         <Box mx={2}>
           <Box
+            width={400}
             sx={{
               paddingY: theme.spacing(2),
             }}
           >
-            <TextField label='Cari tenant' variant='outlined' />
+            <TextField
+              fullWidth
+              placeholder='Cari pengumuman'
+              variant='outlined'
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Search />
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Box>
           {alert && <ErrorComponent />}
           {!data && !alert && (

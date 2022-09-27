@@ -1,4 +1,18 @@
-import { Avatar, Box, Card, Link, Skeleton, Tab, Tabs, TextField, Theme, Typography, useTheme } from '@mui/material';
+import { Search } from '@mui/icons-material';
+import {
+  Avatar,
+  Box,
+  Card,
+  InputAdornment,
+  Link,
+  Skeleton,
+  Tab,
+  Tabs,
+  TextField,
+  Theme,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { PropsWithChildren, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
@@ -120,11 +134,23 @@ const TenantTable = () => {
         <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
         <Box mx={2}>
           <Box
+            width={400}
             sx={{
               paddingY: theme.spacing(2),
             }}
           >
-            <TextField label='Cari tenant' variant='outlined' />
+            <TextField
+              fullWidth
+              placeholder='Cari tenant'
+              variant='outlined'
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <Search />
+                  </InputAdornment>
+                ),
+              }}
+            />
           </Box>
           {alert && <ErrorComponent />}
           {!data && !alert && (

@@ -14,7 +14,7 @@ export default function Alert(theme) {
   });
 
   const filledStyle = (color) => ({
-    color: theme.palette[color][isLight ? 'darker' : 'lighter'],
+    color: theme.palette[color][isLight ? 'lighter' : 'lighter'],
     backgroundColor: theme.palette[color][isLight ? 'main' : 'darker'],
   });
 

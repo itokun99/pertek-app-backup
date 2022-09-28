@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import { Endpoint } from '../../src/config/apiEndpoint';
 import { post } from '../../src/lib/apiCall';
 
 import { withSessionRoute } from '../../src/lib/withSession';
@@ -6,7 +7,7 @@ import { withSessionRoute } from '../../src/lib/withSession';
 export default withSessionRoute(loginHandler);
 
 async function loginHandler(req: NextApiRequest, res: NextApiResponse) {
-  const apiResponse = await post(req, 'https://xrqr-haey-y7wc.n7.xano.io/api:xG61OBxf/auth/login');
+  const apiResponse = await post(req, Endpoint.Login);
 
   const responseBody = await apiResponse.json();
 

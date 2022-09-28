@@ -72,11 +72,11 @@ export const GREY = {
 };
 
 export const GRADIENTS = {
-  primary: createGradient(PRIMARY.light, PRIMARY.main),
-  info: createGradient(INFO.light, INFO.main),
-  success: createGradient(SUCCESS.light, SUCCESS.main),
-  warning: createGradient(WARNING.light, WARNING.main),
-  error: createGradient(ERROR.light, ERROR.main),
+  primary: createGradient(PRIMARY.main, PRIMARY.dark),
+  info: createGradient(INFO.main, INFO.dark),
+  success: createGradient(SUCCESS.main, SUCCESS.dark),
+  warning: createGradient(WARNING.main, WARNING.dark),
+  error: createGradient(ERROR.main, ERROR.dark),
 };
 
 export const CHART_COLORS = {

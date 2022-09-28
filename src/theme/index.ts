@@ -47,9 +47,17 @@ declare module '@mui/material/styles' {
     neutral: string;
   }
 
+  interface MyGradients {
+    primary: string;
+    info: string;
+    success: string;
+    warning: string;
+    error: string;
+  }
   interface MyPalette extends Palette {
     grey: MyColor;
     background: MyBackgroundColor;
+    gradients: MyGradients;
   }
 
   interface MyTypeBackground extends TypeBackground {

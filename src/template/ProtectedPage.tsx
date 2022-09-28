@@ -41,11 +41,11 @@ const ProtectedPage = ({ children }: PropsWithChildren) => {
       {alert && (
         <Snackbar
           onClose={() => setAlert(null)}
-          // autoHideDuration={2000}
-          anchorOrigin={alert.position}
+          autoHideDuration={alert.severity === 'error' ? null : 2000}
+          anchorOrigin={alert.position ? alert.position : { horizontal: 'center', vertical: 'top' }}
           open={alert !== null}
         >
-          <Alert severity={alert.severity} variant={alert.variant}>
+          <Alert severity={alert.severity} variant={alert.variant ?? 'filled'}>
             {alert.message}
           </Alert>
         </Snackbar>

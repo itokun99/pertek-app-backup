@@ -19,7 +19,7 @@ const StyledDrawerHeader = styled('div')(({ theme }) => ({
 export const SidebarHeader = ({ buttonColor, children }: SidebarHeaderProps) => {
   const theme = useTheme();
 
-  const { open, setOpen } = useContext(SidebarContext);
+  const { open, setOpen, activeProperty } = useContext(SidebarContext);
 
   const icon = open ? (
     <KeyboardDoubleArrowLeft sx={{ color: buttonColor }} />

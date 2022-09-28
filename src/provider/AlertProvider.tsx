@@ -22,11 +22,12 @@ export const AlertContext = createContext<AlertContextInterface>({
 
 export const AlertProvider = ({ children }: PropsWithChildren) => {
   const [alert, setAlert] = useState<AlertModel | null>(null);
-  const value = useMemo(() => {
-    return {
+  const value = useMemo(
+    () => ({
       alert,
       setAlert,
-    };
-  }, [alert, setAlert]);
+    }),
+    [alert, setAlert]
+  );
   return <AlertContext.Provider value={value}>{children}</AlertContext.Provider>;
 };

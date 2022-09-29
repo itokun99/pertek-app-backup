@@ -1,21 +1,9 @@
 import { Search } from '@mui/icons-material';
-import {
-  Avatar,
-  Box,
-  Card,
-  InputAdornment,
-  Link,
-  Skeleton,
-  Tab,
-  Tabs,
-  TextField,
-  Theme,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Avatar, Box, Card, InputAdornment, Link, TextField, Theme, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
-import { PropsWithChildren, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { fetchData } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { createTextAvatar } from '../../utils/createAvatar';
 import { fDate } from '../../utils/formatTime';
@@ -95,21 +83,19 @@ const TenantTable = () => {
 
   useEffect(() => {
     if (isReady) {
-      const fetcher = async () => {
+      (async () => {
         setData(null);
-        const res = await fetch(`/api${asPath}`);
-        const payload = await res.json();
-
-        if (res.status !== 200) {
+        const { error, data } = await fetchData(`/api/${asPath}`);
+        if (error) {
           setAlert({
             severity: 'error',
-            message: payload.message || 'Terjadi kesalahan',
+            message: error,
           });
+          return;
         }
 
-        setData(payload);
-      };
-      fetcher();
+        setData(data);
+      })();
     }
   }, [isReady, asPath, setAlert]);
 

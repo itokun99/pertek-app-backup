@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Endpoint } from '../../src/config/apiEndpoint';
-import { isInvalidSession, methodNotAlowed, unauthorized } from '../../src/lib/apiAuthHelpers';
+import { methodNotAlowed, unauthorized } from '../../src/lib/apiAuthHelpers';
 import { get } from '../../src/lib/apiCall';
 import { withSessionRoute } from '../../src/lib/withSession';
 

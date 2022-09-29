@@ -1,8 +1,9 @@
-import { Loop, Search } from '@mui/icons-material';
-import { Box, Card, Grid, InputAdornment, Link, Skeleton, TextField, Typography, useTheme } from '@mui/material';
+import { Search } from '@mui/icons-material';
+import { Box, Card, InputAdornment, Link, TextField, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { fetchData } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { fDateTime } from '../../utils/formatTime';
 import { ErrorComponent } from '../error/ErrorComponent';
@@ -15,9 +16,9 @@ export const AnnouncementTable = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
   const status = useMemo(() => ['Semua', 'Draft', 'Published'], []);
   const [data, setData] = useState<any>(null);
-  const { setAlert, alert } = useContext(AlertContext);
-  const theme = useTheme();
+  const { alert, setAlert } = useContext(AlertContext);
   const router = useRouter();
+  const theme = useTheme();
 
   useEffect(() => {
     if (isReady && query.tab) {
@@ -27,21 +28,18 @@ export const AnnouncementTable = () => {
 
   useEffect(() => {
     if (isReady) {
-      const fetcher = async () => {
+      (async () => {
         setData(null);
-        const res = await fetch(`/api${asPath}`);
-        const payload = await res.json();
-
-        if (res.status !== 200) {
+        const { error, data } = await fetchData(`/api/${asPath}`);
+        if (error) {
           setAlert({
             severity: 'error',
-            message: payload.message || 'Terjadi kesalahan',
+            message: error,
           });
+          return;
         }
-
-        setData(payload);
-      };
-      fetcher();
+        setData(data);
+      })();
     }
   }, [isReady, asPath, setAlert]);
 

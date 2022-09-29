@@ -33,7 +33,7 @@ async function fetcher(
         'Content-Type': 'application/json',
         ...headers,
       },
-      body: body ? JSON.stringify(body) : null,
+      body,
     });
     return res;
   } catch (e) {

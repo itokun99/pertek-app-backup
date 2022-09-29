@@ -1,36 +1,21 @@
 import { LoadingButton } from '@mui/lab';
-import {
-  Alert as MuiAlert,
-  AlertProps,
-  alpha,
-  Box,
-  Grid,
-  IconButton,
-  InputAdornment,
-  Snackbar,
-  Stack,
-  TextField,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { alpha, Box, Grid, IconButton, InputAdornment, Stack, TextField, Typography, useTheme } from '@mui/material';
 
-import { FormEvent, forwardRef, useState } from 'react';
+import { FormEvent, useContext, useState } from 'react';
 import { AccountCircle, Lock, Visibility, VisibilityOff } from '@mui/icons-material';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-
-type MessageType = {
-  type: 'error' | 'success' | 'warning' | 'info';
-  message: string;
-};
+import { fetchData } from '../../src/lib/dataFetcher';
+import { AlertContext } from '../../src/provider/AlertProvider';
 
 const LoginPage = () => {
   const theme = useTheme();
   const router = useRouter();
 
+  const { setAlert } = useContext(AlertContext);
+
   const [identity, setIdentity] = useState('');
   const [password, setPassword] = useState('');
-  const [alert, setAlert] = useState<MessageType | null>(null);
   const [isVisible, setVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -40,29 +25,27 @@ const LoginPage = () => {
 
     if (identity === '' && password === '') {
       setAlert({
-        type: 'warning',
+        severity: 'warning',
         message: 'Identitas dan atau passwork tidak boleh kosong!',
       });
       setIsLoading(false);
       return;
     }
 
-    const response = await fetch('/api/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    const { error } = await fetchData(
+      '/api/login',
+      'POST',
+      JSON.stringify({
         identity,
         password,
-      }),
-    });
+      })
+    );
 
-    const payload = await response.json();
-
-    if (!response.ok) {
-      setAlert({ type: 'error', message: payload.message || 'Unknown error occurs' });
-      setIsLoading(false);
+    if (error) {
+      setAlert({
+        severity: 'error',
+        message: error,
+      });
       return;
     }
 
@@ -70,10 +53,6 @@ const LoginPage = () => {
 
     router.replace('/dashboard');
   };
-
-  const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) {
-    return <MuiAlert elevation={6} ref={ref} variant='filled' {...props} />;
-  });
 
   return (
     <Grid
@@ -94,15 +73,6 @@ const LoginPage = () => {
                 Best Indonesia Property Management System
               </Typography>
             </Box>
-            {alert !== null && (
-              <Snackbar
-                onClose={() => setAlert(null)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                open={alert !== null}
-              >
-                <Alert severity={alert.type}>{alert.message}</Alert>
-              </Snackbar>
-            )}
             <TextField
               InputProps={{
                 startAdornment: (

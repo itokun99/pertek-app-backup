@@ -3,13 +3,13 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { SWRConfig } from 'swr';
 import { AuthProvider } from '../src/provider/AuthProvider';
-import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Alert, CssBaseline, Snackbar, ThemeProvider } from '@mui/material';
 
 import MyTheme from '../src/theme';
 import { NextPage } from 'next';
-import { ReactElement, ReactNode } from 'react';
+import { PropsWithChildren, ReactElement, ReactNode, useContext } from 'react';
 import 'simplebar-react/dist/simplebar.min.css';
-import { AlertProvider } from '../src/provider/AlertProvider';
+import { AlertContext, AlertProvider } from '../src/provider/AlertProvider';
 
 export class MyError extends Error {
   statusCode?: number;
@@ -66,12 +66,34 @@ function MyApp({ Component, pageProps }: MyAppProps) {
               <link rel='icon' href='/favicon.ico' />
             </Head>
             <CssBaseline />
-            {getLayout(<Component {...pageProps} />)}
+            <MainContainer>{getLayout(<Component {...pageProps} />)}</MainContainer>
           </ThemeProvider>
         </AuthProvider>
       </SWRConfig>
     </AlertProvider>
   );
 }
+
+const MainContainer = ({ children }: PropsWithChildren) => {
+  const { alert, setAlert } = useContext(AlertContext);
+
+  return (
+    <>
+      {children}
+      {alert && (
+        <Snackbar
+          onClose={() => setAlert(null)}
+          autoHideDuration={alert.severity === 'error' ? null : 2000}
+          anchorOrigin={alert.position ? alert.position : { horizontal: 'center', vertical: 'top' }}
+          open={alert !== null}
+        >
+          <Alert severity={alert.severity} variant={alert.variant ?? 'filled'}>
+            {alert.message}
+          </Alert>
+        </Snackbar>
+      )}
+    </>
+  );
+};
 
 export default MyApp;

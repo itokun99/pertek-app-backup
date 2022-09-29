@@ -18,7 +18,9 @@ import {
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { ReactNode, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { fetchData } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
+import { NetworkContext } from '../../provider/NetworkProvider';
 import { fDate } from '../../utils/formatTime';
 import { ErrorComponent } from '../error/ErrorComponent';
 import Label from '../Label';
@@ -27,6 +29,7 @@ import { TableLoader } from '../loader/TableLoader';
 const PelaporanTable = () => {
   const theme = useTheme();
   const { query, push, isReady, asPath } = useRouter();
+  const { isOnline } = useContext(NetworkContext);
 
   const [filter, setFilter] = useState<number | null>(null);
 
@@ -36,31 +39,23 @@ const PelaporanTable = () => {
 
   useEffect(() => {
     if (isReady) {
-      const fetcher = async () => {
-        const res = await fetch('/api/complain_state?property_id');
-      };
-
-      fetcher();
+      // get list of complain state
     }
   }, [isReady]);
 
   useEffect(() => {
     if (isReady) {
-      const fetcher = async () => {
-        setData(null);
-        const res = await fetch(`/api${asPath}`);
-        const payload = await res.json();
-
-        if (res.status !== 200) {
+      (async () => {
+        const { error, data } = await fetchData(`/api/${asPath}`);
+        if (error) {
           setAlert({
             severity: 'error',
-            message: payload.message || 'Terjadi kesalahan',
+            message: error,
           });
+          return;
         }
-
-        setData(payload);
-      };
-      //   fetcher();
+        setData(data);
+      })();
     }
   }, [isReady, asPath, setAlert]);
 
@@ -73,52 +68,52 @@ const PelaporanTable = () => {
     <Box>
       <Card>
         <Box m={2}>
-          <Stack direction='row' gap={2}>
-            <Box width={200}>
-              <FormControl fullWidth>
-                <InputLabel>Filter</InputLabel>
-                <Select label='Filter' value={filter} onChange={handleChange}>
-                  <MenuItem>Testing</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
-            <Box width={400}>
-              <TextField
-                fullWidth
-                placeholder='Cari laporan'
-                variant='outlined'
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Box>
-          </Stack>
-          {alert && <ErrorComponent />}
-          {!data && !alert && (
+          {data && isOnline && (
+            <Stack direction='row' gap={2} mb={2}>
+              <Box width={200}>
+                <FormControl fullWidth>
+                  <InputLabel>Filter</InputLabel>
+                  <Select label='Filter' value={filter} onChange={handleChange}>
+                    {<MenuItem value={0}>Testing</MenuItem>}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box width={400}>
+                <TextField
+                  fullWidth
+                  placeholder='Cari laporan'
+                  variant='outlined'
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position='start'>
+                        <Search />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+            </Stack>
+          )}
+          {!isOnline && <ErrorComponent offline={!isOnline} />}
+          {!data && isOnline && (
             <Box mb={2}>
               <TableLoader />
             </Box>
           )}
-          <Box>
-            {data && !alert && (
-              <DataGrid
-                headerHeight={40}
-                density={'comfortable'}
-                disableColumnSelector
-                checkboxSelection
-                hideFooterSelectedRowCount
-                disableSelectionOnClick
-                showCellRightBorder={false}
-                autoHeight
-                columns={Columns}
-                rows={(data && data.items) || []}
-              />
-            )}
-          </Box>
+          {data && isOnline && (
+            <DataGrid
+              headerHeight={40}
+              density={'comfortable'}
+              disableColumnSelector
+              checkboxSelection
+              hideFooterSelectedRowCount
+              disableSelectionOnClick
+              showCellRightBorder={false}
+              autoHeight
+              columns={Columns}
+              rows={(data && data.items) || []}
+            />
+          )}
         </Box>
       </Card>
     </Box>

@@ -1,7 +1,7 @@
-import { createContext, PropsWithChildren, useMemo, useState } from 'react';
+import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
 import { SidebarMenuGroup } from '../components/sidebar';
-import { getCookie, setCookie } from 'cookies-next';
+import { useRouter } from 'next/router';
 
 export type Property = {
   id: number;
@@ -36,19 +36,25 @@ export const SidebarContext = createContext<SidebarContextInterface>({
 });
 
 export const SidebarProvider = ({ children }: PropsWithChildren) => {
+  const { isReady } = useRouter();
+
   const [open, setOpen] = useState(true);
   const [activeMenu, setActiveMenu] = useState<ActiveMenu | undefined>();
+  const [activeProperty, setActiveProperty] = useState<Property | undefined>();
 
-  const activePropertyInCookie = getCookie('activeProperty');
-  let activePropertyState = undefined;
-  if (activePropertyInCookie) {
-    activePropertyState = JSON.parse(activePropertyInCookie as string);
-  }
-
-  const [activeProperty, setActiveProperty] = useState<Property | undefined>(activePropertyState);
+  useEffect(() => {
+    if (isReady) {
+      const activePropertyInLocalStorage = window.localStorage.getItem('activeProperty');
+      if (activePropertyInLocalStorage) {
+        setActiveProperty(JSON.parse(activePropertyInLocalStorage));
+      }
+    }
+  }, [isReady]);
 
   const updateProperty = (property: Property) => {
-    setCookie('activeProperty', property);
+    if (window) {
+      window.localStorage.setItem('activeProperty', JSON.stringify(property));
+    }
     setActiveProperty(property);
   };
 

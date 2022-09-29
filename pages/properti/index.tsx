@@ -1,11 +1,27 @@
-import { Typography } from '@mui/material';
-import { ReactElement } from 'react';
+import { Container, Grid } from '@mui/material';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { CardLoader } from '../../src/components/loader/CardLoader';
 import ProtectedPage from '../../src/template/ProtectedPage';
 
-const PropertiIndex = () => {
-  return <Typography>Properti Index</Typography>;
+const PropertyCard = dynamic(() => import('../../src/components/PropertyCard'), {
+  ssr: false,
+  suspense: true,
+  loading: () => <CardLoader />,
+});
+
+const PropertyIndex = () => {
+  return (
+    <Container maxWidth='lg'>
+      <Grid container spacing={3}>
+        <Suspense>
+          <PropertyCard />
+        </Suspense>
+      </Grid>
+    </Container>
+  );
 };
 
-PropertiIndex.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
+PropertyIndex.getLayout = (page: any) => <ProtectedPage>{page}</ProtectedPage>;
 
-export default PropertiIndex;
+export default PropertyIndex;

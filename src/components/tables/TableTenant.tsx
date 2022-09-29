@@ -73,7 +73,7 @@ const TenantTable = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
   const { setAlert, alert } = useContext(AlertContext);
-  const { isOnline, isBrowserSupported } = useContext(NetworkContext);
+  const { isOnline } = useContext(NetworkContext);
 
   const status = useMemo(() => ['Semua', 'Pending', 'Verified', 'Blocked'], []);
 
@@ -84,7 +84,7 @@ const TenantTable = () => {
   }, [isReady, query.tab]);
 
   useEffect(() => {
-    if (isReady) {
+    if (isReady && isOnline) {
       (async () => {
         setData(null);
         const { error, data } = await fetchData(`/api/${asPath}`);
@@ -123,32 +123,39 @@ const TenantTable = () => {
       <Card>
         <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
         <Box mx={2}>
-          <Box
-            width={400}
-            sx={{
-              paddingY: theme.spacing(2),
-            }}
-          >
-            <TextField
-              fullWidth
-              placeholder='Cari tenant'
-              variant='outlined'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Search />
-                  </InputAdornment>
-                ),
+          {!alert && isOnline && (
+            <Box
+              width={400}
+              sx={{
+                paddingY: theme.spacing(2),
               }}
+            >
+              <TextField
+                fullWidth
+                placeholder='Cari tenant'
+                variant='outlined'
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          )}
+          {(alert || !isOnline) && (
+            <ErrorComponent
+              showReloadButton={isOnline}
+              message={!isOnline ? 'Tidak ada koneksi internet' : undefined}
             />
-          </Box>
-          {alert && <ErrorComponent />}
-          {!data && !alert && (
+          )}
+          {!data && !alert && isOnline && (
             <Box mb={2}>
               <TableLoader />
             </Box>
           )}
-          {data && !alert && (
+          {data && !alert && isOnline && (
             <DataGrid
               columnVisibilityModel={{
                 color: false,

@@ -3,7 +3,7 @@ import { Box, Card, InputAdornment, Link, TextField, Typography, useTheme } from
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { fetchData } from '../../lib/dataFetcher';
+import { doFetch } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { NetworkContext } from '../../provider/NetworkProvider';
 import { fDateTime } from '../../utils/formatTime';
@@ -17,11 +17,12 @@ const AnnouncementTable = () => {
   const { isReady, query, asPath, push } = useRouter();
   const status = useMemo(() => ['Semua', 'Draft', 'Published'], []);
 
-  const { alert, setAlert } = useContext(AlertContext);
+  const { setAlert } = useContext(AlertContext);
   const { isOnline } = useContext(NetworkContext);
 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (isReady && query.tab) {
@@ -31,18 +32,19 @@ const AnnouncementTable = () => {
 
   useEffect(() => {
     if (isReady && isOnline) {
-      (async () => {
-        setData(null);
-        const { error, data } = await fetchData(`/api/${asPath}`);
-        if (error) {
-          setAlert({
-            severity: 'error',
-            message: error,
-          });
-          return;
-        }
-        setData(data);
-      })();
+      doFetch(asPath, isOnline, setData, setAlert, setIsError);
+      // (async () => {
+      //   setData(null);
+      //   const { error, data } = await fetchData(`/api${asPath}`);
+      //   if (error) {
+      //     setAlert({
+      //       severity: 'error',
+      //       message: error,
+      //     });
+      //     return;
+      //   }
+      //   setData(data);
+      // })();
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
@@ -62,12 +64,17 @@ const AnnouncementTable = () => {
     push('/pengumuman');
   };
 
+  const handleReload = (e: any) => {
+    e.preventDefault();
+    doFetch(asPath, isOnline, setData, setAlert, setIsError, true);
+  };
+
   return (
     <Box>
       <Card>
         <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
         <Box mx={2}>
-          {data && isOnline && (
+          {data && isOnline && !isError && (
             <Box
               width={400}
               sx={{
@@ -88,13 +95,15 @@ const AnnouncementTable = () => {
               />
             </Box>
           )}
-          {!isOnline && <ErrorComponent offline={!isOnline} />}
-          {!data && isOnline && (
+          {(!isOnline || (isOnline && isError)) && (
+            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={!isOnline} />
+          )}
+          {!data && isOnline && !isError && (
             <Box mb={2}>
               <TableLoader />
             </Box>
           )}
-          {data && isOnline && (
+          {data && isOnline && !isError && (
             <DataGrid
               columns={Columns}
               rows={(data && data.items) || []}

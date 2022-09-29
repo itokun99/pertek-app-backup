@@ -20,6 +20,7 @@ export const fetchData = async (
     const payload = await apiResponse.json();
 
     if (apiResponse.status !== 200) {
+      console.log('here', payload);
       return { error: payload.message } as FetcherResponse;
     }
     return { data: payload } as FetcherResponse;
@@ -27,3 +28,31 @@ export const fetchData = async (
     return { error: e.message } as FetcherResponse;
   }
 };
+
+export async function doFetch(
+  asPath: string,
+  isOnline: boolean,
+  setData: Function,
+  setAlert: Function,
+  setIsError: Function,
+  isReload?: boolean
+) {
+  setData(null);
+  if (isReload) {
+    setIsError(false);
+  }
+  const { error, data } = await fetchData(`/api${asPath}`);
+  if (error) {
+    setIsError(true);
+    if (isOnline) {
+      setAlert({
+        severity: 'error',
+        message: error,
+      });
+    }
+    return;
+  }
+
+  setIsError(false);
+  setData(data);
+}

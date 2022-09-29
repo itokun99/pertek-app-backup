@@ -18,7 +18,7 @@ import {
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { ReactNode, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { fetchData } from '../../lib/dataFetcher';
+import { doFetch, fetchData } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { NetworkContext } from '../../provider/NetworkProvider';
 import { fDate } from '../../utils/formatTime';
@@ -27,15 +27,14 @@ import Label from '../Label';
 import { TableLoader } from '../loader/TableLoader';
 
 const PelaporanTable = () => {
-  const theme = useTheme();
   const { query, push, isReady, asPath } = useRouter();
+
   const { isOnline } = useContext(NetworkContext);
+  const { setAlert, alert } = useContext(AlertContext);
 
   const [filter, setFilter] = useState<number | null>(null);
-
-  const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
-  const { setAlert, alert } = useContext(AlertContext);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (isReady) {
@@ -45,30 +44,36 @@ const PelaporanTable = () => {
 
   useEffect(() => {
     if (isReady) {
-      (async () => {
-        const { error, data } = await fetchData(`/api/${asPath}`);
-        if (error) {
-          setAlert({
-            severity: 'error',
-            message: error,
-          });
-          return;
-        }
-        setData(data);
-      })();
+      doFetch(asPath, isOnline, setData, setAlert, setIsError);
+      // (async () => {
+      //   const { error, data } = await fetchData(`/api${asPath}`);
+      //   if (error) {
+      //     setAlert({
+      //       severity: 'error',
+      //       message: error,
+      //     });
+      //     return;
+      //   }
+      //   setData(data);
+      // })();
     }
-  }, [isReady, asPath, setAlert]);
+  }, [isReady, asPath, setIsError, isOnline, setAlert]);
 
   const handleChange = (e: SelectChangeEvent<number | null>, child: ReactNode) => {
     e.preventDefault();
     //
   };
 
+  const handleReload = (e: any) => {
+    e.preventDefault();
+    doFetch(asPath, isOnline, setData, setAlert, setIsError, true);
+  };
+
   return (
     <Box>
       <Card>
         <Box m={2}>
-          {data && isOnline && (
+          {data && isOnline && !isError && (
             <Stack direction='row' gap={2} mb={2}>
               <Box width={200}>
                 <FormControl fullWidth>
@@ -94,13 +99,15 @@ const PelaporanTable = () => {
               </Box>
             </Stack>
           )}
-          {!isOnline && <ErrorComponent offline={!isOnline} />}
-          {!data && isOnline && (
+          {(!isOnline || (isOnline && isError)) && (
+            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={!isOnline} />
+          )}
+          {!data && isOnline && !isError && (
             <Box mb={2}>
               <TableLoader />
             </Box>
           )}
-          {data && isOnline && (
+          {data && isOnline && !isError && (
             <DataGrid
               headerHeight={40}
               density={'comfortable'}

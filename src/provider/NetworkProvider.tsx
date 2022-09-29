@@ -29,11 +29,14 @@ export const NetworkProvier = ({ children }: PropsWithChildren) => {
     if (isReady) {
       if (window.navigator) {
         setBrowserSupported(true);
-        setIsOnline(window.navigator.onLine);
+        (async () => {
+          const { error } = await fetchData('/api/healthcheck', 'GET');
+          setIsOnline(!error || error === undefined);
+        })();
         window.addEventListener('online', async () => {
           setShouldShowMessage(true);
           const { error } = await fetchData('/api/healthcheck', 'GET');
-          setIsOnline(!error);
+          setIsOnline(!error || error === undefined);
         });
         window.addEventListener('offline', () => {
           setShouldShowMessage(true);

@@ -4,7 +4,6 @@ import { useContext } from 'react';
 import { AuthContext } from '../../provider/AuthProvider';
 import Divider from '../Divider';
 import { PopoverButtonBox, PopoverHeaderBox } from './AppBar';
-import { removeCookies } from 'cookies-next';
 
 export type UserAccount = {
   username?: string;
@@ -25,7 +24,9 @@ const AccountPopover = (props: PopoverProps) => {
 
     if (res.ok) {
       router.replace('/login');
-      removeCookies('activeProperty');
+      if (window) {
+        window.localStorage.removeItem('activeProperty');
+      }
     }
   };
 

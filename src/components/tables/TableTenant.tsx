@@ -3,7 +3,7 @@ import { Avatar, Box, Card, InputAdornment, Link, TextField, Theme, Typography, 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { fetchData } from '../../lib/dataFetcher';
+import { doFetch, fetchData } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { NetworkContext } from '../../provider/NetworkProvider';
 import { createTextAvatar } from '../../utils/createAvatar';
@@ -70,10 +70,12 @@ const TenantTable = () => {
   const theme = useTheme();
   const { query, push, isReady, asPath } = useRouter();
 
+  const { setAlert } = useContext(AlertContext);
+  const { isOnline } = useContext(NetworkContext);
+
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
-  const { setAlert, alert } = useContext(AlertContext);
-  const { isOnline } = useContext(NetworkContext);
+  const [isError, setIsError] = useState(false);
 
   const status = useMemo(() => ['Semua', 'Pending', 'Verified', 'Blocked'], []);
 
@@ -85,21 +87,7 @@ const TenantTable = () => {
 
   useEffect(() => {
     if (isReady && isOnline) {
-      (async () => {
-        setData(null);
-        const { error, data } = await fetchData(`/api/${asPath}`);
-        if (error) {
-          if (isOnline) {
-            setAlert({
-              severity: 'error',
-              message: error,
-            });
-          }
-          return;
-        }
-
-        setData(data);
-      })();
+      doFetch(asPath, isOnline, setData, setAlert, setIsError);
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
@@ -118,12 +106,17 @@ const TenantTable = () => {
     return push('/tenant');
   };
 
+  const handleReload = (e: any) => {
+    e.preventDefault();
+    doFetch(asPath, isOnline, setData, setAlert, setIsError, true);
+  };
+
   return (
     <Box>
       <Card>
         <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
         <Box mx={2}>
-          {isOnline && data && (
+          {isOnline && data && !isError && (
             <Box
               width={400}
               sx={{
@@ -144,13 +137,15 @@ const TenantTable = () => {
               />
             </Box>
           )}
-          {!isOnline && <ErrorComponent offline={!isOnline} />}
-          {!data && isOnline && (
+          {(!isOnline || (isOnline && isError)) && (
+            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={!isOnline} />
+          )}
+          {!data && isOnline && !isError && (
             <Box mb={2}>
               <TableLoader />
             </Box>
           )}
-          {isOnline && data && (
+          {isOnline && data && !isError && (
             <DataGrid
               columnVisibilityModel={{
                 color: false,

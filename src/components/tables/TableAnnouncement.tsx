@@ -11,7 +11,7 @@ import Label from '../Label';
 import { TableLoader } from '../loader/TableLoader';
 import { TabBar } from '../TabBar';
 
-export const AnnouncementTable = () => {
+const AnnouncementTable = () => {
   const { isReady, query, asPath } = useRouter();
   const [tabIndex, setTabIndex] = useState<number>(0);
   const status = useMemo(() => ['Semua', 'Draft', 'Published'], []);
@@ -161,3 +161,5 @@ const Columns = [
     valueFormatter: (params) => (params.value === null ? '-' : fDateTime(params.value)),
   },
 ] as GridColDef[];
+
+export default AnnouncementTable;

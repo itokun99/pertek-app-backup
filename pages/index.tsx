@@ -2,22 +2,23 @@ import { useContext, useEffect } from 'react';
 import { AuthContext } from '../src/provider/AuthProvider';
 import { useRouter } from 'next/router';
 import { withSessionSsr } from '../src/lib/withSession';
-import { redirectToAuth } from '../src/lib/useRedirect';
 
 export const getServerSideProps = withSessionSsr(({ req, res }) => {
   const session = req?.session;
-
+  let location = '/dashboard';
+  let code = 302;
   if (!session.user) {
-    return redirectToAuth(res);
+    location = '/login';
+    code = 301;
   }
 
-  res.setHeader('location', '/dashboard');
-  res.statusCode = 302;
+  res.setHeader('location', location);
+  res.statusCode = code;
   res.end();
 
   return {
     props: {
-      user: session.user,
+      user: session.user || undefined,
     },
   };
 });

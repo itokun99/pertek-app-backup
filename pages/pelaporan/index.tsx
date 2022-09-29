@@ -1,9 +1,14 @@
 import { Add } from '@mui/icons-material';
 import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
+import dynamic from 'next/dynamic';
 import { ReactElement, Suspense } from 'react';
 import { AnimatedButton } from '../../src/components/AnimatedButtton';
-import { PelaporanTable } from '../../src/components/tables/TablePelaporan';
 import ProtectedPage from '../../src/template/ProtectedPage';
+
+const PelaporanTable = dynamic(() => import('../../src/components/tables/TablePelaporan'), {
+  ssr: false,
+  suspense: true,
+});
 
 const PelaporanIndex = () => {
   const theme = useTheme();

@@ -24,7 +24,7 @@ import { ErrorComponent } from '../error/ErrorComponent';
 import Label from '../Label';
 import { TableLoader } from '../loader/TableLoader';
 
-export const PelaporanTable = () => {
+const PelaporanTable = () => {
   const theme = useTheme();
   const { query, push, isReady, asPath } = useRouter();
 
@@ -161,3 +161,5 @@ const Columns = [
     renderCell: (params) => fDate(params.value),
   },
 ] as GridColDef[];
+
+export default PelaporanTable;

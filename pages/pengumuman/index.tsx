@@ -1,9 +1,15 @@
 import { Add } from '@mui/icons-material';
 import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
+import dynamic from 'next/dynamic';
 import { ReactElement, Suspense } from 'react';
 import { AnimatedButton } from '../../src/components/AnimatedButtton';
-import { AnnouncementTable } from '../../src/components/tables/TableAnnouncement';
+// import { AnnouncementTable } from '../../src/components/tables/TableAnnouncement';
 import ProtectedPage from '../../src/template/ProtectedPage';
+
+const AnnouncementTable = dynamic(() => import('../../src/components/tables/TableAnnouncement'), {
+  ssr: false,
+  suspense: true,
+});
 
 const PengumumanIndex = () => {
   const theme = useTheme();

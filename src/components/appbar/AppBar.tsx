@@ -1,14 +1,15 @@
 import { useRouter } from 'next/router';
 import { PropsWithChildren, useContext, useState } from 'react';
 
-import { AppBar, Toolbar, Box, IconButton, Avatar, Grid, useTheme, Badge } from '@mui/material';
+import { AppBar, Toolbar, Box, IconButton, Avatar, Grid, useTheme, Badge, Stack, Tooltip } from '@mui/material';
 import { AuthContext } from '../../provider/AuthProvider';
-import { Mail, Notifications } from '@mui/icons-material';
+import { Mail, Notifications, WifiOffOutlined } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import NotificationPopover from './NotificationPopover';
 import InboxPopover from './InboxPopover';
 import AccountPopover from './AccountPopover';
 import { NotificationContext } from '../../provider/NotificationProvider';
+import { NetworkContext } from '../../provider/NetworkProvider';
 
 export const popoverDefaultProps = {
   anchorOrigin: {
@@ -38,6 +39,7 @@ const AppBarComponent = () => {
   const theme = useTheme();
   const { unreadCount } = useContext(NotificationContext);
   const { user } = useContext(AuthContext);
+  const { isBrowserSupported, isOnline } = useContext(NetworkContext);
 
   const [popover, setPopover] = useState<PopoverState | null>(null);
 
@@ -61,59 +63,72 @@ const AppBarComponent = () => {
         }}
       >
         <Toolbar variant='dense' disableGutters>
-          <Box
-            component={motion.div}
-            whileHover='hover'
-            whileTap='tap'
-            variants={boxVariant}
-            sx={{
-              display: 'inline-flex',
-            }}
-            onClick={(e: any) => {
-              mountPopover(e, 'inbox');
-            }}
-          >
-            <IconButton aria-label='inbox button'>
-              <Badge max={9} overlap='circular' color='error'>
-                <Mail />
-              </Badge>
-            </IconButton>
-          </Box>
-          <InboxPopover open={popover?.name === 'inbox'} anchorEl={popover?.anchor} onClose={unmountPopover} />
-          <Box
-            component={motion.div}
-            whileTap='tap'
-            whileHover='hover'
-            variants={boxVariant}
-            sx={{ ml: theme.spacing(2) }}
-          >
-            <IconButton
-              aria-label='Notification Button'
-              onClick={(e: any) => {
-                mountPopover(e, 'notif');
-              }}
-            >
-              <Badge invisible={unreadCount <= 0} badgeContent={unreadCount} max={9} overlap='circular' color='error'>
-                <Notifications />
-              </Badge>
-            </IconButton>
-          </Box>
-          <NotificationPopover anchorEl={popover?.anchor} open={popover?.name === 'notif'} onClose={unmountPopover} />
-
-          <Box sx={{ mx: 2 }} component={motion.div} whileTap='tap' variants={boxVariant} whileHover='hover'>
-            <IconButton
-              aria-label='My Profile Button'
+          <Stack direction='row' gap={2} alignItems='center'>
+            {isBrowserSupported && !isOnline && (
+              <Tooltip title='Koneksi Terputus'>
+                <WifiOffOutlined sx={{ color: theme.palette.error.main }} />
+              </Tooltip>
+            )}
+            <Box
+              component={motion.div}
+              whileHover='hover'
+              whileTap='tap'
+              variants={boxVariant}
               sx={{
-                p: 0,
+                display: 'inline-flex',
               }}
               onClick={(e: any) => {
-                mountPopover(e, 'account');
+                mountPopover(e, 'inbox');
               }}
             >
-              <Avatar src={user?.avatar ?? '/static/images/4.jpg'} alt='profile avatar' />
-            </IconButton>
-          </Box>
-          <AccountPopover anchorEl={popover?.anchor} open={popover?.name === 'account'} onClose={unmountPopover} />
+              <IconButton aria-label='inbox button'>
+                <Badge max={9} overlap='circular' color='error'>
+                  <Mail />
+                </Badge>
+              </IconButton>
+            </Box>
+            <InboxPopover open={popover?.name === 'inbox'} anchorEl={popover?.anchor} onClose={unmountPopover} />
+            <Box
+              component={motion.div}
+              whileTap='tap'
+              whileHover='hover'
+              variants={boxVariant}
+              // sx={{ ml: theme.spacing(2) }}
+            >
+              <IconButton
+                aria-label='Notification Button'
+                onClick={(e: any) => {
+                  mountPopover(e, 'notif');
+                }}
+              >
+                <Badge invisible={unreadCount <= 0} badgeContent={unreadCount} max={9} overlap='circular' color='error'>
+                  <Notifications />
+                </Badge>
+              </IconButton>
+            </Box>
+            <NotificationPopover anchorEl={popover?.anchor} open={popover?.name === 'notif'} onClose={unmountPopover} />
+
+            <Box
+              // sx={{ mx: 2 }}
+              component={motion.div}
+              whileTap='tap'
+              variants={boxVariant}
+              whileHover='hover'
+            >
+              <IconButton
+                aria-label='My Profile Button'
+                sx={{
+                  p: 0,
+                }}
+                onClick={(e: any) => {
+                  mountPopover(e, 'account');
+                }}
+              >
+                <Avatar src={user?.avatar ?? '/static/images/4.jpg'} alt='profile avatar' />
+              </IconButton>
+            </Box>
+            <AccountPopover anchorEl={popover?.anchor} open={popover?.name === 'account'} onClose={unmountPopover} />
+          </Stack>
         </Toolbar>
       </Grid>
     </AppBar>

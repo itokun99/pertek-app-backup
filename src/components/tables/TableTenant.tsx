@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { fetchData } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
+import { NetworkContext } from '../../provider/NetworkProvider';
 import { createTextAvatar } from '../../utils/createAvatar';
 import { fDate } from '../../utils/formatTime';
 import { ErrorComponent } from '../error/ErrorComponent';
@@ -72,6 +73,7 @@ const TenantTable = () => {
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
   const { setAlert, alert } = useContext(AlertContext);
+  const { isOnline, isBrowserSupported } = useContext(NetworkContext);
 
   const status = useMemo(() => ['Semua', 'Pending', 'Verified', 'Blocked'], []);
 
@@ -87,17 +89,19 @@ const TenantTable = () => {
         setData(null);
         const { error, data } = await fetchData(`/api/${asPath}`);
         if (error) {
-          setAlert({
-            severity: 'error',
-            message: error,
-          });
+          if (isOnline) {
+            setAlert({
+              severity: 'error',
+              message: error,
+            });
+          }
           return;
         }
 
         setData(data);
       })();
     }
-  }, [isReady, asPath, setAlert]);
+  }, [isReady, isOnline, asPath, setAlert]);
 
   const handleChange = (e: SyntheticEvent<Element, Event>, v: number) => {
     e.preventDefault();

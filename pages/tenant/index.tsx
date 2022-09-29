@@ -1,11 +1,10 @@
 import { Add } from '@mui/icons-material';
-import { Box, Card, Grid, Stack, Tab, Tabs, TextField, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
 import dynamic from 'next/dynamic';
-import { PropsWithChildren, Suspense, useContext, useState } from 'react';
+import { Suspense } from 'react';
 
 import { ReactElement } from 'react';
 import { AnimatedButton } from '../../src/components/AnimatedButtton';
-import { AlertContext } from '../../src/provider/AlertProvider';
 import ProtectedPage from '../../src/template/ProtectedPage';
 
 const TenantTable = dynamic(() => import('../../src/components/tables/TableTenant'), {

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import { fetchData } from '../lib/dataFetcher';
 
 export interface NetworkState {
   isOnline: boolean;
@@ -29,9 +30,10 @@ export const NetworkProvier = ({ children }: PropsWithChildren) => {
       if (window.navigator) {
         setBrowserSupported(true);
         setIsOnline(window.navigator.onLine);
-        window.addEventListener('online', () => {
+        window.addEventListener('online', async () => {
           setShouldShowMessage(true);
-          setIsOnline(true);
+          const { error } = await fetchData('/api/healthcheck', 'GET');
+          setIsOnline(!error);
         });
         window.addEventListener('offline', () => {
           setShouldShowMessage(true);

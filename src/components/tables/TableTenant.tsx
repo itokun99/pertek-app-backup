@@ -123,7 +123,7 @@ const TenantTable = () => {
       <Card>
         <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
         <Box mx={2}>
-          {!alert && isOnline && (
+          {isOnline && data && (
             <Box
               width={400}
               sx={{
@@ -144,13 +144,13 @@ const TenantTable = () => {
               />
             </Box>
           )}
-          {(alert || !isOnline) && <ErrorComponent offline />}
-          {!data && !alert && isOnline && (
+          {!isOnline && <ErrorComponent offline={!isOnline} />}
+          {!data && isOnline && (
             <Box mb={2}>
               <TableLoader />
             </Box>
           )}
-          {data && !alert && isOnline && (
+          {isOnline && data && (
             <DataGrid
               columnVisibilityModel={{
                 color: false,

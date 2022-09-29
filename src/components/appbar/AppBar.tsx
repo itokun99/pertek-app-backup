@@ -65,8 +65,8 @@ const AppBarComponent = () => {
         <Toolbar variant='dense' disableGutters>
           <Stack direction='row' gap={2} alignItems='center'>
             {isBrowserSupported && !isOnline && (
-              <Tooltip title='Koneksi Terputus'>
-                <WifiOffOutlined sx={{ color: theme.palette.error.main }} />
+              <Tooltip title='Tidak ada koneksi internet'>
+                <WifiOffOutlined sx={{ color: theme.palette.grey[500] }} />
               </Tooltip>
             )}
             <Box

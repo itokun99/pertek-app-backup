@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { fetchData } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
+import { NetworkContext } from '../../provider/NetworkProvider';
 import { fDateTime } from '../../utils/formatTime';
 import { ErrorComponent } from '../error/ErrorComponent';
 import Label from '../Label';
@@ -12,13 +13,15 @@ import { TableLoader } from '../loader/TableLoader';
 import { TabBar } from '../TabBar';
 
 const AnnouncementTable = () => {
-  const { isReady, query, asPath } = useRouter();
-  const [tabIndex, setTabIndex] = useState<number>(0);
-  const status = useMemo(() => ['Semua', 'Draft', 'Published'], []);
-  const [data, setData] = useState<any>(null);
-  const { alert, setAlert } = useContext(AlertContext);
-  const router = useRouter();
   const theme = useTheme();
+  const { isReady, query, asPath, push } = useRouter();
+  const status = useMemo(() => ['Semua', 'Draft', 'Published'], []);
+
+  const { alert, setAlert } = useContext(AlertContext);
+  const { isOnline } = useContext(NetworkContext);
+
+  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [data, setData] = useState<any>(null);
 
   useEffect(() => {
     if (isReady && query.tab) {
@@ -27,7 +30,7 @@ const AnnouncementTable = () => {
   }, [isReady, query.tab]);
 
   useEffect(() => {
-    if (isReady) {
+    if (isReady && isOnline) {
       (async () => {
         setData(null);
         const { error, data } = await fetchData(`/api/${asPath}`);
@@ -41,14 +44,14 @@ const AnnouncementTable = () => {
         setData(data);
       })();
     }
-  }, [isReady, asPath, setAlert]);
+  }, [isReady, isOnline, asPath, setAlert]);
 
   const handleChange = (e: SyntheticEvent<Element, Event>, tabIndex: number) => {
     e.preventDefault();
     setTabIndex(tabIndex);
 
     if (tabIndex > 0) {
-      router.push('/pengumuman', {
+      push('/pengumuman', {
         query: {
           tab: tabIndex,
           status: status[tabIndex].toLowerCase(),
@@ -56,7 +59,7 @@ const AnnouncementTable = () => {
       });
       return;
     }
-    router.push('/pengumuman');
+    push('/pengumuman');
   };
 
   return (
@@ -64,27 +67,29 @@ const AnnouncementTable = () => {
       <Card>
         <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
         <Box mx={2}>
-          <Box
-            width={400}
-            sx={{
-              paddingY: theme.spacing(2),
-            }}
-          >
-            <TextField
-              fullWidth
-              placeholder='Cari pengumuman'
-              variant='outlined'
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position='start'>
-                    <Search />
-                  </InputAdornment>
-                ),
+          {((!isOnline && !data) || data) && (
+            <Box
+              width={400}
+              sx={{
+                paddingY: theme.spacing(2),
               }}
-            />
-          </Box>
-          {alert && <ErrorComponent />}
-          {!data && !alert && (
+            >
+              <TextField
+                fullWidth
+                placeholder='Cari pengumuman'
+                variant='outlined'
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            </Box>
+          )}
+          {(alert || !isOnline) && !data && <ErrorComponent offline={!isOnline} />}
+          {!data && !alert && isOnline && (
             <Box mb={2}>
               <TableLoader />
             </Box>

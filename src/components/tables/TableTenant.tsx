@@ -144,12 +144,7 @@ const TenantTable = () => {
               />
             </Box>
           )}
-          {(alert || !isOnline) && (
-            <ErrorComponent
-              showReloadButton={isOnline}
-              message={!isOnline ? 'Tidak ada koneksi internet' : undefined}
-            />
-          )}
+          {(alert || !isOnline) && <ErrorComponent offline />}
           {!data && !alert && isOnline && (
             <Box mb={2}>
               <TableLoader />

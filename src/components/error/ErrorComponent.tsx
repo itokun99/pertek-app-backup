@@ -4,11 +4,13 @@ import { PropsWithChildren } from 'react';
 
 export const ErrorComponent = ({
   message,
+  offline,
   showReloadButton,
-}: PropsWithChildren & { message?: string; showReloadButton?: boolean }) => (
+}: PropsWithChildren & { message?: string; showReloadButton?: boolean; offline?: boolean }) => (
   <Container sx={{ py: 2, lineHeight: 3, width: '100%', textAlign: 'center' }}>
-    <Typography variant='body1'>{message ? message : 'Terjadi kesalahan.'}</Typography>
-    {showReloadButton && (
+    {offline && <Typography variant='body1'>{'Tidak ada koneksi internet'}</Typography>}
+    {!offline && <Typography variant='body1'>{message ? message : 'Terjadi kesalahan.'}</Typography>}
+    {!offline && showReloadButton && (
       <Button variant='outlined' startIcon={<Cached />}>
         Muat Ulang
       </Button>

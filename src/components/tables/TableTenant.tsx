@@ -3,7 +3,7 @@ import { Avatar, Box, Card, InputAdornment, Link, TextField, Theme, Typography, 
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { doFetch, fetchData } from '../../lib/dataFetcher';
+import { doFetch } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { NetworkContext } from '../../provider/NetworkProvider';
 import { createTextAvatar } from '../../utils/createAvatar';

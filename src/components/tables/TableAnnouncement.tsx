@@ -33,18 +33,6 @@ const AnnouncementTable = () => {
   useEffect(() => {
     if (isReady && isOnline) {
       doFetch(asPath, isOnline, setData, setAlert, setIsError);
-      // (async () => {
-      //   setData(null);
-      //   const { error, data } = await fetchData(`/api${asPath}`);
-      //   if (error) {
-      //     setAlert({
-      //       severity: 'error',
-      //       message: error,
-      //     });
-      //     return;
-      //   }
-      //   setData(data);
-      // })();
     }
   }, [isReady, isOnline, asPath, setAlert]);
 

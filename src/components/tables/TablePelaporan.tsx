@@ -5,20 +5,16 @@ import {
   FormControl,
   InputAdornment,
   InputLabel,
-  Link,
   MenuItem,
   Select,
   SelectChangeEvent,
   Stack,
   TextField,
-  Theme,
-  Typography,
-  useTheme,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
-import { ReactNode, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { doFetch, fetchData } from '../../lib/dataFetcher';
+import { ReactNode, useContext, useEffect, useState } from 'react';
+import { doFetch } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { NetworkContext } from '../../provider/NetworkProvider';
 import { fDate } from '../../utils/formatTime';
@@ -30,7 +26,7 @@ const PelaporanTable = () => {
   const { query, push, isReady, asPath } = useRouter();
 
   const { isOnline } = useContext(NetworkContext);
-  const { setAlert, alert } = useContext(AlertContext);
+  const { setAlert } = useContext(AlertContext);
 
   const [filter, setFilter] = useState<number | null>(null);
   const [data, setData] = useState<any>(null);
@@ -45,17 +41,6 @@ const PelaporanTable = () => {
   useEffect(() => {
     if (isReady) {
       doFetch(asPath, isOnline, setData, setAlert, setIsError);
-      // (async () => {
-      //   const { error, data } = await fetchData(`/api${asPath}`);
-      //   if (error) {
-      //     setAlert({
-      //       severity: 'error',
-      //       message: error,
-      //     });
-      //     return;
-      //   }
-      //   setData(data);
-      // })();
     }
   }, [isReady, asPath, setIsError, isOnline, setAlert]);
 

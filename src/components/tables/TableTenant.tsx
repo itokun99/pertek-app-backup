@@ -71,7 +71,7 @@ const TenantTable = () => {
   const { query, push, isReady, asPath } = useRouter();
 
   const { setAlert } = useContext(AlertContext);
-  const { isOnline } = useContext(NetworkContext);
+  const { isOnline, isOffline } = useContext(NetworkContext);
 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
@@ -87,7 +87,7 @@ const TenantTable = () => {
 
   useEffect(() => {
     if (isReady && isOnline) {
-      doFetch(asPath, isOnline, setData, setAlert, setIsError);
+      doFetch(asPath, setData, setAlert, setIsError);
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
@@ -108,7 +108,7 @@ const TenantTable = () => {
 
   const handleReload = (e: any) => {
     e.preventDefault();
-    doFetch(asPath, isOnline, setData, setAlert, setIsError, true);
+    doFetch(asPath, setData, setAlert, setIsError, true);
   };
 
   return (
@@ -137,8 +137,8 @@ const TenantTable = () => {
               />
             </Box>
           )}
-          {(!isOnline || (isOnline && isError)) && (
-            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={!isOnline} />
+          {(isOffline || (isOnline && isError)) && (
+            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={isOffline} />
           )}
           {!data && isOnline && !isError && (
             <Box mb={2}>

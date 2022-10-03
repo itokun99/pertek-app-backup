@@ -1,37 +1,62 @@
+import { NetworkState } from '../provider/NetworkProvider';
+
 export type ListResponse = {
   items: Array<any>;
 };
 
 export type FetcherResponse = {
-  error?: string;
+  error?: {
+    code: number;
+    message: string;
+  };
   data?: any;
 };
+
+const controller = new AbortController();
+const signal = controller.signal;
 
 export const fetchData = async (
   url: string,
   method?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE',
   body?: BodyInit | null | undefined
 ) => {
+  const timeout = setTimeout(() => controller.abort(), 3000);
+
   try {
     const apiResponse = await fetch(url, {
+      signal,
       method,
       body,
     });
     const payload = await apiResponse.json();
+    clearTimeout(timeout);
+
+    if (apiResponse.status === 401) {
+      window.location.replace('/login');
+      return {};
+    }
 
     if (apiResponse.status !== 200) {
-      console.log('here', payload);
-      return { error: payload.message } as FetcherResponse;
+      return { error: { code: apiResponse.status, message: payload.message } } as FetcherResponse;
     }
+
     return { data: payload } as FetcherResponse;
   } catch (e: any) {
-    return { error: e.message } as FetcherResponse;
+    clearTimeout(timeout);
+    let message = 'Unknown error occurs during fething the data. Please try again!';
+    if (e instanceof DOMException) {
+      message = 'Connection timed out!';
+    }
+    if (e.message) {
+      message = e.message;
+    }
+    return { error: { code: 500, message: message } } as FetcherResponse;
   }
 };
 
 export async function doFetch(
   asPath: string,
-  isOnline: boolean,
+  // networkState: NetworkState,
   setData: Function,
   setAlert: Function,
   setIsError: Function,
@@ -44,12 +69,12 @@ export async function doFetch(
   const { error, data } = await fetchData(`/api${asPath}`);
   if (error) {
     setIsError(true);
-    if (isOnline) {
-      setAlert({
-        severity: 'error',
-        message: error,
-      });
-    }
+    // if (networkState === NetworkState.Offline) {
+    setAlert({
+      severity: 'error',
+      message: error.message,
+    });
+    // }
     return;
   }
 

@@ -38,15 +38,15 @@ const ProtectedPage = ({ children }: PropsWithChildren) => {
           </SimpleBar>
         </SidebarProvider>
       </NotificationProvider>
-      {alert && (
+      {alert?.message && (
         <Snackbar
           onClose={() => setAlert(null)}
-          autoHideDuration={alert.severity === 'error' ? null : 2000}
+          autoHideDuration={alert.message.severity === 'error' ? null : 2000}
           anchorOrigin={alert.position ? alert.position : { horizontal: 'center', vertical: 'top' }}
           open={alert !== null}
         >
-          <Alert severity={alert.severity} variant={alert.variant ?? 'filled'}>
-            {alert.message}
+          <Alert severity={alert.message.severity} variant={alert.variant ?? 'filled'}>
+            {alert.message.content}
           </Alert>
         </Snackbar>
       )}

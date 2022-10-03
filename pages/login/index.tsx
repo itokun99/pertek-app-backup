@@ -23,10 +23,12 @@ const LoginPage = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    if (identity === '' && password === '') {
+    if (identity === '' || password === '') {
       setAlert({
-        severity: 'warning',
-        message: 'Identitas dan atau passwork tidak boleh kosong!',
+        message: {
+          severity: 'warning',
+          content: 'Identitas dan atau password tidak boleh kosong!',
+        },
       });
       setIsLoading(false);
       return;
@@ -43,15 +45,18 @@ const LoginPage = () => {
 
     if (error) {
       setAlert({
-        severity: 'error',
-        message: error,
+        message: {
+          severity: 'error',
+          content: error.message,
+        },
       });
+      setIsLoading(false);
       return;
     }
 
     setIsLoading(false);
 
-    router.replace('/dashboard');
+    router.replace('/properti');
   };
 
   return (

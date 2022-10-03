@@ -10,7 +10,7 @@ import { NextPage } from 'next';
 import { PropsWithChildren, ReactElement, ReactNode, useContext, useEffect } from 'react';
 import 'simplebar-react/dist/simplebar.min.css';
 import { AlertContext, AlertProvider } from '../src/provider/AlertProvider';
-import { NetworkContext, NetworkProvier } from '../src/provider/NetworkProvider';
+import { NetworkContext, NetworkProvier, NetworkState } from '../src/provider/NetworkProvider';
 
 export class MyError extends Error {
   statusCode?: number;
@@ -79,36 +79,34 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
 const MainContainer = ({ children }: PropsWithChildren) => {
   const { alert, setAlert } = useContext(AlertContext);
-  const { isOnline, isBrowserSupported, shouldShowMessage } = useContext(NetworkContext);
+  const { message } = useContext(NetworkContext);
 
   useEffect(() => {
-    if (isBrowserSupported && shouldShowMessage) {
-      let severity = 'success';
-      let message = 'Koneksi internet telah pulih!';
-      if (!isOnline) {
-        severity = 'error';
-        message = 'Koneksi internet terputus!';
-      }
-
-      setAlert({
-        severity: severity as any,
-        message,
-      });
+    //   if (isBrowserSupported) {
+    //     let severity = 'success';
+    //     let message = 'Koneksi tersambung!. Mohon tunggu kami sedang melakukan pemeriksaan koneksi internet';
+    //     if (networkState === NetworkState.Offline) {
+    //       severity = 'error';
+    //       message = 'Koneksi terputus atau tidak dapat terhubung dengan server!';
+    //     }
+    if (message) {
+      setAlert({ message });
     }
-  }, [isOnline, isBrowserSupported, shouldShowMessage, setAlert]);
+    //   }x
+  }, [message, setAlert]);
 
   return (
     <>
       {children}
-      {alert && (
+      {alert?.message && (
         <Snackbar
           onClose={() => setAlert(null)}
-          autoHideDuration={alert.severity === 'error' ? null : 2000}
+          autoHideDuration={alert.message.severity === 'error' ? null : 2000}
           anchorOrigin={alert.position ? alert.position : { horizontal: 'center', vertical: 'top' }}
           open={alert !== null}
         >
-          <Alert severity={alert.severity} variant={alert.variant ?? 'filled'}>
-            {alert.message}
+          <Alert severity={alert.message.severity} variant={alert.variant ?? 'filled'}>
+            {alert.message.content}
           </Alert>
         </Snackbar>
       )}

@@ -25,7 +25,7 @@ import { TableLoader } from '../loader/TableLoader';
 const PelaporanTable = () => {
   const { query, push, isReady, asPath } = useRouter();
 
-  const { isOnline } = useContext(NetworkContext);
+  const { isOnline, isOffline } = useContext(NetworkContext);
   const { setAlert } = useContext(AlertContext);
 
   const [filter, setFilter] = useState<number | null>(null);
@@ -40,7 +40,7 @@ const PelaporanTable = () => {
 
   useEffect(() => {
     if (isReady) {
-      doFetch(asPath, isOnline, setData, setAlert, setIsError);
+      doFetch(asPath, setData, setAlert, setIsError);
     }
   }, [isReady, asPath, setIsError, isOnline, setAlert]);
 
@@ -51,7 +51,7 @@ const PelaporanTable = () => {
 
   const handleReload = (e: any) => {
     e.preventDefault();
-    doFetch(asPath, isOnline, setData, setAlert, setIsError, true);
+    doFetch(asPath, setData, setAlert, setIsError, true);
   };
 
   return (
@@ -84,8 +84,8 @@ const PelaporanTable = () => {
               </Box>
             </Stack>
           )}
-          {(!isOnline || (isOnline && isError)) && (
-            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={!isOnline} />
+          {(isOffline || (isOnline && isError)) && (
+            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={isOffline} />
           )}
           {!data && isOnline && !isError && (
             <Box mb={2}>

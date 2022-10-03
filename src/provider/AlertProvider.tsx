@@ -1,9 +1,13 @@
 import { createContext, PropsWithChildren, useMemo, useState } from 'react';
 
-export type AlertModel = {
+export type MessageModel = {
   severity: 'success' | 'warning' | 'error' | 'info';
+  content: string;
+};
+
+export type AlertModel = {
   variant?: 'standard' | 'filled' | 'outlined';
-  message?: string;
+  message?: MessageModel;
   position?: {
     vertical: 'top' | 'bottom';
     horizontal: 'center' | 'left' | 'right';

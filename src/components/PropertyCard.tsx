@@ -1,42 +1,77 @@
 import { TaskAltOutlined } from '@mui/icons-material';
-import { Box, Card, CardActionArea, Grid, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Card, CardActionArea, Grid, Skeleton, Stack, Typography, useTheme } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import { fetchData } from '../lib/dataFetcher';
+import { doFetch } from '../lib/dataFetcher';
 import { AlertContext } from '../provider/AlertProvider';
+import { NetworkContext, NetworkState } from '../provider/NetworkProvider';
 import { Property, SidebarContext } from '../provider/SidebarProvider';
+import { ErrorComponent } from './error/ErrorComponent';
 
 const PropertyCard = () => {
   const theme = useTheme();
-  const { isReady } = useRouter();
+  const { isReady, asPath } = useRouter();
+
   const { setAlert } = useContext(AlertContext);
+  const { isOnline, isOffline } = useContext(NetworkContext);
   const { activeProperty, setActiveProperty } = useContext(SidebarContext);
 
-  const [properties, setProperties] = useState<Property[]>([]);
+  const [data, setData] = useState<any>(null);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     if (isReady) {
-      (async () => {
-        const { error, data } = await fetchData('/api/dashboard');
-        if (error) {
-          setAlert({
-            severity: 'error',
-            message: error,
-          });
-          return;
-        }
-        setProperties(data!.items);
-      })();
+      doFetch(asPath, setData, setAlert, setIsError);
+      // (async () => {
+      //   const { error, data } = await fetchData('/api/');
+      //   if (error) {
+      //     setAlert({
+      //       severity: 'error',
+      //       message: error,
+      //     });
+      //     return;
+      //   }
+      //   setProperties(data!.items);
+      // })();
     }
-  }, [isReady, setAlert]);
+  }, [setAlert, asPath, isReady]);
 
-  if (properties.length === 0) {
-    return <></>;
+  const handleReload = (e: any) => {
+    e.preventDefault();
+    doFetch(asPath, setData, setAlert, setIsError, true);
+  };
+
+  if (!data) {
+    return (
+      <Grid item md={4} sm={12}>
+        <Card>Tidak ada data</Card>
+      </Grid>
+    );
+  }
+
+  if (isOffline || (isOnline && isError)) {
+    return (
+      <Grid item md={4} sm={12}>
+        <Card>
+          <ErrorComponent showReloadButton={isError} offline={isOffline} onReload={handleReload} />
+        </Card>
+      </Grid>
+    );
+  }
+
+  if (isOnline && !isError && !data) {
+    return (
+      <Grid item md={4} sm={12}>
+        <Card>
+          <Skeleton width='100%' height='100%' />
+        </Card>
+      </Grid>
+    );
   }
 
   return (
     <>
-      {properties.map((property, key) => {
+      {data.items.map((property: Property, key: number) => {
         const isActive = activeProperty?.id === property.id;
         const gradient = theme.palette.gradients.primary;
         const contrastText = theme.palette.info.contrastText;
@@ -53,7 +88,7 @@ const PropertyCard = () => {
                 }}
                 onClick={() => setActiveProperty(property)}
               >
-                <Box p={3}>
+                <Box p={3} position='absolute' left={0} top={0} sx={{ zIndex: 1 }}>
                   <Stack direction='row'>
                     <Box flex={1} justifyContent='space-between'>
                       <Typography variant='subtitle1' color={isActive ? contrastText : undefined}>
@@ -69,24 +104,27 @@ const PropertyCard = () => {
                       </Box>
                     )}
                   </Stack>
-                  <Stack direction='row' gap={2} mt={2}>
+                  <Stack direction='row' gap={4} mt={2}>
                     <Stack>
-                      <Typography variant='h5' color={isActive ? lightText : primaryText}>
-                        {property.total_unit}
-                      </Typography>
                       <Typography variant='body2' color={isActive ? lightText : secondaryText}>
-                        Jumlah Unit
+                        {property.type.match(/apartment|office*|mall/i) ? 'Tower' : 'Klaster'}
+                      </Typography>
+                      <Typography variant='h4' color={isActive ? lightText : primaryText}>
+                        {property.total_cluster}
                       </Typography>
                     </Stack>
                     <Stack>
-                      <Typography variant='h5' color={isActive ? lightText : primaryText}>
-                        {property.total_unit}
-                      </Typography>
                       <Typography variant='body2' color={isActive ? lightText : secondaryText}>
-                        Jumlah {property.type.match(/apartment|office*|mall/i) ? 'Tower' : 'Klaster'}
+                        Unit
+                      </Typography>
+                      <Typography variant='h4' color={isActive ? lightText : primaryText}>
+                        {property.total_unit}
                       </Typography>
                     </Stack>
                   </Stack>
+                </Box>
+                <Box position='relative' bottom={0} left={16} sx={{ zIndex: 10 }}>
+                  <Typography variant='h3'>Apartment</Typography>
                 </Box>
               </CardActionArea>
             </Card>

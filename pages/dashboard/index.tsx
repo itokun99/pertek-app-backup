@@ -21,8 +21,10 @@ function Dashboard() {
         const { error, data } = await fetchData('/api/dashboard');
         if (error) {
           setAlert({
-            severity: 'error',
-            message: error,
+            message: {
+              severity: 'error',
+              content: error.message,
+            },
           });
           return;
         }

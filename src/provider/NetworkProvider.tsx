@@ -9,76 +9,152 @@ export enum NetworkState {
   Online,
 }
 export interface INetworkContext {
-  // networkState: NetworkState;
   isOnline: boolean;
   isOffline: boolean;
+  isNetworkConnected: boolean;
+  isNetworkNotConnected: boolean;
   isBrowserSupported: boolean;
   message?: MessageModel;
-  // shouldShowMessage: boolean;
 }
 
 export const NetworkContext = createContext<INetworkContext>({
-  // networkState: NetworkState.Checking,
+  isNetworkConnected: false,
+  isNetworkNotConnected: true,
   isOnline: false,
   isOffline: true,
   isBrowserSupported: false,
-  // shouldShowMessage: false,
 });
 
+const connectionTestingMessage = {
+  severity: 'info',
+  content: 'Jaringan terhubung!. Testing koneksi internet...',
+} as MessageModel;
+
+const noInternetConnectionMessage = {
+  severity: 'error',
+  content: 'Tidak dapat terhubung ke internet, periksa kembali koneksi internet Anda!',
+} as MessageModel;
+
+const noNetworkConnectionMessage = {
+  severity: 'warning',
+  content: 'Jaringan terputus!',
+} as MessageModel;
+
+const connectionNormalMessage = {
+  severity: 'success',
+  content: 'Koneksi internet ok',
+} as MessageModel;
+
+const networkConnectionChecher = async (
+  setMessage: Function,
+  setIsNetworkConnected: Function,
+  setIsNetworkNotConnected: Function,
+  setIsOffline: Function,
+  setIsOnline: Function,
+  state: 'offline' | 'online' = 'offline',
+  isInit?: boolean
+) => {
+  let isOffline = false;
+  let isOnline = true;
+  let isNetworkConnected = true;
+  let isNetworkNotConnected = false;
+
+  if (state === 'offline') {
+    setMessage(noNetworkConnectionMessage);
+    isOffline = true;
+    isOnline = false;
+    isNetworkConnected = false;
+    isNetworkNotConnected = true;
+  }
+
+  if (state === 'online') {
+    if (!isInit) {
+      setMessage(connectionTestingMessage);
+    }
+    isOffline = false;
+    isOnline = true;
+    isNetworkConnected = true;
+    isNetworkNotConnected = false;
+    const { error } = await fetchData('/api/healthcheck', 'GET');
+    if (error) {
+      setMessage(noInternetConnectionMessage);
+    } else {
+      if (!isInit) {
+        setMessage(connectionNormalMessage);
+      }
+    }
+  }
+
+  setIsNetworkConnected(isNetworkConnected);
+  setIsNetworkNotConnected(isNetworkNotConnected);
+  setIsOffline(isOffline);
+  setIsOnline(isOnline);
+};
+
 export const NetworkProvier = ({ children }: PropsWithChildren) => {
-  // const [networkState, setNetworkState] = useState<NetworkState>(NetworkState.Checking);
   const [isBrowserSupported, setBrowserSupported] = useState<boolean>(false);
   const [message, setMessage] = useState<MessageModel | undefined>();
-  const [isOnline, setIsOnline] = useState(false);
-  const [isOffline, setIsOffline] = useState(true);
-  // const [shouldShowMessage, setShouldShowMessage] = useState<boolean>(false);
+  const [isOnline, setIsOnline] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
+  const [isNetworkConnected, setIsNetworkConnected] = useState(true);
+  const [isNetworkNotConnected, setIsNetworkNotConnected] = useState(false);
   const { isReady } = useRouter();
 
   const value = useMemo(
-    () => ({ isBrowserSupported, isOnline, isOffline, message }),
-    [isOnline, isOffline, isBrowserSupported, message]
+    () => ({ isNetworkConnected, isNetworkNotConnected, isBrowserSupported, isOnline, isOffline, message }),
+    [isNetworkConnected, isNetworkNotConnected, isOnline, isOffline, isBrowserSupported, message]
   );
 
   useEffect(() => {
     if (isReady) {
       if (window.navigator) {
         setBrowserSupported(true);
-        (async () => {
-          if (!window.navigator.onLine) {
-            setMessage({ severity: 'warning', content: 'Jaringan tidak terhubung!' });
-            setIsOffline(true);
-            setIsOnline(false);
-            return;
-          }
-          setMessage({ severity: 'info', content: 'Jaringan terhubung. Mencoba koneksi internet...' });
-          // setNetworkState(NetworkState.Checking);
-          const { error } = await fetchData('/api/healthcheck', 'GET');
 
-          if (error) {
-            setMessage({
-              severity: 'error',
-              content: 'Tidak dapat terhubung ke internet, periksa kembali koneksi internet Anda!',
-            });
-          }
+        if (window.navigator.onLine) {
+          (async () =>
+            networkConnectionChecher(
+              setMessage,
+              setIsNetworkConnected,
+              setIsNetworkNotConnected,
+              setIsOffline,
+              setIsOnline,
+              'online',
+              true
+            ))();
+        } else {
+          (async () =>
+            networkConnectionChecher(
+              setMessage,
+              setIsNetworkConnected,
+              setIsNetworkNotConnected,
+              setIsOffline,
+              setIsOnline,
+              'offline',
+              true
+            ))();
+        }
 
-          setIsOffline(error === undefined);
-          setIsOnline(error !== undefined);
-          // const state = error ? NetworkState.Offline : NetworkState.Online;
-          // setNetworkState(state);
-          // setIsOnline(!error || error === undefined);
-        })();
-        window.addEventListener('online', async () => {
-          // setNetworkState(NetworkState.Checking);
-          // setShouldShowMessage(true);
-          const { error } = await fetchData('/api/healthcheck', 'GET');
-          // const state = error ? NetworkState.Offline : NetworkState.Online;
-          // setNetworkState(state);
-          // setIsOnline(!error || error === undefined);
-        });
-        window.addEventListener('offline', () => {
-          // setShouldShowMessage(true);
-          // setNetworkState(NetworkState.Offline);
-        });
+        window.addEventListener('online', () =>
+          networkConnectionChecher(
+            setMessage,
+            setIsNetworkConnected,
+            setIsNetworkNotConnected,
+            setIsOffline,
+            setIsOnline,
+            'online'
+          )
+        );
+
+        window.addEventListener('offline', () =>
+          networkConnectionChecher(
+            setMessage,
+            setIsNetworkConnected,
+            setIsNetworkNotConnected,
+            setIsOffline,
+            setIsOnline,
+            'offline'
+          )
+        );
       }
     }
   }, [isReady]);

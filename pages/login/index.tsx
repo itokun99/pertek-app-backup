@@ -7,12 +7,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { fetchData } from '../../src/lib/dataFetcher';
 import { AlertContext } from '../../src/provider/AlertProvider';
+import { NetworkContext } from '../../src/provider/NetworkProvider';
 
 const LoginPage = () => {
   const theme = useTheme();
   const router = useRouter();
 
   const { setAlert } = useContext(AlertContext);
+  const { isOffline } = useContext(NetworkContext);
 
   const [identity, setIdentity] = useState('');
   const [password, setPassword] = useState('');
@@ -115,7 +117,13 @@ const LoginPage = () => {
                 <Link href='/forgot-password'>Lupa password?</Link>
               </Typography>
             </Box>
-            <LoadingButton loading={isLoading} type='submit' sx={{ height: theme.spacing(6) }} variant='contained'>
+            <LoadingButton
+              disabled={isOffline}
+              loading={isLoading}
+              type='submit'
+              sx={{ height: theme.spacing(6) }}
+              variant='contained'
+            >
               Login
             </LoadingButton>
           </Stack>

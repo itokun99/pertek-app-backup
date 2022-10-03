@@ -56,7 +56,6 @@ export const fetchData = async (
 
 export async function doFetch(
   asPath: string,
-  // networkState: NetworkState,
   setData: Function,
   setAlert: Function,
   setIsError: Function,
@@ -69,12 +68,10 @@ export async function doFetch(
   const { error, data } = await fetchData(`/api${asPath}`);
   if (error) {
     setIsError(true);
-    // if (networkState === NetworkState.Offline) {
     setAlert({
       severity: 'error',
       message: error.message,
     });
-    // }
     return;
   }
 

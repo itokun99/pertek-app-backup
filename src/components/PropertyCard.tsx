@@ -88,7 +88,7 @@ const PropertyCard = () => {
                 }}
                 onClick={() => setActiveProperty(property)}
               >
-                <Box p={3} position='absolute' left={0} top={0} sx={{ zIndex: 1 }}>
+                <Box p={3}>
                   <Stack direction='row'>
                     <Box flex={1} justifyContent='space-between'>
                       <Typography variant='subtitle1' color={isActive ? contrastText : undefined}>
@@ -123,9 +123,9 @@ const PropertyCard = () => {
                     </Stack>
                   </Stack>
                 </Box>
-                <Box position='relative' bottom={0} left={16} sx={{ zIndex: 10 }}>
+                {/* <Box position='relative' bottom={0} left={16} sx={{ zIndex: 10 }}>
                   <Typography variant='h3'>Apartment</Typography>
-                </Box>
+                </Box> */}
               </CardActionArea>
             </Card>
           </Grid>

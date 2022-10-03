@@ -8,7 +8,6 @@ import { withSessionRoute } from '../../src/lib/withSession';
 export default withSessionRoute(handler);
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
-  console.log('here');
   if (isInvalidSession(req)) {
     return unauthorized(res);
   }

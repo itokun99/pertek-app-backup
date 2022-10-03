@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material';
+import { Add, UploadFileOutlined, UploadOutlined } from '@mui/icons-material';
 import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
@@ -28,9 +28,12 @@ const TenantIndex = () => {
             </Stack>
           </Grid>
           <Grid item>
-            <Box>
+            <Stack direction='row' gap={2}>
               <AnimatedButton startIcon={<Add />}>Tenant Baru</AnimatedButton>
-            </Box>
+              <AnimatedButton sx={{ backgroundColor: theme.palette.success.dark }} startIcon={<UploadOutlined />}>
+                Upload CSV
+              </AnimatedButton>
+            </Stack>
           </Grid>
         </Grid>
       </Box>

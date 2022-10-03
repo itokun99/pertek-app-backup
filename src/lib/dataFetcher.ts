@@ -29,7 +29,7 @@ export const fetchData = async (
       body,
     });
     const payload = await apiResponse.json();
-    clearTimeout(timeout);
+    // clearTimeout(timeout);
 
     if (apiResponse.status === 401) {
       window.location.replace('/login');
@@ -42,7 +42,7 @@ export const fetchData = async (
 
     return { data: payload } as FetcherResponse;
   } catch (e: any) {
-    clearTimeout(timeout);
+    // clearTimeout(timeout);
     let message = 'Unknown error occurs during fething the data. Please try again!';
     if (e instanceof DOMException) {
       message = 'Connection timed out!';

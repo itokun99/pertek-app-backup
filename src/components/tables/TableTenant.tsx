@@ -2,7 +2,7 @@ import { Search } from '@mui/icons-material';
 import { Avatar, Box, Card, InputAdornment, Link, TextField, Theme, Typography, useTheme } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
-import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { PropsWithChildren, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
 import { doFetch } from '../../lib/dataFetcher';
 import { AlertContext } from '../../provider/AlertProvider';
 import { NetworkContext } from '../../provider/NetworkProvider';
@@ -66,109 +66,21 @@ const generateTableColumns = (theme: Theme) =>
     },
   ] as GridColDef[];
 
-const TenantTable = () => {
+const TenantTable = ({ data }: PropsWithChildren & { data: [] }) => {
   const theme = useTheme();
-  const { query, push, isReady, asPath } = useRouter();
-
-  const { setAlert } = useContext(AlertContext);
-  const { isOnline, isOffline } = useContext(NetworkContext);
-
-  const [tabIndex, setTabIndex] = useState<number>(0);
-  const [data, setData] = useState<any>(null);
-  const [isError, setIsError] = useState(false);
-
-  const status = useMemo(() => ['Semua', 'Pending', 'Verified', 'Blocked'], []);
-
-  useEffect(() => {
-    if (isReady && query.tab) {
-      setTabIndex(parseInt(query.tab as string));
-    }
-  }, [isReady, query.tab]);
-
-  useEffect(() => {
-    if (isReady && isOnline) {
-      doFetch(asPath, setData, setAlert, setIsError);
-    }
-  }, [isReady, isOnline, asPath, setAlert]);
-
-  const handleChange = (e: SyntheticEvent<Element, Event>, v: number) => {
-    e.preventDefault();
-    setTabIndex(v);
-
-    if (v > 0) {
-      return push('/tenant', {
-        query: {
-          status: status[v].toLowerCase(),
-          tab: v,
-        },
-      });
-    }
-    return push('/tenant');
-  };
-
-  const handleReload = (e: any) => {
-    e.preventDefault();
-    doFetch(asPath, setData, setAlert, setIsError, true);
-  };
-
   return (
-    <Box>
-      <Card>
-        <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
-        <Box mx={2}>
-          {isOnline && data && !isError && (
-            <Box
-              width={400}
-              sx={{
-                paddingY: theme.spacing(2),
-              }}
-            >
-              <TextField
-                fullWidth
-                placeholder='Cari tenant'
-                variant='outlined'
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Search />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </Box>
-          )}
-          {(isOffline || (isOnline && isError)) && (
-            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={isOffline} />
-          )}
-          {!data && isOnline && !isError && (
-            <Box mb={2}>
-              <TableLoader />
-            </Box>
-          )}
-          {isOnline && data && !isError && (
-            <DataGrid
-              columnVisibilityModel={{
-                color: false,
-                email: false,
-                phone: false,
-                checkInDate: false,
-                checkOutDate: false,
-              }}
-              headerHeight={40}
-              density={'comfortable'}
-              disableColumnSelector
-              checkboxSelection
-              hideFooterSelectedRowCount
-              disableSelectionOnClick
-              showCellRightBorder={false}
-              autoHeight
-              columns={generateTableColumns(theme)}
-              rows={(data && data.items) || []}
-            />
-          )}
-        </Box>
-      </Card>
-    </Box>
+    <DataGrid
+      headerHeight={40}
+      density={'comfortable'}
+      disableColumnSelector
+      checkboxSelection
+      hideFooterSelectedRowCount
+      disableSelectionOnClick
+      showCellRightBorder={false}
+      autoHeight
+      columns={generateTableColumns(theme)}
+      rows={data}
+    />
   );
 };
 

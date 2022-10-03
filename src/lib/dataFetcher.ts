@@ -1,4 +1,4 @@
-import { NetworkState } from '../provider/NetworkProvider';
+import { AlertModel } from '../provider/AlertProvider';
 
 export type ListResponse = {
   items: Array<any>;
@@ -12,14 +12,13 @@ export type FetcherResponse = {
   data?: any;
 };
 
-const controller = new AbortController();
-const signal = controller.signal;
-
 export const fetchData = async (
   url: string,
   method?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE',
   body?: BodyInit | null | undefined
 ) => {
+  const controller = new AbortController();
+  const signal = controller.signal;
   const timeout = setTimeout(() => controller.abort(), 3000);
 
   try {
@@ -29,7 +28,7 @@ export const fetchData = async (
       body,
     });
     const payload = await apiResponse.json();
-    // clearTimeout(timeout);
+    clearTimeout(timeout);
 
     if (apiResponse.status === 401) {
       window.location.replace('/login');
@@ -42,14 +41,17 @@ export const fetchData = async (
 
     return { data: payload } as FetcherResponse;
   } catch (e: any) {
-    // clearTimeout(timeout);
     let message = 'Unknown error occurs during fething the data. Please try again!';
+
     if (e instanceof DOMException) {
       message = 'Connection timed out!';
     }
+
     if (e.message) {
       message = e.message;
     }
+
+    clearTimeout(timeout);
     return { error: { code: 500, message: message } } as FetcherResponse;
   }
 };
@@ -57,7 +59,7 @@ export const fetchData = async (
 export async function doFetch(
   asPath: string,
   setData: Function,
-  setAlert: Function,
+  setAlert: (mode: AlertModel) => void,
   setIsError: Function,
   isReload?: boolean
 ) {
@@ -67,10 +69,13 @@ export async function doFetch(
   }
   const { error, data } = await fetchData(`/api${asPath}`);
   if (error) {
+    console.log('im here guys');
     setIsError(true);
     setAlert({
-      severity: 'error',
-      message: error.message,
+      message: {
+        severity: 'error',
+        content: error.message,
+      },
     });
     return;
   }

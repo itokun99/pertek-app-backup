@@ -15,6 +15,7 @@ export type FetcherResponse = {
 export const fetchData = async (
   url: string,
   method?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE',
+  headers?: {},
   body?: BodyInit | null | undefined
 ) => {
   const controller = new AbortController();
@@ -23,17 +24,18 @@ export const fetchData = async (
 
   try {
     const apiResponse = await fetch(url, {
+      headers,
       signal,
       method,
       body,
     });
-    const payload = await apiResponse.json();
-    clearTimeout(timeout);
 
     if (apiResponse.status === 401) {
       window.location.replace('/login');
       return {};
     }
+
+    const payload = await apiResponse.json();
 
     if (apiResponse.status !== 200) {
       return { error: { code: apiResponse.status, message: payload.message } } as FetcherResponse;
@@ -51,8 +53,9 @@ export const fetchData = async (
       message = e.message;
     }
 
-    clearTimeout(timeout);
     return { error: { code: 500, message: message } } as FetcherResponse;
+  } finally {
+    clearTimeout(timeout);
   }
 };
 

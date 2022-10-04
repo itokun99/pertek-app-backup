@@ -1,13 +1,5 @@
-import {
-  Add,
-  CloudUpload,
-  Search,
-  UploadFileOutlined,
-  UploadFileRounded,
-  UploadOutlined,
-  UploadTwoTone,
-} from '@mui/icons-material';
-import { Box, Button, Card, Grid, InputAdornment, Stack, styled, TextField, Typography, useTheme } from '@mui/material';
+import { Add, CloudDownload, CloudUpload, Search } from '@mui/icons-material';
+import { Box, Card, Grid, InputAdornment, Stack, styled, TextField, Typography, useTheme } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { ChangeEventHandler, Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
@@ -17,15 +9,11 @@ import { AnimatedButton } from '../../src/components/AnimatedButtton';
 import { ErrorComponent } from '../../src/components/error/ErrorComponent';
 import { TableLoader } from '../../src/components/loader/TableLoader';
 import { TabBar } from '../../src/components/TabBar';
-import { doFetch } from '../../src/lib/dataFetcher';
+import { UplaoderTable } from '../../src/components/tables/TableUploader';
+import { doFetch, fetchData } from '../../src/lib/dataFetcher';
 import { AlertContext } from '../../src/provider/AlertProvider';
 import { NetworkContext } from '../../src/provider/NetworkProvider';
 import ProtectedPage from '../../src/template/ProtectedPage';
-
-const TenantTable = dynamic(() => import('../../src/components/tables/TableTenant'), {
-  ssr: false,
-  suspense: true,
-});
 
 const GreenButton = styled(AnimatedButton)(({ theme }) => ({
   backgroundColor: theme.palette.success.main,
@@ -33,6 +21,11 @@ const GreenButton = styled(AnimatedButton)(({ theme }) => ({
     backgroundColor: theme.palette.success.dark,
   },
 }));
+
+const TenantTable = dynamic(() => import('../../src/components/tables/TableTenant'), {
+  ssr: false,
+  suspense: true,
+});
 
 const TenantIndex = () => {
   const theme = useTheme();
@@ -43,20 +36,12 @@ const TenantIndex = () => {
 
   const status = useMemo(() => ['Semua', 'Pending', 'Verified', 'Blocked'], []);
 
-  const [csvFile, setCsvFile] = useState<File | null>();
+  // const [csvFile, setCsvFile] = useState<File | null>();
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
 
-  const csvHandler: ChangeEventHandler<HTMLInputElement> = (e) => {
-    e.preventDefault();
-    const reader = new FileReader();
+  // const csvHandler: ChangeEventHandler<HTMLInputElement> = (e) => setCsvFile(e.target.files![0]);
 
-    reader.onload = (e) => {
-      console.log(e.target?.result);
-    };
-
-    reader.readAsText(e.target.files![0]);
-  };
   useEffect(() => {
     if (isReady && query.tab) {
       setTabIndex(parseInt(query.tab as string));
@@ -69,7 +54,7 @@ const TenantIndex = () => {
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
-  const handleChange = (e: SyntheticEvent<Element, Event>, v: number) => {
+  const handleTabBarChange = (e: SyntheticEvent<Element, Event>, v: number) => {
     e.preventDefault();
     setTabIndex(v);
 
@@ -89,6 +74,34 @@ const TenantIndex = () => {
     doFetch(asPath, setData, setAlert, setIsError, true);
   };
 
+  const handleTemplateDownload = async (e: any) => {
+    e.preventDefault();
+
+    const url = '/api/template?model=tenant';
+
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      const payload = await res.json();
+      return setAlert({
+        message: {
+          severity: 'error',
+          content: payload.message,
+        },
+      });
+    }
+
+    location.replace(url);
+    setAlert({
+      message: {
+        severity: 'success',
+        content: 'Download template berhasil!',
+      },
+    });
+  };
+
+  const handleCSVUpload = () => {};
+
   return (
     <Stack mt={12}>
       <Box mb={5}>
@@ -103,22 +116,28 @@ const TenantIndex = () => {
           </Grid>
           <Grid item>
             <Stack direction='row' gap={2}>
-              <AnimatedButton startIcon={<Add />}>Tenant Baru</AnimatedButton>
-              <GreenButton
+              <AnimatedButton color='info' startIcon={<Add />}>
+                Tenant Baru
+              </AnimatedButton>
+              <AnimatedButton
+                color='warning'
                 component='label'
-                sx={{ backgroundColor: theme.palette.success.dark }}
-                startIcon={<CloudUpload />}
+                onClick={handleTemplateDownload}
+                startIcon={<CloudDownload />}
               >
+                Template
+              </AnimatedButton>
+              <AnimatedButton color='success' component='label' startIcon={<CloudUpload />}>
                 Upload CSV
-                <input type='file' hidden multiple accept='.csv' onChange={csvHandler} />
-              </GreenButton>
+                <input type='file' hidden multiple accept='.csv' onChange={handleCSVUpload} />
+              </AnimatedButton>
             </Stack>
           </Grid>
         </Grid>
       </Box>
       <Box>
         <Card>
-          <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
+          <TabBar theme={theme} value={tabIndex} onChange={handleTabBarChange} tabs={status} />
           <Box mx={2}>
             {isOnline && data && !isError && (
               <Box

@@ -13,11 +13,18 @@ const defaultVariants = {
   },
 };
 
-export const AnimatedButton = ({ children, whileTap, variant, variants, ...rest }: MyAnimatedButtonProps) => {
+export const AnimatedButton = ({
+  children,
+  whileTap,
+  component,
+  variant,
+  variants,
+  ...rest
+}: MyAnimatedButtonProps) => {
   return (
     <Button
-      component={motion.button}
-      whileTap={whileTap || 'tap'}
+      component={component || motion.a}
+      whileTap='tap'
       variant={variant || 'contained'}
       variants={variants || defaultVariants}
       {...rest}

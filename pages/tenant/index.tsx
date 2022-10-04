@@ -1,8 +1,9 @@
 import { Add, CloudDownload, CloudUpload, Search } from '@mui/icons-material';
 import { Box, Card, Grid, InputAdornment, Stack, styled, TextField, Typography, useTheme } from '@mui/material';
+import { motion } from 'framer-motion';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { ChangeEventHandler, Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
+import { Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
 
 import { ReactElement } from 'react';
 import { AnimatedButton } from '../../src/components/AnimatedButtton';
@@ -10,7 +11,7 @@ import { ErrorComponent } from '../../src/components/error/ErrorComponent';
 import { TableLoader } from '../../src/components/loader/TableLoader';
 import { TabBar } from '../../src/components/TabBar';
 import { UplaoderTable } from '../../src/components/tables/TableUploader';
-import { doFetch, fetchData } from '../../src/lib/dataFetcher';
+import { doFetch } from '../../src/lib/dataFetcher';
 import { AlertContext } from '../../src/provider/AlertProvider';
 import { NetworkContext } from '../../src/provider/NetworkProvider';
 import ProtectedPage from '../../src/template/ProtectedPage';
@@ -119,15 +120,10 @@ const TenantIndex = () => {
               <AnimatedButton color='info' startIcon={<Add />}>
                 Tenant Baru
               </AnimatedButton>
-              <AnimatedButton
-                color='warning'
-                component='label'
-                onClick={handleTemplateDownload}
-                startIcon={<CloudDownload />}
-              >
+              <AnimatedButton color='warning' startIcon={<CloudDownload />}>
                 Template
               </AnimatedButton>
-              <AnimatedButton color='success' component='label' startIcon={<CloudUpload />}>
+              <AnimatedButton color='success' component={motion.label} startIcon={<CloudUpload />}>
                 Upload CSV
                 <input type='file' hidden multiple accept='.csv' onChange={handleCSVUpload} />
               </AnimatedButton>

@@ -1,108 +1,71 @@
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogProps,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
-  styled,
-  Typography,
-} from '@mui/material';
-import { DataGrid as MuiDataGrid, GridColDef } from '@mui/x-data-grid';
-import dynamic from 'next/dynamic';
-import { useCallback, useMemo, useState } from 'react';
-
-const MappingDialog = ({ open, setOpen, columns }: DialogProps & { setOpen: Function; columns: GridColDef[] }) => {
-  return (
-    <Dialog open={open}>
-      <Typography variant='h5'>Tabel Mapping</Typography>
-      <DataGrid rows={[]} columns={columns} />
-      <Button onClick={() => setOpen(false)}>Close</Button>
-    </Dialog>
-  );
-};
+import { styled } from "@mui/material";
+import { DataGrid as MuiDataGrid, GridColDef } from "@mui/x-data-grid";
+import { useCallback, useMemo, useState } from "react";
 
 const DataGrid = styled(MuiDataGrid)({
-  '& .MuiDataGrid-row:hover': {
-    backgroundColor: 'transparent',
+  "& .MuiDataGrid-row:hover": {
+    backgroundColor: "transparent",
   },
 });
 
 export interface UplaoderTableProps {
-  refColumns: { [key: string]: string };
   csvFile: File;
 }
 
-export const UplaoderTable = ({ refColumns, csvFile }: UplaoderTableProps) => {
-  const rows: Array<{ [key: string]: any } | null> = [];
-  const [unmappedColumn, setUnmappedColumn] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
+export const UploaderTable = ({ csvFile }: UplaoderTableProps) => {
+  const [dataTable, setDataTable] = useState<{
+    columns: GridColDef[];
+    rows: any[];
+  }>({
+    columns: [],
+    rows: [],
+  });
 
-  const [selectedItemColumns, setSelectedItemColumns] = useState([]);
+  const tableHeader = useMemo<Array<GridColDef>>(() => [], []);
+  const tableRows = useMemo<Array<{ [key: string]: any }>>(() => [], []);
 
   const csvArray: Array<string[] | undefined> = useMemo(() => [], []);
-  const columnFields = useMemo(() => Object.keys(refColumns), [refColumns]);
-
-  const handleChange = useCallback(
-    (e: SelectChangeEvent, index: number) => {
-      selectedItemColumns[index] = e.target.value as never;
-      setSelectedItemColumns(selectedItemColumns);
-    },
-    [selectedItemColumns]
-  );
-
-  const columns = columnFields.map((field, fieldId) => {
-    const selectItem = csvArray[0]?.map((f, i) => {
-      return (
-        <MenuItem key={i} value={f} selected={selectedItemColumns[fieldId] === f}>
-          {f}
-        </MenuItem>
-      );
-    });
-    return {
-      flex: 1,
-      field,
-      headerName: refColumns[field],
-      renderCell: () => {
-        return (
-          <FormControl>
-            <InputLabel id={`item-${fieldId}`}>Kolom</InputLabel>
-            <Select
-              label='Kolom'
-              sx={{ minWidth: 120, height: 50 }}
-              onChange={(e) => handleChange(e, fieldId)}
-              value={selectedItemColumns[fieldId]}
-            >
-              {selectItem}
-            </Select>
-          </FormControl>
-        );
-      },
-    } as GridColDef;
-  });
-  //   }, [columnFields, refColumns, selectedItemColumns]);
 
   const fileReader = useMemo(() => new FileReader(), []);
 
   fileReader.onload = useCallback(
     (e: ProgressEvent<FileReader>) => {
       csvArray.length = 0;
-      const value = e.target?.result?.toString().replaceAll('\r', '');
-      const endOfLineIndex = value?.indexOf('\n') || 0;
+      const value = e.target?.result?.toString();
+      const endOfLineIndex = value?.indexOf("\r\n") || 0;
 
       const parsedCsvHeaders = value?.slice(0, endOfLineIndex).split(/[;,]/);
-      const parsedCsvData = value?.slice(endOfLineIndex + 1).split(/[,;]/);
+      const parsedCsvRows = value?.slice(endOfLineIndex + 2).split("\r\n");
 
-      csvArray.push(parsedCsvHeaders);
-      csvArray.push(parsedCsvData);
+      const parsedCsvData = parsedCsvRows?.map((row) => row.split(/[,;]/));
+
+      parsedCsvHeaders?.forEach((header) => {
+        tableHeader.push({
+          flex: 1,
+          field: header,
+        });
+      });
+
+      parsedCsvData?.forEach((data, index) => {
+        let row: { [key: string]: any } = { id: index };
+
+        data.forEach((cell, cellIndex) => {
+          const key =
+            (parsedCsvHeaders && parsedCsvHeaders[cellIndex]) || "unknown";
+          row[key] = cell;
+        });
+
+        tableRows.push(row);
+      });
     },
     [csvArray]
   );
 
-  fileReader.onloadend = () => setOpenDialog(true);
+  fileReader.onloadend = () =>
+    setDataTable({
+      columns: tableHeader,
+      rows: tableRows,
+    });
 
   useMemo(() => {
     fileReader.readAsText(csvFile);
@@ -110,15 +73,13 @@ export const UplaoderTable = ({ refColumns, csvFile }: UplaoderTableProps) => {
 
   return (
     <>
-      <MappingDialog open={openDialog} setOpen={setOpenDialog} columns={columns} />
       <DataGrid
         headerHeight={40}
-        rowHeight={80}
-        hideFooter
         autoHeight
         disableColumnSelector
-        columns={columns}
-        rows={[{ id: 1 }]}
+        hideFooterSelectedRowCount
+        columns={dataTable.columns}
+        rows={dataTable.rows}
       />
     </>
   );

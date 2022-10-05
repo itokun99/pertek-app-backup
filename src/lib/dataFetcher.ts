@@ -12,22 +12,23 @@ export type FetcherResponse = {
   data?: any;
 };
 
-export const fetchData = async (
-  url: string,
-  method?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE',
-  headers?: {},
-  body?: BodyInit | null | undefined
-) => {
+export type FetchDataParams = {
+  method?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
+  headers?: {};
+  body?: BodyInit | null | undefined;
+};
+
+export const fetchData = async (url: string, params?: FetchDataParams) => {
   const controller = new AbortController();
   const signal = controller.signal;
   const timeout = setTimeout(() => controller.abort(), 3000);
 
   try {
     const apiResponse = await fetch(url, {
-      headers,
+      headers: params?.headers,
       signal,
-      method,
-      body,
+      method: params?.method,
+      body: params?.body,
     });
 
     if (apiResponse.status === 401) {
@@ -36,6 +37,7 @@ export const fetchData = async (
     }
 
     const payload = await apiResponse.json();
+	console.log(payload)
 
     if (apiResponse.status !== 200) {
       return { error: { code: apiResponse.status, message: payload.message } } as FetcherResponse;
@@ -67,13 +69,16 @@ export async function doFetch(
   isReload?: boolean
 ) {
   setData(null);
+
   if (isReload) {
     setIsError(false);
   }
+
   const { error, data } = await fetchData(`/api${asPath}`);
+
   if (error) {
-    console.log('im here guys');
     setIsError(true);
+
     setAlert({
       message: {
         severity: 'error',

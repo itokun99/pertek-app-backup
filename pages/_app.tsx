@@ -10,11 +10,12 @@ import { NextPage } from 'next';
 import { PropsWithChildren, ReactElement, ReactNode, useContext, useEffect } from 'react';
 import 'simplebar-react/dist/simplebar.min.css';
 import { AlertContext, AlertProvider } from '../src/provider/AlertProvider';
-import { NetworkContext, NetworkProvier, NetworkState } from '../src/provider/NetworkProvider';
+import { NetworkContext, NetworkProvier } from '../src/provider/NetworkProvider';
 
 export class MyError extends Error {
   statusCode?: number;
 }
+
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -29,7 +30,7 @@ const fetcher = async (url: string) => {
   throw err;
 };
 
-const _errorRetryHandler = (err: MyError, key: string, config: any, revalidate: any) => {
+const _errorRetryHandler = (err: MyError) => {
   if (err.statusCode === 401) {
     window.location.replace('/login');
     return;
@@ -80,19 +81,12 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 const MainContainer = ({ children }: PropsWithChildren) => {
   const { alert, setAlert } = useContext(AlertContext);
   const { message } = useContext(NetworkContext);
+  console.log(message)
 
   useEffect(() => {
-    //   if (isBrowserSupported) {
-    //     let severity = 'success';
-    //     let message = 'Koneksi tersambung!. Mohon tunggu kami sedang melakukan pemeriksaan koneksi internet';
-    //     if (networkState === NetworkState.Offline) {
-    //       severity = 'error';
-    //       message = 'Koneksi terputus atau tidak dapat terhubung dengan server!';
-    //     }
     if (message) {
       setAlert({ message });
     }
-    //   }x
   }, [message, setAlert]);
 
   return (

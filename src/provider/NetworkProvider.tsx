@@ -75,7 +75,9 @@ const networkConnectionChecher = async (
     isOnline = true;
     isNetworkConnected = true;
     isNetworkNotConnected = false;
-    const { error } = await fetchData('/api/healthcheck', 'GET');
+
+	const {error} = await fetchData('/api/healthcheck');
+
     if (error) {
       setMessage(noInternetConnectionMessage);
     } else {

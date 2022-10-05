@@ -37,11 +37,8 @@ const TenantIndex = () => {
 
   const status = useMemo(() => ['Semua', 'Pending', 'Verified', 'Blocked'], []);
 
-  // const [csvFile, setCsvFile] = useState<File | null>();
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
-
-  // const csvHandler: ChangeEventHandler<HTMLInputElement> = (e) => setCsvFile(e.target.files![0]);
 
   useEffect(() => {
     if (isReady && query.tab) {
@@ -101,7 +98,9 @@ const TenantIndex = () => {
     });
   };
 
-  const handleCSVUpload = () => {};
+  const handleCSVUpload = (e: any) => {
+    e.prevenDefault();
+  };
 
   return (
     <Stack mt={12}>
@@ -120,7 +119,7 @@ const TenantIndex = () => {
               <AnimatedButton color='info' startIcon={<Add />}>
                 Tenant Baru
               </AnimatedButton>
-              <AnimatedButton color='warning' startIcon={<CloudDownload />}>
+              <AnimatedButton color='warning' onClick={handleTemplateDownload} startIcon={<CloudDownload />}>
                 Template
               </AnimatedButton>
               <AnimatedButton color='success' component={motion.label} startIcon={<CloudUpload />}>

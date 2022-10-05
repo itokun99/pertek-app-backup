@@ -36,14 +36,13 @@ const LoginPage = () => {
       return;
     }
 
-    const { error } = await fetchData(
-      '/api/login',
-      'POST',
-      JSON.stringify({
+    const { error } = await fetchData('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({
         identity,
         password,
-      })
-    );
+      }),
+    });
 
     if (error) {
       setAlert({

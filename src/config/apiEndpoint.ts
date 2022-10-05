@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://xrqr-haey-y7wc.n7.xano.io/api';
+const API_BASE_URL = 'https://xmbi-4bje-h8wi.s2.xano.io/api';
 
 const EndpointGroup = {
   Announcement: '18S1unQy',

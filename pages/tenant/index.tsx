@@ -11,7 +11,6 @@ import {
   Grid,
   InputAdornment,
   Stack,
-  styled,
   TextField,
   Typography,
   useTheme,
@@ -47,6 +46,14 @@ const TenantTable = dynamic(
   }
 );
 
+const AddTenantDialog = dynamic(
+  () => import("../../src/components/dialog/AddTenant"),
+  {
+    ssr: false,
+    suspense: true,
+  }
+);
+
 const TenantIndex = () => {
   const theme = useTheme();
   const { query, push, isReady, asPath } = useRouter();
@@ -55,18 +62,12 @@ const TenantIndex = () => {
   const { setAlert } = useContext(AlertContext);
 
   const status = useMemo(() => ["Semua", "Pending", "Verified", "Blocked"], []);
-  const refColumns = useMemo(
-    () => ({
-      first_name: "Nama Depan",
-      last_name: "Nama Belakang",
-      phone_number: "No. Telp",
-    }),
-    []
-  );
 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
   const [csvFile, setCsvFile] = useState<File | undefined>();
+
+  const [openDialog, setOpenDialog] = useState(false);
 
   useEffect(() => {
     if (isReady && query.tab) {
@@ -93,6 +94,10 @@ const TenantIndex = () => {
       });
     }
     return push("/tenant");
+  };
+
+  const handleAddTenant = () => {
+    setOpenDialog(true);
   };
 
   const handleReload = (e: any) => {
@@ -132,6 +137,11 @@ const TenantIndex = () => {
 
   return (
     <Stack mt={12}>
+      <Suspense>
+        {openDialog && (
+          <AddTenantDialog open={openDialog} setOpen={setOpenDialog} />
+        )}
+      </Suspense>
       <Box mb={5}>
         <Grid container>
           <Grid item flexGrow={1}>
@@ -146,7 +156,11 @@ const TenantIndex = () => {
             <Stack direction="row" gap={2}>
               {!csvFile && (
                 <>
-                  <AnimatedButton color="info" startIcon={<Add />}>
+                  <AnimatedButton
+                    onClick={handleAddTenant}
+                    color="info"
+                    startIcon={<Add />}
+                  >
                     Tenant Baru
                   </AnimatedButton>
                   <AnimatedButton

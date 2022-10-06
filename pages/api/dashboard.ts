@@ -1,9 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { Endpoint } from '../../src/config/apiEndpoint';
-import { buildAuthorization, isInvalidSession, unauthorized } from '../../src/lib/apiAuthHelpers';
-import { get } from '../../src/lib/apiCall';
-import { createRequestParams } from '../../src/lib/urllib';
-import { withSessionRoute } from '../../src/lib/withSession';
+import { NextApiRequest, NextApiResponse } from "next";
+import { Endpoint } from "../../src/config/apiEndpoint";
+import {
+  buildAuthorization,
+  isInvalidSession,
+  unauthorized,
+} from "../../src/lib/apiAuthHelpers";
+import { get } from "../../src/lib/apiCall";
+import { createRequestParams } from "../../src/lib/urllib";
+import { withSessionRoute } from "../../src/lib/withSession";
 
 export default withSessionRoute(handler);
 
@@ -19,7 +23,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const params = createRequestParams(req.query);
     endpoint = `${Endpoint.Property}?${params}`;
   }
-  const apiResponse = await get(req, endpoint, { ...buildAuthorization(user!.token) });
+  const apiResponse = await get(req, endpoint, {
+    ...buildAuthorization(user!.token),
+  });
 
   const payload = await apiResponse.json();
 

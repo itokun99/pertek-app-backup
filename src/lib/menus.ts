@@ -1,102 +1,148 @@
 export const menus = [
   {
     id: 1,
-    name: 'Tenant Relation',
+    name: "Tenant Relation",
     menus: [
       {
         id: 1,
-        name: 'Tenant Manajemen',
-        url: '/tenant',
-        icon: 'people',
-        submenus: [
-          {
-            id: 1,
-            name: 'List',
-            url: '/tenant',
-          },
-          {
-            id: 2,
-            name: 'Tambah',
-            url: '/tenant/tambah',
-          },
-        ],
+        name: "Kontak",
+        url: "/kontak",
+        icon: "people",
+        // submenus: [
+        //   {
+        //     id: 1,
+        //     name: "List",
+        //     url: "/kontak",
+        //   },
+        //   {
+        //     id: 2,
+        //     name: "Tambah",
+        //     url: "",
+        //   },
+        // ],
       },
       {
         id: 2,
-        name: 'Pengumuman',
-        url: '/pengumuman',
-        icon: 'campaign',
-        submenus: [
-          {
-            id: 1,
-            name: 'List',
-            url: '/pengumuman',
-          },
-          {
-            id: 2,
-            name: 'Buat Baru',
-            url: '/pengumuman/baru',
-          },
-        ],
+        name: "Tenant",
+        url: "/tenant",
+        icon: "people",
+        // submenus: [
+        //   {
+        //     id: 1,
+        //     name: "List",
+        //     url: "/tenant",
+        //   },
+        //   {
+        //     id: 2,
+        //     name: "Tambah",
+        //     url: "",
+        //   },
+        // ],
       },
       {
         id: 3,
-        name: 'Penerimaan Paket',
-        url: '/paket',
-        icon: 'widgets',
-        submenus: [
-          {
-            id: 1,
-            name: 'List',
-            url: '/paket',
-          },
-          {
-            id: 2,
-            name: 'Tambah',
-            url: '/paket/baru',
-          },
-        ],
+        name: "Pengumuman",
+        url: "/pengumuman",
+        icon: "campaign",
+        // submenus: [
+        //   {
+        //     id: 1,
+        //     name: "List",
+        //     url: "/pengumuman",
+        //   },
+        //   {
+        //     id: 2,
+        //     name: "Buat Baru",
+        //     url: "/pengumuman/baru",
+        //   },
+        // ],
       },
       {
         id: 4,
-        name: 'Pelaporan',
-        url: '/pelaporan',
-        icon: 'report',
+        name: "Penerimaan Paket",
+        url: "/paket",
+        icon: "widgets",
+        // submenus: [
+        //   {
+        //     id: 1,
+        //     name: "List",
+        //     url: "/paket",
+        //   },
+        //   {
+        //     id: 2,
+        //     name: "Tambah",
+        //     url: "/paket/baru",
+        //   },
+        // ],
       },
       {
         id: 5,
-        name: 'Token Listrik',
-        url: '/token',
-        icon: 'bolt',
+        name: "Pelaporan",
+        url: "/pelaporan",
+        icon: "report",
+      },
+      {
+        id: 6,
+        name: "Reservasi Fasilitas",
+        url: "/reservasi",
+        icon: "bolt",
       },
     ],
   },
   {
     id: 2,
-    name: 'Settings',
+    name: "Keuangan",
     menus: [
       {
         id: 1,
-        name: 'Master Properti',
-        url: '/properti',
-        icon: 'homework',
-        submenus: [
-          {
-            name: 'Daftar',
-            url: '/properti',
-          },
-          {
-            name: 'Tambah',
-            url: '/properti/tambah',
-          },
-        ],
+        name: "Invoice",
+        url: "/invoice",
+        icon: "homework",
+        // submenus: [
+        //   {
+        //     name: "Daftar",
+        //     url: "/properti",
+        //   },
+        //   {
+        //     name: "Tambah",
+        //     url: "/properti/tambah",
+        //   },
+        // ],
+      },
+      {
+        id: 2,
+        name: "Token Listrik",
+        url: "/token",
+        icon: "bolt",
+      },
+    ],
+  },
+  {
+    id: 3,
+    name: "Settings",
+    menus: [
+      {
+        id: 1,
+        name: "Master Properti",
+        url: "/properti",
+        icon: "homework",
+        // submenus: [
+        //   {
+        //     name: "Daftar",
+        //     url: "/properti",
+        //   },
+        //   {
+        //     name: "Tambah",
+        //     url: "/properti/tambah",
+        //   },
+        // ],
       },
     ],
   },
 ];
 
 export enum UserRole {
-  SuperAdmin = 'Super Admin',
+  SuperAdmin = "Super Admin",
 }
 
 export const getMenus = (role: UserRole) => {

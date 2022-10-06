@@ -7,8 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { FormControl, TextField, InputLabel, Input } from "@mui/material";
-import { Label } from "@mui/icons-material";
+import { FormControl, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -67,7 +66,10 @@ export default function AddNewTenant({
         id="customized-dialog-title"
         onClose={() => setOpen(false)}
       >
-        Tambah Tenant Baru
+        <Typography variant="h6">Tenant Baru</Typography>
+        <Typography variant="body2">
+          Tambah data tenant/penghuni baru
+        </Typography>
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <FormControl>
@@ -76,7 +78,12 @@ export default function AddNewTenant({
               <TextField label="Nama Depan" />
               <TextField label="Nama Belakang" />
             </Stack>
+            <TextField label="No. Unit" />
             <TextField label="No Telpon" />
+            <Stack direction="row" gap={2}>
+              <TextField label="Awal Huni" />
+              <TextField label="Akhir Huni" />
+            </Stack>
           </Stack>
         </FormControl>
       </DialogContent>

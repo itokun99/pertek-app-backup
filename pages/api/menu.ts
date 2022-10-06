@@ -2,23 +2,23 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Endpoint } from "../../src/config/apiEndpoint";
 import { buildAuthorization } from "../../src/lib/apiAuthHelpers";
 import { get } from "../../src/lib/apiCall";
-import { createRequestParams } from "../../src/lib/urllib";
+// import { createRequestParams } from "../../src/lib/urllib";
 import { withSessionRoute } from "../../src/lib/withSession";
 
 export default withSessionRoute(handler);
 
-interface Menu {
-  id: number;
-  name: string;
-  url: string;
-  icon: string;
-}
+// interface Menu {
+//   id: number;
+//   name: string;
+//   url: string;
+//   icon: string;
+// }
 
-interface MenuGroup {
-  id: number;
-  name: string;
-  menus: Menu[];
-}
+// interface MenuGroup {
+//   id: number;
+//   name: string;
+//   menus: Menu[];
+// }
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -29,12 +29,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   // const params = createRequestParams(req.query);
 
-  const apiResponse = await get(req, `${Endpoint.Menu}`, {
+  const apiResponse = await get(req, `${Endpoint.MenuMe}`, {
     ...buildAuthorization(user!.token),
   });
 
   if (!apiResponse.ok) {
-    return res.status(501).json(await apiResponse.json());
+    return res.status(apiResponse.status).json(await apiResponse.json());
   }
 
   let payload = await apiResponse.json();
@@ -54,7 +54,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     };
   } = {};
 
-  payload.items.forEach((item: any) => {
+  payload.menus.forEach((item: any) => {
     if (Object.hasOwn(menuGroups, item.menu_group.id)) {
       menuGroups[item.menu_group.id].menus.push({
         id: item.id,

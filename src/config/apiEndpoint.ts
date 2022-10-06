@@ -40,6 +40,7 @@ export const Endpoint = {
   RoleGroup: `${API_BASE_URL}:${EndpointGroup.Role}/role_group`,
 
   Menu: `${API_BASE_URL}:${EndpointGroup.Menu}/menu`,
+  MenuMe: `${API_BASE_URL}:${EndpointGroup.Menu}/menu_me`,
   MenuGroup: `${API_BASE_URL}:${EndpointGroup.Menu}/menu_group`,
 
   User: `${API_BASE_URL}:${EndpointGroup.User}/user`,

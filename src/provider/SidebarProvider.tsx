@@ -8,6 +8,7 @@ import {
 import useSWR from "swr";
 import { SidebarMenu, SidebarMenuGroup } from "../components/sidebar";
 import { useRouter } from "next/router";
+import { doFetch } from "../lib/dataFetcher";
 
 export type Property = {
   id: number;
@@ -47,16 +48,26 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
   const [open, setOpen] = useState(true);
   const [activeMenu, setActiveMenu] = useState<ActiveMenu | undefined>();
   const [activeProperty, setActiveProperty] = useState<Property | undefined>();
+  // const [data, setData] = useState<[] | undefined>();
 
-  useEffect(() => {
-    if (isReady) {
-      const activePropertyInLocalStorage =
-        window.localStorage.getItem("activeProperty");
-      if (activePropertyInLocalStorage) {
-        setActiveProperty(JSON.parse(activePropertyInLocalStorage));
-      }
-    }
-  }, [isReady]);
+  const { data } = useSWR("/api/menu");
+  // useEffect(() => {
+  //   if (isReady) {
+  //     const activePropertyInLocalStorage =
+  //       window.localStorage.getItem("activeProperty");
+  //     if (activePropertyInLocalStorage) {
+  //       setActiveProperty(JSON.parse(activePropertyInLocalStorage));
+  //     }
+
+  //     (async () => {
+  //       const response = await fetch("/api/menu");
+  //       if (response.ok) {
+  //         const payload = await response.json();
+  //         setData(payload.items);
+  //       }
+  //     })();
+  //   }
+  // }, [isReady]);
 
   const updateProperty = (property: Property) => {
     if (window) {
@@ -64,11 +75,6 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
     }
     setActiveProperty(property);
   };
-
-  const menuGroup: { [key: string]: SidebarMenuGroup[] } = {};
-
-  const { data, error } = useSWR("/api/menu");
-  console.log(data.items);
 
   const value = useMemo<SidebarContextInterface>(
     () => ({
@@ -78,7 +84,7 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
       activeProperty,
       setActiveMenu,
       setActiveProperty: updateProperty,
-      menuGroups: data.items || [],
+      menuGroups: data?.items || [],
     }),
     [open, activeMenu, activeProperty, data]
   );

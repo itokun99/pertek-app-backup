@@ -27,11 +27,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const user = req.session.user;
 
-  const params = createRequestParams(req.query);
+  // const params = createRequestParams(req.query);
 
-  const apiResponse = await get(req, `${Endpoint.Menu}?${params}`, {
+  const apiResponse = await get(req, `${Endpoint.Menu}`, {
     ...buildAuthorization(user!.token),
   });
+
+  if (!apiResponse.ok) {
+    return res.status(501).json(await apiResponse.json());
+  }
 
   let payload = await apiResponse.json();
 
@@ -51,7 +55,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   } = {};
 
   payload.items.forEach((item: any) => {
-    console.log(item);
     if (Object.hasOwn(menuGroups, item.menu_group.id)) {
       menuGroups[item.menu_group.id].menus.push({
         id: item.id,
@@ -76,7 +79,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     };
   });
 
-  // const menus = getMenus(user.profile['role']  ;
   payload.items = Object.values(menuGroups);
 
   return res.status(apiResponse.status).json(payload);

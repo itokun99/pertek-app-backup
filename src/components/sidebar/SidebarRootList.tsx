@@ -1,4 +1,4 @@
-import { KeyboardArrowRight } from '@mui/icons-material';
+import { KeyboardArrowRight } from "@mui/icons-material";
 import {
   List,
   ListItemButton,
@@ -13,12 +13,12 @@ import {
   Collapse,
   Theme,
   Typography,
-} from '@mui/material';
-import { NextRouter, useRouter } from 'next/router';
-import { useContext, useMemo, useRef, useState } from 'react';
-import { SidebarMenu } from '.';
-import { SidebarContext } from '../../provider/SidebarProvider';
-import { SidebarSubList } from './SidebarSubList';
+} from "@mui/material";
+import { NextRouter, useRouter } from "next/router";
+import { useContext, useMemo, useRef, useState } from "react";
+import { SidebarMenu } from ".";
+import { SidebarContext } from "../../provider/SidebarProvider";
+import { SidebarSubList } from "./SidebarSubList";
 
 export interface SidebarMenuGroup {
   id: number;
@@ -46,7 +46,15 @@ export interface RootListItemProps {
   iconSpacing?: number;
 }
 
-const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSpacing }: RootListItemProps) => {
+const RootListItem = ({
+  item,
+  open,
+  theme,
+  router,
+  isActive,
+  hasChildren,
+  iconSpacing,
+}: RootListItemProps) => {
   const { url, id, submenus, icon, name } = item;
 
   const parentId = useMemo(() => `${url}-${id}`, [url, id]);
@@ -73,7 +81,7 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
           pr: open ? 1 : 2,
           minHeight: theme.spacing(6),
           my: theme.spacing(0.5),
-          justifyContent: open ? 'initial' : 'center',
+          justifyContent: open ? "initial" : "center",
           ...(isActive && {
             backgroundColor: activeBgColor,
             color: theme.palette.info.dark,
@@ -87,31 +95,31 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
 
         {open && (
           <Stack
-            direction='row'
+            direction="row"
             sx={{
               flexGrow: 1,
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              alignItems: "center",
+              justifyContent: "space-between",
             }}
           >
-            <Typography variant='body2'>{name}</Typography>
+            <Typography variant="body2">{name}</Typography>
             {hasChildren && (
               <Box
                 sx={{
                   transition: (theme) =>
-                    theme.transitions.create('transform', {
+                    theme.transitions.create("transform", {
                       duration: theme.transitions.duration.shorter,
                     }),
                   ...(shouldExpand && {
-                    transform: 'rotate(90deg)',
+                    transform: "rotate(90deg)",
                   }),
                 }}
               >
                 <KeyboardArrowRight
                   sx={{
-                    display: 'block',
-                    fontSize: '1.4rem',
-                    stroke: isActive ? activeBgColor : 'white',
+                    display: "block",
+                    fontSize: "1.4rem",
+                    stroke: isActive ? activeBgColor : "white",
                     strokeWidth: 0.7,
                   }}
                 />
@@ -129,18 +137,21 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
   );
 };
 
-const ListSubheader = ({ title, color, open }: ListSubHeaderProps) => (
-  <MuiListSubheader
-    sx={{
-      opacity: open ? 1 : 0,
-      textTransform: 'uppercase',
-      fontSize: '0.8rem',
-      color: color,
-    }}
-  >
-    {title}
-  </MuiListSubheader>
-);
+const ListSubheader = ({ title, open }: ListSubHeaderProps) => {
+  const theme = useTheme();
+  return (
+    <MuiListSubheader
+      sx={{
+        opacity: open ? 1 : 0,
+        textTransform: "uppercase",
+        fontSize: "0.8rem",
+        color: theme.palette.text.primary,
+      }}
+    >
+      {title}
+    </MuiListSubheader>
+  );
+};
 
 export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
   const { open } = useContext(SidebarContext);
@@ -155,7 +166,7 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
 
         const isActive = (() => {
           if (hasChildren) {
-            return router.pathname.split('/')[1] === item.url.split('/')[1];
+            return router.pathname.split("/")[1] === item.url.split("/")[1];
           }
           return router.pathname === item.url;
         })();

@@ -1,7 +1,13 @@
-import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
-import useSWR from 'swr';
-import { SidebarMenuGroup } from '../components/sidebar';
-import { useRouter } from 'next/router';
+import {
+  createContext,
+  PropsWithChildren,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import useSWR from "swr";
+import { SidebarMenu, SidebarMenuGroup } from "../components/sidebar";
+import { useRouter } from "next/router";
 
 export type Property = {
   id: number;
@@ -44,7 +50,8 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (isReady) {
-      const activePropertyInLocalStorage = window.localStorage.getItem('activeProperty');
+      const activePropertyInLocalStorage =
+        window.localStorage.getItem("activeProperty");
       if (activePropertyInLocalStorage) {
         setActiveProperty(JSON.parse(activePropertyInLocalStorage));
       }
@@ -53,12 +60,15 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
 
   const updateProperty = (property: Property) => {
     if (window) {
-      window.localStorage.setItem('activeProperty', JSON.stringify(property));
+      window.localStorage.setItem("activeProperty", JSON.stringify(property));
     }
     setActiveProperty(property);
   };
 
-  const { data } = useSWR('/api/menu');
+  const menuGroup: { [key: string]: SidebarMenuGroup[] } = {};
+
+  const { data, error } = useSWR("/api/menu");
+  console.log(data.items);
 
   const value = useMemo<SidebarContextInterface>(
     () => ({
@@ -68,10 +78,12 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
       activeProperty,
       setActiveMenu,
       setActiveProperty: updateProperty,
-      menuGroups: data || [],
+      menuGroups: data.items || [],
     }),
     [open, activeMenu, activeProperty, data]
   );
 
-  return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;
+  return (
+    <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
+  );
 };

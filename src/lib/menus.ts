@@ -8,72 +8,24 @@ export const menus = [
         name: "Kontak",
         url: "/kontak",
         icon: "people",
-        // submenus: [
-        //   {
-        //     id: 1,
-        //     name: "List",
-        //     url: "/kontak",
-        //   },
-        //   {
-        //     id: 2,
-        //     name: "Tambah",
-        //     url: "",
-        //   },
-        // ],
       },
       {
         id: 2,
         name: "Tenant",
         url: "/tenant",
         icon: "people",
-        // submenus: [
-        //   {
-        //     id: 1,
-        //     name: "List",
-        //     url: "/tenant",
-        //   },
-        //   {
-        //     id: 2,
-        //     name: "Tambah",
-        //     url: "",
-        //   },
-        // ],
       },
       {
         id: 3,
         name: "Pengumuman",
         url: "/pengumuman",
         icon: "campaign",
-        // submenus: [
-        //   {
-        //     id: 1,
-        //     name: "List",
-        //     url: "/pengumuman",
-        //   },
-        //   {
-        //     id: 2,
-        //     name: "Buat Baru",
-        //     url: "/pengumuman/baru",
-        //   },
-        // ],
       },
       {
         id: 4,
         name: "Penerimaan Paket",
         url: "/paket",
         icon: "widgets",
-        // submenus: [
-        //   {
-        //     id: 1,
-        //     name: "List",
-        //     url: "/paket",
-        //   },
-        //   {
-        //     id: 2,
-        //     name: "Tambah",
-        //     url: "/paket/baru",
-        //   },
-        // ],
       },
       {
         id: 5,
@@ -84,6 +36,12 @@ export const menus = [
       {
         id: 6,
         name: "Reservasi Fasilitas",
+        url: "/reservasi",
+        icon: "bolt",
+      },
+      {
+        id: 7,
+        name: "Visitor Manajemen",
         url: "/reservasi",
         icon: "bolt",
       },
@@ -98,16 +56,12 @@ export const menus = [
         name: "Invoice",
         url: "/invoice",
         icon: "homework",
-        // submenus: [
-        //   {
-        //     name: "Daftar",
-        //     url: "/properti",
-        //   },
-        //   {
-        //     name: "Tambah",
-        //     url: "/properti/tambah",
-        //   },
-        // ],
+      },
+      {
+        id: 2,
+        name: "Pencatatan Meter",
+        url: "/meter",
+        icon: "homework",
       },
       {
         id: 2,
@@ -119,6 +73,36 @@ export const menus = [
   },
   {
     id: 3,
+    name: "Engineering",
+    menus: [
+      {
+        id: 1,
+        name: "Pemeliharaan & Perbaikan",
+        url: "/pemeliharaan",
+        icon: "homework",
+      },
+      {
+        id: 1,
+        name: "Inventori",
+        url: "/Inventori",
+        icon: "homework",
+      },
+      {
+        id: 1,
+        name: "Security",
+        url: "/security",
+        icon: "homework",
+      },
+      {
+        id: 1,
+        name: "Kebersihan",
+        url: "/Kebersihan",
+        icon: "homework",
+      },
+    ],
+  },
+  {
+    id: 4,
     name: "Settings",
     menus: [
       {
@@ -126,16 +110,6 @@ export const menus = [
         name: "Master Properti",
         url: "/properti",
         icon: "homework",
-        // submenus: [
-        //   {
-        //     name: "Daftar",
-        //     url: "/properti",
-        //   },
-        //   {
-        //     name: "Tambah",
-        //     url: "/properti/tambah",
-        //   },
-        // ],
       },
     ],
   },

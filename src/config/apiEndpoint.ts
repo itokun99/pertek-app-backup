@@ -1,16 +1,17 @@
-const API_BASE_URL = 'https://xmbi-4bje-h8wi.s2.xano.io/api';
+const API_BASE_URL = "https://xmbi-4bje-h8wi.s2.xano.io/api";
 
 const EndpointGroup = {
-  Announcement: '18S1unQy',
-  Auth: 'xG61OBxf',
-  Profile: '4ZHQKRkr',
-  Tenant: 'AyPV9ZMZ',
-  Invoice: 'KM9qpTln',
-  Property: 'dhVjwBnw',
-  Role: 'vMBtbFQW',
-  User: 'f_KrKkJn',
-  General: 'aQbHTGQV',
-  Complain: 'Ro92vKeQ',
+  Announcement: "18S1unQy",
+  Auth: "xG61OBxf",
+  Profile: "4ZHQKRkr",
+  Tenant: "AyPV9ZMZ",
+  Invoice: "KM9qpTln",
+  Property: "dhVjwBnw",
+  Role: "vMBtbFQW",
+  User: "f_KrKkJn",
+  General: "aQbHTGQV",
+  Complain: "Ro92vKeQ",
+  Menu: "2ENXJrQ4",
 };
 
 export const Endpoint = {
@@ -37,6 +38,9 @@ export const Endpoint = {
 
   Role: `${API_BASE_URL}:${EndpointGroup.Role}/role`,
   RoleGroup: `${API_BASE_URL}:${EndpointGroup.Role}/role_group`,
+
+  Menu: `${API_BASE_URL}:${EndpointGroup.Menu}/menu`,
+  MenuGroup: `${API_BASE_URL}:${EndpointGroup.Menu}/menu_group`,
 
   User: `${API_BASE_URL}:${EndpointGroup.User}/user`,
 

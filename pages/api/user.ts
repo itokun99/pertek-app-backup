@@ -1,16 +1,16 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { Endpoint } from '../../src/config/apiEndpoint';
-import { methodNotAlowed, unauthorized } from '../../src/lib/apiAuthHelpers';
-import { get } from '../../src/lib/apiCall';
-import { withSessionRoute } from '../../src/lib/withSession';
+import { NextApiRequest, NextApiResponse } from "next";
+import { Endpoint } from "../../src/config/apiEndpoint";
+import { methodNotAlowed, unauthorized } from "../../src/lib/apiAuthHelpers";
+import { get } from "../../src/lib/apiCall";
+import { withSessionRoute } from "../../src/lib/withSession";
 
 export default withSessionRoute((req, res) => {
   if (!req.session.user) {
     return unauthorized(res);
   }
 
-  if (req.method === 'GET') return useGetHandler(req, res);
-  if (req.method === 'POST') return usePostHandler(req, res);
+  if (req.method === "GET") return useGetHandler(req, res);
+  if (req.method === "POST") return usePostHandler(req, res);
 
   return methodNotAlowed(res);
 });
@@ -18,7 +18,7 @@ export default withSessionRoute((req, res) => {
 async function useGetHandler(req: NextApiRequest, res: NextApiResponse) {
   const { user } = req.session;
 
-  if (!req.query['id']) {
+  if (!req.query["id"]) {
     return res.json(user?.profile);
   }
 
@@ -27,6 +27,6 @@ async function useGetHandler(req: NextApiRequest, res: NextApiResponse) {
   return res.status(apiResponse.status).json(await apiResponse.json());
 }
 
-function usePostHandler(req: NextApiRequest, res: NextApiResponse) {
-  return res.json({ message: 'ok' });
+function usePostHandler(_: NextApiRequest, res: NextApiResponse) {
+  return res.json({ message: "ok" });
 }

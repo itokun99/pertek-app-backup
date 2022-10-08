@@ -1,21 +1,29 @@
-import '../styles/globals.css';
-import type { AppProps } from 'next/app';
-import Head from 'next/head';
-import { SWRConfig } from 'swr';
-import { AuthProvider } from '../src/provider/AuthProvider';
-import { Alert, CssBaseline, Snackbar, ThemeProvider } from '@mui/material';
+import "../styles/globals.css";
+import type { AppProps } from "next/app";
+import Head from "next/head";
+import { SWRConfig } from "swr";
+import { AuthProvider } from "../src/provider/AuthProvider";
+import { Alert, CssBaseline, Snackbar, ThemeProvider } from "@mui/material";
 
-import MyTheme from '../src/theme';
-import { NextPage } from 'next';
-import { PropsWithChildren, ReactElement, ReactNode, useContext, useEffect } from 'react';
-import 'simplebar-react/dist/simplebar.min.css';
-import { AlertContext, AlertProvider } from '../src/provider/AlertProvider';
-import { NetworkContext, NetworkProvier } from '../src/provider/NetworkProvider';
+import MyTheme from "../src/theme";
+import { NextPage } from "next";
+import {
+  PropsWithChildren,
+  ReactElement,
+  ReactNode,
+  useContext,
+  useEffect,
+} from "react";
+import "simplebar-react/dist/simplebar.min.css";
+import { AlertContext, AlertProvider } from "../src/provider/AlertProvider";
+import {
+  NetworkContext,
+  NetworkProvier,
+} from "../src/provider/NetworkProvider";
 
 export class MyError extends Error {
   statusCode?: number;
 }
-
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -32,7 +40,7 @@ const fetcher = async (url: string) => {
 
 const _errorRetryHandler = (err: MyError) => {
   if (err.statusCode === 401) {
-    window.location.replace('/login');
+    window.location.replace("/login");
     return;
   }
 };
@@ -60,16 +68,23 @@ function MyApp({ Component, pageProps }: MyAppProps) {
           <AuthProvider>
             <ThemeProvider theme={MyTheme}>
               <Head>
-                <title>Propertek - Best Indonesia Property Management System</title>
-                <meta name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no' />
+                <title>
+                  Propertek - Best Indonesia Property Management System
+                </title>
                 <meta
-                  name='description'
-                  content='The best property management system that suit Indonesia property management business'
+                  name="viewport"
+                  content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
-                <link rel='icon' href='/favicon.ico' />
+                <meta
+                  name="description"
+                  content="The best property management system that suit Indonesia property management business"
+                />
+                <link rel="icon" href="/favicon.ico" />
               </Head>
               <CssBaseline />
-              <MainContainer>{getLayout(<Component {...pageProps} />)}</MainContainer>
+              <MainContainer>
+                {getLayout(<Component {...pageProps} />)}
+              </MainContainer>
             </ThemeProvider>
           </AuthProvider>
         </SWRConfig>
@@ -81,7 +96,6 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 const MainContainer = ({ children }: PropsWithChildren) => {
   const { alert, setAlert } = useContext(AlertContext);
   const { message } = useContext(NetworkContext);
-  console.log(message)
 
   useEffect(() => {
     if (message) {
@@ -95,11 +109,18 @@ const MainContainer = ({ children }: PropsWithChildren) => {
       {alert?.message && (
         <Snackbar
           onClose={() => setAlert(null)}
-          autoHideDuration={alert.message.severity === 'error' ? null : 2000}
-          anchorOrigin={alert.position ? alert.position : { horizontal: 'center', vertical: 'top' }}
+          autoHideDuration={alert.message.severity === "error" ? null : 2000}
+          anchorOrigin={
+            alert.position
+              ? alert.position
+              : { horizontal: "center", vertical: "top" }
+          }
           open={alert !== null}
         >
-          <Alert severity={alert.message.severity} variant={alert.variant ?? 'filled'}>
+          <Alert
+            severity={alert.message.severity}
+            variant={alert.variant ?? "filled"}
+          >
             {alert.message.content}
           </Alert>
         </Snackbar>

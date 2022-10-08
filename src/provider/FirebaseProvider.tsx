@@ -1,18 +1,18 @@
-import { useRouter } from "next/router";
-import { createContext, useEffect, useMemo, PropsWithChildren } from "react";
-import { app } from "../config/firebase";
-import { getAnalytics, logEvent } from "firebase/analytics";
+import { useRouter } from 'next/router';
+import { createContext, useEffect, useMemo, PropsWithChildren } from 'react';
+import { app } from '../config/firebase';
+import { EventNameString, getAnalytics, logEvent, EventParams } from 'firebase/analytics';
 
 export enum LogType {
   page,
   action,
 }
 export interface IFirebaseContext {
-  log: (key: string, type: LogType) => void;
+  log: (event: EventNameString, params?: EventParams) => void;
 }
 
 export const FirebaseContext = createContext<IFirebaseContext>({
-  log: (key: string, _: LogType) => {},
+  log: (event: EventNameString, params?: EventParams) => {},
 });
 
 export const FirebaseProvider = ({ children }: PropsWithChildren) => {
@@ -20,14 +20,9 @@ export const FirebaseProvider = ({ children }: PropsWithChildren) => {
 
   const value = useMemo(
     () => ({
-      log: (key: string, type: LogType = LogType.page) => {
+      log: (event: EventNameString, params?: EventParams) => {
         const analytics = getAnalytics(app);
-
-        if (type === LogType.page) {
-          logEvent(analytics, "screen_view" as never, {
-            screen_name: key,
-          });
-        }
+        logEvent(analytics, event as never, params);
       },
     }),
     []
@@ -35,19 +30,15 @@ export const FirebaseProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     if (isReady) {
-      events.on("routeChangeComplete", (url) => value.log(url));
-      events.on("hashChangeComplete", (url) => value.log(url));
+      events.on('routeChangeComplete', (url) => value.log('screen_view', { screen_name: url }));
+      events.on('hashChangeComplete', (url) => value.log('screen_view', { screen_name: url }));
     }
 
     return () => {
-      events.off("routeChangeComplete", (url) => value.log(url));
-      events.off("hashChangeComplete", (url) => value.log(url));
+      events.off('routeChangeComplete', (url) => value.log('screen_view', { screen_name: url }));
+      events.off('hashChangeComplete', (url) => value.log('screen_view', { screen_name: url }));
     };
-  }, [isReady]);
+  }, [events, isReady, value]);
 
-  return (
-    <FirebaseContext.Provider value={value}>
-      {children}
-    </FirebaseContext.Provider>
-  );
+  return <FirebaseContext.Provider value={value}>{children}</FirebaseContext.Provider>;
 };

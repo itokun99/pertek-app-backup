@@ -16,6 +16,7 @@ import {
 } from "react";
 import "simplebar-react/dist/simplebar.min.css";
 import { AlertContext, AlertProvider } from "../src/provider/AlertProvider";
+import { FirebaseProvider } from "../src/provider/FirebaseProvider";
 import {
   NetworkContext,
   NetworkProvier,
@@ -58,37 +59,39 @@ function MyApp({ Component, pageProps }: MyAppProps) {
 
   return (
     <NetworkProvier>
-      <AlertProvider>
-        <SWRConfig
-          value={{
-            onErrorRetry: _errorRetryHandler,
-            fetcher,
-          }}
-        >
-          <AuthProvider>
-            <ThemeProvider theme={MyTheme}>
-              <Head>
-                <title>
-                  Propertek - Best Indonesia Property Management System
-                </title>
-                <meta
-                  name="viewport"
-                  content="width=device-width, initial-scale=1, shrink-to-fit=no"
-                />
-                <meta
-                  name="description"
-                  content="The best property management system that suit Indonesia property management business"
-                />
-                <link rel="icon" href="/favicon.ico" />
-              </Head>
-              <CssBaseline />
-              <MainContainer>
-                {getLayout(<Component {...pageProps} />)}
-              </MainContainer>
-            </ThemeProvider>
-          </AuthProvider>
-        </SWRConfig>
-      </AlertProvider>
+      <FirebaseProvider>
+        <AlertProvider>
+          <SWRConfig
+            value={{
+              onErrorRetry: _errorRetryHandler,
+              fetcher,
+            }}
+          >
+            <AuthProvider>
+              <ThemeProvider theme={MyTheme}>
+                <Head>
+                  <title>
+                    Propertek - Best Indonesia Property Management System
+                  </title>
+                  <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                  />
+                  <meta
+                    name="description"
+                    content="The best property management system that suit Indonesia property management business"
+                  />
+                  <link rel="icon" href="/favicon.ico" />
+                </Head>
+                <CssBaseline />
+                <MainContainer>
+                  {getLayout(<Component {...pageProps} />)}
+                </MainContainer>
+              </ThemeProvider>
+            </AuthProvider>
+          </SWRConfig>
+        </AlertProvider>
+      </FirebaseProvider>
     </NetworkProvier>
   );
 }

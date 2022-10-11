@@ -73,7 +73,7 @@ const TenantIndex = () => {
     if (isReady && query.tab) {
       setTabIndex(parseInt(query.tab as string));
     }
-  }, [isReady, query.tab]);
+  }, [isReady, query]);
 
   useEffect(() => {
     if (isReady && isOnline) {

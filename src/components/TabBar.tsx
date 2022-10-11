@@ -1,10 +1,6 @@
-import { Tab, Tabs, Theme, Typography } from '@mui/material';
-import { PropsWithChildren, SyntheticEvent } from 'react';
+import { Tab, Tabs, Theme, Typography } from "@mui/material";
+import { PropsWithChildren, SyntheticEvent } from "react";
 
-type TabType = {
-  color: 'warning' | 'success' | 'info' | 'error' | 'default';
-  label: string;
-};
 type TabBarProps = PropsWithChildren & {
   theme: Theme;
   value: number;
@@ -17,7 +13,7 @@ export const TabBar = ({ theme, tabs, value, onChange }: TabBarProps) => {
       sx={{
         paddingX: theme.spacing(2),
         backgroundColor: theme.palette.grey[200],
-        display: 'flex',
+        display: "flex",
       }}
       value={value}
       onChange={onChange}
@@ -27,7 +23,7 @@ export const TabBar = ({ theme, tabs, value, onChange }: TabBarProps) => {
           key={key}
           id={`tenant-table-tab-${key}`}
           disableRipple
-          label={<Typography variant='subtitle2'>{tab}</Typography>}
+          label={<Typography variant="subtitle2">{tab}</Typography>}
         />
       ))}
     </Tabs>

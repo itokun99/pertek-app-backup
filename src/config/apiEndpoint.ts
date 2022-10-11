@@ -11,6 +11,7 @@ const EndpointGroup = {
   User: "f_KrKkJn",
   General: "aQbHTGQV",
   Complain: "Ro92vKeQ",
+  Facility: "JBGyX9le",
   Menu: "2ENXJrQ4",
 };
 
@@ -38,6 +39,9 @@ export const Endpoint = {
 
   Role: `${API_BASE_URL}:${EndpointGroup.Role}/role`,
   RoleGroup: `${API_BASE_URL}:${EndpointGroup.Role}/role_group`,
+
+  Facility: `${API_BASE_URL}:${EndpointGroup.Facility}/facility`,
+  FacilityBooking: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_booking`,
 
   Menu: `${API_BASE_URL}:${EndpointGroup.Menu}/menu`,
   MenuMe: `${API_BASE_URL}:${EndpointGroup.Menu}/menu_me`,

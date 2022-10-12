@@ -1,4 +1,4 @@
-import Add from "@mui/icons-material/Add"
+import Add from "@mui/icons-material/Add";
 
 import {
   Box,
@@ -20,8 +20,9 @@ import {
   useEffect,
   useMemo,
   useState,
-  ReactElement
+  ReactElement,
 } from "react";
+import useSWR from "swr";
 
 import ActionButton from "../../src/components/buttons/ActionButton";
 import AnimatedButton, { MyAnimatedButtonProps } from "../../src/components/buttons/AnimatedButton";
@@ -34,43 +35,43 @@ import { AlertContext } from "../../src/provider/AlertProvider";
 import { NetworkContext } from "../../src/provider/NetworkProvider";
 import ProtectedPage from "../../src/template/ProtectedPage";
 
-const Section = dynamic(() => import('../../src/components/views/Section'), {
+const Section = dynamic(() => import("../../src/components/views/Section"), {
   ssr: false,
-  suspense: true
+  suspense: true,
 });
 
 const CardTable = dynamic(() => import("../../src/components/cards/CardTable"), {
-  ssr: false
-})
-const TableData = dynamic(
-  () => import("../../src/components/tables/TableCluster"),
-  {
-    ssr: false
-  }
-);
+  ssr: false,
+});
+const TableData = dynamic(() => import("../../src/components/tables/TableCluster"), {
+  ssr: false,
+});
 
 const ClusterIndex = (): ReactElement => {
-
   const theme = useTheme();
 
   const [tabIndex] = useState<number>(0);
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>("");
 
   const tabs = useMemo(() => ["Semua"], []);
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
       title: "Kluster Baru",
-      onClick: (): void => { },
+      onClick: (): void => {},
       color: "info",
-      startIcon: <Add />
-    }
+      startIcon: <Add />,
+    },
   ];
 
+  // todo: make this filter search as a reusable component
   const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-  }
+  };
 
+  const { data } = useSWR("/api/klaster");
+
+  console.info(data);
 
   return (
     <Suspense fallback={<div>Loading</div>}>
@@ -80,16 +81,23 @@ const ClusterIndex = (): ReactElement => {
         stackProps={{ mt: 12 }}
         actionButton={<ActionButton buttons={actionButton} />}
       >
-        <CardTable searchPlaceholder="Cari klaster" searchValue={search} onChangeSearch={handleChangeSearch} theme={theme} tabs={tabs} tabIndex={tabIndex} withTabs searchField >
-          <TableData data={[]} />
+        <CardTable
+          searchPlaceholder="Cari klaster"
+          searchValue={search}
+          onChangeSearch={handleChangeSearch}
+          theme={theme}
+          tabs={tabs}
+          tabIndex={tabIndex}
+          withTabs
+          searchField
+        >
+          <TableData data={data?.items || []} loading={!data} />
         </CardTable>
       </Section>
     </Suspense>
   );
 };
 
-ClusterIndex.getLayout = (page: ReactElement) => (
-  <ProtectedPage>{page}</ProtectedPage>
-);
+ClusterIndex.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default ClusterIndex;

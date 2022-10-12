@@ -28,7 +28,7 @@ import {
 } from "react";
 
 import { ReactElement } from "react";
-import { AnimatedButton } from "../../src/components/AnimatedButtton";
+import AnimatedButton from "../../src/components/buttons/AnimatedButton";
 import { ErrorComponent } from "../../src/components/error/ErrorComponent";
 import { TableLoader } from "../../src/components/loader/TableLoader";
 import { TabBar } from "../../src/components/TabBar";

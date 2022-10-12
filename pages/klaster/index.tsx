@@ -1,27 +1,95 @@
-import { Container, Grid } from '@mui/material';
-import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-import { CardLoader } from '../../src/components/loader/CardLoader';
-import ProtectedPage from '../../src/template/ProtectedPage';
+import Add from "@mui/icons-material/Add"
 
-// const PropertyCard = dynamic(() => import('../../src/components/PropertyCard'), {
-//   ssr: false,
-//   suspense: true,
-//   loading: () => <CardLoader />,
-// });
+import {
+  Box,
+  Card,
+  Grid,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { motion } from "framer-motion";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import {
+  Suspense,
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  ReactElement
+} from "react";
 
-const ClusterIndex = () => {
+import ActionButton from "../../src/components/buttons/ActionButton";
+import AnimatedButton, { MyAnimatedButtonProps } from "../../src/components/buttons/AnimatedButton";
+import { ErrorComponent } from "../../src/components/error/ErrorComponent";
+import { TableLoader } from "../../src/components/loader/TableLoader";
+import { TabBar } from "../../src/components/TabBar";
+import { UploaderTable } from "../../src/components/tables/TableUploader";
+import { doFetch } from "../../src/lib/dataFetcher";
+import { AlertContext } from "../../src/provider/AlertProvider";
+import { NetworkContext } from "../../src/provider/NetworkProvider";
+import ProtectedPage from "../../src/template/ProtectedPage";
+
+const Section = dynamic(() => import('../../src/components/views/Section'), {
+  ssr: false,
+  suspense: true
+});
+
+const CardTable = dynamic(() => import("../../src/components/cards/CardTable"), {
+  ssr: false
+})
+const TableData = dynamic(
+  () => import("../../src/components/tables/TableCluster"),
+  {
+    ssr: false
+  }
+);
+
+const ClusterIndex = (): ReactElement => {
+
+  const theme = useTheme();
+
+  const [tabIndex] = useState<number>(0);
+  const [search, setSearch] = useState<string>('');
+
+  const tabs = useMemo(() => ["Semua"], []);
+
+  const actionButton: Array<MyAnimatedButtonProps> = [
+    {
+      title: "Kluster Baru",
+      onClick: (): void => { },
+      color: "info",
+      startIcon: <Add />
+    }
+  ];
+
+  const handleChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+  }
+
+
   return (
-    <Container maxWidth='lg'>
-      <Grid container spacing={3}>
-        <Suspense>
-          <div>Kluster</div>
-        </Suspense>
-      </Grid>
-    </Container>
+    <Suspense fallback={<div>Loading</div>}>
+      <Section
+        title="Klaster"
+        description="Kelola kluster properti"
+        stackProps={{ mt: 12 }}
+        actionButton={<ActionButton buttons={actionButton} />}
+      >
+        <CardTable searchPlaceholder="Cari klaster" searchValue={search} onChangeSearch={handleChangeSearch} theme={theme} tabs={tabs} tabIndex={tabIndex} withTabs searchField >
+          <TableData data={[]} />
+        </CardTable>
+      </Section>
+    </Suspense>
   );
 };
 
-ClusterIndex.getLayout = (page: any) => <ProtectedPage>{page}</ProtectedPage>;
+ClusterIndex.getLayout = (page: ReactElement) => (
+  <ProtectedPage>{page}</ProtectedPage>
+);
 
 export default ClusterIndex;

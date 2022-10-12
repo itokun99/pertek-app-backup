@@ -5,8 +5,19 @@ import { doFetch } from "../../lib/dataFetcher";
 import { AlertContext } from "../../provider/AlertProvider";
 import { fDateTime } from "../../utils/formatTime";
 import Label from "../../components/Label";
-import { Button, Grid, IconButton, Popover } from "@mui/material";
-import { DeleteOutlined, MoreVert } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Popover,
+  useTheme,
+} from "@mui/material";
+import {
+  BorderColorOutlined,
+  DeleteOutlined,
+  MoreVert,
+} from "@mui/icons-material";
 import { padding, Stack } from "@mui/system";
 import { LoadingButton } from "@mui/lab";
 
@@ -44,6 +55,8 @@ const TableFacilityReservation = () => {
 
   const { setAlert } = useContext(AlertContext);
 
+  const theme = useTheme();
+
   const router = useRouter();
 
   useEffect(() => {
@@ -68,14 +81,19 @@ const TableFacilityReservation = () => {
         onClose={() => setAnchor(null)}
         open={anchor !== null}
       >
-        <Stack sx={{ padding: 1 }}>
-          <Button startIcon={<DeleteOutlined />}>Hapus</Button>
-          <Button startIcon={<DeleteOutlined />}>Hapus</Button>
-          <Grid container flexGrow={1}>
-            <Grid item></Grid>
-            <Grid item></Grid>
-          </Grid>
-        </Stack>
+        <Box width={150}>
+          <Stack sx={{ padding: 1 }} gap={0.5} alignItems="start">
+            <Button color="error" startIcon={<DeleteOutlined />}>
+              Hapus
+            </Button>
+            <Button
+              sx={{ color: theme.palette.text.primary }}
+              startIcon={<BorderColorOutlined />}
+            >
+              Edit
+            </Button>
+          </Stack>
+        </Box>
       </Popover>
     ),
     [anchor]
@@ -97,9 +115,7 @@ const TableFacilityReservation = () => {
       field: "slotDate",
       headerName: "Booking Slot",
       flex: 1,
-      renderCell: (params) => {
-        return fDateTime(params.row.slot_date);
-      },
+      renderCell: (params) => fDateTime(params.row.slot_date),
     },
     {
       field: "bookingDuration",
@@ -128,7 +144,7 @@ const TableFacilityReservation = () => {
             {createLabel(params.row.status)}
           </Grid>
           <Grid item>
-            <IconButton disableRipple onClick={handleClick}>
+            <IconButton onClick={handleClick}>
               <MoreVert />
             </IconButton>
           </Grid>

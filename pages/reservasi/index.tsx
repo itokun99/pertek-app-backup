@@ -20,8 +20,7 @@ import {
   useState,
 } from "react";
 import { AnimatedButton } from "../../src/components/AnimatedButtton";
-import Label from "../../src/components/Label";
-import { TabBar } from "../../src/components/TabBar";
+import { TabBar, TabItem } from "../../src/components/TabBar";
 import ProtectedPage from "../../src/template/ProtectedPage";
 
 const TableFacilityReservation = dynamic(
@@ -32,19 +31,79 @@ const TableFacilityReservation = dynamic(
   }
 );
 
-const createLabel = (label: string) => <Label color="success">{label}</Label>;
-
 const ReservasiFasilitas = () => {
   const theme = useTheme();
   const router = useRouter();
 
   const [tabIndex, setTabIndex] = useState(0);
-  const tabs = useMemo(
-    () => ["All", "Requested", "Ongoing", "No Show", "Canceled", "Done"],
-    []
-  );
+  const [stats, setStats] = useState<
+    Array<{ status: string; count: number }> | undefined
+  >();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (router.isReady) {
+      const index = parseInt(router.query.tab as string);
+      if (!isNaN(index) && index !== 0) {
+        setTabIndex(index);
+      }
+    }
+  }, []);
+
+  const tabs = useMemo<TabItem[]>(() => {
+    const tabobjects: TabItem[] = [];
+
+    const statusColorMap = {
+      All: "default",
+      Requested: "info",
+      Booked: "warning",
+      Ongoing: "success",
+      "No Show": "error",
+      Canceled: "error",
+      Done: "default",
+    } as { [key: string]: string };
+
+    if (!stats) {
+      const keys = Object.keys(statusColorMap);
+      keys.forEach((key) =>
+        tabobjects.push({
+          color: statusColorMap[key] as any,
+          text: key,
+        })
+      );
+
+      return tabobjects;
+    }
+
+    let totalCount = 0;
+
+    stats.forEach((stat) => {
+      totalCount += stat.count;
+
+      tabobjects.push({
+        color: statusColorMap[stat.status.toString()] as any,
+        label: stat.count as any,
+        text: stat.status,
+      });
+    });
+
+    tabobjects.unshift({
+      color: "default",
+      text: "All",
+      label: totalCount as any,
+    });
+
+    return tabobjects;
+  }, [stats]);
+
+  useEffect(() => {
+    (async () => {
+      const response = await fetch("/api/reservasi/stats");
+      if (response.ok) {
+        const payload = await response.json();
+        setStats(payload);
+      }
+    })();
+  }, []);
 
   const handleTabClick = (_: SyntheticEvent<Element, Event>, index: number) => {
     if (index === 0) {
@@ -52,7 +111,7 @@ const ReservasiFasilitas = () => {
     } else {
       router.push(`${router.asPath}?`, {
         query: {
-          status: encodeURI(tabs[index]),
+          status: tabs[index].text,
           tab: index,
         },
       });

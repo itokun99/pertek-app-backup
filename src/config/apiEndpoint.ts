@@ -42,6 +42,7 @@ export const Endpoint = {
 
   Facility: `${API_BASE_URL}:${EndpointGroup.Facility}/facility`,
   FacilityBooking: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_booking`,
+  FacilityBookingStats: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_booking_stats`,
 
   Menu: `${API_BASE_URL}:${EndpointGroup.Menu}/menu`,
   MenuMe: `${API_BASE_URL}:${EndpointGroup.Menu}/menu_me`,

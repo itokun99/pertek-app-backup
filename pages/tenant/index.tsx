@@ -31,7 +31,7 @@ import { ReactElement } from "react";
 import { AnimatedButton } from "../../src/components/AnimatedButtton";
 import { ErrorComponent } from "../../src/components/error/ErrorComponent";
 import { TableLoader } from "../../src/components/loader/TableLoader";
-import { TabBar } from "../../src/components/TabBar";
+import { TabBar, TabItem } from "../../src/components/TabBar";
 import { UploaderTable } from "../../src/components/tables/TableUploader";
 import { doFetch } from "../../src/lib/dataFetcher";
 import { AlertContext } from "../../src/provider/AlertProvider";
@@ -61,7 +61,15 @@ const TenantIndex = () => {
   const [isError, setIsError] = useState(false);
   const { setAlert } = useContext(AlertContext);
 
-  const status = useMemo(() => ["Semua", "Pending", "Verified", "Blocked"], []);
+  const status = useMemo(() => {
+    const status: TabItem[] = [
+      { text: "Semua", color: "default" },
+      { text: "Pending", color: "info" },
+      { text: "Verified", color: "success" },
+      { text: "Blocked", color: "error" },
+    ];
+    return status;
+  }, []);
 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
@@ -88,7 +96,7 @@ const TenantIndex = () => {
     if (v > 0) {
       return push("/tenant", {
         query: {
-          status: status[v].toLowerCase(),
+          status: status[v].text.toLowerCase(),
           tab: v,
         },
       });

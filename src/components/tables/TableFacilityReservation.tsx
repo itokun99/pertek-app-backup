@@ -4,7 +4,6 @@ import { useContext, useEffect, useMemo, useState } from "react";
 import { doFetch } from "../../lib/dataFetcher";
 import { AlertContext } from "../../provider/AlertProvider";
 import { fDateTime } from "../../utils/formatTime";
-import Label from "../../components/Label";
 import {
   Box,
   Button,
@@ -18,8 +17,8 @@ import {
   DeleteOutlined,
   MoreVert,
 } from "@mui/icons-material";
-import { padding, Stack } from "@mui/system";
-import { LoadingButton } from "@mui/lab";
+import { Stack } from "@mui/system";
+import Label from "../Label";
 
 const createLabel = (status: string) => {
   let color = "default";
@@ -96,7 +95,7 @@ const TableFacilityReservation = () => {
         </Box>
       </Popover>
     ),
-    [anchor]
+    [anchor, theme]
   );
 
   const columns: GridColDef[] = [

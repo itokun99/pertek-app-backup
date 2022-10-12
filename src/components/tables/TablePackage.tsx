@@ -1,20 +1,42 @@
-import { Search } from '@mui/icons-material';
-import { Box, Card, InputAdornment, Link, TextField, Typography, useTheme } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { useRouter } from 'next/router';
-import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { doFetch } from '../../lib/dataFetcher';
-import { AlertContext } from '../../provider/AlertProvider';
-import { NetworkContext } from '../../provider/NetworkProvider';
-import { fDateTime } from '../../utils/formatTime';
-import { ErrorComponent } from '../error/ErrorComponent';
-import Label from '../Label';
-import { TableLoader } from '../loader/TableLoader';
-import { TabBar } from '../TabBar';
+import { Search } from "@mui/icons-material";
+import {
+  Box,
+  Card,
+  InputAdornment,
+  Link,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { useRouter } from "next/router";
+import {
+  SyntheticEvent,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import { doFetch } from "../../lib/dataFetcher";
+import { AlertContext } from "../../provider/AlertProvider";
+import { NetworkContext } from "../../provider/NetworkProvider";
+import { fDateTime } from "../../utils/formatTime";
+import { ErrorComponent } from "../error/ErrorComponent";
+import Label from "../Label";
+import { TableLoader } from "../loader/TableLoader";
+import { TabBar, TabItem } from "../TabBar";
 
 const PackageTable = () => {
   const theme = useTheme();
-  const status = useMemo(() => ['Semua', 'Draft', 'Published'], []);
+  const status = useMemo(
+    () =>
+      [
+        { text: "All", color: "default" },
+        { text: "Draft", color: "warning" },
+        { text: "Published", color: "success" },
+      ] as TabItem[],
+    []
+  );
   const { isReady, query, asPath, push } = useRouter();
 
   const { setAlert } = useContext(AlertContext);
@@ -36,20 +58,23 @@ const PackageTable = () => {
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
-  const handleChange = (e: SyntheticEvent<Element, Event>, tabIndex: number) => {
+  const handleChange = (
+    e: SyntheticEvent<Element, Event>,
+    tabIndex: number
+  ) => {
     e.preventDefault();
     setTabIndex(tabIndex);
 
     if (tabIndex > 0) {
-      push('/paket', {
+      push("/paket", {
         query: {
           tab: tabIndex,
-          status: status[tabIndex].toLowerCase(),
+          status: status[tabIndex].text.toLowerCase(),
         },
       });
       return;
     }
-    push('/paket');
+    push("/paket");
   };
 
   const handleReload = (e: any) => {
@@ -60,7 +85,12 @@ const PackageTable = () => {
   return (
     <Box>
       <Card>
-        <TabBar theme={theme} value={tabIndex} onChange={handleChange} tabs={status} />
+        <TabBar
+          theme={theme}
+          value={tabIndex}
+          onChange={handleChange}
+          tabs={status}
+        />
         <Box mx={2}>
           {data && isOnline && !isError && (
             <Box
@@ -71,11 +101,11 @@ const PackageTable = () => {
             >
               <TextField
                 fullWidth
-                placeholder='Cari pengumuman'
-                variant='outlined'
+                placeholder="Cari pengumuman"
+                variant="outlined"
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position='start'>
+                    <InputAdornment position="start">
                       <Search />
                     </InputAdornment>
                   ),
@@ -84,7 +114,11 @@ const PackageTable = () => {
             </Box>
           )}
           {(isOffline || (isOnline && isError)) && (
-            <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={isOffline} />
+            <ErrorComponent
+              onReload={handleReload}
+              showReloadButton={isError}
+              offline={isOffline}
+            />
           )}
           {!data && isOnline && !isError && (
             <Box mb={2}>
@@ -96,7 +130,7 @@ const PackageTable = () => {
               columns={Columns}
               rows={(data && data.items) || []}
               headerHeight={40}
-              density='standard'
+              density="standard"
               disableColumnSelector
               checkboxSelection
               hideFooterSelectedRowCount
@@ -113,54 +147,60 @@ const PackageTable = () => {
 
 const Columns = [
   {
-    headerName: 'Topik',
+    headerName: "Topik",
     flex: 1,
-    field: 'subject',
+    field: "subject",
     renderCell: (params) => {
       return (
-        <Typography variant='subtitle1' color='black'>
+        <Typography variant="subtitle1" color="black">
           <Link href={`/pengumuman/${params.row.id}`}>{params.value}</Link>
         </Typography>
       );
     },
   },
   {
-    headerName: 'Pengumuman',
+    headerName: "Pengumuman",
     flex: 1,
-    field: 'content',
+    field: "content",
     valueFormatter: (params) => {
-      const length = (params.value as string).length > 30 ? 30 : params.value.length;
+      const length =
+        (params.value as string).length > 30 ? 30 : params.value.length;
       `${(params.value as string).slice(0, length)}...`;
     },
   },
   {
-    headerName: 'Status',
+    headerName: "Status",
     flex: 1,
-    field: 'status',
+    field: "status",
     renderCell: (params) => {
       return (
-        <Label variant='ghost' color={params.value === 'published' ? 'success' : 'default'}>
-          {params.value === 'published' ? 'Diterbitkan' : 'Draft'}
+        <Label
+          variant="ghost"
+          color={params.value === "published" ? "success" : "default"}
+        >
+          {params.value === "published" ? "Diterbitkan" : "Draft"}
         </Label>
       );
     },
   },
   {
-    headerName: 'Tujuan',
+    headerName: "Tujuan",
     flex: 1,
-    field: 'target_segment',
+    field: "target_segment",
   },
   {
-    headerName: 'Tanggal Dibuat',
+    headerName: "Tanggal Dibuat",
     flex: 1,
-    field: 'created_at',
-    valueFormatter: (params) => (params.value === null ? '-' : fDateTime(params.value)),
+    field: "created_at",
+    valueFormatter: (params) =>
+      params.value === null ? "-" : fDateTime(params.value),
   },
   {
-    headerName: 'Tanggal Terbit',
+    headerName: "Tanggal Terbit",
     flex: 1,
-    field: 'published_at',
-    valueFormatter: (params) => (params.value === null ? '-' : fDateTime(params.value)),
+    field: "published_at",
+    valueFormatter: (params) =>
+      params.value === null ? "-" : fDateTime(params.value),
   },
 ] as GridColDef[];
 

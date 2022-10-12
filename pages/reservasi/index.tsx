@@ -47,7 +47,7 @@ const ReservasiFasilitas = () => {
         setTabIndex(index);
       }
     }
-  }, []);
+  }, [router]);
 
   const tabs = useMemo<TabItem[]>(() => {
     const tabobjects: TabItem[] = [];

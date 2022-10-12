@@ -17,7 +17,7 @@ import { Property, SidebarContext } from "../../src/provider/SidebarProvider";
 import { fetchData } from "../../src/lib/dataFetcher";
 
 function Dashboard() {
-  const theme = ();
+  const theme = useTheme();
   const { isReady } = useRouter();
   const { setAlert } = useContext(AlertContext);
   const { activeProperty, setActiveProperty } = useContext(SidebarContext);

@@ -25,7 +25,8 @@ import {
 import useSWR from "swr";
 
 import ActionButton from "../../src/components/buttons/ActionButton";
-import AnimatedButton, { MyAnimatedButtonProps } from "../../src/components/buttons/AnimatedButton";
+import { MyAnimatedButtonProps } from "../../src/components/buttons/AnimatedButton";
+import AddKlaster from "../../src/components/dialog/FormKlaster";
 import { ErrorComponent } from "../../src/components/error/ErrorComponent";
 import { TableLoader } from "../../src/components/loader/TableLoader";
 import { TabBar } from "../../src/components/TabBar";
@@ -53,12 +54,14 @@ const ClusterIndex = (): ReactElement => {
   const [tabIndex] = useState<number>(0);
   const [search, setSearch] = useState<string>("");
 
+  const [visibility, setVisibility] = useState(false);
+
   const tabs = useMemo(() => ["Semua"], []);
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
       title: "Kluster Baru",
-      onClick: (): void => {},
+      onClick: (): void => setVisibility(true),
       color: "info",
       startIcon: <Add />,
     },
@@ -70,8 +73,6 @@ const ClusterIndex = (): ReactElement => {
   };
 
   const { data } = useSWR("/api/klaster");
-
-  console.info(data);
 
   return (
     <Suspense fallback={<div>Loading</div>}>
@@ -94,6 +95,9 @@ const ClusterIndex = (): ReactElement => {
           <TableData data={data?.items || []} loading={!data} />
         </CardTable>
       </Section>
+      <Suspense>
+        {visibility && <AddKlaster visible={visibility} onClose={() => setVisibility(false)} />}
+      </Suspense>
     </Suspense>
   );
 };

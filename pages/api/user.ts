@@ -17,6 +17,7 @@ export default withSessionRoute((req, res) => {
 
 async function useGetHandler(req: NextApiRequest, res: NextApiResponse) {
   const { user } = req.session;
+  console.info(req.session);
 
   if (!req.query["id"]) {
     return res.json(user?.profile);

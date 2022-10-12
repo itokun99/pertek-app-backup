@@ -1,25 +1,10 @@
 import { Add, Search } from "@mui/icons-material";
-import {
-  Card,
-  Grid,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Card, Grid, InputAdornment, Stack, TextField, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import {
-  ReactElement,
-  Suspense,
-  SyntheticEvent,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { AnimatedButton } from "../../src/components/AnimatedButtton";
+import { ReactElement, Suspense, SyntheticEvent, useEffect, useMemo, useState } from "react";
+import AnimatedButton from "../../src/components/buttons/AnimatedButton";
 import Label from "../../src/components/Label";
 import { TabBar } from "../../src/components/TabBar";
 import ProtectedPage from "../../src/template/ProtectedPage";
@@ -39,10 +24,7 @@ const ReservasiFasilitas = () => {
   const router = useRouter();
 
   const [tabIndex, setTabIndex] = useState(0);
-  const tabs = useMemo(
-    () => ["All", "Requested", "Ongoing", "No Show", "Canceled", "Done"],
-    []
-  );
+  const tabs = useMemo(() => ["All", "Requested", "Ongoing", "No Show", "Canceled", "Done"], []);
 
   useEffect(() => {}, []);
 
@@ -76,11 +58,7 @@ const ReservasiFasilitas = () => {
           </Grid>
           <Grid item>
             <Stack direction="row" gap={2}>
-              <AnimatedButton
-                onClick={handleNewBooking}
-                color="info"
-                startIcon={<Add />}
-              >
+              <AnimatedButton onClick={handleNewBooking} color="info" startIcon={<Add />}>
                 Booking Baru
               </AnimatedButton>
             </Stack>
@@ -88,12 +66,7 @@ const ReservasiFasilitas = () => {
         </Grid>
       </Box>
       <Card>
-        <TabBar
-          theme={theme}
-          value={tabIndex}
-          onChange={handleTabClick}
-          tabs={tabs}
-        />
+        <TabBar theme={theme} value={tabIndex} onChange={handleTabClick} tabs={tabs} />
         <Box m={2}>
           <TextField
             fullWidth
@@ -116,8 +89,6 @@ const ReservasiFasilitas = () => {
   );
 };
 
-ReservasiFasilitas.getLayout = (page: ReactElement) => (
-  <ProtectedPage>{page}</ProtectedPage>
-);
+ReservasiFasilitas.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default ReservasiFasilitas;

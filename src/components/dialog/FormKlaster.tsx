@@ -20,6 +20,13 @@ import { fetchData } from "../../lib/dataFetcher";
 
 interface IModalProperties {
   visible: boolean;
+  onSubmit: () => void;
+  form: any,
+  onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelectProperty: (
+    _event: React.SyntheticEvent<Element, Event>,
+    newValue: SelectOptionType | null
+  ) => void;
   onClose: () => void;
 }
 
@@ -66,80 +73,8 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const FormKlaster: React.FC<IModalProperties> = ({ visible, onClose }) => {
-  const { setAlert } = React.useContext(AlertContext);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [form, setForm] = React.useState({
-    name: "",
-    properti: {
-      label: "",
-      value: "",
-    },
-  });
+const FormKlaster: React.FC<IModalProperties> = ({ visible, onClose, onInputChange, onSelectProperty, onSubmit, form }) => {
 
-  const onInputchange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setForm((previousValues) => ({
-      ...previousValues,
-      [name]: value,
-    }));
-  };
-
-  const onSelectProperti = (
-    _event: React.SyntheticEvent<Element, Event>,
-    newValue: SelectOptionType | null
-  ) => {
-    setForm((previousValues) => ({
-      ...previousValues,
-      properti: {
-        label: newValue?.label || "",
-        value: newValue?.value || "",
-      },
-    }));
-  };
-
-  const onSubmit = async () => {
-    try {
-      setIsLoading(true);
-      // it should check if the form is empty
-      if (form.name === "" || Object.values(form.properti).every((dt) => dt === "")) {
-        setAlert({
-          message: {
-            severity: "warning",
-            content: "Form tidak boleh kosong!",
-          },
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      const payload = {
-        name: form.name,
-        property_id: form.properti.value,
-        description: "desc..",
-      };
-
-      const { error } = await fetchData("/api/klaster", {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
-
-      if (error) {
-        setAlert({
-          message: {
-            severity: "error",
-            content: error.message,
-          },
-        });
-        setIsLoading(false);
-        return;
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <BootstrapDialog open={visible} onClose={onClose}>
@@ -150,10 +85,21 @@ const FormKlaster: React.FC<IModalProperties> = ({ visible, onClose }) => {
         <FormControl fullWidth>
           <Grid container direction="row" spacing={2}>
             <Grid item xs={12}>
-              <TextField label="name" name="name" onChange={onInputchange} fullWidth />
+              <TextField value={form?.name} placeholder="Masukan nama klaster" label="Nama Klaster" name="name" onChange={onInputChange} fullWidth />
             </Grid>
             <Grid item xs={12}>
-              <SelectProperty onChange={onSelectProperti} />
+              <TextField
+                label="Deskripsi"
+                placeholder="Masukan deskripsi klaster"
+                multiline
+                name="description"
+                onChange={onInputChange}
+                fullWidth
+                value={form?.description}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <SelectProperty value={form?.property?.value} onChange={onSelectProperty} />
             </Grid>
           </Grid>
         </FormControl>

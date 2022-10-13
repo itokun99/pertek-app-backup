@@ -21,3 +21,19 @@ export interface ApiResponseType<T> {
   totalPage?: number;
   itemsTotal?: number;
 }
+
+export interface IClusterPropertyDataRaw {
+  id: number;
+  name: string;
+  address: string;
+  type: string;
+  code: string;
+  total_unit: number;
+  total_cluster: number;
+}
+
+export interface IClusterDataRaw {
+  id: number;
+  name: string;
+  property: IClusterPropertyDataRaw;
+}

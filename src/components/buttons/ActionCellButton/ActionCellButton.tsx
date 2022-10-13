@@ -27,13 +27,18 @@ const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] 
         }}
         onClose={() => setAnchorEl(null)}
         open={Boolean(anchorEl)}
+        disableAutoFocus={true}
+        disableEnforceFocus={true}
         PaperProps={{
           style: { width: 100 },
         }}
       >
         <Stack sx={{ padding: 1 }}>
           {options.map((dt, index) => (
-            <Button color={dt.color} startIcon={dt.icon} onClick={dt.onClick} key={index}>
+            <Button color={dt.color} startIcon={dt.icon} onClick={e => {
+              dt?.onClick?.(e);
+              setAnchorEl(null);
+            }} key={index}>
               {dt.label}
             </Button>
           ))}

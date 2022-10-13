@@ -1,7 +1,7 @@
 import { memo, MouseEventHandler, SyntheticEvent } from 'react';
 import Card from '@mui/material/Card';
 import Box from '@mui/material/Box';
-import { Theme } from '@mui/material/styles/createTheme';
+import useTheme from '@mui/material/styles/useTheme';
 
 import ErrorStack from '../../error/ErrorStack';
 import SearchField from '../../input/SearchField';
@@ -17,7 +17,6 @@ export interface CardTableProps {
   errorMessage?: string;
   tabs: Array<string>;
   tabIndex: number;
-  theme: Theme;
   onChangeTab?: (e: SyntheticEvent<Element, Event>, value: number) => void;
   searchValue: string;
   searchPlaceholder?: string;
@@ -26,7 +25,6 @@ export interface CardTableProps {
 
 const CardTable = ({
   error,
-  theme,
   onReload,
   children,
   errorType,
@@ -41,6 +39,8 @@ const CardTable = ({
   searchPlaceholder
 
 }: CardTableProps): React.ReactElement => {
+
+  const theme = useTheme();
 
   const renderContent = (): React.ReactElement => {
     if (error) {

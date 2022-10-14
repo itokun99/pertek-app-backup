@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import { ApiResponseType, SelectOptionType } from "../../types";
 
 interface ISelectProperty {
@@ -9,9 +9,16 @@ interface ISelectProperty {
     newValue: SelectOptionType | null
   ) => void;
   value?: SelectOptionType | null;
+  placeholder?: string;
+  inputValue?: string;
+  onInputChange?: (
+    event: React.SyntheticEvent,
+    value: string,
+    reason: AutocompleteInputChangeReason,
+  ) => void;
 }
 
-const SelectProperty: React.FC<ISelectProperty> = ({ onChange, value }) => {
+const SelectProperty: React.FC<ISelectProperty> = ({ onChange, value, placeholder, inputValue, onInputChange }) => {
   const [listProperty, setListProperty] = React.useState<SelectOptionType[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -44,6 +51,9 @@ const SelectProperty: React.FC<ISelectProperty> = ({ onChange, value }) => {
       loading={loading}
       style={{ width: "100%" }}
       value={value}
+      inputValue={inputValue}
+      placeholder={placeholder}
+      onInputChange={onInputChange}
       renderInput={(params) => <TextField {...params} label="Pilih Properti" fullWidth />}
       fullWidth
     />

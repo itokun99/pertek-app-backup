@@ -6,7 +6,7 @@ import {
   methodNotAlowed,
   unauthorized,
 } from "../../src/lib/apiAuthHelpers";
-import { get, post } from "../../src/lib/apiCall";
+import { get, post,  put, requestDelete } from "../../src/lib/apiCall";
 import { createRequestParams } from "../../src/lib/urllib";
 import { withSessionRoute } from "../../src/lib/withSession";
 
@@ -19,7 +19,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === "GET") return handlerGet(req, res);
   if (req.method === "POST") return handlerPost(req, res);
-  // if (req.method === "PUT") return handlerUpdate(req, res);
+  if (req.method === "PUT") return handlerUpdate(req, res);
+  if (req.method === "DELETE") return handlerDelete(req, res);
 
   return methodNotAlowed(res);
 }
@@ -57,5 +58,48 @@ async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
   }
 
   await req.session.save();
-  return res.status(200).json({ message: "Successfully, Create new Cluster" });
+  return res.status(200).json({ message: "Successfully, Create new Cluster", data: responseBody });
+}
+
+
+
+async function handlerUpdate(req: NextApiRequest, res: NextApiResponse) {
+  if (isInvalidSession(req)) {
+    return unauthorized(res);
+  }
+
+  const user = req.session.user;
+
+  const { id } = req.query;
+
+  const apiResponse = await put(req, `${Endpoint.Klaster}/${id}`, { ...buildAuthorization(user!.token) });
+  const responseBody = await apiResponse.json();
+
+  if (!apiResponse.ok) {
+    return res.status(apiResponse.status).json({ message: responseBody.message });
+  }
+
+  await req.session.save();
+  return res.status(200).json({ message: "Successfully, Update Cluster", data: responseBody });
+}
+
+
+async function handlerDelete(req: NextApiRequest, res: NextApiResponse) {
+  if (isInvalidSession(req)) {
+    return unauthorized(res);
+  }
+
+  const user = req.session.user;
+
+  const { id } = req.query;
+
+  const apiResponse = await requestDelete(req, `${Endpoint.Klaster}/{property_cluter_id}?property_cluster_id=${id}`, { ...buildAuthorization(user!.token) });
+  const responseBody = await apiResponse.json();
+
+  if (!apiResponse.ok) {
+    return res.status(apiResponse.status).json({ message: responseBody.message });
+  }
+
+  await req.session.save();
+  return res.status(200).json({ message: "Successfully, Delete Cluster", data: responseBody });
 }

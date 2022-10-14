@@ -1,6 +1,27 @@
 import { NextApiRequest } from 'next';
 import { clearSession } from './apiAuthHelpers';
 
+
+export const requestDelete = async (req: NextApiRequest, url: string, headers?: {}) => {
+  const res = await fetcher(url, 'DELETE', headers, req.body);
+  if (res.status === 401) {
+    clearSession(req);
+  }
+
+  return res;
+};
+
+
+export const put = async (req: NextApiRequest, url: string, headers?: {}) => {
+  const res = await fetcher(url, 'PUT', headers, req.body);
+  if (res.status === 401) {
+    clearSession(req);
+  }
+
+  return res;
+};
+
+
 export const post = async (req: NextApiRequest, url: string, headers?: {}) => {
   const res = await fetcher(url, 'POST', headers, req.body);
   if (res.status === 401) {

@@ -18,11 +18,13 @@ export interface ApiResponseType<T> {
   ok?: boolean;
   items: T;
   curPage?: number;
+  nextPage?: number;
+  prevPage?: number;
   totalPage?: number;
   itemsTotal?: number;
 }
 
-export interface IClusterPropertyDataRaw {
+export interface IClusterProperty {
   id: number;
   name: string;
   address: string;
@@ -32,8 +34,22 @@ export interface IClusterPropertyDataRaw {
   total_cluster: number;
 }
 
-export interface IClusterDataRaw {
+export interface ICluster {
   id: number;
   name: string;
-  property: IClusterPropertyDataRaw;
+  property: IClusterProperty;
+}
+
+
+export interface IResponseDataCreation {
+  id?: number;
+  property_id?: number;
+  name?: string;
+  description?: string;
+  created_at?: number;
+  updated_at?: number;
+  deleted_at?: number;
+  created_by?: number;
+  updated_by?: number;
+  deleted_by?: number;
 }

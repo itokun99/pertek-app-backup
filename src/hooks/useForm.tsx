@@ -1,21 +1,22 @@
 import { useState } from 'react';
 
-export default function useForm<T = unknown>(initialState: T): [T, (value: T | unknown, field?: string) => void, () => void] {
+
+type UseFormType<T> = [T, <C>(field: string, value: C) => void, () => void, (value: T) => void]
+
+export default function useForm<T = unknown>(initialState: T): UseFormType<T> {
   const [form, setForm] = useState<T>(initialState);
 
-  const onChange = (value: T | unknown, field?: string, callback?: (value: T) => void) => {
-    if (typeof value === 'object' && !field) {
-      setForm(prevValue => ({ ...prevValue, ...value }))
-    } else if (field && form?.hasOwnProperty(field)) {
-      setForm(prevValue => ({ ...prevValue, [field]: value }))
-    }
-
-    if (callback) callback(value as T);
+  function onChange<C>(field: string, value: C): void {
+    setForm(prev => ({ ...prev, [field]: value }),)
   }
 
-  const resetForm = (): void => {
+  function onChangeBulk(value: T): void {
+    setForm(prev => ({ ...prev, ...value }))
+  }
+
+  function resetForm(): void {
     setForm(initialState);
   }
 
-  return [form, onChange, resetForm];
+  return [form, onChange, resetForm, onChangeBulk];
 }

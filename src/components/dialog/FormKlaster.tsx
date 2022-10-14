@@ -18,10 +18,19 @@ import { SelectOptionType } from "../../types";
 import { AlertContext } from "../../provider/AlertProvider";
 import { fetchData } from "../../lib/dataFetcher";
 
+import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
+
+
 interface IModalProperties {
+  edit: boolean;
   visible: boolean;
   onSubmit: () => void;
   form: any,
+  onInputSelectChange?: (
+    event: React.SyntheticEvent,
+    value: string,
+    reason: AutocompleteInputChangeReason,
+  ) => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectProperty: (
     _event: React.SyntheticEvent<Element, Event>,
@@ -73,13 +82,13 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const FormKlaster: React.FC<IModalProperties> = ({ visible, onClose, onInputChange, onSelectProperty, onSubmit, form }) => {
+const FormKlaster: React.FC<IModalProperties> = ({ edit, visible, onClose, onInputSelectChange, onInputChange, onSelectProperty, onSubmit, form }) => {
 
 
   return (
     <BootstrapDialog open={visible} onClose={onClose}>
       <BootstrapDialogTitle id="customized-dialog-title" onClose={onClose}>
-        Tambah Klaster Baru
+        {edit ? 'Edit Klaster' : 'Tambah Klaster Baru'}
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <FormControl fullWidth>
@@ -99,7 +108,7 @@ const FormKlaster: React.FC<IModalProperties> = ({ visible, onClose, onInputChan
               />
             </Grid>
             <Grid item xs={12}>
-              <SelectProperty value={form?.property?.value} onChange={onSelectProperty} />
+              <SelectProperty onInputChange={onInputSelectChange} placeholder="Masukan properti" value={form?.property} inputValue={form?.propertyInput || ''} onChange={onSelectProperty} />
             </Grid>
           </Grid>
         </FormControl>

@@ -15,7 +15,7 @@ import useSWR from "swr";
 import useConfirmation from "../../src/hooks/useConfirmation";
 import useForm from '../../src/hooks/useForm';
 
-import { SelectOptionType } from '../../src/types';
+import { SelectOptionType, ICluster } from '../../src/types';
 
 import ActionButton from "../../src/components/buttons/ActionButton";
 import { MyAnimatedButtonProps } from "../../src/components/buttons/AnimatedButton";
@@ -29,6 +29,9 @@ import { AlertContext } from "../../src/provider/AlertProvider";
 import { fetchData } from "../../src/lib/dataFetcher";
 import { NetworkContext } from "../../src/provider/NetworkProvider";
 import ProtectedPage from "../../src/template/ProtectedPage";
+
+import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
+
 
 import useCluster from '../../src/hooks/useCluster';
 
@@ -52,22 +55,24 @@ const Confirmation = dynamic(() => import("../../src/components/dialog/Confirmat
 
 interface IFormProperty {
   label: string;
-  value: string;
+  value: number;
 }
 interface IForm {
   id: number;
   name: string;
   description: string;
-  property: IFormProperty
+  property: IFormProperty,
+  propertyInput: string;
 }
 
 const initialForm: IForm = {
   id: 0,
   name: "",
   description: "",
+  propertyInput: "",
   property: {
     label: "",
-    value: ""
+    value: 0
   }
 }
 
@@ -83,15 +88,20 @@ const ClusterIndex = (): ReactElement => {
   const [isLoading, setIsLoading] = useState(false);
 
   // custom hooks
-  const [form, setForm] = useForm<IForm>(initialForm);
-  const [confirmation, confirmationVisibility, { open, close, confirm, cancel }] = useConfirmation({
+  const [form, setForm, resetForm, setFormBulk] = useForm<IForm>(initialForm);
+  const {
+    content: deleteConfirmation,
+    handler: deleteConfirmationHandler,
+    visibility:
+    deleteConfirmationVisibility
+  } = useConfirmation<number>({
     title: 'Konfirmasi Hapus',
     description: 'Apakah kamu yakin ingin menghapus item ini?',
     cancelText: 'Kembali',
     confirmText: 'Ya'
-  });
+  }, 0);
 
-  const { clusters, insert, remove, update, dataLoading, dataError } = useCluster();
+  const { clusters, insert, remove, update, dataLoading, dataError, dataReady, isValidating } = useCluster();
 
   // other hooks
   const tabs = useMemo(() => ["Semua"], []);
@@ -104,20 +114,22 @@ const ClusterIndex = (): ReactElement => {
   // handlers
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setForm(value, name);
+    setForm(name, value);
   };
+
+
+  const handleInputSelectChange = (_event: React.SyntheticEvent, value: string, _reason: AutocompleteInputChangeReason) => {
+    setForm('propertyInput', value);
+  }
 
   const handleSelectProperty = (
     _event: React.SyntheticEvent<Element, Event>,
     newValue: SelectOptionType | null
   ) => {
-    setForm(newValue, 'property');
+    setForm('property', newValue);
   };
 
-  console.log("form ===>", form)
-
-  const handleSubmit = async () => {
-    setIsLoading(true);
+  const handleSubmit = () => {
     // it should check if the form is empty
     if (form.name === "" || Object.values(form.property).every((dt) => dt === "")) {
       setAlert({
@@ -126,7 +138,6 @@ const ClusterIndex = (): ReactElement => {
           content: "Form tidak boleh kosong!",
         },
       });
-      setIsLoading(false);
       return;
     }
 
@@ -137,18 +148,10 @@ const ClusterIndex = (): ReactElement => {
     };
 
 
-    const [data, error] = isEdit ? await update(form.id, payload) : await insert(payload);
-
-    if (error) {
-      setAlert({
-        message: {
-          severity: "error",
-          content: error.message,
-        },
-      });
-      return;
-    }
-    setIsLoading(false)
+    (isEdit ? update(form.id, payload) : insert(payload)).then(() => {
+      setVisibility(false);
+      resetForm();
+    })
   };
 
   const actionButton: Array<MyAnimatedButtonProps> = [
@@ -167,25 +170,38 @@ const ClusterIndex = (): ReactElement => {
 
   const handleClose = (): void => {
     setVisibility(false);
+    resetForm();
   }
 
-  const handleClickEditRow = (id: string, record: object) => {
+  const handleClickEditRow = (id: number, record: ICluster) => {
     // open();
-    console.log("record ==>", record)
+
+    console.log("record", record);
+
+    setFormBulk({
+      id: id,
+      name: record.name,
+      description: "",
+      propertyInput: record.property.name,
+      property: {
+        label: record.property.name,
+        value: record.property.id
+      }
+    })
+
+    setVisibility(true);
   }
 
-  const handleClickDeleteRow = (id: string, record: object) => {
-    open();
-    // console.log("record ==>", record)
-    // setForm({
-    //   id: record?.id || 0,
-    //   name: record?.name || "",
-    //   description: record?.description || "",
-    //   property: {
-    //     label: record?.property?.name,
-    //     value: record?.property?.id
-    //   }
-    // })
+  console.log("FORM===>", form)
+
+  const handleClickDeleteRow = (id: number) => {
+    deleteConfirmationHandler.open()
+    deleteConfirmationHandler.setState(id);
+
+  }
+
+  const handleConfirmDelete = () => {
+    deleteConfirmationHandler.confirm().then(id => remove(id))
   }
 
   return (
@@ -204,13 +220,16 @@ const ClusterIndex = (): ReactElement => {
           tabIndex={tabIndex}
           withTabs
           searchField
+          error={Boolean(dataError)}
         >
-          <TableData data={clusters} loading={dataLoading} onClickEdit={handleClickEditRow} onClickDelete={handleClickDeleteRow} />
+          <TableData ready={dataReady} data={clusters} loading={dataLoading || isValidating} onClickEdit={handleClickEditRow} onClickDelete={handleClickDeleteRow} />
         </CardTable>
       </Section>
       <Suspense>
         <FormCluster
+          edit={isEdit}
           onInputChange={handleInputChange}
+          onInputSelectChange={handleInputSelectChange}
           onSelectProperty={handleSelectProperty}
           onSubmit={handleSubmit}
           visible={visibility}
@@ -220,14 +239,14 @@ const ClusterIndex = (): ReactElement => {
       </Suspense>
       <Suspense>
         <Confirmation
-          open={confirmationVisibility}
-          title={confirmation.title}
-          description={confirmation.description}
-          cancelText={confirmation.cancelText}
-          confirmText={confirmation.confirmText}
-          onClose={close}
-          onCancel={cancel}
-          onConfirm={confirm}
+          open={deleteConfirmationVisibility}
+          title={deleteConfirmation.title}
+          description={deleteConfirmation.description}
+          cancelText={deleteConfirmation.cancelText}
+          confirmText={deleteConfirmation.confirmText}
+          onClose={deleteConfirmationHandler.close}
+          onCancel={deleteConfirmationHandler.cancel}
+          onConfirm={handleConfirmDelete}
         />
       </Suspense>
     </Suspense>

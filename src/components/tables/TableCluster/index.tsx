@@ -1,26 +1,33 @@
 import { DataGrid } from "@mui/x-data-grid";
-import { PropsWithChildren, memo } from "react";
+import { PropsWithChildren, memo, useState, useEffect } from "react";
 import { generateColumns } from "./TableCluster.enum";
+import LinearProgress from '@mui/material/LinearProgress';
+import { TableLoader } from '../../loader/TableLoader';
+import { ICluster } from '../../../types';
 
-export interface ITableItem {
-  name: string;
-  properti_id: string;
-}
 export interface ITableClusterProps {
-  data: Array<ITableItem>,
+  data: Array<ICluster>,
   loading: boolean,
-  onClickEdit: (id: string, record: object) => void,
-  onClickDelete: (id: string, record: object) => void
+  ready: boolean,
+  onClickEdit: (id: number, record: ICluster) => void,
+  onClickDelete: (id: number) => void
 }
 
 const TableCluster = ({
   data,
+  ready,
   loading = false,
   onClickEdit,
   onClickDelete
 }: PropsWithChildren & ITableClusterProps) => {
+
+  if (!ready) {
+    return <TableLoader />
+  }
+
   return (
     <DataGrid
+      components={{ LoadingOverlay: LinearProgress }}
       headerHeight={40}
       density={"comfortable"}
       disableColumnSelector

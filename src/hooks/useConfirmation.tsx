@@ -1,29 +1,38 @@
 import { useState, useEffect, Dispatch, SetStateAction } from 'react';
 
-export interface IUseConfirmationProps {
+export interface IUseConfirmationContent {
   title: string;
   description: string;
   cancelText: string;
   confirmText: string;
 }
 
-export interface IUseConfirmationHandler {
+export interface IUseConfirmationHandler<T> {
   open: () => void;
   close: () => void;
-  confirm: () => Promise<void>;
-  cancel: () => Promise<void>;
-  setState: Dispatch<SetStateAction<IUseConfirmationProps>>
+  confirm: () => Promise<T>;
+  cancel: () => Promise<T>;
+  setState: Dispatch<SetStateAction<T>>;
+  setContent: Dispatch<SetStateAction<IUseConfirmationContent>>;
 }
 
-const initialProps: IUseConfirmationProps = {
+const initialProps: IUseConfirmationContent = {
   title: '',
   description: '',
   cancelText: 'Cancel',
   confirmText: 'Confirm'
 }
 
-export default function useConfirmation(props: IUseConfirmationProps = initialProps): [IUseConfirmationProps, boolean, IUseConfirmationHandler] {
-  const [state, setState] = useState<IUseConfirmationProps>(props);
+export interface IUseConfirmation<T> {
+  content: IUseConfirmationContent;
+  handler: IUseConfirmationHandler<T>;
+  state: T;
+  visibility: boolean;
+}
+
+export default function useConfirmation<State>(props: IUseConfirmationContent = initialProps, initialState: State): IUseConfirmation<State> {
+  const [content, setContent] = useState<IUseConfirmationContent>(props);
+  const [state, setState] = useState<State>(initialState);
   const [visibility, setVisibility] = useState<boolean>(false);
 
   function open(): void {
@@ -34,22 +43,29 @@ export default function useConfirmation(props: IUseConfirmationProps = initialPr
     setVisibility(false);
   }
 
-  function confirm(): Promise<void> {
+  function confirm(): Promise<State> {
     close();
-    return Promise.resolve();
+    setState(initialState);
+    return Promise.resolve(state);
   }
 
-  function cancel(): Promise<void> {
+  function cancel(): Promise<State> {
     close();
-    return Promise.resolve();
+    setState(initialState);
+    return Promise.resolve(state);
 
   }
 
   useEffect(() => {
-    if (state.title !== props.title || state.description !== props.description || state.confirmText !== props.confirmText || state.cancelText !== props.cancelText) {
-      setState(props);
+    if (content.title !== props.title || content.description !== props.description || content.confirmText !== props.confirmText || content.cancelText !== props.cancelText) {
+      setContent(props);
     }
-  }, [state, props])
+  }, [content, props])
 
-  return [state, visibility, { open, close, setState, confirm, cancel }]
+  return {
+    content,
+    handler: { cancel, close, confirm, open, setContent, setState },
+    state,
+    visibility
+  }
 }

@@ -2,10 +2,11 @@ import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/ActionCellButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import { ICluster } from '../../../types';
 
-const optionActionCell = (record: object, onClickEdit: (id: string, record: object) => void, onClickDelete: (id: string, record: object) => void) => {
+const optionActionCell = (record: ICluster, onClickEdit: (id: number, record: ICluster) => void, onClickDelete: (id: number) => void) => {
   // you can abstract your record interface here
-  const { id } = (record as { id: string }) || {};
+  const { id } = record || {};
   const options: IActionCellButtonProperties["options"] = [
     {
       label: "Edit",
@@ -16,7 +17,7 @@ const optionActionCell = (record: object, onClickEdit: (id: string, record: obje
       label: "Delete",
       icon: <DeleteOutlineOutlinedIcon />,
       color: "error",
-      onClick: () => onClickDelete(id, record),
+      onClick: () => onClickDelete(id),
     },
   ];
 
@@ -24,7 +25,7 @@ const optionActionCell = (record: object, onClickEdit: (id: string, record: obje
 };
 
 
-export function generateColumns(onClickEdit: (id: string, record: object) => void, onClickDelete: (id: string, record: object) => void): GridColDef[] {
+export function generateColumns(onClickEdit: (id: number, record: ICluster) => void, onClickDelete: (id: number) => void): GridColDef[] {
   return [
     {
       headerName: "Nama Klaster",

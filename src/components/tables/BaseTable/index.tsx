@@ -123,7 +123,9 @@ const BaseTable: React.FC<IBaseTableProperties> = (props) => {
             </TableCell>
           )}
           {columns.map((col, index) => (
-            <TableCell key={index} align={col.align}>{col.title}</TableCell>
+            <TableCell key={index} align={col.align}>{col.title} {col.sorter && (
+              <span>sorter</span>
+            )}</TableCell>
           ))}
         </TableRow>
       </TableHead>

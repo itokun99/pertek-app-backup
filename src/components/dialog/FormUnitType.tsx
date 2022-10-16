@@ -15,11 +15,6 @@ import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import SelectProperty from "../select/SelectProperty";
 import { SelectOptionType } from "../../types";
-import { AlertContext } from "../../provider/AlertProvider";
-import { fetchData } from "../../lib/dataFetcher";
-
-import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-
 
 interface IModalProperties {
   edit: boolean;
@@ -28,7 +23,7 @@ interface IModalProperties {
   form: any,
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: (
-    _event: React.SyntheticEvent<Element, Event>,
+    _event: React.SyntheticEvent,
     newValue: SelectOptionType | null,
     name: string
   ) => void;
@@ -78,7 +73,7 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
   );
 };
 
-const FormKlaster: React.FC<IModalProperties> = ({
+const FormUnit: React.FC<IModalProperties> = ({
   edit,
   visible,
   onClose,
@@ -92,27 +87,36 @@ const FormKlaster: React.FC<IModalProperties> = ({
   return (
     <BootstrapDialog open={visible} onClose={onClose}>
       <BootstrapDialogTitle id="customized-dialog-title" onClose={onClose}>
-        {edit ? 'Edit Klaster' : 'Tambah Klaster Baru'}
+        {edit ? 'Edit Tipe Unit' : 'Tambah Tipe Unit Baru'}
       </BootstrapDialogTitle>
       <DialogContent dividers>
         <FormControl fullWidth>
           <Grid container direction="row" spacing={2}>
             <Grid item xs={12}>
-              <TextField value={form?.name} placeholder="Masukan nama klaster" label="Nama Klaster" name="name" onChange={onInputChange} fullWidth />
+              <TextField
+                value={form?.name}
+                placeholder="Masukan nama tipe"
+                label="Nama Tipe"
+                name="name"
+                onChange={onInputChange}
+                fullWidth />
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="Deskripsi"
-                placeholder="Masukan deskripsi klaster"
                 multiline
+                value={form?.description}
+                placeholder="Masukan deskripsi"
+                label="Deskripsi"
                 name="description"
                 onChange={onInputChange}
                 fullWidth
-                value={form?.description}
               />
             </Grid>
             <Grid item xs={12}>
-              <SelectProperty value={form?.property} onChange={onSelectChange} />
+              <SelectProperty
+                value={form?.property}
+                onChange={onSelectChange}
+              />
             </Grid>
           </Grid>
         </FormControl>
@@ -129,4 +133,4 @@ const FormKlaster: React.FC<IModalProperties> = ({
   );
 };
 
-export default FormKlaster;
+export default FormUnit;

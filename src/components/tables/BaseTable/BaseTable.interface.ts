@@ -8,7 +8,8 @@ export type KeyTypeString = { [key: string]: string }
  */
 export type ColumnType = {
   title: string,
-  selector: string
+  selector: string,
+  sorter?: () => void, 
   render?: (text: string, record: object) => React.ReactNode,
   align?: 'inherit' | 'left' | 'right' | 'center' | 'justify',
   width?: number | string

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import BaseTable from '../src/components/tables/BaseTable';
+import { ColumnType } from '../src/components/tables/BaseTable/BaseTable.interface';
 import ProtectedPage from '../src/template/ProtectedPage';
 
 
@@ -21,10 +22,12 @@ const jsonData = [
   }
 ]
 
-const columns = [
+const columns: ColumnType[] = [
   {
     title: 'Name',
     selector: 'name',
+    // todo: create sorting table with router params
+    sorter: () => console.info('test')
   },
   {
     title: 'Field 2',

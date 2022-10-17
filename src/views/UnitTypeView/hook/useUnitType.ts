@@ -1,13 +1,12 @@
 import { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
-import { AlertContext } from "../../../provider/AlertProvider";
+import { useRouter } from 'next/router';
+import { AlertContext } from '../../../provider/AlertProvider';
 import useSWR from 'swr';
-import { fetchData, FetcherResponseError } from "../../../lib/dataFetcher";
+import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
 import { IUnitType, ApiResponseType } from '../../../types';
 import { createUnitType, updateUnitType, deleteUnitType, ICreateUnitTypePayload } from '../../../service/tipe-unit';
 import { createUrlParamFromObj } from '../../../utils/helper';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
-
 
 interface IUseUnitType {
   insert: (payload: ICreateUnitTypePayload) => Promise<void>;
@@ -22,26 +21,28 @@ interface IUseUnitType {
   dataMeta?: ApiResponseType<Array<IUnitType>>;
 }
 
-
-
 export default function useUnitType(): IUseUnitType {
-
   const API_URL = ApiProxyEndpoint.UnitType;
 
-  const router = useRouter()
-  const params = router.query
+  const router = useRouter();
+  const params = router.query;
   const paramString = createUrlParamFromObj({ ...params });
 
   // contexts
   const { setAlert } = useContext(AlertContext);
 
   // hooks / states
-  const { data: responseData, error: responseError, isValidating, mutate } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IUnitType[]>>(url, { method: 'GET' }), {
+  const {
+    data: responseData,
+    error: responseError,
+    isValidating,
+    mutate,
+  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IUnitType[]>>(url, { method: 'GET' }), {
     refreshWhenOffline: true,
     refreshWhenHidden: true,
     revalidateIfStale: true,
     revalidateOnFocus: true,
-    revalidateOnReconnect: true
+    revalidateOnReconnect: true,
   });
 
   const [ready, setReady] = useState<boolean>(false);
@@ -52,75 +53,81 @@ export default function useUnitType(): IUseUnitType {
 
   // methods
   const insert = async (payload: ICreateUnitTypePayload) => {
-    createUnitType(payload).then(() => {
-      console.log("error masuk sini")
-      setAlert({
-        message: {
-          severity: "success",
-          content: `Berhasil menambah tipe unit baru`,
-        },
+    createUnitType(payload)
+      .then(() => {
+        // console.log("error masuk sini")
+        setAlert({
+          message: {
+            severity: 'success',
+            content: `Berhasil menambah tipe unit baru`,
+          },
+        });
+        mutate();
+      })
+      .catch((err: FetcherResponseError) => {
+        // console.log("error")
+        setAlert({
+          message: {
+            severity: 'error',
+            content: err.message || '',
+          },
+        });
       });
-      mutate();
-    }).catch((err: FetcherResponseError) => {
-      console.log("error")
-      setAlert({
-        message: {
-          severity: "error",
-          content: err.message || '',
-        },
-      });
-    })
   };
 
   const remove = async (id: number) => {
-    deleteUnitType(id).then(() => {
-      setAlert({
-        message: {
-          severity: "success",
-          content: `Berhasil menghapus tipe unit`,
-        },
+    deleteUnitType(id)
+      .then(() => {
+        setAlert({
+          message: {
+            severity: 'success',
+            content: `Berhasil menghapus tipe unit`,
+          },
+        });
+        mutate();
+      })
+      .catch((err: FetcherResponseError) => {
+        setAlert({
+          message: {
+            severity: 'error',
+            content: err?.message || '',
+          },
+        });
       });
-      mutate();
-    }).catch((err: FetcherResponseError) => {
-      setAlert({
-        message: {
-          severity: "error",
-          content: err?.message || '',
-        },
-      });
-    })
-  }
+  };
 
   const update = async (id: number, payload: ICreateUnitTypePayload) => {
-    updateUnitType(id, payload).then(() => {
-      setAlert({
-        message: {
-          severity: "success",
-          content: `Berhasil mengedit tipe unit`,
-        },
+    updateUnitType(id, payload)
+      .then(() => {
+        setAlert({
+          message: {
+            severity: 'success',
+            content: `Berhasil mengedit tipe unit`,
+          },
+        });
+        mutate();
+      })
+      .catch((err: FetcherResponseError) => {
+        setAlert({
+          message: {
+            severity: 'error',
+            content: err?.message || '',
+          },
+        });
       });
-      mutate();
-    }).catch((err: FetcherResponseError) => {
-      setAlert({
-        message: {
-          severity: "error",
-          content: err?.message || '',
-        },
-      });
-    });
   };
 
   const reload = () => {
     mutate();
-  }
+  };
 
   useEffect(() => {
     if (responseData && !ready) {
       setTimeout(() => {
         setReady(true);
-      }, 3000)
+      }, 3000);
     }
-  }, [responseData, ready])
+  }, [responseData, ready]);
 
   return {
     insert,
@@ -132,6 +139,6 @@ export default function useUnitType(): IUseUnitType {
     dataReady: ready,
     dataLoading,
     dataError,
-    dataMeta
-  }
+    dataMeta,
+  };
 }

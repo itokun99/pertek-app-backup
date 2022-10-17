@@ -154,7 +154,6 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
     <List>
       <ListSubheader title={menuGroup.name} open={open} />
       {menuGroup.menus.map((item, key) => {
-        console.log(item);
         const hasChildren = item.sub_menus && item.sub_menus.length > 0;
 
         const isActive = (() => {

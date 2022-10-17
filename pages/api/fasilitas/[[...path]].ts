@@ -38,7 +38,5 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const payload = await apiResponse.json();
 
-  console.log(req.url);
-
   return res.status(apiResponse.status).json(payload);
 }

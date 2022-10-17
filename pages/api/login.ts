@@ -1,8 +1,8 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { Endpoint } from '../../src/config/apiEndpoint';
-import { post } from '../../src/lib/apiCall';
+import { NextApiRequest, NextApiResponse } from "next";
+import { Endpoint } from "../../src/config/apiEndpoint";
+import { post } from "../../src/lib/apiCall";
 
-import { withSessionRoute } from '../../src/lib/withSession';
+import { withSessionRoute } from "../../src/lib/withSession";
 
 export default withSessionRoute(loginHandler);
 
@@ -12,7 +12,9 @@ async function loginHandler(req: NextApiRequest, res: NextApiResponse) {
   const responseBody = await apiResponse.json();
 
   if (!apiResponse.ok) {
-    return res.status(apiResponse.status).json({ message: responseBody.message });
+    return res
+      .status(apiResponse.status)
+      .json({ message: responseBody.message });
   }
 
   req.session.user = {
@@ -21,5 +23,5 @@ async function loginHandler(req: NextApiRequest, res: NextApiResponse) {
   };
 
   await req.session.save();
-  return res.status(200).json({ message: 'Login Success' });
+  return res.status(200).json({ message: "Login Success" });
 }

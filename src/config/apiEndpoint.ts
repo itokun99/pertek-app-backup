@@ -1,18 +1,20 @@
-const API_BASE_URL = "https://xmbi-4bje-h8wi.s2.xano.io/api";
+const API_BASE_URL = 'https://xmbi-4bje-h8wi.s2.xano.io/api';
+
+export const SendGridAPIKey = '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';
 
 const EndpointGroup = {
-  Announcement: "18S1unQy",
-  Auth: "xG61OBxf",
-  Profile: "4ZHQKRkr",
-  Tenant: "AyPV9ZMZ",
-  Invoice: "KM9qpTln",
-  Property: "dhVjwBnw",
-  Role: "vMBtbFQW",
-  User: "f_KrKkJn",
-  General: "aQbHTGQV",
-  Complain: "Ro92vKeQ",
-  Facility: "JBGyX9le",
-  Menu: "2ENXJrQ4",
+  Announcement: '18S1unQy',
+  Auth: 'xG61OBxf',
+  Profile: '4ZHQKRkr',
+  Tenant: 'AyPV9ZMZ',
+  Invoice: 'KM9qpTln',
+  Property: 'dhVjwBnw',
+  Role: 'vMBtbFQW',
+  User: 'f_KrKkJn',
+  General: 'aQbHTGQV',
+  Complain: 'Ro92vKeQ',
+  Facility: 'JBGyX9le',
+  Menu: '2ENXJrQ4',
 };
 
 export const Endpoint = {
@@ -41,6 +43,8 @@ export const Endpoint = {
   RoleGroup: `${API_BASE_URL}:${EndpointGroup.Role}/role_group`,
 
   Facility: `${API_BASE_URL}:${EndpointGroup.Facility}/facility`,
+  FacilityCategory: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_category`,
+  FacilityVenue: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_venue`,
   FacilityBooking: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_booking`,
   FacilityBookingStats: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_booking_stats`,
 

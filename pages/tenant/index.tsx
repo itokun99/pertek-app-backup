@@ -1,10 +1,4 @@
-import {
-  Add,
-  CloudDownload,
-  CloudUpload,
-  Refresh,
-  Search,
-} from "@mui/icons-material";
+import { Add, CloudDownload, CloudUpload, Refresh, Search } from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -18,17 +12,10 @@ import {
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import {
-  Suspense,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from "react";
 
 import { ReactElement } from "react";
-import { AnimatedButton } from "../../src/components/AnimatedButtton";
+import AnimatedButton from "../../src/components/buttons/AnimatedButton";
 import { ErrorComponent } from "../../src/components/error/ErrorComponent";
 import { TableLoader } from "../../src/components/loader/TableLoader";
 import { TabBar, TabItem } from "../../src/components/TabBar";
@@ -38,21 +25,15 @@ import { AlertContext } from "../../src/provider/AlertProvider";
 import { NetworkContext } from "../../src/provider/NetworkProvider";
 import ProtectedPage from "../../src/template/ProtectedPage";
 
-const TenantTable = dynamic(
-  () => import("../../src/components/tables/TableTenant"),
-  {
-    ssr: false,
-    suspense: true,
-  }
-);
+const TenantTable = dynamic(() => import("../../src/components/tables/TableTenant"), {
+  ssr: false,
+  suspense: true,
+});
 
-const AddTenantDialog = dynamic(
-  () => import("../../src/components/dialog/AddTenant"),
-  {
-    ssr: false,
-    suspense: true,
-  }
-);
+const AddTenantDialog = dynamic(() => import("../../src/components/dialog/AddTenant"), {
+  ssr: false,
+  suspense: true,
+});
 
 const TenantIndex = () => {
   const theme = useTheme();
@@ -146,9 +127,7 @@ const TenantIndex = () => {
   return (
     <Stack mt={12}>
       <Suspense>
-        {openDialog && (
-          <AddTenantDialog open={openDialog} setOpen={setOpenDialog} />
-        )}
+        {openDialog && <AddTenantDialog open={openDialog} setOpen={setOpenDialog} />}
       </Suspense>
       <Box mb={5}>
         <Grid container>
@@ -164,11 +143,7 @@ const TenantIndex = () => {
             <Stack direction="row" gap={2}>
               {!csvFile && (
                 <>
-                  <AnimatedButton
-                    onClick={handleAddTenant}
-                    color="info"
-                    startIcon={<Add />}
-                  >
+                  <AnimatedButton onClick={handleAddTenant} color="info" startIcon={<Add />}>
                     Tenant Baru
                   </AnimatedButton>
                   <AnimatedButton
@@ -184,13 +159,7 @@ const TenantIndex = () => {
                     startIcon={<CloudUpload />}
                   >
                     Upload CSV
-                    <input
-                      type="file"
-                      hidden
-                      multiple
-                      accept=".csv"
-                      onChange={handleCSVUpload}
-                    />
+                    <input type="file" hidden multiple accept=".csv" onChange={handleCSVUpload} />
                   </AnimatedButton>
                 </>
               )}
@@ -222,12 +191,7 @@ const TenantIndex = () => {
           {csvFile && <UploaderTable csvFile={csvFile} />}
           {!csvFile && (
             <>
-              <TabBar
-                theme={theme}
-                value={tabIndex}
-                onChange={handleTabBarChange}
-                tabs={status}
-              />
+              <TabBar theme={theme} value={tabIndex} onChange={handleTabBarChange} tabs={status} />
               <Box mx={2}>
                 {isOnline && data && !isError && (
                   <Box
@@ -276,8 +240,6 @@ const TenantIndex = () => {
   );
 };
 
-TenantIndex.getLayout = (page: ReactElement) => (
-  <ProtectedPage>{page}</ProtectedPage>
-);
+TenantIndex.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default TenantIndex;

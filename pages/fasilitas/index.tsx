@@ -4,7 +4,7 @@ import { Box } from '@mui/system';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { ReactElement, Suspense, SyntheticEvent, useEffect, useMemo, useState } from 'react';
-import { AnimatedButton } from '../../src/components/AnimatedButtton';
+import AnimatedButton from '../../src/components/buttons/AnimatedButton';
 import { TabBar, TabItem } from '../../src/components/TabBar';
 import ProtectedPage from '../../src/template/ProtectedPage';
 

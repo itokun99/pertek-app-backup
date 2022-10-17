@@ -1,11 +1,11 @@
-import { useTheme } from "@mui/material";
-import { useContext } from "react";
-import { SidebarContext } from "../../provider/SidebarProvider";
-import { Drawer } from "./Drawer";
-import { SidebarContent } from "./SidebarContent";
-import { SidebarHeader } from "./SidebarHeader";
+import { useTheme } from '@mui/material';
+import { useContext } from 'react';
+import { SidebarContext } from '../../provider/SidebarProvider';
+import { Drawer } from './Drawer';
+import { SidebarContent } from './SidebarContent';
+import { SidebarHeader } from './SidebarHeader';
 
-import SimpleBar from "simplebar-react";
+import SimpleBar from 'simplebar-react';
 
 export interface SidebarMenuGroup {
   id: number;
@@ -25,7 +25,7 @@ export interface SidebarMenu {
   name: string;
   url: string;
   icon: string;
-  submenus?: SidebarSubMenu[];
+  sub_menus?: SidebarSubMenu[];
 }
 
 const Sidebar = () => {
@@ -33,17 +33,15 @@ const Sidebar = () => {
   const { open } = useContext(SidebarContext);
 
   return (
-    <Drawer variant="permanent" width={280} open={open}>
+    <Drawer variant='permanent' width={280} open={open}>
       <SimpleBar
         style={{
-          maxHeight: "100vh",
+          maxHeight: '100vh',
           ...{ width: open ? 280 : 65 },
-          overflowX: "hidden",
+          overflowX: 'hidden',
         }}
       >
-        <SidebarHeader buttonColor={theme.palette.primary.dark}>
-          Propertek
-        </SidebarHeader>
+        <SidebarHeader buttonColor={theme.palette.primary.dark}>Propertek</SidebarHeader>
         <SidebarContent />
       </SimpleBar>
     </Drawer>

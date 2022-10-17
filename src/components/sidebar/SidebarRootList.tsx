@@ -1,4 +1,4 @@
-import { KeyboardArrowRight } from "@mui/icons-material";
+import { KeyboardArrowRight } from '@mui/icons-material';
 import {
   List,
   ListItemButton,
@@ -13,12 +13,12 @@ import {
   Collapse,
   Theme,
   Typography,
-} from "@mui/material";
-import { NextRouter, useRouter } from "next/router";
-import { useContext, useMemo, useRef, useState } from "react";
-import { SidebarMenu } from ".";
-import { SidebarContext } from "../../provider/SidebarProvider";
-import { SidebarSubList } from "./SidebarSubList";
+} from '@mui/material';
+import { NextRouter, useRouter } from 'next/router';
+import { useContext, useMemo, useRef, useState } from 'react';
+import { SidebarMenu } from '.';
+import { SidebarContext } from '../../provider/SidebarProvider';
+import { SidebarSubList } from './SidebarSubList';
 
 export interface SidebarMenuGroup {
   id: number;
@@ -46,16 +46,8 @@ export interface RootListItemProps {
   iconSpacing?: number;
 }
 
-const RootListItem = ({
-  item,
-  open,
-  theme,
-  router,
-  isActive,
-  hasChildren,
-  iconSpacing,
-}: RootListItemProps) => {
-  const { url, id, submenus, icon, name } = item;
+const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSpacing }: RootListItemProps) => {
+  const { url, id, sub_menus, icon, name } = item;
 
   const parentId = useMemo(() => `${url}-${id}`, [url, id]);
 
@@ -81,7 +73,7 @@ const RootListItem = ({
           pr: open ? 1 : 2,
           minHeight: theme.spacing(6),
           my: theme.spacing(0.5),
-          justifyContent: open ? "initial" : "center",
+          justifyContent: open ? 'initial' : 'center',
           ...(isActive && {
             backgroundColor: activeBgColor,
             color: theme.palette.info.dark,
@@ -95,31 +87,31 @@ const RootListItem = ({
 
         {open && (
           <Stack
-            direction="row"
+            direction='row'
             sx={{
               flexGrow: 1,
-              alignItems: "center",
-              justifyContent: "space-between",
+              alignItems: 'center',
+              justifyContent: 'space-between',
             }}
           >
-            <Typography variant="body2">{name}</Typography>
+            <Typography variant='body2'>{name}</Typography>
             {hasChildren && (
               <Box
                 sx={{
                   transition: (theme) =>
-                    theme.transitions.create("transform", {
+                    theme.transitions.create('transform', {
                       duration: theme.transitions.duration.shorter,
                     }),
                   ...(shouldExpand && {
-                    transform: "rotate(90deg)",
+                    transform: 'rotate(90deg)',
                   }),
                 }}
               >
                 <KeyboardArrowRight
                   sx={{
-                    display: "block",
-                    fontSize: "1.4rem",
-                    stroke: isActive ? activeBgColor : "white",
+                    display: 'block',
+                    fontSize: '1.4rem',
+                    stroke: isActive ? activeBgColor : 'white',
                     strokeWidth: 0.7,
                   }}
                 />
@@ -130,7 +122,7 @@ const RootListItem = ({
       </ListItemButton>
       {hasChildren && (
         <Collapse in={shouldExpand && open} unmountOnExit>
-          <SidebarSubList parentId={parentId} menus={submenus || []} />
+          <SidebarSubList parentId={parentId} menus={sub_menus || []} />
         </Collapse>
       )}
     </>
@@ -143,8 +135,8 @@ const ListSubheader = ({ title, open }: ListSubHeaderProps) => {
     <MuiListSubheader
       sx={{
         opacity: open ? 1 : 0,
-        textTransform: "uppercase",
-        fontSize: "0.8rem",
+        textTransform: 'uppercase',
+        fontSize: '0.8rem',
         color: theme.palette.text.primary,
       }}
     >
@@ -162,11 +154,12 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
     <List>
       <ListSubheader title={menuGroup.name} open={open} />
       {menuGroup.menus.map((item, key) => {
-        const hasChildren = item.submenus && item.submenus.length > 0;
+        console.log(item);
+        const hasChildren = item.sub_menus && item.sub_menus.length > 0;
 
         const isActive = (() => {
           if (hasChildren) {
-            return router.pathname.split("/")[1] === item.url.split("/")[1];
+            return router.pathname.split('/')[1] === item.url.split('/')[1];
           }
           return router.pathname === item.url;
         })();

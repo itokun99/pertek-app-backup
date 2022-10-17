@@ -58,7 +58,7 @@ export const UploaderTable = ({ csvFile }: UplaoderTableProps) => {
         tableRows.push(row);
       });
     },
-    [csvArray]
+    [csvArray, tableHeader, tableRows]
   );
 
   fileReader.onloadend = () =>

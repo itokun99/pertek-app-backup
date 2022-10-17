@@ -4,12 +4,14 @@ export type ListResponse = {
   items: Array<any>;
 };
 
-export type FetcherResponse = {
-  error?: {
-    code: number;
-    message: string;
-  };
-  data?: any;
+export interface FetcherResponseError {
+  code: number;
+  message: string;
+}
+
+export type FetcherResponse<T = any> = {
+  error?: FetcherResponseError;
+  data?: T
 };
 
 export type FetchDataParams = {
@@ -18,7 +20,7 @@ export type FetchDataParams = {
   body?: BodyInit | null | undefined;
 };
 
-export const fetchData = async (url: string, params?: FetchDataParams) => {
+export const fetchData = async <T = any>(url: string, params?: FetchDataParams) => {
   const controller = new AbortController();
   const signal = controller.signal;
   const timeout = setTimeout(() => controller.abort(), 3000);
@@ -41,10 +43,10 @@ export const fetchData = async (url: string, params?: FetchDataParams) => {
     if (apiResponse.status !== 200) {
       return {
         error: { code: apiResponse.status, message: payload.message },
-      } as FetcherResponse;
+      } as FetcherResponse<T>;
     }
 
-    return { data: payload } as FetcherResponse;
+    return { data: payload } as FetcherResponse<T>;
   } catch (e: any) {
     let message =
       "Unknown error occurs during fething the data. Please try again!";
@@ -57,7 +59,7 @@ export const fetchData = async (url: string, params?: FetchDataParams) => {
       message = e.message;
     }
 
-    return { error: { code: 500, message: message } } as FetcherResponse;
+    return { error: { code: 500, message: message } } as FetcherResponse<T>;
   } finally {
     clearTimeout(timeout);
   }

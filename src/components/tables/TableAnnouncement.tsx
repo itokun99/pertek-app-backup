@@ -10,12 +10,18 @@ import { fDateTime } from '../../utils/formatTime';
 import { ErrorComponent } from '../error/ErrorComponent';
 import Label from '../Label';
 import { TableLoader } from '../loader/TableLoader';
-import { TabBar } from '../TabBar';
+import { TabBar, TabItem } from '../TabBar';
 
 const AnnouncementTable = () => {
   const theme = useTheme();
   const { isReady, query, asPath, push } = useRouter();
-  const status = useMemo(() => ['Semua', 'Draft', 'Published'], []);
+  const status = useMemo(() => {
+    return [
+      { text: 'All', color: 'default' },
+      { text: 'Draft', color: 'warning' },
+      { text: 'Published', color: 'success' },
+    ] as TabItem[];
+  }, []);
 
   const { setAlert } = useContext(AlertContext);
   const { isOnline, isOffline } = useContext(NetworkContext);
@@ -44,7 +50,7 @@ const AnnouncementTable = () => {
       push('/pengumuman', {
         query: {
           tab: tabIndex,
-          status: status[tabIndex].toLowerCase(),
+          status: status[tabIndex].text.toLowerCase(),
         },
       });
       return;

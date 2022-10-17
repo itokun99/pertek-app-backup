@@ -1,10 +1,4 @@
-import {
-  Add,
-  CloudDownload,
-  CloudUpload,
-  Refresh,
-  Search,
-} from "@mui/icons-material";
+import { Add, CloudDownload, CloudUpload, Refresh, Search } from "@mui/icons-material";
 import {
   Box,
   Card,
@@ -18,41 +12,28 @@ import {
 import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import {
-  Suspense,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from "react";
 
 import { ReactElement } from "react";
-import { AnimatedButton } from "../../src/components/AnimatedButtton";
+import AnimatedButton from "../../src/components/buttons/AnimatedButton";
 import { ErrorComponent } from "../../src/components/error/ErrorComponent";
 import { TableLoader } from "../../src/components/loader/TableLoader";
-import { TabBar } from "../../src/components/TabBar";
+import { TabBar, TabItem } from "../../src/components/TabBar";
 import { UploaderTable } from "../../src/components/tables/TableUploader";
 import { doFetch } from "../../src/lib/dataFetcher";
 import { AlertContext } from "../../src/provider/AlertProvider";
 import { NetworkContext } from "../../src/provider/NetworkProvider";
 import ProtectedPage from "../../src/template/ProtectedPage";
 
-const TenantTable = dynamic(
-  () => import("../../src/components/tables/TableTenant"),
-  {
-    ssr: false,
-    suspense: true,
-  }
-);
+const TenantTable = dynamic(() => import("../../src/components/tables/TableTenant"), {
+  ssr: false,
+  suspense: true,
+});
 
-const AddTenantDialog = dynamic(
-  () => import("../../src/components/dialog/AddTenant"),
-  {
-    ssr: false,
-    suspense: true,
-  }
-);
+const AddTenantDialog = dynamic(() => import("../../src/components/dialog/AddTenant"), {
+  ssr: false,
+  suspense: true,
+});
 
 const TenantIndex = () => {
   const theme = useTheme();
@@ -61,7 +42,15 @@ const TenantIndex = () => {
   const [isError, setIsError] = useState(false);
   const { setAlert } = useContext(AlertContext);
 
-  const status = useMemo(() => ["Semua", "Pending", "Verified", "Blocked"], []);
+  const status = useMemo(() => {
+    const status: TabItem[] = [
+      { text: "Semua", color: "default" },
+      { text: "Pending", color: "info" },
+      { text: "Verified", color: "success" },
+      { text: "Blocked", color: "error" },
+    ];
+    return status;
+  }, []);
 
   const [tabIndex, setTabIndex] = useState<number>(0);
   const [data, setData] = useState<any>(null);
@@ -88,7 +77,7 @@ const TenantIndex = () => {
     if (v > 0) {
       return push("/tenant", {
         query: {
-          status: status[v].toLowerCase(),
+          status: status[v].text.toLowerCase(),
           tab: v,
         },
       });
@@ -138,9 +127,7 @@ const TenantIndex = () => {
   return (
     <Stack mt={12}>
       <Suspense>
-        {openDialog && (
-          <AddTenantDialog open={openDialog} setOpen={setOpenDialog} />
-        )}
+        {openDialog && <AddTenantDialog open={openDialog} setOpen={setOpenDialog} />}
       </Suspense>
       <Box mb={5}>
         <Grid container>
@@ -156,11 +143,7 @@ const TenantIndex = () => {
             <Stack direction="row" gap={2}>
               {!csvFile && (
                 <>
-                  <AnimatedButton
-                    onClick={handleAddTenant}
-                    color="info"
-                    startIcon={<Add />}
-                  >
+                  <AnimatedButton onClick={handleAddTenant} color="info" startIcon={<Add />}>
                     Tenant Baru
                   </AnimatedButton>
                   <AnimatedButton
@@ -176,13 +159,7 @@ const TenantIndex = () => {
                     startIcon={<CloudUpload />}
                   >
                     Upload CSV
-                    <input
-                      type="file"
-                      hidden
-                      multiple
-                      accept=".csv"
-                      onChange={handleCSVUpload}
-                    />
+                    <input type="file" hidden multiple accept=".csv" onChange={handleCSVUpload} />
                   </AnimatedButton>
                 </>
               )}
@@ -214,12 +191,7 @@ const TenantIndex = () => {
           {csvFile && <UploaderTable csvFile={csvFile} />}
           {!csvFile && (
             <>
-              <TabBar
-                theme={theme}
-                value={tabIndex}
-                onChange={handleTabBarChange}
-                tabs={status}
-              />
+              <TabBar theme={theme} value={tabIndex} onChange={handleTabBarChange} tabs={status} />
               <Box mx={2}>
                 {isOnline && data && !isError && (
                   <Box
@@ -268,8 +240,6 @@ const TenantIndex = () => {
   );
 };
 
-TenantIndex.getLayout = (page: ReactElement) => (
-  <ProtectedPage>{page}</ProtectedPage>
-);
+TenantIndex.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
 
 export default TenantIndex;

@@ -3,7 +3,7 @@ import { Card, Grid, Stack, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { ReactElement, Suspense, SyntheticEvent, useEffect, useMemo, useState } from 'react';
+import { ReactElement, Suspense, SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import AnimatedButton from '../../src/components/buttons/AnimatedButton';
 import { TabBar, TabItem } from '../../src/components/TabBar';
 import ProtectedPage from '../../src/template/ProtectedPage';
@@ -27,8 +27,6 @@ const Fasilitas = () => {
   const theme = useTheme();
   const router = useRouter();
 
-  const tabObjects: TabItem[] = [];
-
   const [tabIndex, setTabIndex] = useState(0);
   const [stats, setStats] = useState<Array<{ status: string; count: number }> | undefined>();
 
@@ -44,35 +42,33 @@ const Fasilitas = () => {
   const tabs = useMemo<TabItem[]>(() => {
     if (!stats) {
       const keys = Object.keys(statusColorMap);
-      keys.forEach((key) =>
-        tabObjects.push({
-          color: statusColorMap[key] as any,
-          text: key,
-        })
-      );
+      const initialTabs = keys.map((status) => ({
+        color: statusColorMap[status] as any,
+        text: status,
+      }));
 
-      return tabObjects;
+      return initialTabs;
     }
 
     let totalCount = 0;
 
-    stats.forEach((stat) => {
+    const tabs = stats.map((stat) => {
       totalCount += stat.count;
 
-      tabObjects.push({
+      return {
         color: statusColorMap[stat.status.toString()] as any,
         label: stat.count as any,
         text: stat.status,
-      });
+      };
     });
 
-    tabObjects.unshift({
+    tabs.unshift({
       color: 'default',
       text: 'All',
       label: totalCount as any,
     });
 
-    return tabObjects;
+    return tabs;
   }, [stats]);
 
   useEffect(() => {
@@ -89,21 +85,29 @@ const Fasilitas = () => {
     setTabIndex(index);
   };
 
+  const pushState = useCallback(() => {
+    if (tabIndex === 0) {
+      delete router.query.tab;
+      delete router.query.status;
+    } else {
+      router.query.status = tabs[tabIndex].text;
+      router.query.tab = tabIndex.toString();
+    }
+    router.push({
+      pathname: router.pathname,
+      query: router.query,
+    });
+  }, [router, tabIndex, tabs]);
+
   useEffect(() => {
     if (router.isReady) {
-      if (tabIndex === 0) {
-        delete router.query.tab;
-        delete router.query.status;
-      } else {
-        router.query.status = tabs[tabIndex].text;
-        router.query.tab = tabIndex.toString();
-      }
-      router.push({
-        pathname: router.pathname,
-        query: router.query,
-      });
+      const testing = () => {
+        pushState();
+      };
+
+      testing();
     }
-  }, [tabIndex]);
+  }, [tabIndex, router.isReady, pushState]);
 
   const handleNewBooking = () => {};
 

@@ -6,8 +6,6 @@ export default function middleware(req: NextRequest) {
     // get client IP address from middleware
     const ip = req.headers.get('x-forwarded-for') || req.ip;
 
-    console.log(req.ip);
-
     if (req.cookies.get('session') === undefined) {
       return NextResponse.redirect(new URL('/login', req.url));
     }

@@ -125,7 +125,7 @@ const FacilityBookingList = () => {
         query: router.query,
       });
     }
-  }, [selectedCategory]);
+  }, [router, selectedCategory]);
 
   useEffect(() => {
     if (router.isReady) {
@@ -140,7 +140,7 @@ const FacilityBookingList = () => {
         query: router.query,
       });
     }
-  }, [selectedVenue]);
+  }, [router, selectedVenue]);
 
   const handleCategoryChange = useCallback((e: SelectChangeEvent<unknown>, node: ReactNode) => {
     setSelectedCategory(e.target.value as number);

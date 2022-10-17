@@ -1,9 +1,7 @@
-import { fetchData } from "../lib/dataFetcher";
+import { fetchData } from '../lib/dataFetcher';
 import { ApiProxyEndpoint } from '../config/apiProxyEndpoint';
 import { IUnit, ApiResponseType } from '../types';
 import { createUrlParamFromObj } from '../utils/helper';
-
-
 
 export interface IGetUnitPayload {
   page?: number;
@@ -22,31 +20,27 @@ export interface ICreateUnitPayload {
   template_invoice_id?: number[];
 }
 
-
-
-
 export async function getUnit(payload: IGetUnitPayload): Promise<ApiResponseType<IUnit[]> | undefined> {
+  const params = createUrlParamFromObj(payload);
 
-  const params = createUrlParamFromObj(payload)
-
-  const { data, error } =  await fetchData<ApiResponseType<Array<IUnit>>>(`${ApiProxyEndpoint.Unit}${params}`, {
-    method: "GET",
+  const { data, error } = await fetchData<ApiResponseType<Array<IUnit>>>(`${ApiProxyEndpoint.Unit}${params}`, {
+    method: 'GET',
   });
 
-  if(error) {
-    throw error
+  if (error) {
+    throw error;
   }
 
-  return data
+  return data;
 }
 
 export async function createUnit(payload: ICreateUnitPayload) {
   const { data, error } = await fetchData<{ message: string }>(ApiProxyEndpoint.Unit, {
     body: JSON.stringify(payload),
-    method: "POST",
+    method: 'POST',
   });
 
-  console.log("error ==>", error, data)
+  // console.log("error ==>", error, data)
 
   if (error) {
     throw error;
@@ -57,25 +51,25 @@ export async function createUnit(payload: ICreateUnitPayload) {
 
 export async function deleteUnit(id: number) {
   const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Unit}?id=${id}`, {
-    method: "DELETE"
+    method: 'DELETE',
   });
 
   if (error) {
     throw error;
   }
 
-  return data
+  return data;
 }
 
 export async function updateUnit(id: number, payload: ICreateUnitPayload) {
   const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Unit}?id=${id}`, {
     body: JSON.stringify(payload),
-    method: "PUT"
+    method: 'PUT',
   });
 
   if (error) {
     throw error;
   }
 
-  return data
+  return data;
 }

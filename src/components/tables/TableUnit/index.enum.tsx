@@ -4,6 +4,7 @@ import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/Act
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { IUnit } from '../../../types';
+import { ColumnType } from '../BaseTable/BaseTable.interface';
 
 
 
@@ -30,30 +31,27 @@ const optionActionCell = (record: IUnit, onClickEdit: (id: number, record: IUnit
 };
 
 
-export function generateColumns(onClickEdit: (id: number, record: IUnit) => void, onClickDelete: (id: number) => void): GridColDef[] {
+export function generateColumns(onClickEdit: (id: number, record: IUnit) => void, onClickDelete: (id: number) => void): ColumnType[] {
   return [
     {
-      headerName: "Nama Unit",
-      field: "name",
-      flex: 1
+      title: "Nama Unit",
+      selector: "name",
+
+
     },
     {
-      headerName: "Total Area",
-      field: "total_area",
-      flex: 1
+      title: "Total Area",
+      selector: "total_area",
     },
     {
-      headerName: "Kapasitas Listrik",
-      field: "electrical_capacity",
-      flex: 1
+      title: "Kapasitas Listrik",
+      selector: "electrical_capacity",
     },
     {
-      headerName: "Dokumen Serah Terima",
-      field: "bast_docs",
-      flex: 1,
-      sortable: false,
-      renderCell: (params: any) => {
-        const { bast_docs }: IUnit = params.row || {};
+      title: "Dokumen Serah Terima",
+      selector: "bast_docs",
+      render: (_text, record: IUnit) => {
+        const { bast_docs } = record;
         if (!bast_docs || bast_docs.length === 0) {
           return '-'
         }
@@ -68,22 +66,21 @@ export function generateColumns(onClickEdit: (id: number, record: IUnit) => void
       },
     },
     {
-      headerName: "Tanggal Serah Terima",
-      field: "bast_date",
-      flex: 1,
-      renderCell: (params: any) => {
-        const { bast_date }: IUnit = params.row || {};
+      title: "Tanggal Serah Terima",
+      selector: "bast_date",
+
+      render: (_text, record: IUnit) => {
+        const { bast_date } = record;
         return bast_date ? bast_date : '-'
       },
     },
     {
-      headerName: "",
-      field: "action",
-      sortable: false,
+      title: "",
+      selector: "",
       align: "right",
-      renderCell: ({ row }) => {
-        return <ActionCellButton options={optionActionCell(row, onClickEdit, onClickDelete)} />;
+      render: (_text, record: IUnit) => {
+        return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete)} />;
       },
     },
-  ];
+  ] as ColumnType[];
 }

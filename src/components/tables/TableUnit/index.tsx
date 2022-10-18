@@ -1,9 +1,10 @@
-import { DataGrid } from "@mui/x-data-grid";
+// import { DataGrid } from "@mui/x-data-grid";
 import { PropsWithChildren, memo, useState, useEffect } from "react";
 import { generateColumns } from "./index.enum";
 import LinearProgress from '@mui/material/LinearProgress';
 import { TableLoader } from '../../loader/TableLoader';
 import { IUnit } from '../../../types';
+import BaseTable from '../BaseTable';
 
 export interface ITableUnitProps {
   data: Array<IUnit>,
@@ -26,19 +27,10 @@ const TableCluster = ({
   }
 
   return (
-    <DataGrid
-      components={{ LoadingOverlay: LinearProgress }}
-      headerHeight={40}
-      density={"comfortable"}
-      disableColumnSelector
-      checkboxSelection
-      hideFooterSelectedRowCount
-      disableSelectionOnClick
-      showCellRightBorder={false}
-      autoHeight
-      loading={loading}
+    <BaseTable
       columns={generateColumns(onClickEdit, onClickDelete)}
-      rows={data}
+      field={data}
+      loading={loading}
     />
   );
 };

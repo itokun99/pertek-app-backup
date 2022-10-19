@@ -1,17 +1,17 @@
 // import { DataGrid } from "@mui/x-data-grid";
 import { PropsWithChildren, memo, useState, useEffect } from "react";
 import { generateColumns } from "./index.enum";
-import LinearProgress from '@mui/material/LinearProgress';
-import { TableLoader } from '../../loader/TableLoader';
-import { IUnit } from '../../../types';
-import BaseTable from '../BaseTable';
+import LinearProgress from "@mui/material/LinearProgress";
+import { TableLoader } from "../../loader/TableLoader";
+import { IUnit } from "../../../types";
+import BaseTable from "../BaseTable";
 
 export interface ITableUnitProps {
-  data: Array<IUnit>,
-  loading: boolean,
-  ready: boolean,
-  onClickEdit: (id: number, record: IUnit) => void,
-  onClickDelete: (id: number) => void
+  data: Array<IUnit>;
+  loading: boolean;
+  ready: boolean;
+  onClickEdit: (id: number, record: IUnit) => void;
+  onClickDelete: (id: number) => void;
 }
 
 const TableCluster = ({
@@ -19,19 +19,21 @@ const TableCluster = ({
   ready,
   loading = false,
   onClickEdit,
-  onClickDelete
+  onClickDelete,
 }: PropsWithChildren & ITableUnitProps) => {
-
   if (!ready) {
-    return <TableLoader />
+    return <TableLoader />;
   }
 
   return (
-    <BaseTable
-      columns={generateColumns(onClickEdit, onClickDelete)}
-      field={data}
-      loading={loading}
-    />
+    <>
+      <BaseTable
+        columns={generateColumns(onClickEdit, onClickDelete)}
+        field={data}
+        loading={loading}
+        withPagination
+      />
+    </>
   );
 };
 

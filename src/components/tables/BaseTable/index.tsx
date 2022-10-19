@@ -178,7 +178,7 @@ const BaseTable: React.FC<IBaseTableProperties> = (props) => {
             ))}
           </TableBody>
         </Table>
-        {withPagination && <ServerPagination total={500} />}
+        {withPagination && <ServerPagination total={field.length} />}
       </TableContainer>
     </>
   );

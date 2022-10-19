@@ -4,8 +4,8 @@ import Box from "@mui/material/Box";
 import useTheme from "@mui/material/styles/useTheme";
 
 import ErrorStack from "../../error/ErrorStack";
-import SearchField from "../../input/SearchField";
 import { TabBar, TabItem } from "../../TabBar";
+import SearchField from "@components/input/SearchField";
 
 export interface CardTableProps {
   error?: boolean;

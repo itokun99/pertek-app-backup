@@ -14,7 +14,6 @@ async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  //   await req.session.save();
   return res.status(response.status).json({ message: 'Success', data: payload });
 }
 
@@ -29,7 +28,6 @@ async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  //   await req.session.save();
   return res.status(response.status).json({ message: 'Success', data: payload });
 }
 

@@ -28,7 +28,6 @@ async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  await req.session.save();
   return res.status(response.status).json({ message: 'Success', data: payload });
 }
 
@@ -43,7 +42,6 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  await req.session.save();
   return res.status(response.status).json({ message: 'Success', data: payload });
 }
 
@@ -58,7 +56,6 @@ async function handlerDelete(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: response.message });
   }
 
-  await req.session.save();
   return res.status(200).json({ message: 'Success', data: payload });
 }
 

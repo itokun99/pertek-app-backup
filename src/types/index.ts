@@ -41,7 +41,6 @@ export interface ICluster {
   property: IClusterProperty;
 }
 
-
 export interface IResponseDataCreation {
   id?: number;
   property_id?: number;
@@ -68,7 +67,6 @@ export interface IUnit {
   public_id: string;
 }
 
-
 export interface IUnitTypeProperty {
   id: number;
   name: string;
@@ -78,7 +76,6 @@ export interface IUnitTypeProperty {
   total_unit: number;
   total_cluster: number;
 }
-
 
 export interface IUnitType {
   id: number,
@@ -100,4 +97,66 @@ export interface IProperty {
   type: string;
   total_unit: number;
   total_cluster: number;
+}
+
+export interface IAnnouncement {
+  id: number;
+  subject: string;
+  content: string;
+  attachments: Array<string>;
+  status: string;
+  published_at: Date;
+  target_segment: string;
+  target: Array<number>;
+  property: IProperty;
+  created_at?: Date;
+  updated_at?: Date;
+  deleted_at?: Date;
+  created_by?: number;
+  updated_by?: number;
+  deleted_by?: number;
+}
+
+export interface IHelpdesk {
+  id: number;
+  subject: string;
+  content: string;
+  attachments: Array<string>;
+  status: string;
+  assignee: any;
+  property: IProperty;
+  created_at?: Date;
+  updated_at?: Date;
+  deleted_at?: Date;
+  created_by?: number;
+  updated_by?: number;
+  deleted_by?: number;
+}
+
+// ---- facility booking
+
+export interface IFacility {
+  id: number;
+  name: string;
+  description: string;
+}
+export interface IBooking {
+  id: number;
+  code: string;
+  facility_id: number;
+  facility_category_id: number;
+  tenant_profile_id: number;
+  property_id: number;
+  property_unit_id: number;
+  duration: number;
+  facility_assistances: any[];
+  description: string;
+  slot_date: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string;
+  created_by: number;
+  updated_by: number;
+  deleted_by: number;
 }

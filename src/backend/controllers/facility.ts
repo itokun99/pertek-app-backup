@@ -1,28 +1,15 @@
+import { createController } from './base';
+
+import { createFacility, deleteFacility, getFacility, updateFacility } from '../repos/facility';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { isInvalidSession, unauthorized } from '../../lib/apiAuthHelpers';
-import { createController } from './base';
-import { getCluster, createCluster, updateCluster, deleteCluster } from '../repos/properti';
 
-// get handler
 async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
   if (isInvalidSession(req)) {
     return unauthorized(res);
   }
-  const [response, payload] = await getCluster(req);
 
-  if (!response.ok) {
-    return res.status(response.status).json({ message: payload.message });
-  }
-
-  return res.status(response.status).json(payload);
-}
-
-async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
-  if (isInvalidSession(req)) {
-    return unauthorized(res);
-  }
-
-  const [response, payload] = await createCluster(req);
+  const [response, payload] = await getFacility(req);
 
   if (!response.ok) {
     return res.status(response.status).json({ message: payload.message });
@@ -31,12 +18,26 @@ async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
   return res.status(response.status).json({ message: 'Success', data: payload });
 }
 
-async function handlePut(req: NextApiRequest, res: NextApiResponse) {
+async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
   if (isInvalidSession(req)) {
     return unauthorized(res);
   }
 
-  const [response, payload] = await updateCluster(req);
+  const [response, payload] = await createFacility(req);
+
+  if (!response.ok) {
+    return res.status(response.status).json({ message: payload.message });
+  }
+
+  return res.status(response.status).json({ message: 'Success', data: payload });
+}
+
+async function handlerPut(req: NextApiRequest, res: NextApiResponse) {
+  if (isInvalidSession(req)) {
+    return unauthorized(res);
+  }
+
+  const [response, payload] = await updateFacility(req);
 
   if (!response.ok) {
     return res.status(response.status).json({ message: payload.message });
@@ -50,20 +51,20 @@ async function handlerDelete(req: NextApiRequest, res: NextApiResponse) {
     return unauthorized(res);
   }
 
-  const [response, payload] = await deleteCluster(req);
+  const [response, payload] = await deleteFacility(req);
 
   if (!response.ok) {
-    return res.status(response.status).json({ message: response.message });
+    return res.status(response.status).json({ message: payload.message });
   }
 
-  return res.status(200).json({ message: 'Success', data: payload });
+  return res.status(response.status).json({ message: 'Success', data: payload });
 }
 
-const clusterController = createController({
+const facilityController = createController({
   get: handlerGet,
   post: handlerPost,
-  put: handlePut,
   delete: handlerDelete,
+  put: handlerPut,
 });
 
-export default clusterController;
+export default facilityController;

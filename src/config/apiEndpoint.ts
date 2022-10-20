@@ -4,6 +4,7 @@ export const SendGridAPIKey = 'SG.ZapMc-ZQRpmixif5X1Y-Ug.yYNa7ZIG7DkMId6-6lXvHsf
 
 const EndpointGroup = {
   Announcement: '18S1unQy',
+  Helpdesk: '',
   Auth: 'xG61OBxf',
   Profile: '4ZHQKRkr',
   Tenant: 'AyPV9ZMZ',
@@ -14,6 +15,7 @@ const EndpointGroup = {
   General: 'aQbHTGQV',
   Complain: 'Ro92vKeQ',
   Facility: 'JBGyX9le',
+  Booking: '4oTf-klT',
   Menu: '2ENXJrQ4',
 };
 
@@ -21,6 +23,8 @@ export const Endpoint = {
   Announcement: `${API_BASE_URL}:${EndpointGroup.Announcement}/announcement`,
   Login: `${API_BASE_URL}:${EndpointGroup.Auth}/auth/login`,
   Me: `${API_BASE_URL}:${EndpointGroup.Auth}/auth/me`,
+
+  Helpdesk: `${API_BASE_URL}:${EndpointGroup.Helpdesk}/helpdesk`,
 
   Complain: `${API_BASE_URL}:${EndpointGroup.Complain}/complain`,
   ComplainCategory: `${API_BASE_URL}:${EndpointGroup.Complain}/complain_category`,
@@ -45,8 +49,9 @@ export const Endpoint = {
   Facility: `${API_BASE_URL}:${EndpointGroup.Facility}/facility`,
   FacilityCategory: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_category`,
   FacilityVenue: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_venue`,
-  FacilityBooking: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_booking`,
-  FacilityBookingStats: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_booking_stats`,
+
+  Booking: `${API_BASE_URL}:${EndpointGroup.Booking}/facility_booking`,
+  BookingStats: `${API_BASE_URL}:${EndpointGroup.Booking}/facility_booking_stats`,
 
   Menu: `${API_BASE_URL}:${EndpointGroup.Menu}/menu`,
   MenuMe: `${API_BASE_URL}:${EndpointGroup.Menu}/menu_me`,
@@ -61,6 +66,6 @@ export const Endpoint = {
 
   // Klaster
   Unit: `${API_BASE_URL}:${EndpointGroup.Property}/property_unit`,
-  
-  UnitType: `${API_BASE_URL}:${EndpointGroup.Property}/property_unit_type`
+
+  UnitType: `${API_BASE_URL}:${EndpointGroup.Property}/property_unit_type`,
 };

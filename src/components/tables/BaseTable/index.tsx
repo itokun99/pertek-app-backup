@@ -38,6 +38,7 @@ const BaseTable: React.FC<IBaseTableProperties> = (props) => {
     rowSelection,
     loading = false,
     withPagination = false,
+    total = 0
   } = props;
 
   const [tempData, setTempData] = React.useState([]);
@@ -178,7 +179,7 @@ const BaseTable: React.FC<IBaseTableProperties> = (props) => {
             ))}
           </TableBody>
         </Table>
-        {withPagination && <ServerPagination total={field.length} />}
+        {withPagination && <ServerPagination total={total} />}
       </TableContainer>
     </>
   );

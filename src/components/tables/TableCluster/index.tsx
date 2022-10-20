@@ -4,11 +4,13 @@ import { generateColumns } from "./TableCluster.enum";
 import LinearProgress from '@mui/material/LinearProgress';
 import { TableLoader } from '../../loader/TableLoader';
 import { ICluster } from '../../../types';
+import BaseTable from '../BaseTable';
 
 export interface ITableClusterProps {
   data: Array<ICluster>,
   loading: boolean,
   ready: boolean,
+  total: number;
   onClickEdit: (id: number, record: ICluster) => void,
   onClickDelete: (id: number) => void
 }
@@ -16,6 +18,7 @@ export interface ITableClusterProps {
 const TableCluster = ({
   data,
   ready,
+  total,
   loading = false,
   onClickEdit,
   onClickDelete
@@ -26,19 +29,12 @@ const TableCluster = ({
   }
 
   return (
-    <DataGrid
-      components={{ LoadingOverlay: LinearProgress }}
-      headerHeight={40}
-      density={"comfortable"}
-      disableColumnSelector
-      checkboxSelection
-      hideFooterSelectedRowCount
-      disableSelectionOnClick
-      showCellRightBorder={false}
-      autoHeight
-      loading={loading}
+    <BaseTable
       columns={generateColumns(onClickEdit, onClickDelete)}
-      rows={data}
+      field={data}
+      loading={loading}
+      withPagination
+      total={total}
     />
   );
 };

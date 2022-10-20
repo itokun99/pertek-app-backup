@@ -56,10 +56,10 @@ const FacilityBookingList = () => {
   const [booking, setBooking] = useState<any>(null);
   const [isError, setIsError] = useState(false);
   const [anchor, setAnchor] = useState<any>(null);
-  const [categories, setCategories] = useState<[] | null>(null);
-  const [venues, setVenues] = useState<[] | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<number | undefined>();
-  const [selectedVenue, setSelectedVenue] = useState<number | undefined>();
+  const [categories, setCategories] = useState<[]>([]);
+  const [venues, setVenues] = useState<[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<number>(0);
+  const [selectedVenue, setSelectedVenue] = useState<number>(0);
 
   const { setAlert } = useContext(AlertContext);
 
@@ -88,7 +88,7 @@ const FacilityBookingList = () => {
     }
   }, []);
 
-  useEffect(() => {
+  const testing = useCallback(() => {
     if (router.isReady) {
       const categoryId = parseInt(router.query.category_id as string);
       const venueId = parseInt(router.query.facility_id as string);
@@ -108,12 +108,16 @@ const FacilityBookingList = () => {
     router.query.facility_id,
   ]);
 
+  useEffect(() => {
+    testing();
+  }, [testing]);
+
   const handleClick = (e: any) => {
     e.preventDefault();
     setAnchor(e.currentTarget);
   };
 
-  useEffect(() => {
+  const handler = () => {
     if (router.isReady) {
       if (selectedCategory === 0) {
         delete router.query.category_id;
@@ -125,7 +129,11 @@ const FacilityBookingList = () => {
         query: router.query,
       });
     }
-  }, [router, selectedCategory]);
+  };
+
+  useEffect(() => {
+    handler();
+  }, [selectedCategory, handler]);
 
   useEffect(() => {
     if (router.isReady) {
@@ -140,7 +148,7 @@ const FacilityBookingList = () => {
         query: router.query,
       });
     }
-  }, [router, selectedVenue]);
+  }, [selectedVenue]);
 
   const handleCategoryChange = useCallback((e: SelectChangeEvent<unknown>, node: ReactNode) => {
     setSelectedCategory(e.target.value as number);

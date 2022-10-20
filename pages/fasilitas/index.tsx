@@ -1,34 +1,49 @@
-import { Add } from '@mui/icons-material';
-import { Card, Grid, Stack, Typography, useTheme } from '@mui/material';
-import { Box } from '@mui/system';
-import dynamic from 'next/dynamic';
-import { useRouter } from 'next/router';
-import { ReactElement, Suspense, SyntheticEvent, useCallback, useEffect, useMemo, useState } from 'react';
-import AnimatedButton from '../../src/components/buttons/AnimatedButton';
-import { TabBar, TabItem } from '../../src/components/TabBar';
-import ProtectedPage from '../../src/template/ProtectedPage';
+import { Add } from "@mui/icons-material";
+import { Card, Grid, Stack, Typography, useTheme } from "@mui/material";
+import { Box } from "@mui/system";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import {
+  ReactElement,
+  Suspense,
+  SyntheticEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import AnimatedButton from "../../src/components/buttons/AnimatedButton";
+import { TabBar, TabItem } from "../../src/components/TabBar";
+import ProtectedPage from "../../src/template/ProtectedPage";
 
-const TableFacilityReservation = dynamic(() => import('../../src/components/fasilitas/FacilityBookingList'), {
-  ssr: false,
-  suspense: true,
-});
+const TableFacilityReservation = dynamic(
+  () => import("../../src/components/fasilitas/FacilityBookingList"),
+  {
+    ssr: false,
+    suspense: true,
+  }
+);
 
 const statusColorMap = {
-  All: 'default',
-  Requested: 'info',
-  Booked: 'warning',
-  Ongoing: 'success',
-  'No Show': 'error',
-  Canceled: 'error',
-  Done: 'default',
+  All: "default",
+  Requested: "info",
+  Booked: "warning",
+  Ongoing: "success",
+  "No Show": "error",
+  Canceled: "error",
+  Done: "default",
 } as { [key: string]: string };
 
 const Fasilitas = () => {
   const theme = useTheme();
   const router = useRouter();
 
+  const [view, setView] = useState("booking");
+
   const [tabIndex, setTabIndex] = useState(0);
-  const [stats, setStats] = useState<Array<{ status: string; count: number }> | undefined>();
+  const [stats, setStats] = useState<
+    Array<{ status: string; count: number }> | undefined
+  >();
 
   useEffect(() => {
     if (router.isReady) {
@@ -63,8 +78,8 @@ const Fasilitas = () => {
     });
 
     tabs.unshift({
-      color: 'default',
-      text: 'All',
+      color: "default",
+      text: "All",
       label: totalCount as any,
     });
 
@@ -73,7 +88,7 @@ const Fasilitas = () => {
 
   useEffect(() => {
     (async () => {
-      const statsResponse = await fetch('/api/fasilitas/stats');
+      const statsResponse = await fetch("/api/fasilitas/stats");
       if (statsResponse.ok) {
         const payload = await statsResponse.json();
         setStats(payload);
@@ -81,33 +96,42 @@ const Fasilitas = () => {
     })();
   }, []);
 
+  // create router query change in useEffect
+  useEffect(() => {
+    if (router.isReady) {
+      if (router.query.view !== view) {
+        setView(router.query.view as string);
+      }
+    }
+  }, [router]);
+
   const handleTabClick = (_: SyntheticEvent<Element, Event>, index: number) => {
     setTabIndex(index);
   };
 
-  const pushState = useCallback(() => {
-    if (tabIndex === 0) {
-      delete router.query.tab;
-      delete router.query.status;
-    } else {
-      router.query.status = tabs[tabIndex].text;
-      router.query.tab = tabIndex.toString();
-    }
-    router.push({
-      pathname: router.pathname,
-      query: router.query,
-    });
-  }, [router, tabIndex, tabs]);
+  // const pushState = useCallback(() => {
+  //   if (tabIndex === 0) {
+  //     delete router.query.tab;
+  //     delete router.query.status;
+  //   } else {
+  //     router.query.status = tabs[tabIndex].text;
+  //     router.query.tab = tabIndex.toString();
+  //   }
+  //   router.push({
+  //     pathname: router.pathname,
+  //     query: router.query,
+  //   });
+  // }, [router, tabIndex, tabs]);
 
-  useEffect(() => {
-    if (router.isReady) {
-      const testing = () => {
-        pushState();
-      };
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     const testing = () => {
+  //       pushState();
+  //     };
 
-      testing();
-    }
-  }, [tabIndex, router.isReady, pushState]);
+  //     testing();
+  //   }
+  // }, [tabIndex, router.isReady, pushState]);
 
   const handleNewBooking = () => {};
 
@@ -117,15 +141,19 @@ const Fasilitas = () => {
         <Grid container>
           <Grid item flexGrow={1}>
             <Stack>
-              <Typography variant='h6'>Booking Management</Typography>
-              <Typography variant='body2' color={theme.palette.text.secondary}>
+              <Typography variant="h6">Booking Management</Typography>
+              <Typography variant="body2" color={theme.palette.text.secondary}>
                 Kelola reservasi fasilitas properti Anda
               </Typography>
             </Stack>
           </Grid>
           <Grid item>
-            <Stack direction='row' gap={2}>
-              <AnimatedButton onClick={handleNewBooking} color='info' startIcon={<Add />}>
+            <Stack direction="row" gap={2}>
+              <AnimatedButton
+                onClick={handleNewBooking}
+                color="info"
+                startIcon={<Add />}
+              >
                 Booking Baru
               </AnimatedButton>
             </Stack>
@@ -133,8 +161,13 @@ const Fasilitas = () => {
         </Grid>
       </Box>
       <Card>
-        <TabBar theme={theme} value={tabIndex} onChange={handleTabClick} tabs={tabs} />
-        <Stack direction='row'></Stack>
+        <TabBar
+          theme={theme}
+          value={tabIndex}
+          onChange={handleTabClick}
+          tabs={tabs}
+        />
+        <Stack direction="row"></Stack>
         <Suspense>
           <Box mx={2}>
             <TableFacilityReservation />
@@ -145,6 +178,8 @@ const Fasilitas = () => {
   );
 };
 
-Fasilitas.getLayout = (page: ReactElement) => <ProtectedPage>{page}</ProtectedPage>;
+Fasilitas.getLayout = (page: ReactElement) => (
+  <ProtectedPage>{page}</ProtectedPage>
+);
 
 export default Fasilitas;

@@ -3,6 +3,7 @@ import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/Act
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { ICluster } from '../../../types';
+import { ColumnType } from '../BaseTable/BaseTable.interface';
 
 const optionActionCell = (record: ICluster, onClickEdit: (id: number, record: ICluster) => void, onClickDelete: (id: number) => void) => {
   // you can abstract your record interface here
@@ -25,30 +26,26 @@ const optionActionCell = (record: ICluster, onClickEdit: (id: number, record: IC
 };
 
 
-export function generateColumns(onClickEdit: (id: number, record: ICluster) => void, onClickDelete: (id: number) => void): GridColDef[] {
+export function generateColumns(onClickEdit: (id: number, record: ICluster) => void, onClickDelete: (id: number) => void): ColumnType[] {
   return [
     {
-      headerName: "Nama Klaster",
-      field: "name",
-      flex: 1,
+      title: "Nama Klaster",
+      selector: "name"
     },
     {
-      headerName: "Properti",
-      field: "property_id",
-      flex: 1,
-      renderCell: (params: any) => {
-        const { property } = params.row || {};
-        return property ? property.name : "-";
+      title: "Properti",
+      selector: "property_id",
+      render: (_text, record: ICluster) => {
+        return record ? record.name : "-";
       },
     },
     {
-      headerName: "",
-      field: "action",
-      sortable: false,
+      title: "",
+      selector: "action",
       align: "right",
-      renderCell: ({ row }) => {
-        return <ActionCellButton options={optionActionCell(row, onClickEdit, onClickDelete)} />;
+      render: (_text, record: ICluster) => {
+        return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete)} />;
       },
     },
-  ];
+  ] as ColumnType[];
 }

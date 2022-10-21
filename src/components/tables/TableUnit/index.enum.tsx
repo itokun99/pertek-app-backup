@@ -1,15 +1,16 @@
-import Link from '@mui/material/Link';
+import Link from "@mui/material/Link";
 import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
 import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/ActionCellButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { IUnit } from '../../../types';
+import { IUnit } from "../../../types";
+import { ColumnType } from "../BaseTable/BaseTable.interface";
 
-
-
-
-
-const optionActionCell = (record: IUnit, onClickEdit: (id: number, record: IUnit) => void, onClickDelete: (id: number) => void) => {
+const optionActionCell = (
+  record: IUnit,
+  onClickEdit: (id: number, record: IUnit) => void,
+  onClickDelete: (id: number) => void
+) => {
   // you can abstract your record interface here
   const { id } = record || {};
   const options: IActionCellButtonProperties["options"] = [
@@ -29,61 +30,57 @@ const optionActionCell = (record: IUnit, onClickEdit: (id: number, record: IUnit
   return options;
 };
 
-
-export function generateColumns(onClickEdit: (id: number, record: IUnit) => void, onClickDelete: (id: number) => void): GridColDef[] {
+export function generateColumns(
+  onClickEdit: (id: number, record: IUnit) => void,
+  onClickDelete: (id: number) => void
+): ColumnType[] {
   return [
     {
-      headerName: "Nama Unit",
-      field: "name",
-      flex: 1
+      title: "Nama Unit",
+      selector: "name",
     },
     {
-      headerName: "Total Area",
-      field: "total_area",
-      flex: 1
+      title: "Total Area",
+      selector: "total_area",
     },
     {
-      headerName: "Kapasitas Listrik",
-      field: "electrical_capacity",
-      flex: 1
+      title: "Kapasitas Listrik",
+      selector: "electrical_capacity",
     },
     {
-      headerName: "Dokumen Serah Terima",
-      field: "bast_docs",
-      flex: 1,
-      sortable: false,
-      renderCell: (params: any) => {
-        const { bast_docs }: IUnit = params.row || {};
+      title: "Dokumen Serah Terima",
+      selector: "bast_docs",
+      render: (_text, record: IUnit) => {
+        const { bast_docs } = record;
         if (!bast_docs || bast_docs.length === 0) {
-          return '-'
+          return "-";
         }
 
         return (
           <>
             {bast_docs.map((v, i) => {
-              return <Link key={i}>{v}</Link>
+              return <Link key={i}>{v}</Link>;
             })}
           </>
-        )
+        );
       },
     },
     {
-      headerName: "Tanggal Serah Terima",
-      field: "bast_date",
-      flex: 1,
-      renderCell: (params: any) => {
-        const { bast_date }: IUnit = params.row || {};
-        return bast_date ? bast_date : '-'
+      title: "Tanggal Serah Terima",
+      selector: "bast_date",
+
+      render: (_text, record: IUnit) => {
+        const { bast_date } = record;
+        return bast_date ? bast_date : "-";
       },
     },
     {
-      headerName: "",
-      field: "action",
-      sortable: false,
+      title: "",
+      selector: "action",
       align: "right",
-      renderCell: ({ row }) => {
-        return <ActionCellButton options={optionActionCell(row, onClickEdit, onClickDelete)} />;
+      render: (_text, record: IUnit) => {
+        return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete)} />;
       },
     },
-  ];
+  ] as ColumnType[];
 }

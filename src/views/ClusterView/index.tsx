@@ -20,6 +20,7 @@ import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import dynamic from "next/dynamic";
 
 import useCluster from './hook/useCluster';
+import { TabItem } from '@components/TabBar';
 
 
 const ActionButton = dynamic(() => import("../../components/buttons/ActionButton"), {
@@ -105,11 +106,18 @@ const ClusterView = (): ReactElement => {
     dataError,
     dataReady,
     isValidating,
-    reload
+    reload,
+    dataMeta
   } = useCluster();
 
+  const totalData = dataMeta?.itemsTotal || clusters.length
+
   // other hooks
-  const tabs = useMemo(() => ["Semua"], []);
+  const tabs = useMemo((): TabItem[] => [{
+    label: "",
+    text: "Semua",
+    color: "default"
+  }], []);
 
 
   // variables
@@ -226,7 +234,7 @@ const ClusterView = (): ReactElement => {
             error={Boolean(dataError)}
             onReload={reload}
           >
-            <TableData ready={dataReady} data={clusters} loading={dataLoading || isValidating} onClickEdit={handleClickEditRow} onClickDelete={handleClickDeleteRow} />
+            <TableData total={totalData} ready={dataReady} data={clusters} loading={dataLoading || isValidating} onClickEdit={handleClickEditRow} onClickDelete={handleClickDeleteRow} />
           </CardTable>
         </Section>
       </Suspense>
@@ -253,6 +261,7 @@ const ClusterView = (): ReactElement => {
           onClose={deleteConfirmationHandler.close}
           onCancel={deleteConfirmationHandler.cancel}
           onConfirm={handleConfirmDelete}
+
         />
       </Suspense>
     </>

@@ -1,11 +1,11 @@
-import { memo, MouseEventHandler, SyntheticEvent } from 'react';
-import Card from '@mui/material/Card';
-import Box from '@mui/material/Box';
-import useTheme from '@mui/material/styles/useTheme';
+import { memo, MouseEventHandler, SyntheticEvent } from "react";
+import Card from "@mui/material/Card";
+import Box from "@mui/material/Box";
+import useTheme from "@mui/material/styles/useTheme";
 
-import ErrorStack from '../../error/ErrorStack';
-import SearchField from '../../input/SearchField';
-import { TabBar } from '../../TabBar';
+import ErrorStack from "../../error/ErrorStack";
+import { TabBar, TabItem } from "../../TabBar";
+import SearchField from "@components/input/SearchField";
 
 export interface CardTableProps {
   error?: boolean;
@@ -15,12 +15,12 @@ export interface CardTableProps {
   searchField?: boolean;
   withTabs?: boolean;
   errorMessage?: string;
-  tabs: Array<string>;
+  tabs: TabItem[];
   tabIndex: number;
   onChangeTab?: (e: SyntheticEvent<Element, Event>, value: number) => void;
   searchValue: string;
   searchPlaceholder?: string;
-  onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const CardTable = ({
@@ -36,48 +36,36 @@ const CardTable = ({
   onChangeTab,
   searchValue,
   onChangeSearch,
-  searchPlaceholder
-
+  searchPlaceholder,
 }: CardTableProps): React.ReactElement => {
-
   const theme = useTheme();
 
   const renderContent = (): React.ReactElement => {
     if (error) {
-      return <ErrorStack reloadButton={error} type={errorType} onReload={onReload} message={errorMessage} />
+      return (
+        <ErrorStack
+          reloadButton={error}
+          type={errorType}
+          onReload={onReload}
+          message={errorMessage}
+        />
+      );
     }
 
     return (
       <Box mx={2}>
-        {searchField && (
-          <SearchField
-            width={400}
-            value={searchValue}
-            onChange={onChangeSearch}
-            placeholder={searchPlaceholder}
-          />
-        )}
-        <Box mb={2}>
-          {children}
-        </Box>
+        {searchField && <SearchField width={400} placeholder={searchPlaceholder} />}
+        <Box mb={2}>{children}</Box>
       </Box>
-    )
-  }
-
+    );
+  };
 
   return (
     <Card>
-      {withTabs && (
-        <TabBar
-          theme={theme}
-          value={tabIndex}
-          onChange={onChangeTab}
-          tabs={tabs}
-        />
-      )}
+      {withTabs && <TabBar theme={theme} value={tabIndex} onChange={onChangeTab} tabs={tabs} />}
       {renderContent()}
     </Card>
-  )
-}
+  );
+};
 
-export default memo(CardTable)
+export default memo(CardTable);

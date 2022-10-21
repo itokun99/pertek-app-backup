@@ -78,9 +78,16 @@ export interface IUnitTypeProperty {
 }
 
 export interface IUnitType {
-  id: number;
-  name: string;
-  property: IUnitTypeProperty;
+  id: number,
+  type_name: string,
+  description: string,
+  property_id: number,
+  created_at: number | null,
+  updated_at: number | null,
+  deleted_at: number | null,
+  created_by: number | null,
+  updated_by: number | null,
+  deleted_by: number | null
 }
 
 export interface IProperty {

@@ -9,6 +9,7 @@ import { AlertContext } from '../../provider/AlertProvider';
 import useUnit from './hook/useUnit';
 import { ICreateUnitPayload } from '../../service/unit';
 import dynamic from 'next/dynamic';
+import { TabItem } from '@components/TabBar';
 
 const ActionButton = dynamic(() => import('../../components/buttons/ActionButton'), {
   ssr: false,
@@ -105,7 +106,11 @@ const UnitView = (): ReactElement => {
   const { units, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload } = useUnit();
 
   // other hooks
-  const tabs = useMemo(() => ['Semua'], []);
+  const tabs = useMemo((): TabItem[] => [{
+    label: "",
+    text: "Semua",
+    color: "default"
+  }], []);
 
   // variables
   const isEdit = Boolean(form.id);

@@ -133,6 +133,20 @@ export interface IFacility {
   name: string;
   description: string;
 }
+
+// facility category interface
+export interface IFacilityCategory {
+  id: number;
+  name: string;
+  description: string;
+  created_at?: Date;
+  updated_at?: Date;
+  deleted_at?: Date;
+  created_by?: number;
+  updated_by?: number;
+  deleted_by?: number;
+}
+
 export interface IBooking {
   id: number;
   code: string;
@@ -153,3 +167,5 @@ export interface IBooking {
   updated_by: number;
   deleted_by: number;
 }
+
+export interface IAssistant {}

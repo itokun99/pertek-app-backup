@@ -30,16 +30,24 @@ const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] 
         disableAutoFocus={true}
         disableEnforceFocus={true}
         PaperProps={{
-          style: { width: 100 },
+          style: { width: 120 },
         }}
+        className="action-cell-button"
       >
         <Stack sx={{ padding: 1 }}>
           {options.map((dt, index) => (
-            <Button color={dt.color} startIcon={dt.icon} onClick={e => {
-              dt?.onClick?.(e);
-              setAnchorEl(null);
-            }} key={index}>
-              {dt.label}
+            <Button
+              color={dt.color}
+              onClick={(e) => {
+                dt?.onClick?.(e);
+                setAnchorEl(null);
+              }}
+              key={index}
+            >
+              <div className="action-cell-button">
+                {dt.icon}
+                <span className="action-cell-button__text">{dt.label}</span>
+              </div>
             </Button>
           ))}
         </Stack>

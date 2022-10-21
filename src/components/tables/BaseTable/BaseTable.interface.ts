@@ -21,6 +21,7 @@ export interface IBaseTableProperties extends TableProps {
   loading?: boolean;
   withPagination?: boolean;
   isRowSelection?: boolean;
+  total?: number;
   rowSelection?: {
     /**
      * it should filled with unique row such as id

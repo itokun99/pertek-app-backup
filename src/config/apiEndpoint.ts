@@ -1,6 +1,6 @@
-const API_BASE_URL = 'https://xmbi-4bje-h8wi.s2.xano.io/api';
+const API_BASE_URL = process.env.API_BASE_URL;
 
-export const SendGridAPIKey = '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';
+export const SendGridAPIKey = process.env.SENDGRID_API_KEY;
 
 const EndpointGroup = {
   Announcement: '18S1unQy',

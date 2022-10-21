@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { isInvalidSession, unauthorized } from '../../lib/apiAuthHelpers';
 import { createController } from './base';
-import { getCluster, createCluster, updateCluster, deleteCluster } from '../repos/properti';
+import { getCluster, createCluster, updateCluster, deleteCluster } from '../repos/cluster';
 
 // get handler
 async function handlerGet(req: NextApiRequest, res: NextApiResponse) {

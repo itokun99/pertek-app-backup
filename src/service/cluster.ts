@@ -1,10 +1,7 @@
-import { fetchData, FetcherResponseError, FetcherResponse } from "../lib/dataFetcher";
-import { ApiProxyEndpoint } from '../config/apiProxyEndpoint';
-import { ICluster, ApiResponseType } from '../types';
-import { createUrlParamFromObj } from '../utils/helper';
-
-
-
+import { fetchData } from "@lib/dataFetcher";
+import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
+import { ICluster, ApiResponseType } from '@types';
+import { createUrlParamFromObj } from '@utils/helper';
 export interface IGetClusterPayload {
   page?: number;
   limit?: number;

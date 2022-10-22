@@ -1,12 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import useSWR from 'swr';
-import { ApiProxyEndpoint } from '../../../../config/apiProxyEndpoint';
-import { fetchData } from '../../../../lib/dataFetcher';
+import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
+import { fetchData } from '@lib/dataFetcher';
 import { useRouter } from 'next/router';
-import { createUrlParamFromObj } from '../../../../utils/helper';
-import { ApiResponseType, IProperty } from '../../../../types';
-import useDebounce from '../../../../hooks/useDebounce';
-import { getProperty } from '../../../../service/properti';
+import { createUrlParamFromObj } from '@utils/helper';
+import { ApiResponseType, IProperty } from '@types';
+import useDebounce from '@hooks/useDebounce';
+import { getProperty } from '@service/property';
 
 export default function usePropertyList() {
 

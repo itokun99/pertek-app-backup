@@ -4,7 +4,7 @@ import useSWR from 'swr';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
 import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
 import { AlertContext } from '../../../provider/AlertProvider';
-import { createFacility, deleteFacility, ICreateFacilityPayload, updateFacility } from '../../../service/fasilitas';
+import { createFacility, deleteFacility, ICreateFacilityPayload, updateFacility } from '../../../service/facility';
 import { ApiResponseType, IFacility } from '../../../types';
 import { createUrlParamFromObj } from '../../../utils/helper';
 

@@ -1,65 +1,62 @@
 import Add from '@mui/icons-material/Add';
-import { Suspense, useMemo, useState, ReactElement, useContext, useEffect } from 'react';
+import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from 'react';
 
-import useConfirmation from '../../hooks/useConfirmation';
-import useForm from '../../hooks/useForm';
-import { SelectOptionType, IUnitType } from '../../types';
-import { MyAnimatedButtonProps } from '../../components/buttons/AnimatedButton';
-// import FormDialog from "../../components/dialog/FormUnitType";
-import { AlertContext } from '../../provider/AlertProvider';
-import useUnitType from './hook/useUnitType';
+import useConfirmation from '@hooks/useConfirmation';
+import useForm from '@hooks/useForm';
+import { SelectOptionType, IContact } from '@types';
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
+import { AlertContext } from '@provider/AlertProvider';
+import useContact from './hook/useContact';
+import { ICreateContactPayload } from '@service/contact';
 import dynamic from 'next/dynamic';
+import { TabItem } from '@components/TabBar';
 
-const ActionButton = dynamic(() => import('../../components/buttons/ActionButton'), {
+const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
-});
-
-const FormDialog = dynamic(() => import('../../components/dialog/FormUnitType'), {
-  ssr: false,
-  suspense: true,
-});
-const Section = dynamic(() => import('../../components/views/Section'), {
-  ssr: false,
-  suspense: true,
-});
-const CardTable = dynamic(() => import('../../components/cards/CardTable'), {
-  ssr: false,
-  suspense: true,
-});
-const TableData = dynamic(() => import('../../components/tables/TableUnitType'), {
-  ssr: false,
-  suspense: true,
-});
-const Confirmation = dynamic(() => import('../../components/dialog/Confirmation'), {
-  ssr: false,
-  suspense: true,
 });
 
-import { ICreateUnitTypePayload } from '../../service/unit-type';
-
-interface IFormSelectable {
-  label: string;
-  value: number;
-}
+const FormDialog = dynamic(() => import('@components/dialog/FormUnit'), {
+  ssr: false,
+  suspense: true,
+});
+const Section = dynamic(() => import('@components/views/Section'), {
+  ssr: false,
+  suspense: true,
+});
+const CardTable = dynamic(() => import('@components/cards/CardTable'), {
+  ssr: false,
+  suspense: true,
+});
+const TableData = dynamic(() => import('@components/tables/TableContact'), {
+  ssr: false,
+  suspense: true,
+});
+const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
+  ssr: false,
+  suspense: true,
+});
 
 interface IForm {
   id: number;
-  name: string;
-  description: string;
-  property: IFormSelectable;
+  firstName: string;
+  lastName: string;
+  identity: string;
+  identityType: string;
+  profilType: string;
+  address: string;
 }
 
 const initialForm: IForm = {
   id: 0,
-  name: '',
-  description: '',
-  property: {
-    label: '',
-    value: 0,
-  },
+  firstName: "",
+  lastName: "",
+  identity: "",
+  identityType: "",
+  profilType: "",
+  address: ""
 };
 
-const UnitView = (): ReactElement => {
+const ContactView = (): ReactElement => {
   // contexts
   const { setAlert } = useContext(AlertContext);
 
@@ -86,10 +83,14 @@ const UnitView = (): ReactElement => {
     0
   );
 
-  const { unitTypes, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload } = useUnitType();
+  const { units, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload } = useContact();
 
   // other hooks
-  const tabs = useMemo(() => ['Semua'], []);
+  const tabs = useMemo((): TabItem[] => [{
+    label: "",
+    text: "Semua",
+    color: "default"
+  }], []);
 
   // variables
   const isEdit = Boolean(form.id);
@@ -106,28 +107,26 @@ const UnitView = (): ReactElement => {
     name: string
   ) => {
     setForm(name, newValue);
-
-    if (name === 'property' && form.property && String(form.property.value) !== String(newValue?.value)) {
-      setForm('cluster', null);
-    }
   };
 
   const handleSubmit = () => {
     // it should check if the form is empty
-    if (form.name === '' || Object.values(form.property).every((dt) => dt === '')) {
-      setAlert({
-        message: {
-          severity: 'warning',
-          content: 'Form tidak boleh kosong!',
-        },
-      });
-      return;
-    }
+    // if (form.name === '' || Object.values(form.property).every((dt) => dt === '')) {
+    //   setAlert({
+    //     message: {
+    //       severity: 'warning',
+    //       content: 'Form tidak boleh kosong!',
+    //     },
+    //   });
+    //   return;
+    // }
 
-    const payload: ICreateUnitTypePayload = {
-      type_name: form.name,
-      description: form.description,
-      property_id: form.property.value,
+    const payload: ICreateContactPayload = {
+      first_name: form.firstName,
+      last_name: form.lastName,
+      address: form.address,
+      identity: form.identity,
+      identity_type: form.identityType
     };
 
     (isEdit ? update(form.id, payload) : insert(payload)).then(() => {
@@ -138,16 +137,7 @@ const UnitView = (): ReactElement => {
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
-      title: 'Tipe Unit Baru',
-      onClick: (): void => setVisibility(true),
-      color: 'info',
-      startIcon: <Add />,
-    },
-  ];
-
-  const actionButtonTypeUnit: Array<MyAnimatedButtonProps> = [
-    {
-      title: 'Tipe Unit Baru',
+      title: 'Kontak Baru',
       onClick: (): void => setVisibility(true),
       color: 'info',
       startIcon: <Add />,
@@ -164,8 +154,11 @@ const UnitView = (): ReactElement => {
     resetForm();
   };
 
-  const handleClickEditRow = (id: number, record: IUnitType) => {
+  const handleClickEditRow = (id: number, record: IContact) => {
     setVisibility(true);
+    // setFormBulk({
+
+    // });
   };
 
   const handleClickDeleteRow = (id: number) => {
@@ -177,29 +170,35 @@ const UnitView = (): ReactElement => {
     deleteConfirmationHandler.confirm().then((id) => remove(id));
   };
 
+  // useEffect(() => {
+  //   if (form?.cluster?.value && !form.property.value) {
+  //     setForm('cluster', null);
+  //   }
+  // }, [form?.property?.value, form?.cluster?.value, setForm]);
+
   return (
     <>
-      <Suspense fallback={<div>Loading</div>}>
+      <Suspense>
         <Section
-          title='Tipe Unit'
-          description='Kelola tipe unit yang tersedia'
+          title='Kontak'
+          description='management kelola kontak'
           stackProps={{ mt: 12 }}
           actionButton={<ActionButton buttons={actionButton} />}
         >
           <CardTable
-            searchPlaceholder='Cari Tipe Unit'
+            searchPlaceholder='Cari Kontak'
             searchValue={search}
             onChangeSearch={handleChangeSearch}
             tabs={tabs}
             tabIndex={tabIndex}
             withTabs
             searchField
-            error={Boolean(dataError)}
             onReload={reload}
+            error={Boolean(dataError)}
           >
             <TableData
               ready={dataReady}
-              data={unitTypes}
+              data={units}
               loading={dataLoading || isValidating}
               onClickEdit={handleClickEditRow}
               onClickDelete={handleClickDeleteRow}
@@ -236,4 +235,4 @@ const UnitView = (): ReactElement => {
   );
 };
 
-export default UnitView;
+export default ContactView;

@@ -160,3 +160,27 @@ export interface IBooking {
   updated_by: number;
   deleted_by: number;
 }
+
+
+export interface IContact {
+  id:                  number;
+  first_name:          string;
+  last_name:           string;
+  registration_status: string;
+  public_id:           string;
+  role_id:             number;
+  role_group_id:       number;
+  property_id:         number;
+  profile_picture:     string;
+  identity:            string;
+  identity_type:       string;
+  profile_type:        string;
+  address:             string;
+  last_login:          number | null;
+  created_by:          number;
+  updated_by:          number;
+  deleted_by:          number;
+  created_at:          number;
+  updated_at:          number;
+  deleted_at:          number | null;
+}

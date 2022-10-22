@@ -1,28 +1,28 @@
 import { useState, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { AlertContext } from '../../../provider/AlertProvider';
+import { AlertContext } from '@provider/AlertProvider';
 import useSWR from 'swr';
-import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
-import { IUnitType, ApiResponseType } from '../../../types';
-import { createUnitType, updateUnitType, deleteUnitType, ICreateUnitTypePayload } from '../../../service/unit-type';
-import { createUrlParamFromObj } from '../../../utils/helper';
-import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
+import { fetchData, FetcherResponseError } from '@lib/dataFetcher';
+import { IContact, ApiResponseType } from '@types';
+import { createContact, updateContact, deleteContact, ICreateContactPayload } from '@service/contact';
+import { createUrlParamFromObj } from '@utils/helper';
+import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
 
-interface IUseUnitType {
-  insert: (payload: ICreateUnitTypePayload) => Promise<void>;
+interface IUseContact {
+  insert: (payload: ICreateContactPayload) => Promise<void>;
   remove: (id: number) => Promise<void>;
-  update: (id: number, payload: ICreateUnitTypePayload) => Promise<void>;
+  update: (id: number, payload: ICreateContactPayload) => Promise<void>;
   reload: () => void;
-  unitTypes: Array<IUnitType>;
+  units: Array<IContact>;
   dataReady: boolean;
   dataLoading: boolean;
   dataError: any;
   isValidating: boolean;
-  dataMeta?: ApiResponseType<Array<IUnitType>>;
+  dataMeta?: ApiResponseType<Array<IContact>>;
 }
 
-export default function useUnitType(): IUseUnitType {
-  const API_URL = ApiProxyEndpoint.UnitType;
+export default function useContact(): IUseContact {
+  const API_URL = ApiProxyEndpoint.Contact;
 
   const router = useRouter();
   const params = router.query;
@@ -37,7 +37,7 @@ export default function useUnitType(): IUseUnitType {
     error: responseError,
     isValidating,
     mutate,
-  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IUnitType[]>>(url, { method: 'GET' }), {
+  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IContact[]>>(url, { method: 'GET' }), {
     refreshWhenOffline: true,
     refreshWhenHidden: true,
     revalidateIfStale: true,
@@ -47,19 +47,19 @@ export default function useUnitType(): IUseUnitType {
 
   const [ready, setReady] = useState<boolean>(false);
   const dataMeta = responseData?.data;
-  const unitTypes = responseData?.data?.items || [];
+  const units = responseData?.data?.items || [];
   const dataLoading = !responseData;
   const dataError = responseError || responseData?.error;
 
   // methods
-  const insert = async (payload: ICreateUnitTypePayload) => {
-    createUnitType(payload)
+  const insert = async (payload: ICreateContactPayload) => {
+    createContact(payload)
       .then(() => {
         // console.log("error masuk sini")
         setAlert({
           message: {
             severity: 'success',
-            content: `Berhasil menambah tipe unit baru`,
+            content: `Berhasil menambah Contact Baru`,
           },
         });
         mutate();
@@ -76,12 +76,12 @@ export default function useUnitType(): IUseUnitType {
   };
 
   const remove = async (id: number) => {
-    deleteUnitType(id)
+    deleteContact(id)
       .then(() => {
         setAlert({
           message: {
             severity: 'success',
-            content: `Berhasil menghapus tipe unit`,
+            content: `Berhasil menghapus Contact`,
           },
         });
         mutate();
@@ -96,13 +96,13 @@ export default function useUnitType(): IUseUnitType {
       });
   };
 
-  const update = async (id: number, payload: ICreateUnitTypePayload) => {
-    updateUnitType(id, payload)
+  const update = async (id: number, payload: ICreateContactPayload) => {
+    updateContact(id, payload)
       .then(() => {
         setAlert({
           message: {
             severity: 'success',
-            content: `Berhasil mengedit tipe unit`,
+            content: `Berhasil mengedit Contact`,
           },
         });
         mutate();
@@ -117,7 +117,7 @@ export default function useUnitType(): IUseUnitType {
       });
   };
 
-  const reload = () => {
+  const reload = (): void => {
     mutate();
   };
 
@@ -134,7 +134,7 @@ export default function useUnitType(): IUseUnitType {
     remove,
     update,
     reload,
-    unitTypes,
+    units,
     isValidating,
     dataReady: ready,
     dataLoading,

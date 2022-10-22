@@ -4,7 +4,7 @@ import { AlertContext } from "../../../provider/AlertProvider";
 import useSWR from 'swr';
 import { fetchData, FetcherResponseError } from "../../../lib/dataFetcher";
 import { ICluster, ApiResponseType } from '../../../types';
-import { createCluster, updateCluster, deleteCluster, ICreateClusterPayload } from '../../../service/klaster';
+import { createCluster, updateCluster, deleteCluster, ICreateClusterPayload } from '../../../service/cluster';
 import { createUrlParamFromObj } from '../../../utils/helper';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
 

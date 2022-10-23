@@ -21,6 +21,8 @@ interface ISelectOptionProps {
   label: string;
   loading?: boolean;
   disabled?: boolean;
+  error?: boolean;
+  helperText?: string;
   onOpen?: (event: React.SyntheticEvent) => void;
   onClose?: (event: React.SyntheticEvent) => void;
   options: SelectOptionType[],
@@ -39,6 +41,8 @@ const SelectOption = ({
   options,
   loading,
   disabled,
+  error,
+  helperText,
   onOpen,
   onClose,
   type = 'base-select'
@@ -70,6 +74,8 @@ const SelectOption = ({
           onOpen={onOpen}
           onClose={onClose}
           onInputChange={onInputChange}
+          error={error}
+          helperText={helperText}
         />
       );
 
@@ -84,6 +90,8 @@ const SelectOption = ({
           id={id}
           name={name}
           placeholder={placeholder}
+          error={error}
+          helperText={helperText}
         />
       )
   }

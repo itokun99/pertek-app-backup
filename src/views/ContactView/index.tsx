@@ -10,8 +10,8 @@ import useContact from './hook/useContact';
 import { ICreateContactPayload } from '@service/contact';
 import dynamic from 'next/dynamic';
 import { TabItem } from '@components/TabBar';
-import FormDialog, { IForm } from '@components/dialog/FormContact';
-import { IMultipleInputItem } from '@components/input/MultipleInput';
+import FormDialog, { IForm, IFormError } from '@components/dialog/FormContact';
+import { IMultipleInputItem, validateMultipleInput } from '@components/input/MultipleInput';
 
 const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
@@ -41,6 +41,19 @@ const initialForm: IForm = {
   identity: "",
   identityType: "",
   address: "",
+  profileType: "",
+  property: {
+    label: "",
+    value: ""
+  },
+  role: {
+    label: "",
+    value: ""
+  },
+  roleGroup: {
+    label: "",
+    value: ""
+  },
   emails: [
     {
       value: "",
@@ -55,6 +68,15 @@ const initialForm: IForm = {
   ]
 };
 
+const initialFormError: IFormError = {
+  firstName: "",
+  lastName: "",
+  address: "",
+  identity: "",
+  identityType: "",
+  profileType: ""
+}
+
 const ContactView = (): ReactElement => {
   // contexts
   const { setAlert } = useContext(AlertContext);
@@ -66,7 +88,10 @@ const ContactView = (): ReactElement => {
 
   // custom hooks
   const [form, setForm, resetForm, setFormBulk] = useForm<IForm>(initialForm);
-  // console.log("form ==>", form)
+  const [formError, setFormError, resetFormError, setFormErrorBulk] = useForm<IFormError>(initialFormError);
+
+  console.log("form ==>", form);
+  console.log("formError ==>", formError);
 
   const {
     content: deleteConfirmation,
@@ -102,10 +127,18 @@ const ContactView = (): ReactElement => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setForm(name, value);
+
+    if (formError[name as keyof typeof formError]) {
+      setFormError(name, "");
+    }
   };
 
   const handleSelectChange = (name: string, value: any) => {
     setForm(name, value);
+
+    if (formError[name as keyof typeof formError]) {
+      setFormError(name, "");
+    }
   };
 
   const handleMultipleInputChange = (name: string, value: IMultipleInputItem[]) => {
@@ -116,29 +149,65 @@ const ContactView = (): ReactElement => {
     setTabIndex(value);
   }
 
+  const validateForm = (form: IForm, formError: IFormError) => {
+    const error = { ...formError };
+    if (!form.firstName) {
+      error.firstName = "Nama depan harus diisi";
+    }
+
+    if (!form.identityType) {
+      error.identityType = "Tipe identitas harus diisi"
+    }
+
+    if (!form.identity) {
+      error.identity = "Nomor Identitas harus diisi"
+    }
+
+    if (!form.address) {
+      error.address = "Alamat harus diisi";
+    }
+
+    if (!form.profileType) {
+      error.profileType = "Tipe profil harus diisi"
+    }
+
+    return error;
+  }
+
   const handleSubmit = () => {
     // it should check if the form is empty
-    // if (form.name === '' || Object.values(form.property).every((dt) => dt === '')) {
-    //   setAlert({
-    //     message: {
-    //       severity: 'warning',
-    //       content: 'Form tidak boleh kosong!',
-    //     },
-    //   });
-    //   return;
-    // }
+
+    const error = validateForm(form, formError);
+    const isValid = Object.keys(error).every(key => !error[key as keyof typeof formError]);
+
+    if (!isValid) {
+      // console.log("masuk sini12", error)
+      setFormErrorBulk(error);
+      return;
+    } else {
+      resetFormError();
+    }
 
     const payload: ICreateContactPayload = {
       first_name: form.firstName,
       last_name: form.lastName,
       address: form.address,
       identity: form.identity,
-      identity_type: form.identityType
+      identity_type: form.identityType,
+      profile_type: form.profileType,
+      role_id: Number(form.role?.value) || 0,
+      role_group_id: Number(form.roleGroup?.value) || 0,
+      property_id: Number(form.property?.value) || 0,
+      emails: validateMultipleInput(form.emails).map(email => ({ address: email.value, verified: email.checked || false })),
+      phone_numbers: validateMultipleInput(form.phones).map(phone => phone.value)
     };
 
+    // console.log("masuk sini");
     (isEdit ? update(form.id, payload) : insert(payload)).then(() => {
       setVisibility(false);
       resetForm();
+    }).catch(err => {
+      console.log("err", err);
     });
   };
 
@@ -220,6 +289,7 @@ const ContactView = (): ReactElement => {
           visible={visibility}
           onClose={handleClose}
           form={form}
+          formError={formError}
         />
       </Suspense>
 

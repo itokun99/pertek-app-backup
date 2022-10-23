@@ -16,6 +16,22 @@ export interface IMultipleInputItem {
   checked?: boolean;
 }
 
+export function validateMultipleInput(datas: IMultipleInputItem[]): IMultipleInputItem[] {
+  const currentData = [...datas];
+
+  if (currentData.length === 0) {
+    return [];
+  }
+
+  const result = currentData.filter(data => data.value.trim() !== "");
+
+  if (result.length === 0) {
+    return [];
+  }
+
+  return result;
+}
+
 interface IMultipleInputProps {
   label: string;
   name: string;

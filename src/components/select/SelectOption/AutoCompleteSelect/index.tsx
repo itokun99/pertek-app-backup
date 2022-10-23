@@ -14,6 +14,8 @@ interface IAutoCompleteSelect {
   label: string;
   loading?: boolean;
   disabled?: boolean;
+  helperText?: string;
+  error?: boolean;
   onOpen?: (event: React.SyntheticEvent) => void;
   onClose?: (event: React.SyntheticEvent) => void;
   onInputChange?: (
@@ -36,6 +38,8 @@ function AutoCompleteSelect({
   placeholder,
   disabled,
   label,
+  helperText,
+  error,
   onChange,
   onInputChange,
   onOpen,
@@ -54,12 +58,14 @@ function AutoCompleteSelect({
       disabled={disabled}
       onOpen={onOpen}
       onClose={onClose}
-      isOptionEqualToValue={(op, val) => op.value === val.value}
+      isOptionEqualToValue={(options, value) => options.value === value.value}
       onInputChange={onInputChange}
       renderInput={(params) => <TextField {...params}
         label={label}
         placeholder={placeholder}
         fullWidth
+        error={error}
+        helperText={helperText}
         InputProps={{
           ...params.InputProps,
           endAdornment: (

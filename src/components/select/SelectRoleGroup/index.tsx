@@ -1,26 +1,27 @@
-import React from "react";
+import React, { useEffect, memo } from "react";
 import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import { SelectOptionType } from "@types";
 import SelectOption from '../SelectOption';
-import usePropertyList from './hook/usePropertyList';
+import useRoleGroupList from './hook/useRoleGroupList';
 import { createOptions } from '@utils/helper';
 import { SelectOptionChangeType } from '../SelectOption';
 
 
-interface ISelectProperty {
+interface ISelectRoleGroup {
   onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
   disabled?: boolean;
 }
 
-const SelectProperty: React.FC<ISelectProperty> = ({
+const SelectRoleGroup: React.FC<ISelectRoleGroup> = ({
   onChange,
   value,
   disabled
 }) => {
 
 
-  const { data, error, loading, keyword, setOpen, setKeyword } = usePropertyList();
+  const { data, loading, keyword, setKeyword, setOpen } = useRoleGroupList();
+
 
 
   const handleInputChange = (
@@ -45,21 +46,21 @@ const SelectProperty: React.FC<ISelectProperty> = ({
 
   return (
     <SelectOption
-      name="property"
-      label="Properti"
-      placeholder="Masukan Nama Properti"
+      name="roleGroup"
+      label="Role Group"
+      placeholder="Masukan Nama Role Group"
       loading={loading}
       value={value}
       inputValue={keyword}
-      type="auto-complete-select"
       onInputChange={handleInputChange}
       onChange={onChange}
       options={options}
       disabled={disabled}
       onOpen={handleOpen}
       onClose={handleClose}
+      type="auto-complete-select"
     />
   );
 };
 
-export default SelectProperty;
+export default memo(SelectRoleGroup);

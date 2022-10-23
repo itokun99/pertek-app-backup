@@ -10,10 +10,12 @@ import Typography from "@mui/material/Typography";
 
 import { SelectOptionType } from "@types";
 import SelectOption, { SelectOptionChangeType } from '../../select/SelectOption';
+import SelectRole from '../../select/SelectRole';
+import SelectProperty from '../../select/SelectProperty';
 import MultipleInput, { IMultipleInputItem, MultipleInputChangeType } from '../../input/MultipleInput';
 import Divider from '@mui/material/Divider';
-
 import BaseDialogForm from '../BaseDialogForm';
+import SelectRoleGroup from "@components/select/SelectRoleGroup";
 
 export interface IForm {
   id: number;
@@ -22,8 +24,21 @@ export interface IForm {
   identity: string;
   identityType: string;
   address: string;
+  profileType: string;
+  role: SelectOptionType;
+  roleGroup: SelectOptionType;
+  property: SelectOptionType;
   emails: IMultipleInputItem[];
   phones: IMultipleInputItem[];
+}
+
+export interface IFormError {
+  firstName: string;
+  lastName: string;
+  identity: string;
+  identityType: string;
+  address: string;
+  profileType: string;
 }
 
 
@@ -31,6 +46,7 @@ interface IFormContactProps {
   edit: boolean;
   visible: boolean;
   form: IForm;
+  formError: IFormError;
   onClose: () => void;
   onSubmit: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -54,6 +70,21 @@ const identityTypeOptions: SelectOptionType[] = [
   },
 ]
 
+const profileTypeOptions: SelectOptionType[] = [
+  {
+    label: "Personal",
+    value: "personal"
+  },
+  {
+    label: "Bisnis",
+    value: "bisnis"
+  },
+  {
+    label: "Lainnya",
+    value: "lainnnya"
+  },
+]
+
 const FormContact: React.FC<IFormContactProps> = ({
   edit,
   visible,
@@ -62,7 +93,8 @@ const FormContact: React.FC<IFormContactProps> = ({
   onSelectChange,
   onMultipleInputChange,
   onSubmit,
-  form
+  form,
+  formError
 }) => {
   return (
     <BaseDialogForm
@@ -91,7 +123,10 @@ const FormContact: React.FC<IFormContactProps> = ({
                 label="Nama Depan"
                 name="firstName"
                 onChange={onInputChange}
-                fullWidth />
+                fullWidth
+                error={Boolean(formError.firstName)}
+                helperText={formError.firstName}
+              />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -101,6 +136,8 @@ const FormContact: React.FC<IFormContactProps> = ({
                 name="lastName"
                 onChange={onInputChange}
                 fullWidth
+                error={Boolean(formError.lastName)}
+                helperText={formError.lastName}
               />
             </Grid>
             <Grid item xs={12}>
@@ -112,6 +149,8 @@ const FormContact: React.FC<IFormContactProps> = ({
                 name="identityType"
                 placeholder="Pilih Identitas"
                 onChange={onSelectChange}
+                error={Boolean(formError.identityType)}
+                helperText={formError.identityType}
               />
             </Grid>
             <Grid item xs={12}>
@@ -123,6 +162,8 @@ const FormContact: React.FC<IFormContactProps> = ({
                 onChange={onInputChange}
                 fullWidth
                 inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
+                error={Boolean(formError.identity)}
+                helperText={formError.identity}
               />
             </Grid>
             <Grid item xs={12}>
@@ -134,6 +175,21 @@ const FormContact: React.FC<IFormContactProps> = ({
                 name="address"
                 onChange={onInputChange}
                 fullWidth
+                error={Boolean(formError.address)}
+                helperText={formError.address}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <SelectOption
+                type="base-select"
+                options={profileTypeOptions}
+                value={form.profileType}
+                label="Tipe Profil"
+                name="profileType"
+                placeholder="Pilih Tipe Profil"
+                onChange={onSelectChange}
+                error={Boolean(formError.profileType)}
+                helperText={formError.profileType}
               />
             </Grid>
           </Grid>
@@ -169,8 +225,28 @@ const FormContact: React.FC<IFormContactProps> = ({
             </Grid>
           </Grid>
         </Box>
+        <Box>
+          <Typography variant="h6" sx={{ mb: 1 }}>Properti Info</Typography>
+          <Divider sx={{ mb: 3 }} />
+          <Grid container direction="row" spacing={2}>
+            <Grid item xs={12}>
+              <SelectProperty onChange={onSelectChange} value={form.property} />
+            </Grid>
+          </Grid>
+        </Box>
+        <Box>
+          <Typography variant="h6" sx={{ mb: 1 }}>Akses</Typography>
+          <Divider sx={{ mb: 3 }} />
+          <Grid container direction="row" spacing={2}>
+            <Grid item xs={12}>
+              <SelectRole onChange={onSelectChange} value={form.role} />
+            </Grid>
+            <Grid item xs={12}>
+              <SelectRoleGroup onChange={onSelectChange} value={form.roleGroup} />
+            </Grid>
+          </Grid>
+        </Box>
       </Stack>
-
     </BaseDialogForm>
   );
 };

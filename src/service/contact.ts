@@ -23,6 +23,8 @@ export interface ICreateContactPayload {
   profile_type?:        string;
   address:             string;
   last_login?:          number;
+  emails: { address: string; verified:boolean }[];
+  phone_numbers: string[];
 }
 
 

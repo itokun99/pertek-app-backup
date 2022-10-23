@@ -54,6 +54,7 @@ const SelectCluster: React.FC<ISelectCluster> = ({
 
   return (
     <SelectOption
+      type="auto-complete-select"
       name="cluster"
       label="Pilih Klaster"
       placeholder="Masukan Nama Klaster"

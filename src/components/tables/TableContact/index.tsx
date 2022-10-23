@@ -9,6 +9,7 @@ export interface ITableContactProps {
   data: Array<IContact>;
   loading: boolean;
   ready: boolean;
+  total: number;
   onClickEdit: (id: number, record: IContact) => void;
   onClickDelete: (id: number) => void;
 }
@@ -16,6 +17,7 @@ export interface ITableContactProps {
 const TableContact = ({
   data,
   ready,
+  total,
   loading = false,
   onClickEdit,
   onClickDelete,
@@ -31,6 +33,7 @@ const TableContact = ({
         field={data}
         loading={loading}
         withPagination
+        total={total}
       />
     </>
   );

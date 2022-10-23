@@ -14,11 +14,9 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import SelectProperty from "../select/SelectProperty";
-import { SelectOptionType } from "../../types";
-import { AlertContext } from "../../provider/AlertProvider";
-import { fetchData } from "../../lib/dataFetcher";
+import { SelectOptionType } from "@types";
+import { SelectOptionChangeType } from '../select/SelectOption';
 
-import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 
 
 interface IModalProperties {
@@ -27,11 +25,7 @@ interface IModalProperties {
   onSubmit: () => void;
   form: any,
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onSelectChange: (
-    _event: React.SyntheticEvent<Element, Event>,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => void;
+  onSelectChange: SelectOptionChangeType<SelectOptionType>;
   onClose: () => void;
 }
 

@@ -1,17 +1,14 @@
 import React, { useEffect } from "react";
 import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-import { SelectOptionType } from "../../../types";
+import { SelectOptionType } from "@types";
 import SelectOption from '../SelectOption';
 import useClusterList from './hook/useClusterList';
-import { createOptions } from '../../../utils/helper';
+import { createOptions } from '@utils/helper';
+import { SelectOptionChangeType } from '../SelectOption';
 
 
 interface ISelectCluster {
-  onChange: (
-    event: React.SyntheticEvent,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => void;
+  onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
   disabled?: boolean;
   propertyId?: number;

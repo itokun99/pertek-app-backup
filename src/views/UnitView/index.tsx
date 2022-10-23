@@ -121,14 +121,11 @@ const UnitView = (): ReactElement => {
     setForm(name, value);
   };
 
-  const handleSelectChange = (
-    _event: React.SyntheticEvent<Element, Event>,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => {
-    setForm(name, newValue);
 
-    if (name === 'property' && form.property && String(form.property.value) !== String(newValue?.value)) {
+  const handleSelectChange = (name: string, value: any) => {
+    setForm(name, value);
+
+    if (name === 'property' && form.property && String(form.property.value) !== String(value?.value)) {
       setForm('cluster', null);
     }
   };

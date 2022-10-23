@@ -1,19 +1,16 @@
-import React, { useEffect } from "react";
-import TextField from "@mui/material/TextField";
-import { FetcherResponseError } from '../../../lib/dataFetcher';
-import CircularProgress from '@mui/material/CircularProgress';
-import Autocomplete, { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-import { ApiResponseType, SelectOptionType } from "../../../types";
-import { getUnit } from '../../../service/unit';
+import React, { memo } from "react";
+import { SelectChangeEvent } from '@mui/material/Select';
+import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
+import { SelectOptionType } from "@types";
+import AutoCompleteSelect from "./AutoCompleteSelect";
+import BaseSelect from "./BaseSelect";
 
-interface ISelectOption {
+export type SelectOptionChangeType<T = any> = (name: string, value: T) => void;
+interface ISelectOptionProps {
+  id?: string;
   name: string;
-  onChange: (
-    event: React.SyntheticEvent,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => void;
-  value?: SelectOptionType | null;
+  onChange: SelectOptionChangeType;
+  value?: SelectOptionType | null | string;
   placeholder?: string;
   inputValue?: string;
   onInputChange?: (
@@ -22,14 +19,16 @@ interface ISelectOption {
     reason: AutocompleteInputChangeReason
   ) => void;
   label: string;
-  loading: boolean;
+  loading?: boolean;
   disabled?: boolean;
   onOpen?: (event: React.SyntheticEvent) => void;
   onClose?: (event: React.SyntheticEvent) => void;
-  options: SelectOptionType[]
+  options: SelectOptionType[],
+  type?: 'base-select' | 'auto-complete-select';
 }
 
-const SelectOption: React.FC<ISelectOption> = ({
+const SelectOption = ({
+  id,
   name,
   onChange,
   value,
@@ -42,48 +41,52 @@ const SelectOption: React.FC<ISelectOption> = ({
   disabled,
   onOpen,
   onClose,
-}) => {
+  type = 'base-select'
+}: ISelectOptionProps) => {
 
-  const handleChange: (
-    e: React.SyntheticEvent,
-    newValue: SelectOptionType | null
-  ) => void = (e, newValue) => {
-    onChange(e, newValue, name)
+  const handleAutoCompleteSelectChange = (_event: React.SyntheticEvent, newValue: SelectOptionType | null) => {
+    onChange(name, newValue)
   }
 
+  const handleBaseSelectChange = (event: SelectChangeEvent) => {
+    const { name, value } = event.target;
+    onChange(name, value);
+  };
 
-  return (
-    <Autocomplete
-      options={options}
-      sx={{ width: 300 }}
-      onChange={handleChange}
-      loading={loading}
-      style={{ width: "100%" }}
-      value={value}
-      inputValue={inputValue}
-      placeholder={placeholder}
-      disabled={disabled}
-      onOpen={onOpen}
-      onClose={onClose}
-      isOptionEqualToValue={(options, value) => options.value === value.value}
-      onInputChange={onInputChange}
-      renderInput={(params) => <TextField {...params}
-        label={label}
-        placeholder={placeholder}
-        fullWidth
-        InputProps={{
-          ...params.InputProps,
-          endAdornment: (
-            <>
-              {loading ? <CircularProgress color="inherit" size={20} /> : null}
-              {params.InputProps.endAdornment}
-            </>
-          ),
-        }}
-      />}
-      fullWidth
-    />
-  );
+
+  switch (type) {
+    case 'auto-complete-select':
+      return (
+        <AutoCompleteSelect
+          name={name}
+          label={label}
+          options={options}
+          onChange={handleAutoCompleteSelectChange}
+          loading={loading}
+          value={value as SelectOptionType | null}
+          inputValue={inputValue}
+          placeholder={placeholder}
+          disabled={disabled}
+          onOpen={onOpen}
+          onClose={onClose}
+          onInputChange={onInputChange}
+        />
+      );
+
+    default:
+      return (
+        <BaseSelect
+          options={options}
+          label={label}
+          onChange={handleBaseSelectChange}
+          value={String(value)}
+          disabled={disabled}
+          id={id}
+          name={name}
+          placeholder={placeholder}
+        />
+      )
+  }
 };
 
-export default SelectOption;
+export default memo(SelectOption);

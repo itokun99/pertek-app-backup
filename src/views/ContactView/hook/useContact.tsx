@@ -13,7 +13,7 @@ interface IUseContact {
   remove: (id: number) => Promise<void>;
   update: (id: number, payload: ICreateContactPayload) => Promise<void>;
   reload: () => void;
-  units: Array<IContact>;
+  items: Array<IContact>;
   dataReady: boolean;
   dataLoading: boolean;
   dataError: any;
@@ -47,7 +47,7 @@ export default function useContact(): IUseContact {
 
   const [ready, setReady] = useState<boolean>(false);
   const dataMeta = responseData?.data;
-  const units = responseData?.data?.items || [];
+  const items = responseData?.data?.items || [];
   const dataLoading = !responseData;
   const dataError = responseError || responseData?.error;
 
@@ -134,7 +134,7 @@ export default function useContact(): IUseContact {
     remove,
     update,
     reload,
-    units,
+    items,
     isValidating,
     dataReady: ready,
     dataLoading,

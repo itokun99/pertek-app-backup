@@ -10,15 +10,13 @@ import useContact from './hook/useContact';
 import { ICreateContactPayload } from '@service/contact';
 import dynamic from 'next/dynamic';
 import { TabItem } from '@components/TabBar';
+import FormDialog, { IForm } from '@components/dialog/FormContact';
+import { IMultipleInputItem } from '@components/input/MultipleInput';
 
 const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
 });
 
-const FormDialog = dynamic(() => import('@components/dialog/FormUnit'), {
-  ssr: false,
-  suspense: true,
-});
 const Section = dynamic(() => import('@components/views/Section'), {
   ssr: false,
   suspense: true,
@@ -36,24 +34,25 @@ const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   suspense: true,
 });
 
-interface IForm {
-  id: number;
-  firstName: string;
-  lastName: string;
-  identity: string;
-  identityType: string;
-  profilType: string;
-  address: string;
-}
-
 const initialForm: IForm = {
   id: 0,
   firstName: "",
   lastName: "",
   identity: "",
   identityType: "",
-  profilType: "",
-  address: ""
+  address: "",
+  emails: [
+    {
+      value: "",
+      checked: false,
+    }
+  ],
+  phones: [
+    {
+      value: "",
+      checked: false,
+    }
+  ]
 };
 
 const ContactView = (): ReactElement => {
@@ -61,7 +60,7 @@ const ContactView = (): ReactElement => {
   const { setAlert } = useContext(AlertContext);
 
   // states
-  const [tabIndex] = useState<number>(0);
+  const [tabIndex, setTabIndex] = useState<string | number>("all");
   const [search, setSearch] = useState<string>('');
   const [visibility, setVisibility] = useState(false);
 
@@ -83,17 +82,21 @@ const ContactView = (): ReactElement => {
     0
   );
 
-  const { units, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload } = useContact();
+  const { items, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload, dataMeta } = useContact();
 
   // other hooks
-  const tabs = useMemo((): TabItem[] => [{
-    label: "",
-    text: "Semua",
-    color: "default"
-  }], []);
+  const tabs = useMemo((): TabItem[] => [
+    {
+      label: "",
+      text: "Semua",
+      color: "default",
+      value: "all"
+    }
+  ], []);
 
   // variables
   const isEdit = Boolean(form.id);
+
 
   // handlers
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,13 +104,17 @@ const ContactView = (): ReactElement => {
     setForm(name, value);
   };
 
-  const handleSelectChange = (
-    _event: React.SyntheticEvent<Element, Event>,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => {
-    setForm(name, newValue);
+  const handleSelectChange = (name: string, value: any) => {
+    setForm(name, value);
   };
+
+  const handleMultipleInputChange = (name: string, value: IMultipleInputItem[]) => {
+    setForm(name, value);
+  }
+
+  const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
+    setTabIndex(value);
+  }
 
   const handleSubmit = () => {
     // it should check if the form is empty
@@ -170,12 +177,6 @@ const ContactView = (): ReactElement => {
     deleteConfirmationHandler.confirm().then((id) => remove(id));
   };
 
-  // useEffect(() => {
-  //   if (form?.cluster?.value && !form.property.value) {
-  //     setForm('cluster', null);
-  //   }
-  // }, [form?.property?.value, form?.cluster?.value, setForm]);
-
   return (
     <>
       <Suspense>
@@ -194,11 +195,13 @@ const ContactView = (): ReactElement => {
             withTabs
             searchField
             onReload={reload}
+            onChangeTab={handleTabChange}
             error={Boolean(dataError)}
           >
             <TableData
               ready={dataReady}
-              data={units}
+              data={items}
+              total={dataMeta?.itemsTotal || items.length}
               loading={dataLoading || isValidating}
               onClickEdit={handleClickEditRow}
               onClickDelete={handleClickDeleteRow}
@@ -212,6 +215,7 @@ const ContactView = (): ReactElement => {
           edit={isEdit}
           onInputChange={handleInputChange}
           onSelectChange={handleSelectChange}
+          onMultipleInputChange={handleMultipleInputChange}
           onSubmit={handleSubmit}
           visible={visibility}
           onClose={handleClose}

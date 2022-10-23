@@ -1,19 +1,14 @@
-import React, { useEffect } from "react";
-import useSWR from 'swr';
-import TextField from "@mui/material/TextField";
-import Autocomplete, { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-import { ApiResponseType, IProperty, SelectOptionType } from "../../../types";
+import React from "react";
+import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
+import { SelectOptionType } from "@types";
 import SelectOption from '../SelectOption';
 import usePropertyList from './hook/usePropertyList';
-import { createOptions } from '../../../utils/helper';
+import { createOptions } from '@utils/helper';
+import { SelectOptionChangeType } from '../SelectOption';
 
 
 interface ISelectProperty {
-  onChange: (
-    event: React.SyntheticEvent,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => void;
+  onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
   disabled?: boolean;
 }
@@ -47,9 +42,6 @@ const SelectProperty: React.FC<ISelectProperty> = ({
   }
 
   const options: SelectOptionType[] = createOptions(data, 'name', 'id')
-
-
-
 
   return (
     <SelectOption

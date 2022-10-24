@@ -3,7 +3,7 @@ import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from
 
 import useConfirmation from "@hooks/useConfirmation";
 import useForm from "@hooks/useForm";
-import { SelectOptionType, IContact } from "@general-types";
+import { SelectOptionType, IContact, IContactEmail } from "@general-types";
 import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
 import { AlertContext } from "@provider/AlertProvider";
 import useContact from "./hook/useContact";
@@ -91,9 +91,6 @@ const ContactView = (): ReactElement => {
   const [formError, setFormError, resetFormError, setFormErrorBulk] =
     useForm<IFormError>(initialFormError);
 
-  console.log("form ==>", form);
-  console.log("formError ==>", formError);
-
   const {
     content: deleteConfirmation,
     handler: deleteConfirmationHandler,
@@ -113,12 +110,15 @@ const ContactView = (): ReactElement => {
     insert,
     remove,
     update,
-    dataLoading,
-    dataError,
-    dataReady,
+    inquiry,
+    isLoading,
+    isError,
+    isReady,
     isValidating,
     reload,
     dataMeta,
+    loadingForm,
+    setLoadingForm
   } = useContact();
 
   // other hooks
@@ -219,13 +219,15 @@ const ContactView = (): ReactElement => {
       phone_numbers: validateMultipleInput(form.phones).map((phone) => phone.value),
     };
 
-    // console.log("masuk sini");
+    setLoadingForm(true);
     (isEdit ? update(form.id, payload) : insert(payload))
       .then(() => {
         setVisibility(false);
         resetForm();
+        setLoadingForm(false);
       })
       .catch((err) => {
+        setLoadingForm(false);
         console.log("err", err);
       });
   };
@@ -249,13 +251,47 @@ const ContactView = (): ReactElement => {
     resetForm();
   };
 
-  const handleClickEditRow = (id: number, record: IContact) => {
+  const handleClickEditRow = (id: number, _record: IContact) => {
     setVisibility(true);
-    // setFormBulk({
 
-    // });
+    setLoadingForm(true);
+    inquiry(id).then(data => {
+      // console.log("data", data);
+      if (data) {
+        setFormBulk({
+          firstName: data.first_name,
+          lastName: data.last_name,
+          address: data.address,
+          id: data.id,
+          identity: data.identity,
+          identityType: data.identity_type,
+          profileType: data.profile_type,
+          property: {
+            label: data.property.name,
+            value: String(data.property.id)
+          },
+          emails: data.emails.map(email => ({ value: email.address, checked: email.verified })),
+          phones: data.phones.map(phone => ({ value: phone.number })),
+          role: {
+            label: data.role.name,
+            value: String(data.role.id)
+          },
+          roleGroup: {
+            label: "",
+            value: ""
+          }
+        })
+      }
+
+    }).catch(err => {
+      console.log(err)
+    }).finally(() => {
+      setLoadingForm(false);
+    });
   };
 
+
+  // TODO: have problem with api params
   const handleClickDeleteRow = (id: number) => {
     deleteConfirmationHandler.open();
     deleteConfirmationHandler.setState(id);
@@ -284,13 +320,13 @@ const ContactView = (): ReactElement => {
             searchField
             onReload={reload}
             onChangeTab={handleTabChange}
-            error={Boolean(dataError)}
+            error={Boolean(isError)}
           >
             <TableData
-              ready={dataReady}
+              ready={isReady}
               data={items}
               total={dataMeta?.itemsTotal || items.length}
-              loading={dataLoading || isValidating}
+              loading={isLoading || isValidating}
               onClickEdit={handleClickEditRow}
               onClickDelete={handleClickDeleteRow}
             />
@@ -301,6 +337,7 @@ const ContactView = (): ReactElement => {
       <Suspense>
         <FormDialog
           edit={isEdit}
+          loading={loadingForm}
           onInputChange={handleInputChange}
           onSelectChange={handleSelectChange}
           onMultipleInputChange={handleMultipleInputChange}

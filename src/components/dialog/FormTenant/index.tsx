@@ -1,8 +1,5 @@
 import React from "react";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from '@mui/icons-material/Save';
+import { Grid, TextField } from "@mui/material";
 
 // additional
 import Button from "@mui/material/Button";
@@ -50,7 +47,6 @@ interface IFormContactProps {
   visible: boolean;
   form: IForm;
   formError: IFormError;
-  loading: boolean;
   onClose: () => void;
   onSubmit: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -89,7 +85,7 @@ const profileTypeOptions: SelectOptionType[] = [
   },
 ]
 
-const FormContact: React.FC<IFormContactProps> = ({
+const FormTenant: React.FC<IFormContactProps> = ({
   edit,
   visible,
   onClose,
@@ -97,7 +93,6 @@ const FormContact: React.FC<IFormContactProps> = ({
   onSelectChange,
   onMultipleInputChange,
   onSubmit,
-  loading,
   form,
   formError
 }) => {
@@ -111,16 +106,9 @@ const FormContact: React.FC<IFormContactProps> = ({
           <Button variant="outlined" color="error" onClick={onClose}>
             Cancel
           </Button>
-          <LoadingButton
-            color="primary"
-            onClick={onSubmit}
-            loading={loading}
-            loadingPosition="start"
-            startIcon={<SaveIcon />}
-            variant="contained"
-          >
+          <Button variant="contained" color="info" onClick={onSubmit}>
             Simpan
-          </LoadingButton>
+          </Button>
         </>
       )}>
       <Stack direction="column" spacing={3}>
@@ -263,4 +251,4 @@ const FormContact: React.FC<IFormContactProps> = ({
   );
 };
 
-export default FormContact;
+export default FormTenant;

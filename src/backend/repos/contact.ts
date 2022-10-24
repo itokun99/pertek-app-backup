@@ -1,8 +1,8 @@
 import { NextApiRequest } from "next";
-import { Endpoint } from "../../config/apiEndpoint";
-import { apiRequest } from "../../lib/apiCall";
-import { createRequestParams } from "../../lib/urllib";
-import { ApiResponseType, IContact } from "../../types";
+import { Endpoint } from "@config/apiEndpoint";
+import { apiRequest } from "@lib/apiCall";
+import { createRequestParams } from "@lib/urllib";
+import { ApiResponseType, IContact, IContactDetail } from "@general-types";
 
 export async function getContact(
   req: NextApiRequest
@@ -10,6 +10,15 @@ export async function getContact(
   const params = createRequestParams(req.query);
   const response = await apiRequest({ req, url: `${Endpoint.Contact}?${params}`, method: "GET" });
   const responseBody: ApiResponseType<IContact> = await response.json();
+  return [response, responseBody];
+}
+
+export async function getContactById(
+  req: NextApiRequest
+): Promise<[Response, IContactDetail & { message: string }]> {
+  const { id } = req.query;
+  const response = await apiRequest({ req, url: `${Endpoint.Contact}/{contact_id}?profile_id=${id}`, method: "GET" });
+  const responseBody: IContactDetail & { message: string } = await response.json();
   return [response, responseBody];
 }
 

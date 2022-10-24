@@ -1,6 +1,6 @@
 import { fetchData } from "@lib/dataFetcher";
 import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
-import { IContact, ApiResponseType } from "@general-types";
+import { IContact, ApiResponseType, IContactDetail } from "@general-types";
 import { createUrlParamFromObj } from "@utils/helper";
 
 export interface IGetContactPayload {
@@ -34,6 +34,21 @@ export async function getContact(
 
   const { data, error } = await fetchData<ApiResponseType<Array<IContact>>>(
     `${ApiProxyEndpoint.Contact}${params}`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getContactById(id: number): Promise<IContactDetail | undefined> {
+  const { data, error } = await fetchData<IContactDetail>(
+    `${ApiProxyEndpoint.Contact}?id=${id}`,
     {
       method: "GET",
     }

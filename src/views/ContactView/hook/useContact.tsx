@@ -1,28 +1,32 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, Dispatch, SetStateAction } from "react";
 import { useRouter } from "next/router";
 import { AlertContext } from "@provider/AlertProvider";
 import useSWR from "swr";
 import { fetchData, FetcherResponseError } from "@lib/dataFetcher";
-import { IContact, ApiResponseType } from "@general-types";
+import { IContact, ApiResponseType, IContactDetail } from "@general-types";
 import {
   createContact,
   updateContact,
   deleteContact,
   ICreateContactPayload,
+  getContactById,
 } from "@service/contact";
 import { createUrlParamFromObj } from "@utils/helper";
 import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
 
 interface IUseContact {
   insert: (payload: ICreateContactPayload) => Promise<void>;
+  inquiry: (id: number) => Promise<IContactDetail | null | undefined>;
   remove: (id: number) => Promise<void>;
   update: (id: number, payload: ICreateContactPayload) => Promise<void>;
   reload: () => void;
   items: Array<IContact>;
-  dataReady: boolean;
-  dataLoading: boolean;
-  dataError: any;
+  isReady: boolean;
+  isLoading: boolean;
+  isError: any;
   isValidating: boolean;
+  loadingForm: boolean;
+  setLoadingForm: Dispatch<SetStateAction<boolean>>;
   dataMeta?: ApiResponseType<Array<IContact>>;
 }
 
@@ -55,76 +59,97 @@ export default function useContact(): IUseContact {
   );
 
   const [ready, setReady] = useState<boolean>(false);
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
   const dataMeta = responseData?.data;
   const items = responseData?.data?.items || [];
-  const dataLoading = !responseData;
-  const dataError = responseError || responseData?.error;
+  const isLoading = !responseData;
+  const isError = responseError || responseData?.error;
 
   // methods
-  const insert = async (payload: ICreateContactPayload) => {
-    createContact(payload)
-      .then(() => {
-        // console.log("error masuk sini")
-        setAlert({
-          message: {
-            severity: "success",
-            content: `Berhasil menambah Contact Baru`,
-          },
-        });
-        mutate();
-      })
-      .catch((err: FetcherResponseError) => {
-        // console.log("error")
-        setAlert({
-          message: {
-            severity: "error",
-            content: err.message || "",
-          },
-        });
+  const insert = async (payload: ICreateContactPayload): Promise<void> => {
+    try {
+      await createContact(payload);
+      setAlert({
+        message: {
+          severity: "success",
+          content: `Berhasil menambah Contact Baru`,
+        },
       });
+      mutate();
+      return;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: "error",
+          content: error.message || "Terjadi kesalahan",
+        },
+      });
+      throw err;
+    }
   };
 
-  const remove = async (id: number) => {
-    deleteContact(id)
-      .then(() => {
-        setAlert({
-          message: {
-            severity: "success",
-            content: `Berhasil menghapus Contact`,
-          },
-        });
-        mutate();
-      })
-      .catch((err: FetcherResponseError) => {
-        setAlert({
-          message: {
-            severity: "error",
-            content: err?.message || "",
-          },
-        });
+  const remove = async (id: number): Promise<void> => {
+    try {
+      await deleteContact(id);
+      setAlert({
+        message: {
+          severity: "success",
+          content: `Berhasil menghapus Contact`,
+        },
       });
+      mutate();
+      return;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: "error",
+          content: error.message || "Terjadi kesalahan",
+        },
+      });
+      throw err;
+    }
   };
 
   const update = async (id: number, payload: ICreateContactPayload) => {
-    updateContact(id, payload)
-      .then(() => {
-        setAlert({
-          message: {
-            severity: "success",
-            content: `Berhasil mengedit Contact`,
-          },
-        });
-        mutate();
-      })
-      .catch((err: FetcherResponseError) => {
-        setAlert({
-          message: {
-            severity: "error",
-            content: err?.message || "",
-          },
-        });
+    try {
+      await updateContact(id, payload);
+      setAlert({
+        message: {
+          severity: "success",
+          content: `Berhasil mengedit Contact`,
+        },
       });
+      mutate();
+      return;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: "error",
+          content: error.message || "Terjadi kesalahan",
+        },
+      });
+      throw err;
+    }
   };
+
+  const inquiry = async (id: number): Promise<IContactDetail | null | undefined> => {
+    try {
+      const data = await getContactById(id);
+      return data;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: "error",
+          content: error?.message || "Terjadi kesalahan",
+        },
+      });
+      return null;
+    }
+  }
 
   const reload = (): void => {
     mutate();
@@ -142,12 +167,15 @@ export default function useContact(): IUseContact {
     insert,
     remove,
     update,
+    inquiry,
     reload,
+    setLoadingForm,
     items,
     isValidating,
-    dataReady: ready,
-    dataLoading,
-    dataError,
+    isReady: ready,
+    isLoading,
+    isError,
     dataMeta,
+    loadingForm,
   };
 }

@@ -15,24 +15,45 @@ export interface IContactRole {
   name: string;
 }
 
-// create interface for contact
-// export interface IContact {
-//   id: number;
-//   first_name: string;
-//   last_name: string;
-//   registration_status: string;
-//   public_id: string;
-//   profile_picture: string;
-//   identity: string;
-//   identity_type: string;
-//   profile_type: string;
-//   address: string;
-//   last_login: Date;
-//   property: IProperty;
-//   role: IContactRole;
-//   emails: IContactEmail[];
-//   phones: IContactPhone[];
-// }
+export interface IContactDetail {
+  id:                  number;
+  first_name:          string;
+  last_name:           string;
+  registration_status: string;
+  public_id:           string;
+  profile_picture:     string;
+  identity:            string;
+  identity_type:       string;
+  profile_type:        string;
+  address:             string;
+  last_login:          number | null | Date;
+  property:            IContactProperty;
+  role:                IContactRole;
+  role_group:          IContactRole;
+  emails:              IContactEmail[];
+  phones:              IContactPhone[];
+}
+
+export interface IContactEmail {
+  id:       number;
+  address:  string;
+  verified: boolean;
+}
+
+export interface IContactPhone {
+  id:     number;
+  number: string;
+}
+
+export interface IContactProperty {
+  id:   number;
+  name: string;
+}
+
+export interface IContactRole {
+  id:   number;
+  name: string;
+}
 
 export interface IContact {
   id: number;

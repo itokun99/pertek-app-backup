@@ -32,6 +32,13 @@ export function validateMultipleInput(datas: IMultipleInputItem[]): IMultipleInp
   return result;
 }
 
+// export function createMultipleInputValues<T>(data: T[], checkedKey: string, valueKey: string): IMultipleInputItem[] {
+//   return data.map(v => ({
+//     value: v[valueKey as keyof typeof data],
+//     checked: v[checkedKey as keyof typeof data]
+//   }))
+// }
+
 interface IMultipleInputProps {
   label: string;
   name: string;

@@ -1,7 +1,7 @@
 import { fetchData } from "@lib/dataFetcher";
-import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
-import { ICluster, ApiResponseType } from '@types';
-import { createUrlParamFromObj } from '@utils/helper';
+import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
+import { ICluster, ApiResponseType } from "@general-types";
+import { createUrlParamFromObj } from "@utils/helper";
 export interface IGetClusterPayload {
   page?: number;
   limit?: number;
@@ -15,20 +15,23 @@ export interface ICreateClusterPayload {
   description: string;
 }
 
+export async function getCluster(
+  payload: IGetClusterPayload
+): Promise<ApiResponseType<ICluster[]> | undefined> {
+  const params = createUrlParamFromObj(payload);
 
-export async function getCluster(payload: IGetClusterPayload): Promise<ApiResponseType<ICluster[]> | undefined> {
+  const { data, error } = await fetchData<ApiResponseType<Array<ICluster>>>(
+    `${ApiProxyEndpoint.Cluster}${params}`,
+    {
+      method: "GET",
+    }
+  );
 
-  const params = createUrlParamFromObj(payload)
-
-  const { data, error } =  await fetchData<ApiResponseType<Array<ICluster>>>(`${ApiProxyEndpoint.Cluster}${params}`, {
-    method: "GET",
-  });
-
-  if(error) {
-    throw error
+  if (error) {
+    throw error;
   }
 
-  return data
+  return data;
 }
 
 export async function createCluster(payload: ICreateClusterPayload) {
@@ -45,26 +48,32 @@ export async function createCluster(payload: ICreateClusterPayload) {
 }
 
 export async function deleteCluster(id: number) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Cluster}?id=${id}`, {
-    method: "DELETE"
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.Cluster}?id=${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
   if (error) {
     throw error;
   }
 
-  return data
+  return data;
 }
 
 export async function updateCluster(id: number, payload: ICreateClusterPayload) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Cluster}?id=${id}`, {
-    body: JSON.stringify(payload),
-    method: "PUT"
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.Cluster}?id=${id}`,
+    {
+      body: JSON.stringify(payload),
+      method: "PUT",
+    }
+  );
 
   if (error) {
     throw error;
   }
 
-  return data
+  return data;
 }

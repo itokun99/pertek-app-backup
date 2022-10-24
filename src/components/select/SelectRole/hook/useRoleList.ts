@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import { IRole } from '@types';
-import useDebounce from '@hooks/useDebounce';
-import { getRole } from '@service/role';
+import { useState, useEffect, useCallback } from "react";
+import { IRole } from "@general-types";
+import useDebounce from "@hooks/useDebounce";
+import { getRole } from "@service/role";
 
 export default function useRoleList() {
-
-  const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [data, setData] = useState<IRole[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -16,34 +15,32 @@ export default function useRoleList() {
   const getData = useCallback(() => {
     setLoading(true);
     setError(false);
-      getRole({ search })
-        .then(res => {
-          setLoading(false);
-          setError(false);
-          if(res) {
-            setData(res);
-          } else {
-            setError(true);
-            setData([]);
-          }
-        }).catch(() => {
+    getRole({ search })
+      .then((res) => {
+        setLoading(false);
+        setError(false);
+        if (res) {
+          setData(res);
+        } else {
           setError(true);
-          setLoading(false);
-        })
-  }, [ search]);
-
+          setData([]);
+        }
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  }, [search]);
 
   useEffect(() => {
-    if(open) {
+    if (open) {
       getData();
     } else {
       setData([]);
       setLoading(false);
       setError(false);
     }
-  }, [open, getData])
-
-  
+  }, [open, getData]);
 
   return {
     data,
@@ -51,6 +48,6 @@ export default function useRoleList() {
     loading,
     keyword,
     setOpen,
-    setKeyword
-  }
+    setKeyword,
+  };
 }

@@ -1,7 +1,7 @@
-import { fetchData } from '@lib/dataFetcher';
-import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
-import { IRole } from '@types';
-import { createUrlParamFromObj } from '@utils/helper';
+import { fetchData } from "@lib/dataFetcher";
+import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
+import { IRole } from "@general-types";
+import { createUrlParamFromObj } from "@utils/helper";
 
 export interface IGetRolePayload {
   search?: string;
@@ -14,7 +14,7 @@ export interface ICreateRolePayload {
 export async function getRole(payload: IGetRolePayload): Promise<IRole[] | undefined> {
   const params = createUrlParamFromObj(payload);
   const { data, error } = await fetchData<IRole[]>(`${ApiProxyEndpoint.Role}${params}`, {
-    method: 'GET',
+    method: "GET",
   });
 
   if (error) {
@@ -27,7 +27,7 @@ export async function getRole(payload: IGetRolePayload): Promise<IRole[] | undef
 export async function createRole(payload: ICreateRolePayload) {
   const { data, error } = await fetchData<{ message: string }>(ApiProxyEndpoint.Role, {
     body: JSON.stringify(payload),
-    method: 'POST',
+    method: "POST",
   });
 
   if (error) {
@@ -38,9 +38,12 @@ export async function createRole(payload: ICreateRolePayload) {
 }
 
 export async function deleteRole(id: number) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Role}?id=${id}`, {
-    method: 'DELETE',
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.Role}?id=${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
   if (error) {
     throw error;
@@ -50,10 +53,13 @@ export async function deleteRole(id: number) {
 }
 
 export async function updateRole(id: number, payload: ICreateRolePayload) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Role}?id=${id}`, {
-    body: JSON.stringify(payload),
-    method: 'PUT',
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.Role}?id=${id}`,
+    {
+      body: JSON.stringify(payload),
+      method: "PUT",
+    }
+  );
 
   if (error) {
     throw error;

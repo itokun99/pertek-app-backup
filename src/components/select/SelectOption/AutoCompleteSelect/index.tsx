@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { SelectOptionType } from '@types';
+import { SelectOptionType } from "@general-types";
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
 import Autocomplete, { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";

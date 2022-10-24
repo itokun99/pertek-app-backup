@@ -1,35 +1,35 @@
-import Add from '@mui/icons-material/Add';
-import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from 'react';
+import Add from "@mui/icons-material/Add";
+import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from "react";
 
-import useConfirmation from '@hooks/useConfirmation';
-import useForm from '@hooks/useForm';
-import { SelectOptionType, IContact } from '@types';
-import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
-import { AlertContext } from '@provider/AlertProvider';
-import useContact from './hook/useContact';
-import { ICreateContactPayload } from '@service/contact';
-import dynamic from 'next/dynamic';
-import { TabItem } from '@components/TabBar';
-import FormDialog, { IForm, IFormError } from '@components/dialog/FormContact';
-import { IMultipleInputItem, validateMultipleInput } from '@components/input/MultipleInput';
+import useConfirmation from "@hooks/useConfirmation";
+import useForm from "@hooks/useForm";
+import { SelectOptionType, IContact } from "@general-types";
+import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
+import { AlertContext } from "@provider/AlertProvider";
+import useContact from "./hook/useContact";
+import { ICreateContactPayload } from "@service/contact";
+import dynamic from "next/dynamic";
+import { TabItem } from "@components/TabBar";
+import FormDialog, { IForm, IFormError } from "@components/dialog/FormContact";
+import { IMultipleInputItem, validateMultipleInput } from "@components/input/MultipleInput";
 
-const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
+const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
 });
 
-const Section = dynamic(() => import('@components/views/Section'), {
+const Section = dynamic(() => import("@components/views/Section"), {
   ssr: false,
   suspense: true,
 });
-const CardTable = dynamic(() => import('@components/cards/CardTable'), {
+const CardTable = dynamic(() => import("@components/cards/CardTable"), {
   ssr: false,
   suspense: true,
 });
-const TableData = dynamic(() => import('@components/tables/TableContact'), {
+const TableData = dynamic(() => import("@components/tables/TableContact"), {
   ssr: false,
   suspense: true,
 });
-const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
+const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
   ssr: false,
   suspense: true,
 });
@@ -44,28 +44,28 @@ const initialForm: IForm = {
   profileType: "",
   property: {
     label: "",
-    value: ""
+    value: "",
   },
   role: {
     label: "",
-    value: ""
+    value: "",
   },
   roleGroup: {
     label: "",
-    value: ""
+    value: "",
   },
   emails: [
     {
       value: "",
       checked: false,
-    }
+    },
   ],
   phones: [
     {
       value: "",
       checked: false,
-    }
-  ]
+    },
+  ],
 };
 
 const initialFormError: IFormError = {
@@ -74,8 +74,8 @@ const initialFormError: IFormError = {
   address: "",
   identity: "",
   identityType: "",
-  profileType: ""
-}
+  profileType: "",
+};
 
 const ContactView = (): ReactElement => {
   // contexts
@@ -83,12 +83,13 @@ const ContactView = (): ReactElement => {
 
   // states
   const [tabIndex, setTabIndex] = useState<string | number>("all");
-  const [search, setSearch] = useState<string>('');
+  const [search, setSearch] = useState<string>("");
   const [visibility, setVisibility] = useState(false);
 
   // custom hooks
   const [form, setForm, resetForm, setFormBulk] = useForm<IForm>(initialForm);
-  const [formError, setFormError, resetFormError, setFormErrorBulk] = useForm<IFormError>(initialFormError);
+  const [formError, setFormError, resetFormError, setFormErrorBulk] =
+    useForm<IFormError>(initialFormError);
 
   console.log("form ==>", form);
   console.log("formError ==>", formError);
@@ -99,29 +100,42 @@ const ContactView = (): ReactElement => {
     visibility: deleteConfirmationVisibility,
   } = useConfirmation<number>(
     {
-      title: 'Konfirmasi Hapus',
-      description: 'Apakah kamu yakin ingin menghapus item ini?',
-      cancelText: 'Kembali',
-      confirmText: 'Ya',
+      title: "Konfirmasi Hapus",
+      description: "Apakah kamu yakin ingin menghapus item ini?",
+      cancelText: "Kembali",
+      confirmText: "Ya",
     },
     0
   );
 
-  const { items, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload, dataMeta } = useContact();
+  const {
+    items,
+    insert,
+    remove,
+    update,
+    dataLoading,
+    dataError,
+    dataReady,
+    isValidating,
+    reload,
+    dataMeta,
+  } = useContact();
 
   // other hooks
-  const tabs = useMemo((): TabItem[] => [
-    {
-      label: "",
-      text: "Semua",
-      color: "default",
-      value: "all"
-    }
-  ], []);
+  const tabs = useMemo(
+    (): TabItem[] => [
+      {
+        label: "",
+        text: "Semua",
+        color: "default",
+        value: "all",
+      },
+    ],
+    []
+  );
 
   // variables
   const isEdit = Boolean(form.id);
-
 
   // handlers
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,11 +157,11 @@ const ContactView = (): ReactElement => {
 
   const handleMultipleInputChange = (name: string, value: IMultipleInputItem[]) => {
     setForm(name, value);
-  }
+  };
 
   const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
     setTabIndex(value);
-  }
+  };
 
   const validateForm = (form: IForm, formError: IFormError) => {
     const error = { ...formError };
@@ -156,11 +170,11 @@ const ContactView = (): ReactElement => {
     }
 
     if (!form.identityType) {
-      error.identityType = "Tipe identitas harus diisi"
+      error.identityType = "Tipe identitas harus diisi";
     }
 
     if (!form.identity) {
-      error.identity = "Nomor Identitas harus diisi"
+      error.identity = "Nomor Identitas harus diisi";
     }
 
     if (!form.address) {
@@ -168,17 +182,17 @@ const ContactView = (): ReactElement => {
     }
 
     if (!form.profileType) {
-      error.profileType = "Tipe profil harus diisi"
+      error.profileType = "Tipe profil harus diisi";
     }
 
     return error;
-  }
+  };
 
   const handleSubmit = () => {
     // it should check if the form is empty
 
     const error = validateForm(form, formError);
-    const isValid = Object.keys(error).every(key => !error[key as keyof typeof formError]);
+    const isValid = Object.keys(error).every((key) => !error[key as keyof typeof formError]);
 
     if (!isValid) {
       // console.log("masuk sini12", error)
@@ -198,24 +212,29 @@ const ContactView = (): ReactElement => {
       role_id: Number(form.role?.value) || 0,
       role_group_id: Number(form.roleGroup?.value) || 0,
       property_id: Number(form.property?.value) || 0,
-      emails: validateMultipleInput(form.emails).map(email => ({ address: email.value, verified: email.checked || false })),
-      phone_numbers: validateMultipleInput(form.phones).map(phone => phone.value)
+      emails: validateMultipleInput(form.emails).map((email) => ({
+        address: email.value,
+        verified: email.checked || false,
+      })),
+      phone_numbers: validateMultipleInput(form.phones).map((phone) => phone.value),
     };
 
     // console.log("masuk sini");
-    (isEdit ? update(form.id, payload) : insert(payload)).then(() => {
-      setVisibility(false);
-      resetForm();
-    }).catch(err => {
-      console.log("err", err);
-    });
+    (isEdit ? update(form.id, payload) : insert(payload))
+      .then(() => {
+        setVisibility(false);
+        resetForm();
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
   };
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
-      title: 'Kontak Baru',
+      title: "Kontak Baru",
       onClick: (): void => setVisibility(true),
-      color: 'info',
+      color: "info",
       startIcon: <Add />,
     },
   ];
@@ -250,13 +269,13 @@ const ContactView = (): ReactElement => {
     <>
       <Suspense>
         <Section
-          title='Kontak'
-          description='management kelola kontak'
+          title="Kontak"
+          description="management kelola kontak"
           stackProps={{ mt: 12 }}
           actionButton={<ActionButton buttons={actionButton} />}
         >
           <CardTable
-            searchPlaceholder='Cari Kontak'
+            searchPlaceholder="Cari Kontak"
             searchValue={search}
             onChangeSearch={handleChangeSearch}
             tabs={tabs}

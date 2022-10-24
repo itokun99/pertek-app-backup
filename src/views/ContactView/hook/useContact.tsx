@@ -1,12 +1,17 @@
-import { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router';
-import { AlertContext } from '@provider/AlertProvider';
-import useSWR from 'swr';
-import { fetchData, FetcherResponseError } from '@lib/dataFetcher';
-import { IContact, ApiResponseType } from '@types';
-import { createContact, updateContact, deleteContact, ICreateContactPayload } from '@service/contact';
-import { createUrlParamFromObj } from '@utils/helper';
-import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
+import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
+import { AlertContext } from "@provider/AlertProvider";
+import useSWR from "swr";
+import { fetchData, FetcherResponseError } from "@lib/dataFetcher";
+import { IContact, ApiResponseType } from "@general-types";
+import {
+  createContact,
+  updateContact,
+  deleteContact,
+  ICreateContactPayload,
+} from "@service/contact";
+import { createUrlParamFromObj } from "@utils/helper";
+import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
 
 interface IUseContact {
   insert: (payload: ICreateContactPayload) => Promise<void>;
@@ -37,13 +42,17 @@ export default function useContact(): IUseContact {
     error: responseError,
     isValidating,
     mutate,
-  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IContact[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  } = useSWR(
+    `${API_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<IContact[]>>(url, { method: "GET" }),
+    {
+      refreshWhenOffline: true,
+      refreshWhenHidden: true,
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
+  );
 
   const [ready, setReady] = useState<boolean>(false);
   const dataMeta = responseData?.data;
@@ -58,7 +67,7 @@ export default function useContact(): IUseContact {
         // console.log("error masuk sini")
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil menambah Contact Baru`,
           },
         });
@@ -68,8 +77,8 @@ export default function useContact(): IUseContact {
         // console.log("error")
         setAlert({
           message: {
-            severity: 'error',
-            content: err.message || '',
+            severity: "error",
+            content: err.message || "",
           },
         });
       });
@@ -80,7 +89,7 @@ export default function useContact(): IUseContact {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil menghapus Contact`,
           },
         });
@@ -89,8 +98,8 @@ export default function useContact(): IUseContact {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });
@@ -101,7 +110,7 @@ export default function useContact(): IUseContact {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil mengedit Contact`,
           },
         });
@@ -110,8 +119,8 @@ export default function useContact(): IUseContact {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });

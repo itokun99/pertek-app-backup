@@ -1,10 +1,10 @@
-import React, { memo, useId } from 'react';
-import FormControl from '@mui/material/FormControl';
-import FormHelperText from '@mui/material/FormHelperText';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import { SelectOptionType } from '@types';
+import React, { memo, useId } from "react";
+import FormControl from "@mui/material/FormControl";
+import FormHelperText from "@mui/material/FormHelperText";
+import MenuItem from "@mui/material/MenuItem";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
+import InputLabel from "@mui/material/InputLabel";
+import { SelectOptionType } from "@general-types";
 
 interface IBaseSelectProps {
   id?: string;
@@ -16,7 +16,7 @@ interface IBaseSelectProps {
   error?: boolean;
   helperText?: string;
   options: SelectOptionType[];
-  onChange: (event: SelectChangeEvent) => void
+  onChange: (event: SelectChangeEvent) => void;
 }
 
 function BaseSelect({
@@ -29,7 +29,7 @@ function BaseSelect({
   options,
   error,
   helperText,
-  placeholder
+  placeholder,
 }: IBaseSelectProps): JSX.Element {
   const labelId = useId();
   const selectId = useId();
@@ -47,17 +47,15 @@ function BaseSelect({
         disabled={disabled}
         placeholder={placeholder}
       >
-        {options.map(option => (
+        {options.map((option) => (
           <MenuItem key={`select-${id}-menu-item-${option.value}`} value={option.value}>
             {option.label}
           </MenuItem>
         ))}
       </Select>
-      {helperText && (
-        <FormHelperText>{helperText}</FormHelperText>
-      )}
+      {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
-  )
+  );
 }
 
-export default memo(BaseSelect)
+export default memo(BaseSelect);

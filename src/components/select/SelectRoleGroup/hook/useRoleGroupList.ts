@@ -1,11 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
-import { IRoleGroup } from '@types';
-import useDebounce from '@hooks/useDebounce';
-import { getRoleGroup } from '@service/role-group';
+import { useState, useEffect, useCallback } from "react";
+import { IRoleGroup } from "@general-types";
+import useDebounce from "@hooks/useDebounce";
+import { getRoleGroup } from "@service/role-group";
 
 export default function useRoleGroupList() {
-
-  const [keyword, setKeyword] = useState<string>('');
+  const [keyword, setKeyword] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [data, setData] = useState<IRoleGroup[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -16,34 +15,32 @@ export default function useRoleGroupList() {
   const getData = useCallback(() => {
     setLoading(true);
     setError(false);
-      getRoleGroup({ search })
-        .then(res => {
-          setLoading(false);
-          setError(false);
-          if(res?.items) {
-            setData(res?.items);
-          } else {
-            setError(true);
-            setData([]);
-          }
-        }).catch(() => {
+    getRoleGroup({ search })
+      .then((res) => {
+        setLoading(false);
+        setError(false);
+        if (res?.items) {
+          setData(res?.items);
+        } else {
           setError(true);
-          setLoading(false);
-        })
-  }, [ search]);
-
+          setData([]);
+        }
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+      });
+  }, [search]);
 
   useEffect(() => {
-    if(open) {
+    if (open) {
       getData();
     } else {
       setData([]);
       setLoading(false);
       setError(false);
     }
-  }, [open, getData])
-
-  
+  }, [open, getData]);
 
   return {
     data,
@@ -51,6 +48,6 @@ export default function useRoleGroupList() {
     loading,
     keyword,
     setOpen,
-    setKeyword
-  }
+    setKeyword,
+  };
 }

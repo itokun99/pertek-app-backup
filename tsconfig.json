@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,48 +16,20 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@components/*": [
-        "src/components/*"
-      ],
-      "@config/*": [
-        "src/config/*"
-      ],
-      "@utils/*": [
-        "src/utils/*"
-      ],
-      "@views/*": [
-        "src/views/*"
-      ],
-      "@backend/*": [
-        "src/backend/*"
-      ],
-      "@lib/*": [
-        "src/lib/*"
-      ],
-      "@provider/*": [
-        "src/provider/*"
-      ],
-      "@hooks/*": [
-        "src/hooks/*"
-      ],
-      "@types": [
-        "src/types"
-      ],
-      "@schema/*": [
-        "src/schema/*"
-      ],
-      "@service/*": [
-        "src/service/*"
-      ],
-      "@template/*": [
-        "src/template/*"
-      ],
-      "@theme/*": [
-        "src/theme/*"
-      ],
-      "@general-types/*": [
-        "src/types/*"
-      ]
+      "@components/*": ["src/components/*"],
+      "@config/*": ["src/config/*"],
+      "@utils/*": ["src/utils/*"],
+      "@views/*": ["src/views/*"],
+      "@backend/*": ["src/backend/*"],
+      "@lib/*": ["src/lib/*"],
+      "@provider/*": ["src/provider/*"],
+      "@hooks/*": ["src/hooks/*"],
+      "@types": ["src/types"],
+      "@schema/*": ["src/schema/*"],
+      "@service/*": ["src/service/*"],
+      "@template/*": ["src/template/*"],
+      "@theme/*": ["src/theme/*"],
+      "@general-types": ["src/types"]
     }
   },
   "include": [
@@ -71,7 +39,5 @@
     "src/theme/overrides/ToggleButton.js",
     "src/theme/overrides/Alert.tsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }

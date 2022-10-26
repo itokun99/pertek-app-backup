@@ -1,19 +1,20 @@
-import React from "react";
+import React from 'react';
 // dialog component
-import Dialog, { DialogProps } from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import Dialog, { DialogProps } from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
 // additional
-import { styled } from "@mui/material/styles";
+import { styled } from '@mui/material/styles';
 
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 interface IBaseDialogForm {
   title: string;
   visible: boolean;
+  fullScreen?: boolean;
   scroll?: DialogProps['scroll'];
   action?: React.ReactElement | JSX.Element | React.ReactNode | null;
   children?: React.ReactElement | JSX.Element | React.ReactNode | null;
@@ -27,14 +28,14 @@ export interface DialogTitleProps {
 }
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
+  '& .MuiDialogContent-root': {
     padding: theme.spacing(2),
   },
-  "& .MuiDialogActions-root": {
+  '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
-  "& .MuiDialog-paper": {
-    width: "100%",
+  '& .MuiDialog-paper': {
+    width: '100%',
   },
 }));
 
@@ -47,10 +48,10 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
       {children}
       {onClose ? (
         <IconButton
-          aria-label="close"
+          aria-label='close'
           onClick={onClose}
           sx={{
-            position: "absolute",
+            position: 'absolute',
             right: 8,
             top: 8,
             color: (theme) => theme.palette.grey[500],
@@ -69,23 +70,16 @@ const BaseDialogForm: React.FC<IBaseDialogForm> = ({
   onClose,
   children,
   action,
-  scroll = 'body'
+  fullScreen = false,
+  scroll = 'body',
 }) => {
-
-
   return (
-    <BootstrapDialog scroll={scroll} open={visible} onClose={onClose}>
-      <BootstrapDialogTitle id="customized-dialog-title" onClose={onClose}>
+    <BootstrapDialog fullScreen={fullScreen} scroll={scroll} open={visible} onClose={onClose}>
+      <BootstrapDialogTitle id='customized-dialog-title' onClose={onClose}>
         {title}
       </BootstrapDialogTitle>
-      <DialogContent dividers>
-        {children}
-      </DialogContent>
-      {action && (
-        <DialogActions>
-          {action}
-        </DialogActions>
-      )}
+      <DialogContent dividers>{children}</DialogContent>
+      {action && <DialogActions>{action}</DialogActions>}
     </BootstrapDialog>
   );
 };

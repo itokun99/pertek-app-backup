@@ -1,36 +1,27 @@
-import { Add, CloudDownload, CloudUpload, Refresh, Search } from "@mui/icons-material";
-import {
-  Box,
-  Card,
-  Grid,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-  useTheme,
-} from "@mui/material";
-import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
-import { Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from "react";
+import { Add, CloudDownload, CloudUpload, Refresh, Search } from '@mui/icons-material';
+import { Box, Card, Grid, InputAdornment, Stack, TextField, Typography, useTheme } from '@mui/material';
+import { motion } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
+import { Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
 
-import { ReactElement } from "react";
-import AnimatedButton from "../../src/components/buttons/AnimatedButton";
-import { ErrorComponent } from "../../src/components/error/ErrorComponent";
-import { TableLoader } from "../../src/components/loader/TableLoader";
-import { TabBar, TabItem } from "../../src/components/TabBar";
-import { UploaderTable } from "../../src/components/tables/TableUploader";
-import { doFetch } from "../../src/lib/dataFetcher";
-import { AlertContext } from "../../src/provider/AlertProvider";
-import { NetworkContext } from "../../src/provider/NetworkProvider";
-import ProtectedPage from "../../src/template/ProtectedPage";
+import { ReactElement } from 'react';
+import AnimatedButton from '../../src/components/buttons/AnimatedButton';
+import { ErrorComponent } from '../../src/components/error/ErrorComponent';
+import { TableLoader } from '../../src/components/loader/TableLoader';
+import { TabBar, TabItem } from '../../src/components/TabBar';
+import { UploaderTable } from '../../src/components/tables/TableUploader';
+import { doFetch } from '../../src/lib/dataFetcher';
+import { AlertContext } from '../../src/provider/AlertProvider';
+import { NetworkContext } from '../../src/provider/NetworkProvider';
+import ProtectedPage from '../../src/template/ProtectedPage';
 
-const TenantTable = dynamic(() => import("../../src/components/tables/TableTenant"), {
+const TenantTable = dynamic(() => import('../../src/components/tables/TableTenant'), {
   ssr: false,
   suspense: true,
 });
 
-const AddTenantDialog = dynamic(() => import("../../src/components/dialog/AddTenant"), {
+const AddTenantDialog = dynamic(() => import('../../src/components/dialog/AddTenant'), {
   ssr: false,
   suspense: true,
 });
@@ -44,10 +35,10 @@ const TenantIndex = () => {
 
   const status = useMemo(() => {
     const status: TabItem[] = [
-      { text: "Semua", color: "default" },
-      { text: "Pending", color: "info" },
-      { text: "Verified", color: "success" },
-      { text: "Blocked", color: "error" },
+      { text: 'Semua', color: 'default' },
+      { text: 'Pending', color: 'info' },
+      { text: 'Verified', color: 'success' },
+      { text: 'Blocked', color: 'error' },
     ];
     return status;
   }, []);
@@ -70,19 +61,20 @@ const TenantIndex = () => {
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
-  const handleTabBarChange = (e: SyntheticEvent<Element, Event>, v: number) => {
+  const handleTabBarChange = (e: SyntheticEvent<Element, Event>, v: number | string) => {
     e.preventDefault();
-    setTabIndex(v);
+    const index = parseInt(v as string);
+    setTabIndex(index);
 
     if (v > 0) {
-      return push("/tenant", {
+      return push('/tenant', {
         query: {
-          status: status[v].text.toLowerCase(),
+          status: status[index].text.toLowerCase(),
           tab: v,
         },
       });
     }
-    return push("/tenant");
+    return push('/tenant');
   };
 
   const handleAddTenant = () => {
@@ -97,7 +89,7 @@ const TenantIndex = () => {
   const handleTemplateDownload = async (e: any) => {
     e.preventDefault();
 
-    const url = "/api/template?model=tenant";
+    const url = '/api/template?model=tenant';
 
     const res = await fetch(url);
 
@@ -105,7 +97,7 @@ const TenantIndex = () => {
       const payload = await res.json();
       return setAlert({
         message: {
-          severity: "error",
+          severity: 'error',
           content: payload.message,
         },
       });
@@ -114,8 +106,8 @@ const TenantIndex = () => {
     location.replace(url);
     setAlert({
       message: {
-        severity: "success",
-        content: "Download template berhasil!",
+        severity: 'success',
+        content: 'Download template berhasil!',
       },
     });
   };
@@ -126,54 +118,40 @@ const TenantIndex = () => {
 
   return (
     <Stack mt={12}>
-      <Suspense>
-        {openDialog && <AddTenantDialog open={openDialog} setOpen={setOpenDialog} />}
-      </Suspense>
+      <Suspense>{openDialog && <AddTenantDialog open={openDialog} setOpen={setOpenDialog} />}</Suspense>
       <Box mb={5}>
         <Grid container>
           <Grid item flexGrow={1}>
             <Stack>
-              <Typography variant="h6">Tenant Management</Typography>
-              <Typography variant="body2" color={theme.palette.text.secondary}>
+              <Typography variant='h6'>Tenant Management</Typography>
+              <Typography variant='body2' color={theme.palette.text.secondary}>
                 Kelola tenant properti
               </Typography>
             </Stack>
           </Grid>
           <Grid item>
-            <Stack direction="row" gap={2}>
+            <Stack direction='row' gap={2}>
               {!csvFile && (
                 <>
-                  <AnimatedButton onClick={handleAddTenant} color="info" startIcon={<Add />}>
+                  <AnimatedButton onClick={handleAddTenant} color='info' startIcon={<Add />}>
                     Tenant Baru
                   </AnimatedButton>
-                  <AnimatedButton
-                    color="warning"
-                    onClick={handleTemplateDownload}
-                    startIcon={<CloudDownload />}
-                  >
+                  <AnimatedButton color='warning' onClick={handleTemplateDownload} startIcon={<CloudDownload />}>
                     Template
                   </AnimatedButton>
-                  <AnimatedButton
-                    color="success"
-                    component={motion.label}
-                    startIcon={<CloudUpload />}
-                  >
+                  <AnimatedButton color='success' component={motion.label} startIcon={<CloudUpload />}>
                     Upload CSV
-                    <input type="file" hidden multiple accept=".csv" onChange={handleCSVUpload} />
+                    <input type='file' hidden multiple accept='.csv' onChange={handleCSVUpload} />
                   </AnimatedButton>
                 </>
               )}
               {csvFile && (
                 <>
-                  <AnimatedButton
-                    color="success"
-                    component={motion.label}
-                    startIcon={<CloudUpload />}
-                  >
+                  <AnimatedButton color='success' component={motion.label} startIcon={<CloudUpload />}>
                     Upload Data
                   </AnimatedButton>
                   <AnimatedButton
-                    color="error"
+                    color='error'
                     onClick={() => setCsvFile(undefined)}
                     component={motion.label}
                     startIcon={<Refresh />}
@@ -202,11 +180,11 @@ const TenantIndex = () => {
                   >
                     <TextField
                       fullWidth
-                      placeholder="Cari tenant"
-                      variant="outlined"
+                      placeholder='Cari tenant'
+                      variant='outlined'
                       InputProps={{
                         startAdornment: (
-                          <InputAdornment position="start">
+                          <InputAdornment position='start'>
                             <Search />
                           </InputAdornment>
                         ),
@@ -215,11 +193,7 @@ const TenantIndex = () => {
                   </Box>
                 )}
                 {(isOffline || (isOnline && isError)) && (
-                  <ErrorComponent
-                    onReload={handleReload}
-                    showReloadButton={isError}
-                    offline={isOffline}
-                  />
+                  <ErrorComponent onReload={handleReload} showReloadButton={isError} offline={isOffline} />
                 )}
                 {!data && isOnline && !isError && (
                   <Box mb={2}>

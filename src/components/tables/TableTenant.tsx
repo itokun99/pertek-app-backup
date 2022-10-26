@@ -45,6 +45,13 @@ const generateTableColumns = (theme: Theme) =>
       headerName: 'No. Telp',
       field: 'phone_number',
       flex: 1,
+      renderCell: (params) => {
+        return (
+          <Typography variant='body2' color={theme.palette.text.secondary}>
+            {params.row.phones.map((phone: any) => phone.number).join(', ')}
+          </Typography>
+        );
+      },
     },
     {
       headerName: 'Mulai Huni',
@@ -68,6 +75,7 @@ const generateTableColumns = (theme: Theme) =>
 
 const TenantTable = ({ data }: PropsWithChildren & { data: [] }) => {
   const theme = useTheme();
+  console.log(data);
   return (
     <DataGrid
       headerHeight={40}

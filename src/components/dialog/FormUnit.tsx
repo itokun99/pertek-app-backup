@@ -13,6 +13,7 @@ import Button from "@mui/material/Button";
 
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
+import { SelectOptionChangeType } from '../select/SelectOption';
 import SelectProperty from "../select/SelectProperty";
 import SelectCluster from "../select/SelectCluster";
 import { SelectOptionType } from "../../types";
@@ -21,13 +22,9 @@ interface IModalProperties {
   edit: boolean;
   visible: boolean;
   onSubmit: () => void;
-  form: any,
+  form: any;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onSelectChange: (
-    _event: React.SyntheticEvent,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => void;
+  onSelectChange: SelectOptionChangeType<SelectOptionType>;
   onClose: () => void;
 }
 

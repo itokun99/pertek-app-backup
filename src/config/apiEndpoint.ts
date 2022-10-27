@@ -64,8 +64,12 @@ export const Endpoint = {
   // Klaster
   Klaster: `${API_BASE_URL}:${EndpointGroup.Property}/property_cluster`,
 
-  // Klaster
+  // Unit
   Unit: `${API_BASE_URL}:${EndpointGroup.Property}/property_unit`,
-
   UnitType: `${API_BASE_URL}:${EndpointGroup.Property}/property_unit_type`,
+
+  // Contacts
+  Contact: `${API_BASE_URL}:${EndpointGroup.Profile}/contact`,
+  ContactPhone: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_phone_number`,
+  ContactEmail: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_email`
 };

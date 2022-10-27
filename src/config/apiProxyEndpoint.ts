@@ -1,8 +1,13 @@
 export enum ApiProxyEndpoint {
-  Cluster = '/api/klaster',
-  Facility = '/api/fasilitas',
+  Cluster = '/api/cluster',
+  Facility = '/api/facility',
   Booking = '/api/booking',
-  Property = '/api/properti',
+  Property = '/api/property',
   Unit = '/api/unit',
-  UnitType = 'api/tipe-unit',
+  UnitType = 'api/unit-type',
+  Contact = '/api/contact',
+  ContactPhone = '/api/contact-phone',
+  ContactEmail = '/api/contact-email',
+  Role = '/api/role',
+  RoleGroup = '/api/role-group'
 }

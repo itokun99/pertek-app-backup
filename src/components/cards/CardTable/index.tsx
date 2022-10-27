@@ -16,8 +16,8 @@ export interface CardTableProps {
   withTabs?: boolean;
   errorMessage?: string;
   tabs: TabItem[];
-  tabIndex: number;
-  onChangeTab?: (e: SyntheticEvent<Element, Event>, value: number) => void;
+  tabIndex: number | string;
+  onChangeTab?: (e: SyntheticEvent<Element, Event>, value: number | string) => void;
   searchValue: string;
   searchPlaceholder?: string;
   onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;

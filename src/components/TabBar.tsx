@@ -2,17 +2,19 @@ import { Stack, Tab, Tabs, Theme, Typography } from '@mui/material';
 import { PropsWithChildren, SyntheticEvent } from 'react';
 import Label from '../components/Label';
 
-export type TabItem = {
+export type TabItem<T = unknown> = {
   label?: string;
   text: string;
   color: 'success' | 'warning' | 'info' | 'error' | 'default';
+  value?: string | number | T;
+  disabled?: boolean;
 };
 
 type TabBarProps = PropsWithChildren & {
   theme: Theme;
-  value: number;
+  value: number | string;
   tabs: TabItem[];
-  onChange?: (e: SyntheticEvent<Element, Event>, value: number) => void;
+  onChange?: (e: SyntheticEvent<Element, Event>, value: number | string) => void;
 };
 export const TabBar = ({ theme, tabs, value, onChange }: TabBarProps) => {
   return (
@@ -30,6 +32,8 @@ export const TabBar = ({ theme, tabs, value, onChange }: TabBarProps) => {
           key={key}
           id={`tenant-table-tab-${key}`}
           disableRipple
+          value={tab.value}
+          disabled={tab.disabled}
           label={
             <Stack direction='row' gap={0.5}>
               {tab.label && (

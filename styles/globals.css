@@ -34,3 +34,7 @@ a {
 .action-cell-button__text {
   self-align: center;
 }
+
+#nprogress .bar {
+  z-index: 99999999999;
+}

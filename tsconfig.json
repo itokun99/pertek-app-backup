@@ -17,17 +17,19 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
+      "@config/*": ["src/config/*"],
       "@utils/*": ["src/utils/*"],
       "@views/*": ["src/views/*"],
       "@backend/*": ["src/backend/*"],
       "@lib/*": ["src/lib/*"],
       "@provider/*": ["src/provider/*"],
       "@hooks/*": ["src/hooks/*"],
+      "@types": ["src/types"],
       "@schema/*": ["src/schema/*"],
       "@service/*": ["src/service/*"],
       "@template/*": ["src/template/*"],
       "@theme/*": ["src/theme/*"],
-      "@general-types/*": ["src/types/*"]
+      "@general-types": ["src/types"]
     }
   },
   "include": [

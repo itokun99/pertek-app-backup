@@ -135,12 +135,8 @@ const ClusterView = (): ReactElement => {
     setForm('propertyInput', value);
   }
 
-  const handleSelectChange = (
-    _event: React.SyntheticEvent<Element, Event>,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => {
-    setForm(name, newValue);
+  const handleSelectChange = (name: string, value: any) => {
+    setForm(name, value);
   };
 
   const handleSubmit = () => {

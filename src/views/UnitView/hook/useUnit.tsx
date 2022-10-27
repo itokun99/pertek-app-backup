@@ -52,69 +52,73 @@ export default function useUnit(): IUseUnit {
   const dataError = responseError || responseData?.error;
 
   // methods
-  const insert = async (payload: ICreateUnitPayload) => {
-    createUnit(payload)
-      .then(() => {
-        // console.log("error masuk sini")
-        setAlert({
-          message: {
-            severity: 'success',
-            content: `Berhasil menambah Unit Baru`,
-          },
-        });
-        mutate();
-      })
-      .catch((err: FetcherResponseError) => {
-        // console.log("error")
-        setAlert({
-          message: {
-            severity: 'error',
-            content: err.message || '',
-          },
-        });
+  const insert = async (payload: ICreateUnitPayload): Promise<void> => {
+    try {
+      await createUnit(payload);
+      setAlert({
+        message: {
+          severity: 'success',
+          content: `Berhasil menambah Unit Baru`,
+        },
       });
+      mutate();
+      return;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: 'error',
+          content: error.message || 'Terjadi Kesalahan',
+        },
+      });
+      throw err;
+    }
   };
 
-  const remove = async (id: number) => {
-    deleteUnit(id)
-      .then(() => {
-        setAlert({
-          message: {
-            severity: 'success',
-            content: `Berhasil menghapus Unit`,
-          },
-        });
-        mutate();
-      })
-      .catch((err: FetcherResponseError) => {
-        setAlert({
-          message: {
-            severity: 'error',
-            content: err?.message || '',
-          },
-        });
+  const remove = async (id: number): Promise<void> => {
+    try {
+      await deleteUnit(id);
+      setAlert({
+        message: {
+          severity: 'success',
+          content: `Berhasil menghapus Unit`,
+        },
       });
+      mutate();
+      return;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: 'error',
+          content: error?.message || 'Terjadi Kesalahan',
+        },
+      });
+      throw err;
+    }
   };
 
-  const update = async (id: number, payload: ICreateUnitPayload) => {
-    updateUnit(id, payload)
-      .then(() => {
-        setAlert({
-          message: {
-            severity: 'success',
-            content: `Berhasil mengedit Unit`,
-          },
-        });
-        mutate();
-      })
-      .catch((err: FetcherResponseError) => {
-        setAlert({
-          message: {
-            severity: 'error',
-            content: err?.message || '',
-          },
-        });
+  const update = async (id: number, payload: ICreateUnitPayload): Promise<void> => {
+    try {
+      await updateUnit(id, payload)
+      setAlert({
+        message: {
+          severity: 'success',
+          content: `Berhasil mengedit Unit`,
+        },
       });
+      mutate();
+      return;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: 'error',
+          content: error?.message || 'Terjadi Kesalahan',
+        },
+      });
+      throw err;
+    }
   };
 
   const reload = (): void => {

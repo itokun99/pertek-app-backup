@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ICluster } from '../../../../types';
 import useDebounce from '../../../../hooks/useDebounce';
-import { getCluster } from '../../../../service/klaster';
+import { getCluster } from '../../../../service/cluster';
 
 export default function useClusterList() {
 

@@ -44,15 +44,16 @@ const PackageTable = () => {
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
-  const handleChange = (e: SyntheticEvent<Element, Event>, tabIndex: number) => {
+  const handleChange = (e: SyntheticEvent<Element, Event>, tabIndex: number | string) => {
     e.preventDefault();
-    setTabIndex(tabIndex);
+    const index = parseInt(tabIndex as string);
+    setTabIndex(index);
 
     if (tabIndex > 0) {
       push('/paket', {
         query: {
           tab: tabIndex,
-          status: status[tabIndex].text.toLowerCase(),
+          status: status[index].text.toLowerCase(),
         },
       });
       return;

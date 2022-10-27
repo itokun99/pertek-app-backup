@@ -2,6 +2,7 @@ import { BaseType } from './base';
 import { IContact } from './contact';
 
 export interface IFacility extends BaseType {
+  id: number;
   name: string;
   description: string;
 }

@@ -21,11 +21,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const path = req.query?.path;
 
   if (path?.includes('stats')) {
-    endpoint = Endpoint.FacilityBookingStats;
+    endpoint = Endpoint.BookingStats;
   }
 
   if (path?.includes('booking')) {
-    endpoint = Endpoint.FacilityBooking;
+    endpoint = Endpoint.Booking;
   }
 
   if (path?.includes('category')) {

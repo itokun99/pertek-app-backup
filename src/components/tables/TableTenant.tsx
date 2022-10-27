@@ -75,7 +75,6 @@ const generateTableColumns = (theme: Theme) =>
 
 const TenantTable = ({ data }: PropsWithChildren & { data: [] }) => {
   const theme = useTheme();
-  console.log(data);
   return (
     <DataGrid
       headerHeight={40}

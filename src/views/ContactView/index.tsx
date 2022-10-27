@@ -1,80 +1,80 @@
-import Add from "@mui/icons-material/Add";
-import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from "react";
+import Add from '@mui/icons-material/Add';
+import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from 'react';
 
-import useConfirmation from "@hooks/useConfirmation";
-import useForm from "@hooks/useForm";
-import { SelectOptionType, IContact, IContactEmail } from "@general-types";
-import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
-import { AlertContext } from "@provider/AlertProvider";
-import useContact from "./hook/useContact";
-import { ICreateContactPayload } from "@service/contact";
-import dynamic from "next/dynamic";
-import { TabItem } from "@components/TabBar";
-import FormDialog, { IForm, IFormError } from "@components/dialog/FormContact";
-import { IMultipleInputItem, validateMultipleInput } from "@components/input/MultipleInput";
+import useConfirmation from '@hooks/useConfirmation';
+import useForm from '@hooks/useForm';
+import { SelectOptionType, IContact, IContactEmail } from '@general-types';
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
+import { AlertContext } from '@provider/AlertProvider';
+import useContact from './hook/useContact';
+import { ICreateContactPayload } from '@service/contact';
+import dynamic from 'next/dynamic';
+import { TabItem } from '@components/TabBar';
+import FormDialog, { IForm, IFormError } from '@components/dialog/FormContact';
+import { IMultipleInputItem, validateMultipleInput } from '@components/input/MultipleInput';
 
-const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
+const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
 });
 
-const Section = dynamic(() => import("@components/views/Section"), {
+const Section = dynamic(() => import('@components/views/Section'), {
   ssr: false,
   suspense: true,
 });
-const CardTable = dynamic(() => import("@components/cards/CardTable"), {
+const CardTable = dynamic(() => import('@components/cards/CardTable'), {
   ssr: false,
   suspense: true,
 });
-const TableData = dynamic(() => import("@components/tables/TableContact"), {
+const TableData = dynamic(() => import('@components/tables/TableContact'), {
   ssr: false,
   suspense: true,
 });
-const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
+const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   ssr: false,
   suspense: true,
 });
 
 const initialForm: IForm = {
   id: 0,
-  firstName: "",
-  lastName: "",
-  identity: "",
-  identityType: "",
-  address: "",
-  profileType: "",
+  firstName: '',
+  lastName: '',
+  identity: '',
+  identityType: '',
+  address: '',
+  profileType: '',
   property: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   role: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   roleGroup: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   emails: [
     {
-      value: "",
+      value: '',
       checked: false,
     },
   ],
   phones: [
     {
-      value: "",
+      value: '',
       checked: false,
     },
   ],
 };
 
 const initialFormError: IFormError = {
-  firstName: "",
-  lastName: "",
-  address: "",
-  identity: "",
-  identityType: "",
-  profileType: "",
+  firstName: '',
+  lastName: '',
+  address: '',
+  identity: '',
+  identityType: '',
+  profileType: '',
 };
 
 const ContactView = (): ReactElement => {
@@ -82,14 +82,13 @@ const ContactView = (): ReactElement => {
   const { setAlert } = useContext(AlertContext);
 
   // states
-  const [tabIndex, setTabIndex] = useState<string | number>("all");
-  const [search, setSearch] = useState<string>("");
+  const [tabIndex, setTabIndex] = useState<string | number>('all');
+  const [search, setSearch] = useState<string>('');
   const [visibility, setVisibility] = useState(false);
 
   // custom hooks
   const [form, setForm, resetForm, setFormBulk] = useForm<IForm>(initialForm);
-  const [formError, setFormError, resetFormError, setFormErrorBulk] =
-    useForm<IFormError>(initialFormError);
+  const [formError, setFormError, resetFormError, setFormErrorBulk] = useForm<IFormError>(initialFormError);
 
   const {
     content: deleteConfirmation,
@@ -97,10 +96,10 @@ const ContactView = (): ReactElement => {
     visibility: deleteConfirmationVisibility,
   } = useConfirmation<number>(
     {
-      title: "Konfirmasi Hapus",
-      description: "Apakah kamu yakin ingin menghapus item ini?",
-      cancelText: "Kembali",
-      confirmText: "Ya",
+      title: 'Konfirmasi Hapus',
+      description: 'Apakah kamu yakin ingin menghapus item ini?',
+      cancelText: 'Kembali',
+      confirmText: 'Ya',
     },
     0
   );
@@ -118,17 +117,19 @@ const ContactView = (): ReactElement => {
     reload,
     dataMeta,
     loadingForm,
-    setLoadingForm
+    setLoadingForm,
   } = useContact();
+
+  console.log(isReady);
 
   // other hooks
   const tabs = useMemo(
     (): TabItem[] => [
       {
-        label: "",
-        text: "Semua",
-        color: "default",
-        value: "all",
+        label: '',
+        text: 'Semua',
+        color: 'default',
+        value: 'all',
       },
     ],
     []
@@ -143,7 +144,7 @@ const ContactView = (): ReactElement => {
     setForm(name, value);
 
     if (formError[name as keyof typeof formError]) {
-      setFormError(name, "");
+      setFormError(name, '');
     }
   };
 
@@ -151,7 +152,7 @@ const ContactView = (): ReactElement => {
     setForm(name, value);
 
     if (formError[name as keyof typeof formError]) {
-      setFormError(name, "");
+      setFormError(name, '');
     }
   };
 
@@ -166,23 +167,23 @@ const ContactView = (): ReactElement => {
   const validateForm = (form: IForm, formError: IFormError) => {
     const error = { ...formError };
     if (!form.firstName) {
-      error.firstName = "Nama depan harus diisi";
+      error.firstName = 'Nama depan harus diisi';
     }
 
     if (!form.identityType) {
-      error.identityType = "Tipe identitas harus diisi";
+      error.identityType = 'Tipe identitas harus diisi';
     }
 
     if (!form.identity) {
-      error.identity = "Nomor Identitas harus diisi";
+      error.identity = 'Nomor Identitas harus diisi';
     }
 
     if (!form.address) {
-      error.address = "Alamat harus diisi";
+      error.address = 'Alamat harus diisi';
     }
 
     if (!form.profileType) {
-      error.profileType = "Tipe profil harus diisi";
+      error.profileType = 'Tipe profil harus diisi';
     }
 
     return error;
@@ -228,15 +229,15 @@ const ContactView = (): ReactElement => {
       })
       .catch((err) => {
         setLoadingForm(false);
-        console.log("err", err);
+        console.log('err', err);
       });
   };
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
-      title: "Kontak Baru",
+      title: 'Kontak Baru',
       onClick: (): void => setVisibility(true),
-      color: "info",
+      color: 'info',
       startIcon: <Add />,
     },
   ];
@@ -255,41 +256,42 @@ const ContactView = (): ReactElement => {
     setVisibility(true);
 
     setLoadingForm(true);
-    inquiry(id).then(data => {
-      // console.log("data", data);
-      if (data) {
-        setFormBulk({
-          firstName: data.first_name,
-          lastName: data.last_name,
-          address: data.address,
-          id: data.id,
-          identity: data.identity,
-          identityType: data.identity_type,
-          profileType: data.profile_type,
-          property: {
-            label: data.property.name,
-            value: String(data.property.id)
-          },
-          emails: data.emails.map(email => ({ value: email.address, checked: email.verified })),
-          phones: data.phones.map(phone => ({ value: phone.number })),
-          role: {
-            label: data.role.name,
-            value: String(data.role.id)
-          },
-          roleGroup: {
-            label: "",
-            value: ""
-          }
-        })
-      }
-
-    }).catch(err => {
-      console.log(err)
-    }).finally(() => {
-      setLoadingForm(false);
-    });
+    inquiry(id)
+      .then((data) => {
+        // console.log("data", data);
+        if (data) {
+          setFormBulk({
+            firstName: data.first_name,
+            lastName: data.last_name,
+            address: data.address,
+            id: data.id,
+            identity: data.identity,
+            identityType: data.identity_type,
+            profileType: data.profile_type,
+            property: {
+              label: data.property.name,
+              value: String(data.property.id),
+            },
+            emails: data.emails.map((email) => ({ value: email.address, checked: email.verified })),
+            phones: data.phones.map((phone) => ({ value: phone.number })),
+            role: {
+              label: data.role.name,
+              value: String(data.role.id),
+            },
+            roleGroup: {
+              label: '',
+              value: '',
+            },
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setLoadingForm(false);
+      });
   };
-
 
   // TODO: have problem with api params
   const handleClickDeleteRow = (id: number) => {
@@ -305,13 +307,13 @@ const ContactView = (): ReactElement => {
     <>
       <Suspense>
         <Section
-          title="Kontak"
-          description="management kelola kontak"
+          title='Kontak'
+          description='management kelola kontak'
           stackProps={{ mt: 12 }}
           actionButton={<ActionButton buttons={actionButton} />}
         >
           <CardTable
-            searchPlaceholder="Cari Kontak"
+            searchPlaceholder='Cari Kontak'
             searchValue={search}
             onChangeSearch={handleChangeSearch}
             tabs={tabs}

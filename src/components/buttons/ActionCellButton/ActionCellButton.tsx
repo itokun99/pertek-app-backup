@@ -1,10 +1,10 @@
-import React from "react";
-import IconButton from "@mui/material/IconButton/IconButton";
-import Popover from "@mui/material/Popover/Popover";
-import Stack from "@mui/material/Stack/Stack";
-import Button from "@mui/material/Button/Button";
-import { IActionCellButtonProperties } from "./ActionCellButton.interface";
-import MoreVert from "@mui/icons-material/MoreVert";
+import React from 'react';
+import IconButton from '@mui/material/IconButton/IconButton';
+import Popover from '@mui/material/Popover/Popover';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button/Button';
+import { IActionCellButtonProperties } from './ActionCellButton.interface';
+import MoreVert from '@mui/icons-material/MoreVert';
 
 const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] }) => {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
@@ -22,8 +22,8 @@ const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] 
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{
-          horizontal: "left",
-          vertical: "bottom",
+          horizontal: 'left',
+          vertical: 'bottom',
         }}
         onClose={() => setAnchorEl(null)}
         open={Boolean(anchorEl)}
@@ -32,7 +32,7 @@ const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] 
         PaperProps={{
           style: { width: 120 },
         }}
-        className="action-cell-button"
+        className='action-cell-button'
       >
         <Stack sx={{ padding: 1 }}>
           {options.map((dt, index) => (
@@ -44,9 +44,9 @@ const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] 
               }}
               key={index}
             >
-              <div className="action-cell-button">
+              <div className='action-cell-button'>
                 {dt.icon}
-                <span className="action-cell-button__text">{dt.label}</span>
+                <span className='action-cell-button__text'>{dt.label}</span>
               </div>
             </Button>
           ))}

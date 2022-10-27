@@ -36,6 +36,7 @@ const Confirmation = dynamic(() => import('../../components/dialog/Confirmation'
 });
 
 import { ICreateUnitTypePayload } from '../../service/unit-type';
+import { TabItem } from '@components/TabBar';
 
 interface IFormSelectable {
   label: string;
@@ -89,7 +90,16 @@ const UnitView = (): ReactElement => {
   const { unitTypes, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload } = useUnitType();
 
   // other hooks
-  const tabs = useMemo(() => ['Semua'], []);
+  const tabs = useMemo(
+    () =>
+      [
+        {
+          label: 'Semua',
+          value: 0,
+        },
+      ] as TabItem[],
+    []
+  );
 
   // variables
   const isEdit = Boolean(form.id);

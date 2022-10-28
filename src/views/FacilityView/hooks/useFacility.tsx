@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
 import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
@@ -13,6 +13,8 @@ export interface IUseFacility {
   remove: (id: number) => Promise<void>;
   update: (id: number, payload: ICreateFacilityPayload) => Promise<void>;
   reload: () => void;
+  setCurrentFacility: (facility: IFacility | null) => void;
+  currentFacility: IFacility | null;
   meta?: ApiResponseType<IFacility[]>;
   facilities: IFacility[];
   isReady: boolean;
@@ -43,7 +45,11 @@ export default function useFacility(): IUseFacility {
     revalidateOnReconnect: true,
   });
 
+  console.log(responseData?.data);
+
   const [isReady, setIsReady] = useState<boolean>(false);
+  const [currentFacility, setCurrentFacility] = useState<IFacility | null>(null);
+
   const facilities = responseData?.data?.items || [];
   const isLoading = !responseData;
   const isError = responseError || responseData?.error;
@@ -117,11 +123,19 @@ export default function useFacility(): IUseFacility {
     mutate();
   };
 
+  useEffect(() => {
+    if (responseData && !isReady) {
+      setIsReady(true);
+    }
+  }, [responseData, isReady]);
+
   return {
     meta,
     insert,
     remove,
     update,
+    setCurrentFacility,
+    currentFacility,
     facilities,
     reload,
     isLoading,

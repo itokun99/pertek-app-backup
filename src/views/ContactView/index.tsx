@@ -120,8 +120,6 @@ const ContactView = (): ReactElement => {
     setLoadingForm,
   } = useContact();
 
-  console.log(isReady);
-
   // other hooks
   const tabs = useMemo(
     (): TabItem[] => [

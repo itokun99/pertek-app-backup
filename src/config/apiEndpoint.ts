@@ -47,6 +47,7 @@ export const Endpoint = {
   RoleGroup: `${API_BASE_URL}:${EndpointGroup.Role}/role_group`,
 
   Facility: `${API_BASE_URL}:${EndpointGroup.Facility}/facility`,
+  FacilityAssistant: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_assistant`,
   FacilityCategory: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_category`,
   FacilityVenue: `${API_BASE_URL}:${EndpointGroup.Facility}/facility_venue`,
 
@@ -71,5 +72,5 @@ export const Endpoint = {
   // Contacts
   Contact: `${API_BASE_URL}:${EndpointGroup.Profile}/contact`,
   ContactPhone: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_phone_number`,
-  ContactEmail: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_email`
+  ContactEmail: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_email`,
 };

@@ -1,4 +1,5 @@
-import { styled, Drawer as MuiDrawer, Theme, CSSObject, DrawerProps } from '@mui/material';
+import { styled, Theme, CSSObject } from '@mui/material/styles';
+import MuiDrawer, { DrawerProps } from '@mui/material/Drawer';
 
 export interface DrawerStyleProps {
   width: number;

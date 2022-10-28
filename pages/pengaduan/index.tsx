@@ -1,11 +1,15 @@
-import { Add } from '@mui/icons-material';
-import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
+import Add from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { ReactElement, Suspense } from 'react';
-import AnimatedButton from '../../src/components/buttons/AnimatedButton';
-import ProtectedPage from '../../src/template/ProtectedPage';
+import AnimatedButton from '@components/buttons/AnimatedButton';
+import ProtectedPage from '@template/ProtectedPage';
 
-const PelaporanTable = dynamic(() => import('../../src/components/tables/TablePelaporan'), {
+const PelaporanTable = dynamic(() => import('@components/tables/TablePelaporan'), {
   ssr: false,
   suspense: true,
 });

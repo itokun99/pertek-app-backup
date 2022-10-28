@@ -6,7 +6,8 @@ import { createUrlParamFromObj } from "@utils/helper";
 export interface IGetContactPayload {
   page?: number;
   limit?: number;
-  property_id?: string;
+  search?: string;
+  property_id?: number;
 }
 
 export interface ICreateContactPayload {

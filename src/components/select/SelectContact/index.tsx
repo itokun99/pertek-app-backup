@@ -1,30 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import { SelectOptionType } from "@types";
 import SelectOption from '../SelectOption';
-import usePropertyList from './hook/usePropertyList';
+import useContactList from './hook/useContactList';
 import { createOptions } from '@utils/helper';
 import { SelectOptionChangeType } from '../SelectOption';
 
 
-interface ISelectProperty {
+interface ISelectContact {
   onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
+  disabled?: boolean;
+  propertyId?: number;
   error?: boolean;
   helperText?: string;
-  disabled?: boolean;
 }
 
-const SelectProperty: React.FC<ISelectProperty> = ({
+const SelectContact: React.FC<ISelectContact> = ({
   onChange,
   value,
   disabled,
+  propertyId,
   error,
   helperText
 }) => {
 
 
-  const { data, loading, keyword, setOpen, setKeyword } = usePropertyList();
+  const { data, loading, keyword, setKeyword, setOpen, setPropertyId } = useContactList();
+
 
 
   const handleInputChange = (
@@ -45,17 +48,23 @@ const SelectProperty: React.FC<ISelectProperty> = ({
     setOpen(false);
   }
 
+  useEffect(() => {
+    if (propertyId) {
+      setPropertyId(propertyId);
+    }
+  }, [propertyId, setPropertyId])
+
   const options: SelectOptionType[] = createOptions(data, 'name', 'id')
 
   return (
     <SelectOption
-      name="property"
-      label="Properti"
-      placeholder="Masukan Nama Properti"
+      type="auto-complete-select"
+      name="contact"
+      label="Kontak"
+      placeholder="Masukan Nama Kontak"
       loading={loading}
       value={value}
       inputValue={keyword}
-      type="auto-complete-select"
       onInputChange={handleInputChange}
       onChange={onChange}
       options={options}
@@ -68,4 +77,4 @@ const SelectProperty: React.FC<ISelectProperty> = ({
   );
 };
 
-export default SelectProperty;
+export default SelectContact;

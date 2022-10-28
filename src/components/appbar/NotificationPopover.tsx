@@ -1,28 +1,24 @@
-import {
-  alpha,
-  Avatar,
-  Box,
-  Button,
-  Grid,
-  Icon,
-  IconButton,
-  List,
-  ListItemButton,
-  Popover,
-  PopoverProps,
-  Stack,
-  Theme,
-  Tooltip,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Icon from '@mui/material/Icon';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import Popover, { PopoverProps } from '@mui/material/Popover';
+import Stack from '@mui/material/Stack';
+import { Theme, useTheme, alpha } from '@mui/material/styles';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import Divider from '../Divider';
-import { createModuleAvatar } from '../../utils/createAvatar';
-import { AccessTime, DoneAll } from '@mui/icons-material';
-import { fToNow } from '../../utils/formatTime';
+import { createModuleAvatar } from '@utils/createAvatar';
+import AccessTime from '@mui/icons-material/AccessTime';
+import DoneAll from '@mui/icons-material/DoneAll';
+import { fToNow } from '@utils/formatTime';
 import SimpleBar from 'simplebar-react';
 import { PropsWithChildren, useContext } from 'react';
-import { NotificationContext, NotificationItem } from '../../provider/NotificationProvider';
+import { NotificationContext, NotificationItem } from '@provider/NotificationProvider';
 
 const NotificationPopover = (props: PopoverProps) => {
   const theme = useTheme();

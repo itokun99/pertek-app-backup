@@ -103,10 +103,10 @@ const Fasilitas = () => {
         setView(router.query.view as string);
       }
     }
-  }, [router]);
+  }, [router?.isReady, router?.query?.view, view]);
 
-  const handleTabClick = (_: SyntheticEvent<Element, Event>, index: number) => {
-    setTabIndex(index);
+  const handleTabClick = (_: SyntheticEvent<Element, Event>, index: number | string) => {
+    setTabIndex(parseInt(String(index)));
   };
 
   // const pushState = useCallback(() => {
@@ -133,7 +133,7 @@ const Fasilitas = () => {
   //   }
   // }, [tabIndex, router.isReady, pushState]);
 
-  const handleNewBooking = () => {};
+  const handleNewBooking = () => { };
 
   return (
     <Stack mt={12}>

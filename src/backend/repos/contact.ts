@@ -17,7 +17,7 @@ export async function getContactById(
   req: NextApiRequest
 ): Promise<[Response, IContactDetail & { message: string }]> {
   const { id } = req.query;
-  const response = await apiRequest({ req, url: `${Endpoint.Contact}/{contact_id}?profile_id=${id}`, method: "GET" });
+  const response = await apiRequest({ req, url: `${Endpoint.Contact}/${id}`, method: "GET" });
   const responseBody: IContactDetail & { message: string } = await response.json();
   return [response, responseBody];
 }

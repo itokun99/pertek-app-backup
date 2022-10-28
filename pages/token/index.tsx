@@ -1,6 +1,6 @@
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { ReactElement } from 'react';
-import ProtectedPage from '../../src/template/ProtectedPage';
+import ProtectedPage from '@template/ProtectedPage';
 
 const TokenIndex = () => {
   return <Typography>Token Index</Typography>;

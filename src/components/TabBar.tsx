@@ -1,6 +1,10 @@
-import { Stack, Tab, Tabs, Theme, Typography } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import { Theme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 import { PropsWithChildren, SyntheticEvent } from 'react';
-import Label from '../components/Label';
+import Label from '@components/Label';
 
 export type TabItem<T = unknown> = {
   label?: string;

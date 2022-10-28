@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import TablePagination from "@mui/material/TablePagination";
 import { useRouter } from "next/router";
-import Stack from "@mui/material/Stack/Stack";
+import Stack from "@mui/material/Stack";
 
 const ServerPagination: React.FC<{ total: number }> = ({ total = 0 }) => {
   const router = useRouter();

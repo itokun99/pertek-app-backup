@@ -1,6 +1,6 @@
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { ReactElement } from 'react';
-import ProtectedPage from '../../src/template/ProtectedPage';
+import ProtectedPage from '@template/ProtectedPage';
 
 const PengumumanBaru = () => {
   return <Typography>Tambah Pengumuman</Typography>;

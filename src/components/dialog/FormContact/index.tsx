@@ -25,6 +25,7 @@ export interface IForm {
   lastName: string;
   identity: string;
   identityType: string;
+  npwp: string;
   address: string;
   profileType: string;
   role: SelectOptionType;
@@ -41,6 +42,8 @@ export interface IFormError {
   identityType: string;
   address: string;
   profileType: string;
+  npwp: string;
+  property: string;
 }
 
 interface IFormContactProps {
@@ -184,15 +187,15 @@ const FormContact: React.FC<IFormContactProps> = ({
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                      value={form.identity}
+                      value={form.npwp}
                       placeholder='Masukan Nomor NPWP'
                       label='Nomor NPWP'
                       name='npwp'
                       onChange={onInputChange}
                       fullWidth
                       inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                      error={Boolean(formError.identity)}
-                      helperText={formError.identity}
+                      error={Boolean(formError.npwp)}
+                      helperText={formError.npwp}
                     />
                   </Grid>
                 </Grid>
@@ -282,27 +285,17 @@ const FormContact: React.FC<IFormContactProps> = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <Stack direction='column' spacing={1}>
-            {/* <Box>
+            <Box>
               <Typography variant='h6' sx={{ mb: 1 }}>
                 Properti Info
               </Typography>
               <Divider sx={{ mb: 3 }} />
               <Grid container direction='row' spacing={2}>
                 <Grid item xs={12}>
-                  <SelectProperty onChange={onSelectChange} value={form.property} />
+                  <SelectProperty onChange={onSelectChange} value={form.property} error={Boolean(formError.property)} helperText={formError.property} />
                 </Grid>
               </Grid>
-              <Grid container direction='row' spacing={2}>
-                <Grid item xs={12}>
-                  <SelectProperty onChange={onSelectChange} value={form.property} />
-                </Grid>
-              </Grid>
-              <Grid container direction='row' spacing={2}>
-                <Grid item xs={12}>
-                  <SelectProperty onChange={onSelectChange} value={form.property} />
-                </Grid>
-              </Grid>
-            </Box> */}
+            </Box>
           </Stack>
         </Grid>
       </Stack>

@@ -1,10 +1,11 @@
-import { Container, Grid } from '@mui/material';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import { CardLoader } from '../../src/components/loader/CardLoader';
-import ProtectedPage from '../../src/template/ProtectedPage';
+import { CardLoader } from '@components/loader/CardLoader';
+import ProtectedPage from '@template/ProtectedPage';
 
-const PropertyCard = dynamic(() => import('../../src/components/PropertyCard'), {
+const PropertyCard = dynamic(() => import('@components/PropertyCard'), {
   ssr: false,
   suspense: true,
   loading: () => <CardLoader />,

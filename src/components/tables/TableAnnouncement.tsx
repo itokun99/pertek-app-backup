@@ -1,12 +1,18 @@
-import { Search } from '@mui/icons-material';
-import { Box, Card, InputAdornment, Link, TextField, Typography, useTheme } from '@mui/material';
+import Search from '@mui/icons-material/Search';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import InputAdornment from '@mui/material/InputAdornment';
+import Link from '@mui/material/Link';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { useRouter } from 'next/router';
 import { SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
-import { doFetch } from '../../lib/dataFetcher';
-import { AlertContext } from '../../provider/AlertProvider';
-import { NetworkContext } from '../../provider/NetworkProvider';
-import { fDateTime } from '../../utils/formatTime';
+import { doFetch } from '@lib/dataFetcher';
+import { AlertContext } from '@provider/AlertProvider';
+import { NetworkContext } from '@provider/NetworkProvider';
+import { fDateTime } from '@utils/formatTime';
 import { ErrorComponent } from '../error/ErrorComponent';
 import Label from '../Label';
 import { TableLoader } from '../loader/TableLoader';
@@ -42,8 +48,9 @@ const AnnouncementTable = () => {
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
-  const handleChange = (e: SyntheticEvent<Element, Event>, tabIndex: number) => {
+  const handleChange = (e: SyntheticEvent<Element, Event>, value: number | string) => {
     e.preventDefault();
+    const taxIndex = parseInt(String(value));
     setTabIndex(tabIndex);
 
     if (tabIndex > 0) {

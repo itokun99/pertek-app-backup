@@ -1,6 +1,6 @@
-import { useTheme } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useContext } from 'react';
-import { SidebarContext } from '../../provider/SidebarProvider';
+import { SidebarContext } from '@provider/SidebarProvider';
 import { Drawer } from './Drawer';
 import { SidebarContent } from './SidebarContent';
 import { SidebarHeader } from './SidebarHeader';

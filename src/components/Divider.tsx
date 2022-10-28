@@ -1,4 +1,5 @@
-import { DividerProps as MuiDividerProps, Divider as MuiDivider, useTheme } from '@mui/material';
+import MuiDivider, { DividerProps as MuiDividerProps } from '@mui/material/Divider';
+import { useTheme } from '@mui/material/styles';
 
 const defaultProps = {
   size: '0.08rem',

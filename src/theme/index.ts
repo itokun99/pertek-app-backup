@@ -1,4 +1,4 @@
-import { createTheme, PaletteOptions, Palette, Color, TypeBackground } from '@mui/material';
+import { createTheme, PaletteOptions, Palette, TypeBackground } from '@mui/material/styles';
 import palette from './palette';
 import typography from './typography';
 
@@ -32,7 +32,21 @@ declare module '@mui/material/styles' {
     };
   }
 
-  interface MyColor extends Color {
+  interface MyColor {
+    50: string;
+    100: string;
+    200: string;
+    300: string;
+    400: string;
+    500: string;
+    600: string;
+    700: string;
+    800: string;
+    900: string;
+    A100: string;
+    A200: string;
+    A400: string;
+    A700: string;
     500_8: (color: string, opacity: number) => string;
     500_12: (color: string, opacity: number) => string;
     500_16: (color: string, opacity: number) => string;
@@ -64,7 +78,7 @@ declare module '@mui/material/styles' {
     neutral: string;
   }
 
-  interface MyColorPartial extends Partial<Color> {
+  interface MyColorPartial extends Partial<MyColor> {
     500_8: (color: string, opacity: number) => string;
     500_12: (color: string, opacity: number) => string;
     500_16: (color: string, opacity: number) => string;

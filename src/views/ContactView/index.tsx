@@ -41,6 +41,7 @@ const initialForm: IForm = {
   identity: "",
   identityType: "",
   address: "",
+  npwp: "",
   profileType: "",
   property: {
     label: "",
@@ -75,6 +76,8 @@ const initialFormError: IFormError = {
   identity: "",
   identityType: "",
   profileType: "",
+  npwp: "",
+  property: ""
 };
 
 const ContactView = (): ReactElement => {
@@ -249,6 +252,7 @@ const ContactView = (): ReactElement => {
   const handleClose = (): void => {
     setVisibility(false);
     resetForm();
+    resetFormError();
   };
 
   const handleClickEditRow = (id: number, _record: IContact) => {
@@ -256,7 +260,7 @@ const ContactView = (): ReactElement => {
 
     setLoadingForm(true);
     inquiry(id).then(data => {
-      // console.log("data", data);
+      console.log("data", data);
       if (data) {
         setFormBulk({
           firstName: data.first_name,
@@ -266,12 +270,13 @@ const ContactView = (): ReactElement => {
           identity: data.identity,
           identityType: data.identity_type,
           profileType: data.profile_type,
+          npwp: data.npwp,
           property: {
             label: data.property.name,
             value: String(data.property.id)
           },
           emails: data.emails.map(email => ({ value: email.address, checked: email.verified })),
-          phones: data.phones.map(phone => ({ value: phone.number })),
+          phones: data.phone_numbers.map(phone => ({ value: phone.number })),
           role: {
             label: data.role.name,
             value: String(data.role.id)
@@ -282,7 +287,6 @@ const ContactView = (): ReactElement => {
           }
         })
       }
-
     }).catch(err => {
       console.log(err)
     }).finally(() => {

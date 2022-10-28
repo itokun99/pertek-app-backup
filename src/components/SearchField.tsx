@@ -1,5 +1,6 @@
-import { Search } from '@mui/icons-material';
-import { InputAdornment, TextField, TextFieldProps } from '@mui/material';
+import Search from '@mui/icons-material/Search';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField, { TextFieldProps } from '@mui/material/TextField';
 
 const defaultProps = {
   placeholder: 'Search',

@@ -1,6 +1,7 @@
-import { Box, useTheme } from '@mui/material';
+import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
 import { useContext } from 'react';
-import { SidebarContext } from '../../provider/SidebarProvider';
+import { SidebarContext } from '@provider/SidebarProvider';
 import { ListLoader } from '../loader/ListLoader';
 import { SidebarRootList } from './SidebarRootList';
 

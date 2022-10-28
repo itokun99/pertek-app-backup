@@ -1,6 +1,16 @@
-import { Add, CloudDownload, CloudUpload, Refresh, Search } from '@mui/icons-material';
-import { Box, Card, Grid, InputAdornment, Stack, TextField, Typography, useTheme } from '@mui/material';
-import { motion } from 'framer-motion';
+import Add from '@mui/icons-material/Add';
+import CloudDownload from '@mui/icons-material/CloudDownload';
+import CloudUpload from '@mui/icons-material/CloudUpload';
+import Refresh from '@mui/icons-material/Refresh';
+import Search from '@mui/icons-material/Search';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { Suspense, SyntheticEvent, useContext, useEffect, useMemo, useState } from 'react';
@@ -139,7 +149,7 @@ const TenantIndex = () => {
                   <AnimatedButton color='warning' onClick={handleTemplateDownload} startIcon={<CloudDownload />}>
                     Template
                   </AnimatedButton>
-                  <AnimatedButton color='success' component={motion.label} startIcon={<CloudUpload />}>
+                  <AnimatedButton color='success' startIcon={<CloudUpload />}>
                     Upload CSV
                     <input type='file' hidden multiple accept='.csv' onChange={handleCSVUpload} />
                   </AnimatedButton>
@@ -147,13 +157,12 @@ const TenantIndex = () => {
               )}
               {csvFile && (
                 <>
-                  <AnimatedButton color='success' component={motion.label} startIcon={<CloudUpload />}>
+                  <AnimatedButton color='success' startIcon={<CloudUpload />}>
                     Upload Data
                   </AnimatedButton>
                   <AnimatedButton
                     color='error'
                     onClick={() => setCsvFile(undefined)}
-                    component={motion.label}
                     startIcon={<Refresh />}
                   >
                     Reset Data

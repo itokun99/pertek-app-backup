@@ -93,15 +93,14 @@ const FacilityView = (): ReactElement => {
                   <Card key={f.id}>
                     <CardActionArea onClick={() => handleOpenDetail(f)}>
                       <Stack direction='column' p={2}>
-                        <Avatar sx={{ width: '100%', height: 230 }} variant='rounded'>
-                          <Image
-                            src='/static/images/product_3.jpg'
-                            alt={f.name}
-                            layout='fill'
-                            width='100%'
-                            height='100%'
-                          />
-                        </Avatar>
+                        <Image
+                          style={{ borderRadius: 8 }}
+                          src={f.pictures[0] ?? '/static/images/product_3.jpg'}
+                          alt={f.name}
+                          layout='responsive'
+                          width='100%'
+                          height='100%'
+                        />
                         <Box mt={5}>
                           <Typography variant='subtitle1'>{f.name}</Typography>
                           <Typography variant='body2'>{f.category.name}</Typography>

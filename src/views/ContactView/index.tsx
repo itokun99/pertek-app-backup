@@ -218,6 +218,7 @@ const ContactView = (): ReactElement => {
       emails: validateMultipleInput(form.emails).map((email) => ({
         address: email.value,
         verified: email.checked || false,
+        id: email.id
       })),
       phone_numbers: validateMultipleInput(form.phones).map((phone) => phone.value),
     };
@@ -275,8 +276,8 @@ const ContactView = (): ReactElement => {
             label: data.property.name,
             value: String(data.property.id)
           },
-          emails: data.emails.map(email => ({ value: email.address, checked: email.verified })),
-          phones: data.phone_numbers.map(phone => ({ value: phone.number })),
+          emails: data.emails.map(email => ({ value: email.address, checked: email.verified, id: email.id })),
+          phones: data.phone_numbers.map(phone => ({ value: phone.number, id: phone.id })),
           role: {
             label: data.role.name,
             value: String(data.role.id)

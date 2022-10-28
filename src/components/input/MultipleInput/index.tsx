@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 export type MultipleInputChangeType = (name: string, value: IMultipleInputItem[]) => void;
 
 export interface IMultipleInputItem {
+  id?: number;
   value: string;
   checked?: boolean;
 }

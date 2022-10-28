@@ -43,6 +43,8 @@ export default function useBooking(): IUseBooking {
     revalidateOnReconnect: true,
   });
 
+  console.log('responseData', responseData?.data?.items);
+
   const [isReady, setIsReady] = useState<boolean>(false);
   const bookings = responseData?.data?.items || [];
   const isLoading = !responseData;
@@ -123,7 +125,7 @@ export default function useBooking(): IUseBooking {
   //   create effect hook to flag if isReady is true
   useEffect(() => {
     if (responseData && !isReady) {
-      setTimeout(() => setIsReady(true), 3000);
+      setIsReady(true);
     }
   }, [responseData, isReady]);
 

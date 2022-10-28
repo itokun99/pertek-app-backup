@@ -1,6 +1,9 @@
+import ActionButton from '@components/buttons/ActionButton';
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
 import CardTable from '@components/cards/CardTable';
 import { TabItem } from '@components/TabBar';
 import Section from '@components/views/Section';
+import { Add } from '@mui/icons-material';
 import { Avatar, Box, Button, Card, CardActionArea, Grid, Link, Typography, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { IFacility } from '@types';
@@ -16,7 +19,8 @@ const TableFacility = dynamic(() => import('@components/tables/TableFacility'), 
 });
 
 const FacilityView = (): ReactElement => {
-  const { facilities, isError, isLoading, isReady, reload, isValidating } = useFacility();
+  const { facilities, currentFacility, isError, isLoading, isReady, reload, isValidating, setCurrentFacility } =
+    useFacility();
 
   const tabs = useMemo(
     () =>
@@ -29,9 +33,25 @@ const FacilityView = (): ReactElement => {
     []
   );
 
+  const actionButtons: MyAnimatedButtonProps[] = useMemo(() => {
+    return [
+      {
+        title: 'Fasilitas',
+        color: 'info',
+        startIcon: <Add />,
+        onClick: () => {},
+      },
+      {
+        title: 'Kategori Fasilitas',
+        color: 'warning',
+        startIcon: <Add />,
+        onClick: () => {},
+      },
+    ];
+  }, []);
+
   const [searchKeyword, setSearchKeyword] = useState('');
   const [tabIndex, setTabIndex] = useState(0);
-  const [facility, setFacility] = useState<IFacility | null>();
 
   const theme = useTheme();
 
@@ -49,19 +69,23 @@ const FacilityView = (): ReactElement => {
   };
 
   const handleOpenDetail = (facility: IFacility) => {
-    setFacility(facility);
+    setCurrentFacility(facility);
   };
 
   const handleDelete = (id: number) => {};
 
   const handleCloseDetail = () => {
-    setFacility(null);
+    setCurrentFacility(null);
   };
 
   return (
     <>
       <Suspense>
-        <Section title='Fasilitas' description='Kelola fasilitas properti Anda'>
+        <Section
+          title='Fasilitas'
+          description='Kelola fasilitas properti Anda'
+          actionButton={<ActionButton buttons={actionButtons} />}
+        >
           <Grid container spacing={3}>
             {facilities.map((f) => {
               return (
@@ -91,7 +115,9 @@ const FacilityView = (): ReactElement => {
           </Grid>
         </Section>
       </Suspense>
-      <Suspense>{facility && <DetailViewFacility facility={facility} onClose={handleCloseDetail} />}</Suspense>
+      <Suspense>
+        {currentFacility && <DetailViewFacility facility={currentFacility} onClose={handleCloseDetail} />}
+      </Suspense>
     </>
   );
 };

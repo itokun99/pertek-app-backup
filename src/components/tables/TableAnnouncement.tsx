@@ -48,16 +48,16 @@ const AnnouncementTable = () => {
     }
   }, [isReady, isOnline, asPath, setAlert]);
 
-  const handleChange = (e: SyntheticEvent<Element, Event>, value: number | string) => {
+  const handleChange = (e: SyntheticEvent<Element, Event>, tabIndex: number | string) => {
     e.preventDefault();
-    const taxIndex = parseInt(String(value));
-    setTabIndex(tabIndex);
+    const index = parseInt(tabIndex as string);
+    setTabIndex(index);
 
     if (tabIndex > 0) {
       push('/pengumuman', {
         query: {
           tab: tabIndex,
-          status: status[tabIndex].text.toLowerCase(),
+          status: status[index].text.toLowerCase(),
         },
       });
       return;

@@ -10,8 +10,6 @@ import { AlertContext } from '@provider/AlertProvider';
 import useUnitType from './hook/useUnitType';
 import dynamic from 'next/dynamic';
 
-import { TabItem } from "@components/TabBar";
-
 
 const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
@@ -38,7 +36,8 @@ const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   suspense: true,
 });
 
-import { ICreateUnitTypePayload } from '@service/unit-type';
+import { ICreateUnitTypePayload } from '../../service/unit-type';
+import { TabItem } from '@components/TabBar';
 
 interface IFormSelectable {
   label: string;
@@ -93,14 +92,13 @@ const UnitView = (): ReactElement => {
 
   // other hooks
   const tabs = useMemo(
-    (): TabItem[] => [
-      {
-        label: "",
-        text: "Semua",
-        color: "default",
-        value: "all",
-      },
-    ],
+    () =>
+      [
+        {
+          label: 'Semua',
+          value: 0,
+        },
+      ] as TabItem[],
     []
   );
 

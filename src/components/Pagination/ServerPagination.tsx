@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect, useRef } from "react";
-import TablePagination from "@mui/material/TablePagination";
-import { useRouter } from "next/router";
-import Stack from "@mui/material/Stack";
+import React, { useState, useEffect, useRef } from 'react';
+import TablePagination from '@mui/material/TablePagination';
+import { useRouter } from 'next/router';
+import Stack from '@mui/material/Stack';
 
 const ServerPagination: React.FC<{ total: number }> = ({ total = 0 }) => {
   const router = useRouter();
@@ -16,9 +16,7 @@ const ServerPagination: React.FC<{ total: number }> = ({ total = 0 }) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setPage(0);
     setLimit(Number(event.target.value));
   };
@@ -40,7 +38,7 @@ const ServerPagination: React.FC<{ total: number }> = ({ total = 0 }) => {
   return (
     <Stack spacing={2}>
       <TablePagination
-        width="100%"
+        width='100%'
         count={total}
         page={page}
         rowsPerPage={limit}

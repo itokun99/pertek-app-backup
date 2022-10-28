@@ -7,6 +7,10 @@ export function fDate(date: string) {
   return format(new Date(date), 'dd MMMM yyyy');
 }
 
+export function fGetTime(date: string | number) {
+  return format(new Date(date), 'hh:mm a');
+}
+
 export function fDateTime(date: string) {
   return format(new Date(date), 'dd MMM yyyy p');
 }

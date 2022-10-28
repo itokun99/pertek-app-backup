@@ -5,7 +5,6 @@ import { getContact, createContact, updateContact, deleteContact, getContactById
 
 // get handler
 async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
-  console.time('handlerGet');
   if (isInvalidSession(req)) {
     return unauthorized(res);
   }
@@ -16,7 +15,6 @@ async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload?.message });
   }
 
-  console.timeEnd('handlerGet');
   return res.status(200).json(payload);
 }
 

@@ -1,11 +1,11 @@
-import { memo, MouseEventHandler, SyntheticEvent } from "react";
-import Card from "@mui/material/Card";
-import Box from "@mui/material/Box";
-import useTheme from "@mui/material/styles/useTheme";
+import { memo, MouseEventHandler, SyntheticEvent } from 'react';
+import Card from '@mui/material/Card';
+import Box from '@mui/material/Box';
 
-import ErrorStack from "../../error/ErrorStack";
-import { TabBar, TabItem } from "../../TabBar";
-import SearchField from "@components/input/SearchField";
+import ErrorStack from '../../error/ErrorStack';
+import { TabBar, TabItem } from '../../TabBar';
+import SearchField from '@components/input/SearchField';
+import { useTheme } from '@mui/material';
 
 export interface CardTableProps {
   error?: boolean;
@@ -42,14 +42,7 @@ const CardTable = ({
 
   const renderContent = (): React.ReactElement => {
     if (error) {
-      return (
-        <ErrorStack
-          reloadButton={error}
-          type={errorType}
-          onReload={onReload}
-          message={errorMessage}
-        />
-      );
+      return <ErrorStack reloadButton={error} type={errorType} onReload={onReload} message={errorMessage} />;
     }
 
     return (

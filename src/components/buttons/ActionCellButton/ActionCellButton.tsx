@@ -1,5 +1,5 @@
 import React from 'react';
-import IconButton from '@mui/material/IconButton/IconButton';
+import IconButton from '@mui/material/IconButton';
 import Popover from '@mui/material/Popover/Popover';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button/Button';

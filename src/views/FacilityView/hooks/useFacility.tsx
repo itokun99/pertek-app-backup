@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
 import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
@@ -42,6 +42,8 @@ export default function useFacility(): IUseFacility {
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
   });
+
+  console.log(responseData?.data);
 
   const [isReady, setIsReady] = useState<boolean>(false);
   const facilities = responseData?.data?.items || [];
@@ -116,6 +118,12 @@ export default function useFacility(): IUseFacility {
   const reload = (): void => {
     mutate();
   };
+
+  useEffect(() => {
+    if (responseData && !isReady) {
+      setIsReady(true);
+    }
+  }, [responseData, isReady]);
 
   return {
     meta,

@@ -19,30 +19,26 @@ import SelectRoleGroup from "@components/select/SelectRoleGroup";
 
 export interface IForm {
   id: number;
-  firstName: string;
-  lastName: string;
-  identity: string;
-  identityType: string;
-  address: string;
-  profileType: string;
-  role: SelectOptionType;
-  roleGroup: SelectOptionType;
-  property: SelectOptionType;
-  emails: IMultipleInputItem[];
-  phones: IMultipleInputItem[];
+  unit: SelectOptionType;
+  contact: SelectOptionType;
+  parentTenancyId: SelectOptionType;
+  residentStatus: string;
+  familyStatus: string;
+  checkedIn: Date | null;
+  checkedOut: Date | null;
 }
 
 export interface IFormError {
-  firstName: string;
-  lastName: string;
-  identity: string;
-  identityType: string;
-  address: string;
-  profileType: string;
+  unit: string;
+  contact: string;
+  residentStatus: string;
+  familyStatus: string;
+  checkedIn: string;
+  checkedOut: string;
 }
 
 
-interface IFormContactProps {
+interface IFormTenantProps {
   edit: boolean;
   visible: boolean;
   form: IForm;
@@ -54,38 +50,45 @@ interface IFormContactProps {
   onMultipleInputChange: MultipleInputChangeType
 }
 
+const residentStatusOptions: SelectOptionType[] = [
+  {
+    label: 'Pending',
+    value: 'Pending',
+  },
+  {
+    label: 'Verified',
+    value: 'Verified',
+  },
+  {
+    label: 'Rejected',
+    value: 'Rejected',
+  },
+];
 
-const identityTypeOptions: SelectOptionType[] = [
+const familyStatusOptions: SelectOptionType[] = [
   {
-    label: "KTP",
-    value: "KTP"
+    label: "Houseband",
+    value: "Houseband"
   },
   {
-    label: "SIM",
-    value: "SIM"
+    label: "Spouse",
+    value: "Spouse"
   },
   {
-    label: "Paspor",
-    value: "Paspor"
+    label: "Child",
+    value: "Child"
   },
+  {
+    label: "Family",
+    value: "Family"
+  },
+  {
+    label: "Assistant",
+    value: "Assistant"
+  }
 ]
 
-const profileTypeOptions: SelectOptionType[] = [
-  {
-    label: "Personal",
-    value: "personal"
-  },
-  {
-    label: "Bisnis",
-    value: "bisnis"
-  },
-  {
-    label: "Lainnya",
-    value: "lainnnya"
-  },
-]
-
-const FormTenant: React.FC<IFormContactProps> = ({
+const FormTenant: React.FC<IFormTenantProps> = ({
   edit,
   visible,
   onClose,
@@ -99,7 +102,7 @@ const FormTenant: React.FC<IFormContactProps> = ({
   return (
     <BaseDialogForm
       visible={visible}
-      title={edit ? 'Edit Kontak' : 'Tambah Kontak'}
+      title={edit ? 'Edit Tenant' : 'Tambah Tenant'}
       onClose={onClose}
       action={(
         <>
@@ -143,27 +146,27 @@ const FormTenant: React.FC<IFormContactProps> = ({
             <Grid item xs={12}>
               <SelectOption
                 type="base-select"
-                options={identityTypeOptions}
-                value={form.identityType}
-                label="Tipe Identitas"
-                name="identityType"
-                placeholder="Pilih Identitas"
+                options={residentStatusOptions}
+                value={form.residentStatus}
+                label="Status Resident"
+                name="residentStatus"
+                placeholder="Pilih Resident"
                 onChange={onSelectChange}
-                error={Boolean(formError.identityType)}
-                helperText={formError.identityType}
+                error={Boolean(formError.residentStatus)}
+                helperText={formError.residentStatus}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                value={form.identity}
-                placeholder="Masukan Nomor Identitas"
-                label="Nomor Identitas"
-                name="identity"
-                onChange={onInputChange}
-                fullWidth
-                inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
-                error={Boolean(formError.identity)}
-                helperText={formError.identity}
+              <SelectOption
+                type="base-select"
+                options={familyStatusOptions}
+                value={form.familyStatus}
+                label="Status Family"
+                name="familyStatus"
+                placeholder="Pilih Status Family"
+                onChange={onSelectChange}
+                error={Boolean(formError.familyStatus)}
+                helperText={formError.familyStatus}
               />
             </Grid>
             <Grid item xs={12}>

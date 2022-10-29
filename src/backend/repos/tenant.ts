@@ -2,7 +2,7 @@ import { NextApiRequest } from "next";
 import { Endpoint } from "@config/apiEndpoint";
 import { apiRequest } from "@lib/apiCall";
 import { createRequestParams } from "@lib/urllib";
-import { ApiResponseType, ITenant, ITenantDetail } from "@general-types";
+import { ApiResponseType, ITenant, ITenantDetail, ITenantParent } from "@general-types";
 
 export async function getTenant(
   req: NextApiRequest
@@ -50,4 +50,14 @@ export async function deleteTenant(req: NextApiRequest) {
   const apiResponse = await apiRequest({ req, url: `${Endpoint.Tenant}/${id}`, method: "DELETE" });
   const responseBody = await apiResponse.json();
   return [apiResponse, responseBody];
+}
+
+
+export async function getTenantParentByUnit(
+  req: NextApiRequest
+): Promise<[Response, ITenantParent & { message: string }]> {
+  const { id } = req.query;
+  const response = await apiRequest({ req, url: `${Endpoint.TenantParent}/${id}`, method: "GET" });
+  const responseBody: ITenantParent & { message: string } = await response.json();
+  return [response, responseBody];
 }

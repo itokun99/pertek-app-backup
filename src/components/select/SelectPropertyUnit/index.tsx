@@ -10,9 +10,11 @@ interface ISelectPropertyUnit {
   onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
   disabled?: boolean;
+  error?: boolean;
+  helperText?: string;
 }
 
-const SelectPropertyUnit: React.FC<ISelectPropertyUnit> = ({ onChange, value, disabled }) => {
+const SelectPropertyUnit: React.FC<ISelectPropertyUnit> = ({ onChange, value, disabled, error, helperText }) => {
   const { data, loading, keyword, setKeyword, setOpen } = usePropertyUnit();
 
   const handleInputChange = (
@@ -50,6 +52,8 @@ const SelectPropertyUnit: React.FC<ISelectPropertyUnit> = ({ onChange, value, di
       onOpen={handleOpen}
       onClose={handleClose}
       type="auto-complete-select"
+      error={error}
+      helperText={helperText}
     />
   );
 };

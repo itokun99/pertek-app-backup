@@ -1,17 +1,20 @@
 import Add from '@mui/icons-material/Add';
+import { useRouter } from 'next/router';
 import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from 'react';
 
 import useConfirmation from '@hooks/useConfirmation';
 import useForm from '@hooks/useForm';
-import { SelectOptionType, IContact, IContactEmail } from '@general-types';
+import { ITenant } from '@general-types';
 import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
 import { AlertContext } from '@provider/AlertProvider';
 import useTenant from './hook/useTenant';
-import { ICreateContactPayload } from '@service/contact';
 import dynamic from 'next/dynamic';
 import { TabItem } from '@components/TabBar';
-import FormDialog, { IForm, IFormError } from '@components/dialog/FormContact';
+import FormDialog, { IForm, IFormError } from '@components/dialog/FormTenant';
 import { IMultipleInputItem, validateMultipleInput } from '@components/input/MultipleInput';
+import CloudDownload from '@mui/icons-material/CloudDownload';
+import CloudUpload from '@mui/icons-material/CloudUpload';
+import { ICreateTenantPayload } from '@service/tenant';
 
 const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
@@ -25,7 +28,7 @@ const CardTable = dynamic(() => import('@components/cards/CardTable'), {
   ssr: false,
   suspense: true,
 });
-const TableData = dynamic(() => import('@components/tables/TableContact'), {
+const TableData = dynamic(() => import('@components/tables/TableTenant'), {
   ssr: false,
   suspense: true,
 });
@@ -36,56 +39,41 @@ const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
 
 const initialForm: IForm = {
   id: 0,
-  firstName: "",
-  lastName: "",
-  identity: "",
-  identityType: "",
-  address: "",
-  npwp: "",
-  profileType: "",
-  property: {
+  contact: {
     label: '',
-    value: '',
+    value: ''
   },
-  role: {
+  propertyUnit: {
     label: '',
-    value: '',
+    value: ''
   },
-  roleGroup: {
-    label: '',
-    value: '',
-  },
-  emails: [
-    {
-      value: '',
-      checked: false,
-    },
-  ],
-  phones: [
-    {
-      value: '',
-      checked: false,
-    },
-  ],
+  checkIn: null,
+  checkOut: null,
+  familyStatus: '',
+  parentTenancy: '',
+  residentStatus: ''
 };
 
 const initialFormError: IFormError = {
-  firstName: "",
-  lastName: "",
-  address: "",
-  identity: "",
-  identityType: "",
-  profileType: "",
-  npwp: "",
-  property: ""
+  contact: '',
+  checkIn: '',
+  checkOut: '',
+  familyStatus: '',
+  propertyUnit: '',
+  residentStatus: '',
+  parentTenancy: ''
 };
+
 
 const TenantView = (): ReactElement => {
   // contexts
   const { setAlert } = useContext(AlertContext);
 
+  const router = useRouter();
+
+
   // states
-  const [tabIndex, setTabIndex] = useState<string | number>('all');
+  const [tabIndex, setTabIndex] = useState<string | number>('');
   const [search, setSearch] = useState<string>('');
   const [visibility, setVisibility] = useState(false);
 
@@ -120,6 +108,7 @@ const TenantView = (): ReactElement => {
     reload,
     dataMeta,
     loadingForm,
+    downloadTemplate,
     setLoadingForm,
   } = useTenant();
 
@@ -130,7 +119,25 @@ const TenantView = (): ReactElement => {
         label: '',
         text: 'Semua',
         color: 'default',
-        value: 'all',
+        value: '',
+      },
+      {
+        label: '',
+        text: 'Pending',
+        color: 'default',
+        value: 'pending',
+      },
+      {
+        label: '',
+        text: 'Verified',
+        color: 'default',
+        value: 'verified',
+      },
+      {
+        label: '',
+        text: 'Blocked',
+        color: 'default',
+        value: 'blocked',
       },
     ],
     []
@@ -155,36 +162,65 @@ const TenantView = (): ReactElement => {
     if (formError[name as keyof typeof formError]) {
       setFormError(name, '');
     }
-  };
 
-  const handleMultipleInputChange = (name: string, value: IMultipleInputItem[]) => {
-    setForm(name, value);
+    if (name === 'propertyUnit') {
+      setForm('parentTenancy', '');
+    }
   };
 
   const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
     setTabIndex(value);
+    const { query } = router
+    const queryPamaramaters = { ...query }
+    queryPamaramaters.status = value as string || '';
+
+    // it should delete unnecessary params || todo: clear empty object
+    Object.entries(queryPamaramaters).forEach(([queryKey]) => {
+      if (!['status'].includes(queryKey)) {
+        delete queryPamaramaters[queryKey]
+      }
+    })
+
+    router.push({ query: { ...queryPamaramaters } }, undefined, { shallow: true })
+
+    // router.push('/tenant', {
+    //   query: {
+    //     ...router.query,
+    //     status: value
+    //   },
+    // }, { shallow: true });
+
+    // console.log("value", value)
   };
 
   const validateForm = (form: IForm, formError: IFormError) => {
     const error = { ...formError };
-    if (!form.firstName) {
-      error.firstName = 'Nama depan harus diisi';
+    if (!form.contact || !form.contact.value) {
+      error.contact = 'Kontak harus diisi';
     }
 
-    if (!form.identityType) {
-      error.identityType = 'Tipe identitas harus diisi';
+    if (!form.propertyUnit || !form.propertyUnit.value) {
+      error.propertyUnit = 'Properti Unit harus diisi';
     }
 
-    if (!form.identity) {
-      error.identity = 'Nomor Identitas harus diisi';
+    if (!form.parentTenancy) {
+      error.parentTenancy = 'Parent Tenant harus diisi';
     }
 
-    if (!form.address) {
-      error.address = 'Alamat harus diisi';
+    if (!form.residentStatus) {
+      error.residentStatus = 'Resident Status harus diisi';
     }
 
-    if (!form.profileType) {
-      error.profileType = 'Tipe profil harus diisi';
+    if (!form.familyStatus) {
+      error.familyStatus = 'Family Status harus diisi';
+    }
+
+    if (!form.checkIn) {
+      error.checkIn = 'Check In harus diisi';
+    }
+
+    if (!form.checkOut) {
+      error.checkOut = 'Check Out harus diisi';
     }
 
     return error;
@@ -192,6 +228,8 @@ const TenantView = (): ReactElement => {
 
   const handleSubmit = () => {
     // it should check if the form is empty
+
+    console.log("FORM", form);
 
     const error = validateForm(form, formError);
     const isValid = Object.keys(error).every((key) => !error[key as keyof typeof formError]);
@@ -204,22 +242,14 @@ const TenantView = (): ReactElement => {
       resetFormError();
     }
 
-    const payload: ICreateContactPayload = {
-      first_name: form.firstName,
-      last_name: form.lastName,
-      address: form.address,
-      identity: form.identity,
-      identity_type: form.identityType,
-      profile_type: form.profileType,
-      role_id: Number(form.role?.value) || 0,
-      role_group_id: Number(form.roleGroup?.value) || 0,
-      property_id: Number(form.property?.value) || 0,
-      emails: validateMultipleInput(form.emails).map((email) => ({
-        address: email.value,
-        verified: email.checked || false,
-        id: email.id
-      })),
-      phone_numbers: validateMultipleInput(form.phones).map((phone) => phone.value),
+    const payload: ICreateTenantPayload = {
+      contact_id: parseInt(form.contact.value),
+      property_unit_id: parseInt(form.propertyUnit.value),
+      check_in: form.checkIn,
+      check_out: form.checkOut,
+      family_status: form.familyStatus,
+      parent_tenancy_id: parseInt(form.parentTenancy),
+      resident_status: form.residentStatus
     };
 
     setLoadingForm(true);
@@ -244,15 +274,15 @@ const TenantView = (): ReactElement => {
     },
     {
       title: 'Template',
-      onClick: (): void => setVisibility(true),
+      onClick: downloadTemplate,
       color: 'info',
-      startIcon: <Add />,
+      startIcon: <CloudDownload />,
     },
     {
       title: 'Upload CSV',
-      onClick: (): void => setVisibility(true),
+      onClick: (): void => { },
       color: 'info',
-      startIcon: <CloudDownload />,
+      startIcon: <CloudUpload />,
     },
   ];
 
@@ -267,36 +297,27 @@ const TenantView = (): ReactElement => {
     resetFormError();
   };
 
-  const handleClickEditRow = (id: number, _record: IContact) => {
+  const handleClickEditRow = (id: number, _record: ITenant) => {
     setVisibility(true);
 
     setLoadingForm(true);
     inquiry(id).then(data => {
-      console.log("data", data);
       if (data) {
         setFormBulk({
-          firstName: data.first_name,
-          lastName: data.last_name,
-          address: data.address,
+          contact: {
+            label: `${data.contact.first_name} ${data.contact.last_name}`,
+            value: String(data.contact.id)
+          },
+          checkIn: data.check_in,
+          checkOut: data.check_out,
           id: data.id,
-          identity: data.identity,
-          identityType: data.identity_type,
-          profileType: data.profile_type,
-          npwp: data.npwp,
-          property: {
-            label: data.property.name,
-            value: String(data.property.id)
-          },
-          emails: data.emails.map(email => ({ value: email.address, checked: email.verified, id: email.id })),
-          phones: data.phone_numbers.map(phone => ({ value: phone.number, id: phone.id })),
-          role: {
-            label: data.role.name,
-            value: String(data.role.id)
-          },
-          roleGroup: {
+          familyStatus: data.family_status,
+          parentTenancy: String(data.parent_tenancy_id),
+          propertyUnit: {
             label: "",
-            value: ""
-          }
+            value: String(data.property_unit_id)
+          },
+          residentStatus: data.resident_status
         })
       }
     }).catch(err => {
@@ -320,13 +341,13 @@ const TenantView = (): ReactElement => {
     <>
       <Suspense>
         <Section
-          title='Kontak'
-          description='management kelola kontak'
+          title='Tenant'
+          description='management kelola tenant'
           stackProps={{ mt: 12 }}
           actionButton={<ActionButton buttons={actionButton} />}
         >
           <CardTable
-            searchPlaceholder='Cari Kontak'
+            searchPlaceholder='Cari Tenant'
             searchValue={search}
             onChangeSearch={handleChangeSearch}
             tabs={tabs}
@@ -355,7 +376,6 @@ const TenantView = (): ReactElement => {
           loading={loadingForm}
           onInputChange={handleInputChange}
           onSelectChange={handleSelectChange}
-          onMultipleInputChange={handleMultipleInputChange}
           onSubmit={handleSubmit}
           visible={visibility}
           onClose={handleClose}

@@ -9,6 +9,7 @@ export enum ApiProxyEndpoint {
   UnitType = 'api/unit-type',
   Contact = '/api/contact',
   Tenant = '/api/tenant',
+  TenantParent = '/api/tenant-parent',
   ContactPhone = '/api/contact-phone',
   ContactEmail = '/api/contact-email',
   Role = '/api/role',

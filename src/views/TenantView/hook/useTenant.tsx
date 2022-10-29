@@ -5,6 +5,7 @@ import useSWR from 'swr';
 import { fetchData, FetcherResponseError } from '@lib/dataFetcher';
 import { ITenant, ApiResponseType, ITenantDetail } from '@general-types';
 import { createTenant, updateTenant, deleteTenant, ICreateTenantPayload, getTenantById } from '@service/tenant';
+import { getTemplateTenant } from '@service/template';
 import { createUrlParamFromObj } from '@utils/helper';
 import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
 
@@ -13,6 +14,7 @@ interface IUseTenant {
   inquiry: (id: number) => Promise<ITenantDetail | null | undefined>;
   remove: (id: number) => Promise<void>;
   update: (id: number, payload: ICreateTenantPayload) => Promise<void>;
+  downloadTemplate: () => void;
   reload: () => void;
   items: Array<ITenant>;
   isReady: boolean;
@@ -29,6 +31,7 @@ export default function useTenant(): IUseTenant {
 
   const router = useRouter();
   const params = router.query;
+
   const paramString = createUrlParamFromObj({ ...params });
 
   // contexts
@@ -163,6 +166,7 @@ export default function useTenant(): IUseTenant {
     inquiry,
     reload,
     setLoadingForm,
+    downloadTemplate: getTemplateTenant,
     items,
     isValidating,
     isReady: ready,

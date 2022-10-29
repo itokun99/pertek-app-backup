@@ -35,9 +35,9 @@ const SelectFamilyStatus: React.FC<ISelectFamilyStatusProps> = (props) => {
     <SelectOption
       type="base-select"
       options={familyStatusOptions}
-      label="Resident Status"
-      name="residentStatus"
-      placeholder="Pilih Resident Status"
+      label="Family Status"
+      name="familyStatus"
+      placeholder="Pilih Family Status"
       {...props}
     />
   );

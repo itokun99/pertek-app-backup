@@ -67,3 +67,19 @@ export interface ITenantFamily {
   family_status:   string;
   contact:         ITenantContact;
 }
+
+
+export interface ITenantParent {
+  id:                  number;
+  resident_status:     string;
+  family_status:       string;
+  check_in:            Date|null;
+  check_out:           Date|null;
+  first_name:          string;
+  last_name:           string;
+  registration_status: string;
+  profile_picture:     string;
+  identity:            string;
+  identity_type:       string;
+  profile_type:        string;
+}

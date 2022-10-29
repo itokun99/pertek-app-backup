@@ -1,6 +1,6 @@
 import { fetchData } from "@lib/dataFetcher";
 import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
-import { ITenant, ApiResponseType, ITenantDetail } from "@general-types";
+import { ITenant, ApiResponseType, ITenantDetail, ITenantParent } from "@general-types";
 import { createUrlParamFromObj } from "@utils/helper";
 
 export interface IGetTenantPayload {
@@ -88,6 +88,22 @@ export async function updateTenant(id: number, payload: ICreateTenantPayload) {
     {
       body: JSON.stringify(payload),
       method: "PUT",
+    }
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+
+export async function getTenantParentByUnit(id: number): Promise<ITenantParent[] | undefined> {
+  const { data, error } = await fetchData<ITenantParent[]>(
+    `${ApiProxyEndpoint.TenantParent}?id=${id}`,
+    {
+      method: "GET",
     }
   );
 

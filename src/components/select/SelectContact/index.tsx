@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import { SelectOptionType } from "@types";
 import SelectOption from '../SelectOption';
@@ -11,7 +11,6 @@ interface ISelectContact {
   onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
   disabled?: boolean;
-  propertyId?: number;
   error?: boolean;
   helperText?: string;
 }
@@ -20,13 +19,12 @@ const SelectContact: React.FC<ISelectContact> = ({
   onChange,
   value,
   disabled,
-  propertyId,
   error,
   helperText
 }) => {
 
 
-  const { data, loading, keyword, setKeyword, setOpen, setPropertyId } = useContactList();
+  const { data, loading, keyword, setKeyword, setOpen } = useContactList();
 
 
 
@@ -48,13 +46,10 @@ const SelectContact: React.FC<ISelectContact> = ({
     setOpen(false);
   }
 
-  useEffect(() => {
-    if (propertyId) {
-      setPropertyId(propertyId);
-    }
-  }, [propertyId, setPropertyId])
-
-  const options: SelectOptionType[] = createOptions(data, 'name', 'id')
+  const options: SelectOptionType[] = createOptions(data.map(v => ({
+    ...v,
+    fullName: `${v.first_name} ${v.last_name}`
+  })), 'fullName', 'id');
 
   return (
     <SelectOption

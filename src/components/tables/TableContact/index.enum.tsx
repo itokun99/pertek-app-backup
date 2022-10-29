@@ -1,8 +1,7 @@
-import Link from "@mui/material/Link";
 import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/ActionCellButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
-import { IContact } from "@types";
+import { IContact } from "@general-types";
 import { ColumnType } from "../BaseTable/BaseTable.interface";
 
 const optionActionCell = (

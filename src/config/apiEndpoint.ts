@@ -61,6 +61,7 @@ export const Endpoint = {
   User: `${API_BASE_URL}:${EndpointGroup.User}/user`,
 
   Tenant: `${API_BASE_URL}:${EndpointGroup.Tenant}/tenant`,
+  TenantParent: `${API_BASE_URL}:${EndpointGroup.Tenant}/tenant_parent_by_unit`,
 
   // Klaster
   Klaster: `${API_BASE_URL}:${EndpointGroup.Property}/property_cluster`,

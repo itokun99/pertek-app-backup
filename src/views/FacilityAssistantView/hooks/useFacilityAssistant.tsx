@@ -1,29 +1,34 @@
+import {
+  createFacilityAssistant,
+  deleteFacilityAssistant,
+  ICreateFacilityAssitantPayload,
+  updateFacilityAssistant,
+} from '@service/facility-assistant';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
 import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
 import { AlertContext } from '../../../provider/AlertProvider';
-import { createFacility, deleteFacility, ICreateFacilityPayload, updateFacility } from '../../../service/facility';
-import { ApiResponseType, IFacility } from '../../../types';
+import { ApiResponseType, IFacilityAssistant } from '../../../types';
 import { createUrlParamFromObj } from '../../../utils/helper';
 
-export interface IUseFacility {
-  insert: (payload: ICreateFacilityPayload) => Promise<void>;
+export interface IUseFacilityAssistant {
+  insert: (payload: ICreateFacilityAssitantPayload) => Promise<void>;
   remove: (id: number) => Promise<void>;
-  update: (id: number, payload: ICreateFacilityPayload) => Promise<void>;
+  update: (id: number, payload: ICreateFacilityAssitantPayload) => Promise<void>;
   reload: () => void;
-  setCurrentFacility: (facility: IFacility | null) => void;
-  currentFacility: IFacility | null;
-  meta?: ApiResponseType<IFacility[]>;
-  facilities: IFacility[];
+  setCurrentFacilityAssistant: (assistant: IFacilityAssistant | null) => void;
+  currentFacilityAssistant: IFacilityAssistant | null;
+  meta?: ApiResponseType<IFacilityAssistant[]>;
+  assistants: IFacilityAssistant[];
   isReady: boolean;
   isValidating: boolean;
   isLoading: boolean;
   isError: boolean;
 }
 
-export default function useFacility(): IUseFacility {
+export default function useFacilityAssistant(): IUseFacilityAssistant {
   const BASE_URL = ApiProxyEndpoint.Facility;
 
   const router = useRouter();
@@ -37,31 +42,33 @@ export default function useFacility(): IUseFacility {
     error: responseError,
     mutate,
     isValidating,
-  } = useSWR(`${BASE_URL}${paramString}`, (url) => fetchData<ApiResponseType<IFacility[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
-
-  console.log(responseData?.data);
+  } = useSWR(
+    `${BASE_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<IFacilityAssistant[]>>(url, { method: 'GET' }),
+    {
+      refreshWhenOffline: true,
+      refreshWhenHidden: true,
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
+  );
 
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [currentFacility, setCurrentFacility] = useState<IFacility | null>(null);
+  const [currentFacilityAssistant, setCurrentFacilityAssistant] = useState<IFacilityAssistant | null>(null);
 
-  const facilities = responseData?.data?.items || [];
+  const assistants = responseData?.data?.items || [];
   const isLoading = !responseData;
   const isError = responseError || responseData?.error;
   const meta = responseData?.data;
 
-  const insert = async (payload: ICreateFacilityPayload) => {
-    createFacility(payload)
+  const insert = async (payload: ICreateFacilityAssitantPayload) => {
+    createFacilityAssistant(payload)
       .then(() => {
         setAlert({
           message: {
             severity: 'success',
-            content: `Berhasil menambahkan Fasilitas`,
+            content: `Berhasil menambahkan Asisten Fasilitas`,
           },
         });
         mutate();
@@ -78,12 +85,12 @@ export default function useFacility(): IUseFacility {
 
   // create remove function
   const remove = async (id: number) => {
-    deleteFacility(id)
+    deleteFacilityAssistant(id)
       .then(() => {
         setAlert({
           message: {
             severity: 'success',
-            content: `Berhasil menghapus Fasilitas`,
+            content: `Berhasil menghapus Asisten Fasilitas`,
           },
         });
         mutate();
@@ -98,13 +105,13 @@ export default function useFacility(): IUseFacility {
       });
   };
 
-  const update = async (id: number, payload: ICreateFacilityPayload) => {
-    updateFacility(id, payload)
+  const update = async (id: number, payload: ICreateFacilityAssitantPayload) => {
+    updateFacilityAssistant(id, payload)
       .then(() => {
         setAlert({
           message: {
             severity: 'success',
-            content: `Berhasil mengedit Fasilitas`,
+            content: `Berhasil mengedit asisten Fasilitas`,
           },
         });
         mutate();
@@ -134,9 +141,9 @@ export default function useFacility(): IUseFacility {
     insert,
     remove,
     update,
-    setCurrentFacility,
-    currentFacility,
-    facilities,
+    setCurrentFacilityAssistant,
+    currentFacilityAssistant,
+    assistants,
     reload,
     isLoading,
     isReady,

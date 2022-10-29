@@ -1,6 +1,6 @@
 import ActionCellButton, { IActionCellButtonProperties } from '@components/buttons/ActionCellButton';
 import { DeleteOutlineOutlined, ModeEditOutlineOutlined } from '@mui/icons-material';
-import { IFacility } from '@types';
+import { IFacility, IFacilityAssistant } from '@types';
 import { fGetTime } from '@utils/formatTime';
 import BaseTable from '../BaseTable';
 import { ColumnType } from '../BaseTable/BaseTable.interface';
@@ -8,16 +8,16 @@ import Label from '../../Label';
 import { createTextAvatar } from '@utils/createAvatar';
 import { Avatar, Badge, Button, Stack, Theme, Typography, useTheme } from '@mui/material';
 
-export interface TableFacilityProps {
-  facilities: IFacility[];
-  onEdit: (id: number, facility: IFacility) => void;
+export interface TableFacilityAssistantProps {
+  assistants: IFacilityAssistant[];
+  onEdit: (id: number, assistant: IFacilityAssistant) => void;
   onDelete: (id: number) => void;
-  openDetail: (facility: IFacility) => void;
+  openDetail: (assistant: IFacilityAssistant) => void;
 }
 
 const optionActionCell = (
-  record: IFacility,
-  onEdit: (id: number, facility: IFacility) => void,
+  record: IFacilityAssistant,
+  onEdit: (id: number, assistant: IFacilityAssistant) => void,
   onDelete: (id: number) => void
 ) => {
   return [
@@ -36,16 +36,16 @@ const optionActionCell = (
 };
 
 const generateColumns = (
-  onEdit: (id: number, record: IFacility) => void,
+  onEdit: (id: number, record: IFacilityAssistant) => void,
   onDelete: (id: number) => void,
-  openDetail: (facility: IFacility) => void,
+  openDetail: (assistant: IFacilityAssistant) => void,
   theme: Theme
 ) => {
   return [
     {
       title: 'Nama Fasilitas',
       selector: 'name',
-      render: (_text, record: IFacility) => {
+      render: (_text, record: IFacilityAssistant) => {
         const avatar = createTextAvatar(_text);
         return (
           <Stack direction='row' alignItems='center' spacing={2}>
@@ -96,16 +96,16 @@ const generateColumns = (
       title: '',
       selector: 'action',
       align: 'right',
-      render: (_text, record: IFacility) => {
+      render: (_text, record: IFacilityAssistant) => {
         return <ActionCellButton options={optionActionCell(record, onEdit, onDelete)} />;
       },
     },
   ] as ColumnType[];
 };
 
-const TableFacility = ({ facilities, onDelete, onEdit, openDetail }: TableFacilityProps) => {
+const TableFacilityAssistant = ({ assistants, onDelete, onEdit, openDetail }: TableFacilityAssistantProps) => {
   const theme = useTheme();
-  return <BaseTable columns={generateColumns(onEdit, onDelete, openDetail, theme)} field={facilities}></BaseTable>;
+  return <BaseTable columns={generateColumns(onEdit, onDelete, openDetail, theme)} field={assistants}></BaseTable>;
 };
 
-export default TableFacility;
+export default TableFacilityAssistant;

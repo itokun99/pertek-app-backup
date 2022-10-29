@@ -14,7 +14,7 @@ async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  return res.status(response.status).json({ message: 'Success', data: payload });
+  return res.status(response.status).json(payload);
 }
 
 async function handlerPost(req: NextApiRequest, res: NextApiResponse) {

@@ -283,13 +283,19 @@ const FormContact: React.FC<IFormContactProps> = ({
             />
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Stack direction='column' spacing={1}>
+        <Grid container mt={4}>
+          <Grid item xs={12}>
             <Box>
               <Typography variant='h6' sx={{ mb: 1 }}>
                 Properti Info
               </Typography>
               <Divider sx={{ mb: 3 }} />
+            </Box>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Stack direction='column' spacing={1}>
+            <Box>
               <Grid container direction='row' spacing={2}>
                 <Grid item xs={12}>
                   <SelectProperty onChange={onSelectChange} value={form.property} error={Boolean(formError.property)} helperText={formError.property} />

@@ -55,18 +55,8 @@ const initialForm: IForm = {
     label: '',
     value: '',
   },
-  emails: [
-    {
-      value: '',
-      checked: false,
-    },
-  ],
-  phones: [
-    {
-      value: '',
-      checked: false,
-    },
-  ],
+  emails: [],
+  phones: [],
 };
 
 const initialFormError: IFormError = {
@@ -275,8 +265,8 @@ const ContactView = (): ReactElement => {
             label: data.property.name,
             value: String(data.property.id)
           },
-          emails: data.emails.map(email => ({ value: email.address, checked: email.verified, id: email.id })),
-          phones: data.phone_numbers.map(phone => ({ value: phone.number, id: phone.id })),
+          emails: data.emails.map(email => ({ value: email.address, checked: email.verified, id: email.id, disabled: true })),
+          phones: data.phone_numbers.map(phone => ({ value: phone.number, id: phone.id, disabled: true })),
           role: {
             label: data.role.name,
             value: String(data.role.id)

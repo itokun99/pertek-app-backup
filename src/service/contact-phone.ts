@@ -1,15 +1,15 @@
-import { fetchData } from '@lib/dataFetcher';
-import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
+import { fetchData } from "@lib/dataFetcher";
+import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
 
 export interface ICreateContactPhonePayload {
-  contact_id: string;
-  phone: string;
+  contact_id: number;
+  number: string;
 }
 
 export async function createContactPhone(payload: ICreateContactPhonePayload) {
   const { data, error } = await fetchData<{ message: string }>(ApiProxyEndpoint.ContactPhone, {
     body: JSON.stringify(payload),
-    method: 'POST',
+    method: "POST",
   });
 
   if (error) {
@@ -20,9 +20,12 @@ export async function createContactPhone(payload: ICreateContactPhonePayload) {
 }
 
 export async function deleteContactPhone(id: number) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.ContactPhone}?id=${id}`, {
-    method: 'DELETE',
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.ContactPhone}?id=${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
   if (error) {
     throw error;
@@ -32,10 +35,13 @@ export async function deleteContactPhone(id: number) {
 }
 
 export async function updateContactPhone(id: number, payload: ICreateContactPhonePayload) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.ContactPhone}?id=${id}`, {
-    body: JSON.stringify(payload),
-    method: 'PUT',
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.ContactPhone}?id=${id}`,
+    {
+      body: JSON.stringify(payload),
+      method: "PUT",
+    }
+  );
 
   if (error) {
     throw error;

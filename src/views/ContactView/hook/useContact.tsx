@@ -1,12 +1,19 @@
-import { useState, useEffect, useContext, Dispatch, SetStateAction } from 'react';
-import { useRouter } from 'next/router';
-import { AlertContext } from '@provider/AlertProvider';
-import useSWR from 'swr';
-import { fetchData, FetcherResponseError } from '@lib/dataFetcher';
-import { IContact, ApiResponseType, IContactDetail } from '@general-types';
-import { createContact, updateContact, deleteContact, ICreateContactPayload, getContactById } from '@service/contact';
-import { createUrlParamFromObj } from '@utils/helper';
-import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
+import { useState, useEffect, useContext, Dispatch, SetStateAction } from "react";
+import { useRouter } from "next/router";
+import { AlertContext } from "@provider/AlertProvider";
+import useSWR from "swr";
+import { fetchData, FetcherResponseError } from "@lib/dataFetcher";
+import { IContact, ApiResponseType, IContactDetail } from "@general-types";
+import {
+  createContact,
+  updateContact,
+  deleteContact,
+  ICreateContactPayload,
+  getContactById,
+} from "@service/contact";
+import { createUrlParamFromObj } from "@utils/helper";
+import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
+import { IMultipleInputItem } from "@components/input/MultipleInput";
 
 interface IUseContact {
   insert: (payload: ICreateContactPayload) => Promise<void>;
@@ -40,13 +47,17 @@ export default function useContact(): IUseContact {
     error: responseError,
     isValidating,
     mutate,
-  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IContact[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  } = useSWR(
+    `${API_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<IContact[]>>(url, { method: "GET" }),
+    {
+      refreshWhenOffline: true,
+      refreshWhenHidden: true,
+      revalidateIfStale: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+    }
+  );
 
   const [ready, setReady] = useState<boolean>(false);
   const [loadingForm, setLoadingForm] = useState<boolean>(false);
@@ -61,7 +72,7 @@ export default function useContact(): IUseContact {
       await createContact(payload);
       setAlert({
         message: {
-          severity: 'success',
+          severity: "success",
           content: `Berhasil menambah Contact Baru`,
         },
       });
@@ -71,8 +82,8 @@ export default function useContact(): IUseContact {
       const error = err as FetcherResponseError;
       setAlert({
         message: {
-          severity: 'error',
-          content: error.message || 'Terjadi kesalahan',
+          severity: "error",
+          content: error.message || "Terjadi kesalahan",
         },
       });
       throw err;
@@ -84,7 +95,7 @@ export default function useContact(): IUseContact {
       await deleteContact(id);
       setAlert({
         message: {
-          severity: 'success',
+          severity: "success",
           content: `Berhasil menghapus Contact`,
         },
       });
@@ -94,8 +105,8 @@ export default function useContact(): IUseContact {
       const error = err as FetcherResponseError;
       setAlert({
         message: {
-          severity: 'error',
-          content: error.message || 'Terjadi kesalahan',
+          severity: "error",
+          content: error.message || "Terjadi kesalahan",
         },
       });
       throw err;
@@ -107,7 +118,7 @@ export default function useContact(): IUseContact {
       await updateContact(id, payload);
       setAlert({
         message: {
-          severity: 'success',
+          severity: "success",
           content: `Berhasil mengedit Contact`,
         },
       });
@@ -117,8 +128,8 @@ export default function useContact(): IUseContact {
       const error = err as FetcherResponseError;
       setAlert({
         message: {
-          severity: 'error',
-          content: error.message || 'Terjadi kesalahan',
+          severity: "error",
+          content: error.message || "Terjadi kesalahan",
         },
       });
       throw err;
@@ -133,12 +144,16 @@ export default function useContact(): IUseContact {
       const error = err as FetcherResponseError;
       setAlert({
         message: {
-          severity: 'error',
-          content: error?.message || 'Terjadi kesalahan',
+          severity: "error",
+          content: error?.message || "Terjadi kesalahan",
         },
       });
       return null;
     }
+  };
+
+  const handleMultipleInputSave = (name: string, data: IMultipleInputItem) => {
+    alert("Save");
   };
 
   const reload = (): void => {

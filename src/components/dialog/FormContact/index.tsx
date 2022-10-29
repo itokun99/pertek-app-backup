@@ -54,6 +54,8 @@ interface IFormContactProps {
   loading: boolean;
   onClose: () => void;
   onSubmit: () => void;
+  onMultipleInputDelete: (name: string, data: IMultipleInputItem) => void;
+  onMultipleInputSave: (name: string, data: IMultipleInputItem) => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: SelectOptionChangeType<SelectOptionType | string>;
   onMultipleInputChange: MultipleInputChangeType;
@@ -100,6 +102,8 @@ const FormContact: React.FC<IFormContactProps> = ({
   loading,
   form,
   formError,
+  onMultipleInputDelete,
+  onMultipleInputSave
 }) => {
   return (
     <BaseDialogForm
@@ -268,6 +272,8 @@ const FormContact: React.FC<IFormContactProps> = ({
                     label='Email'
                     name='emails'
                     withCheckbox
+                    onDelete={onMultipleInputDelete}
+                    onSave={onMultipleInputSave}
                   />
                 </Grid>
               </Grid>
@@ -280,6 +286,8 @@ const FormContact: React.FC<IFormContactProps> = ({
               values={form.phones}
               label='Nomor Telepon'
               name='phones'
+              onDelete={onMultipleInputDelete}
+              onSave={onMultipleInputSave}
             />
           </Grid>
         </Grid>

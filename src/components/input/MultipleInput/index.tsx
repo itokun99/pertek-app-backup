@@ -54,6 +54,8 @@ interface IMultipleInputProps {
   onChange: MultipleInputChangeType;
   values: IMultipleInputItem[];
   withCheckbox?: boolean;
+  onDelete: (name: string, data: IMultipleInputItem) => void;
+  onSave: (name: string, data: IMultipleInputItem) => void;
 }
 
 
@@ -65,6 +67,8 @@ function MultipleInput({
   values = [],
   onChange,
   maxField,
+  onSave,
+  onDelete,
   withCheckbox
 }: IMultipleInputProps) {
 
@@ -126,8 +130,7 @@ function MultipleInput({
   }
 
 
-  const handleClickAdd: React.MouseEventHandler<HTMLButtonElement> | undefined = (e) => {
-    const { name: inputName } = e.currentTarget;
+  const handleClickAdd = () => {
     const currentVal = [...values]
 
     currentVal.push({
@@ -137,13 +140,20 @@ function MultipleInput({
     onChange(name, currentVal);
   }
 
-  const handleClickDelete: React.MouseEventHandler<HTMLButtonElement> | undefined = (e) => {
-    const { name: inputName } = e.currentTarget;
-    const currentIndex = parseInt(inputName.split('-')[1]);
-    const currentVal = [...values];
+  const handleClickDelete = (index: number, data: IMultipleInputItem) => {
 
-    currentVal.splice(currentIndex, 1);
-    onChange(name, currentVal);
+    if (activeEdit !== -1 && tempValue.length > 0) {
+      const currentVal = [...tempValue];
+      const currentValItem = currentVal[activeEdit];
+      onDelete(name, currentValItem);
+    } else if (Boolean(data.id)) {
+      onDelete(name, data);
+    } else {
+      const currentVal = [...values];
+
+      currentVal.splice(index, 1);
+      onChange(name, currentVal);
+    }
   }
 
   const handleClickEditInput = (index: number) => {
@@ -178,6 +188,16 @@ function MultipleInput({
   }
 
 
+  const handleClickSave = () => {
+    if (activeEdit !== -1) {
+      const index = activeEdit;
+      const currentVal = [...tempValue];
+      const currentValItem = currentVal[index];
+      onSave(name, currentValItem);
+    }
+  }
+
+
   return (
     <Stack direction="column" sx={{ width: '100%' }} spacing={2}>
       {values.length > 0 ? (
@@ -186,7 +206,7 @@ function MultipleInput({
 
             const hasId = Boolean(val.id);
             const isEditable = hasId && !val.disabled;
-            const inputDisabled = (hasId && val.disabled && index !== activeEdit && tempValue.length > 0) || false;
+            const inputDisabled = (index !== activeEdit && tempValue.length > 0) || false;
 
             return (
               <Box key={`multiple-input-key-${index}`} sx={{ display: 'flex', width: '100%' }}>
@@ -204,19 +224,17 @@ function MultipleInput({
                         <InputAdornment position="end">
                           {withCheckbox && (
                             <Tooltip title="Verified">
-                              <Checkbox disabled={val.disabled} checked={val.checked} onChange={handleInputChange} name={getName(name, index, 'checkbox')} />
+                              <Checkbox disabled={val.disabled || inputDisabled} checked={val.checked} onChange={handleInputChange} name={getName(name, index, 'checkbox')} />
                             </Tooltip>
                           )}
                           {hasId && (
                             <Stack spacing={2} direction="row">
                               {isEditable ? (
                                 <>
-                                  <IconButton onClick={() => handleClickEditInput(index)} edge="end">
-                                    <SaveIcon />
-                                  </IconButton>
                                   <IconButton onClick={() => handleDiscard(index)} edge="end">
                                     <CancelIcon />
                                   </IconButton>
+                                  <Box />
                                 </>
                               ) : (
                                 <>
@@ -236,19 +254,31 @@ function MultipleInput({
                 <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', pl: 2 }}>
                   <Stack direction="row" spacing={1}>
 
-                    <Tooltip title="Tambah">
-                      <IconButton
-                        name={getName(name, index, 'add-button')}
-                        onClick={handleClickAdd}
-                        disabled={getDisableAddButton(index, values.length) || inputDisabled}
-                      >
-                        <AddIcon fontSize="inherit" />
-                      </IconButton>
-                    </Tooltip>
+                    {hasId && isEditable ? (
+                      <Tooltip title="Simpan">
+                        <IconButton
+                          // name={getName(name, index, 'add-button')}
+                          onClick={handleClickSave}
+                        // disabled={getDisableAddButton(index, values.length) || inputDisabled}
+                        >
+                          <SaveIcon fontSize="inherit" />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Tambah">
+                        <IconButton
+                          name={getName(name, index, 'add-button')}
+                          onClick={handleClickAdd}
+                          disabled={getDisableAddButton(index, values.length) || inputDisabled}
+                        >
+                          <AddIcon fontSize="inherit" />
+                        </IconButton>
+                      </Tooltip>
+                    )}
                     <Tooltip title="Hapus">
                       <IconButton
                         name={getName(name, index, 'delete-button')}
-                        onClick={handleClickDelete}
+                        onClick={() => handleClickDelete(index, val)}
                         disabled={getDisableDeleteButton(index, values.length) || inputDisabled}
                       >
                         <DeleteIcon fontSize="inherit" />

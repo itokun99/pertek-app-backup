@@ -204,6 +204,7 @@ const ContactView = (): ReactElement => {
       role_id: Number(form.role?.value) || 0,
       role_group_id: Number(form.roleGroup?.value) || 0,
       property_id: Number(form.property?.value) || 0,
+      tax_number: Number(form.npwp),
       emails: validateMultipleInput(form.emails).map((email) => ({
         address: email.value,
         verified: email.checked || false,
@@ -224,6 +225,14 @@ const ContactView = (): ReactElement => {
         console.log('err', err);
       });
   };
+
+  const handleMultipleInputDelete = (name: string, data: IMultipleInputItem) => {
+    alert("Delete")
+  }
+
+  const handleMultipleInputSave = (name: string, data: IMultipleInputItem) => {
+    alert("Save")
+  }
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
@@ -339,6 +348,8 @@ const ContactView = (): ReactElement => {
           onClose={handleClose}
           form={form}
           formError={formError}
+          onMultipleInputSave={handleMultipleInputSave}
+          onMultipleInputDelete={handleMultipleInputDelete}
         />
       </Suspense>
 

@@ -52,7 +52,7 @@ export const DetailViewFacility = ({ facility, onClose }: DetailViewFacilityProp
                   <Stack direction='row' spacing={2}>
                     <Stack direction='column' spacing={2} mr={2}>
                       <Typography variant='subtitle1'>Kode Fasilitas</Typography>
-                      <Typography variant='subtitle1'>Harga Dewa</Typography>
+                      <Typography variant='subtitle1'>Harga Sewa</Typography>
                       <Typography variant='subtitle1'>Status</Typography>
                       <Typography variant='subtitle1'>Jam Operasional Standar</Typography>
                       <Typography variant='subtitle1'>Durasi Order</Typography>

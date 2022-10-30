@@ -12,6 +12,8 @@ FROM node:lts-alpine
 
 WORKDIR /app
 
+RUN apk add --no-cache --update dumb-init
+
 COPY --from=0 /app/next.config.js .
 COPY --from=0 /app/public public/
 COPY --from=0 /app/.next .next/
@@ -23,4 +25,4 @@ EXPOSE 3000
 
 USER node
 
-CMD ["yarn", "start"]
+CMD ["dumb-init", "yarn", "start"]

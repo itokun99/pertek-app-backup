@@ -222,8 +222,8 @@ const ContactView = (): ReactElement => {
       isEdit ? await update(form.id, payload) : await insert(payload);
 
       if (isEdit) {
-        const newEmails = form.emails.filter(v => !v.id);
-        const newPhones = form.phones.filter(v => !v.id);
+        const newEmails = form.emails.filter(v => !v.id && v.value.trim() !== "");
+        const newPhones = form.phones.filter(v => !v.id && v.value.trim() !== "");
 
         if (newEmails.length > 0 || newPhones.length > 0) {
           await Promise.all([
@@ -241,7 +241,8 @@ const ContactView = (): ReactElement => {
       }
 
       setLoadingForm(false);
-
+      setVisibility(false);
+      resetForm();
     } catch (err) {
       const error = err as FetcherResponseError;
       setLoadingForm(false);

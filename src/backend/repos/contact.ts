@@ -68,7 +68,7 @@ export async function updateContactPhone(req: NextApiRequest) {
   const apiResponse = await apiRequest({
     req,
     url: `${Endpoint.ContactPhone}/${id}`,
-    method: "POST",
+    method: "PUT",
     body: req.body,
   });
   const responseBody = await apiResponse.json();
@@ -102,7 +102,7 @@ export async function updateContactEmail(req: NextApiRequest) {
   const apiResponse = await apiRequest({
     req,
     url: `${Endpoint.ContactEmail}/${id}`,
-    method: "POST",
+    method: "PUT",
     body: req.body,
   });
   const responseBody = await apiResponse.json();

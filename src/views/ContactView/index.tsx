@@ -12,9 +12,9 @@ import dynamic from "next/dynamic";
 import { TabItem } from "@components/TabBar";
 import FormDialog, { IForm, IFormError } from "@components/dialog/FormContact";
 import { IMultipleInputItem, validateMultipleInput } from "@components/input/MultipleInput";
-import { deleteContactEmail, updateContactEmail } from "@service/contact-email";
+import { deleteContactEmail, updateContactEmail, createContactEmail } from "@service/contact-email";
 import { FetcherResponseError } from "@lib/dataFetcher";
-import { updateContactPhone } from "@service/contact-phone";
+import { deleteContactPhone, updateContactPhone, createContactPhone } from "@service/contact-phone";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -184,7 +184,7 @@ const ContactView = (): ReactElement => {
     return error;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // it should check if the form is empty
 
     const error = validateForm(form, formError);
@@ -217,57 +217,54 @@ const ContactView = (): ReactElement => {
       phone_numbers: validateMultipleInput(form.phones).map((phone) => phone.value),
     };
 
-    setLoadingForm(true);
-    (isEdit ? update(form.id, payload) : insert(payload))
-      .then(() => {
-        setVisibility(false);
-        resetForm();
-        setLoadingForm(false);
-      })
-      .catch((err) => {
-        setLoadingForm(false);
-        console.log("err", err);
-      });
-  };
-
-  const handleDeleteSingleEmail = async (_name: string, data: IMultipleInputItem) => {
     try {
-      const response = await deleteContactEmail(data.id as number);
-      setForm(
-        "emails",
-        form.emails.filter((item) => item.id !== data.id)
-      );
-      return response;
+      setLoadingForm(true);
+      isEdit ? await update(form.id, payload) : await insert(payload);
+
+      if (isEdit) {
+        const newEmails = form.emails.filter(v => !v.id && v.value.trim() !== "");
+        const newPhones = form.phones.filter(v => !v.id && v.value.trim() !== "");
+
+        if (newEmails.length > 0 || newPhones.length > 0) {
+          await Promise.all([
+            ...(newEmails.length > 0 ? newEmails.map(email => createContactEmail({
+              address: email.value,
+              verified: Boolean(email.checked),
+              contact_id: form.id
+            })) : []),
+            ...(newPhones.length > 0 ? newPhones.map(phone => createContactPhone({
+              contact_id: form.id,
+              number: phone.value
+            })) : [])
+          ])
+        }
+      }
+
+      setLoadingForm(false);
+      setVisibility(false);
+      resetForm();
     } catch (err) {
       const error = err as FetcherResponseError;
+      setLoadingForm(false);
       setAlert({
         message: {
           severity: "error",
           content: error?.message || "Terjadi kesalahan",
         },
       });
-      return null;
     }
   };
 
-  const handleUpdateSingleEmail = async (name: string, data: IMultipleInputItem) => {
+  const handleMultipleInputSingeDelete = async (name: string, data: IMultipleInputItem): Promise<void> => {
     try {
-      const response =
-        (await name) === "emails"
-          ? updateContactEmail(data.id as number, {
-              contact_id: form.id,
-              address: data.value,
-              verified: data.checked as boolean,
-            })
-          : updateContactPhone(data.id as number, {
-              contact_id: form.id,
-              number: data.value,
-            });
-      setForm(
-        "emails",
-        form.emails.filter((item) => item.id !== data.id)
-      );
-      return response;
+      const response = await (name === 'emails' ? deleteContactEmail(data.id as number) : deleteContactPhone(data.id as number));
+      setAlert({
+        message: {
+          severity: "success",
+          content: `${name === 'emails' ? 'Email' : 'Nomor Telepon'} kontak berhasil dihapus`,
+        },
+      });
+      return;
     } catch (err) {
       const error = err as FetcherResponseError;
       setAlert({
@@ -276,7 +273,38 @@ const ContactView = (): ReactElement => {
           content: error?.message || "Terjadi kesalahan",
         },
       });
-      return null;
+      throw err;
+    }
+  };
+
+  const handleMultipleInputSingleSave = async (name: string, data: IMultipleInputItem): Promise<void> => {
+    try {
+      const response = name === "emails"
+        ? await updateContactEmail(data.id as number, {
+          contact_id: form.id,
+          address: data.value,
+          verified: data.checked as boolean,
+        })
+        : await updateContactPhone(data.id as number, {
+          contact_id: form.id,
+          number: data.value,
+        });
+      setAlert({
+        message: {
+          severity: "success",
+          content: `${name === 'emails' ? 'Email' : 'Nomor Telepon'} kontak berhasil diperbarui`,
+        },
+      });
+      return;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: "error",
+          content: error?.message || "Terjadi kesalahan",
+        },
+      });
+      throw err;
     }
   };
 
@@ -406,8 +434,8 @@ const ContactView = (): ReactElement => {
           onClose={handleClose}
           form={form}
           formError={formError}
-          onMultipleInputSave={handleUpdateSingleEmail}
-          onMultipleInputDelete={handleDeleteSingleEmail}
+          onMultipleInputSave={handleMultipleInputSingleSave}
+          onMultipleInputDelete={handleMultipleInputSingeDelete}
         />
       </Suspense>
 

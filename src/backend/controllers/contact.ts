@@ -39,6 +39,9 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
 
   const [response, payload] = await updateContact(req);
 
+  console.log(response, payload);
+
+
   if (!response.ok) {
     return res.status(response.status).json({ message: payload.message });
   }
@@ -52,6 +55,9 @@ async function handlerDelete(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const [response, payload] = await deleteContact(req);
+
+
+  console.log(response, payload);
 
   if (!response.ok) {
     return res.status(response.status).json({ message: response.message });

@@ -1,7 +1,11 @@
-import { KeyboardDoubleArrowLeft, KeyboardDoubleArrowRight } from '@mui/icons-material';
-import { Box, IconButton, styled, Typography, useTheme } from '@mui/material';
+import KeyboardDoubleArrowLeft from '@mui/icons-material/KeyboardDoubleArrowLeft';
+import KeyboardDoubleArrowRight from '@mui/icons-material/KeyboardDoubleArrowRight';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { styled, useTheme } from '@mui/material/styles';
 import { PropsWithChildren, useContext } from 'react';
-import { SidebarContext } from '../../provider/SidebarProvider';
+import { SidebarContext } from '@provider/SidebarProvider';
 
 export type SidebarHeaderProps = PropsWithChildren & {
   buttonColor?: string;

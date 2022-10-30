@@ -4,6 +4,7 @@ import Dialog, { DialogProps } from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
 
 // additional
 import { styled } from '@mui/material/styles';
@@ -13,6 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 interface IBaseDialogForm {
   title: string;
+  description?: string;
   visible: boolean;
   fullScreen?: boolean;
   scroll?: DialogProps['scroll'];
@@ -71,12 +73,18 @@ const BaseDialogForm: React.FC<IBaseDialogForm> = ({
   children,
   action,
   fullScreen = false,
+  description,
   scroll = 'body',
 }) => {
   return (
     <BootstrapDialog fullScreen={fullScreen} scroll={scroll} open={visible} onClose={onClose}>
       <BootstrapDialogTitle id='customized-dialog-title' onClose={onClose}>
-        {title}
+        <Typography variant="h6">{title}</Typography>
+        {description && (
+          <Typography variant="body2">
+            {description}
+          </Typography>
+        )}
       </BootstrapDialogTitle>
       <DialogContent dividers>{children}</DialogContent>
       {action && <DialogActions>{action}</DialogActions>}

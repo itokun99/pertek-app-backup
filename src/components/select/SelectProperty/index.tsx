@@ -10,17 +10,21 @@ import { SelectOptionChangeType } from '../SelectOption';
 interface ISelectProperty {
   onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
+  error?: boolean;
+  helperText?: string;
   disabled?: boolean;
 }
 
 const SelectProperty: React.FC<ISelectProperty> = ({
   onChange,
   value,
-  disabled
+  disabled,
+  error,
+  helperText
 }) => {
 
 
-  const { data, error, loading, keyword, setOpen, setKeyword } = usePropertyList();
+  const { data, loading, keyword, setOpen, setKeyword } = usePropertyList();
 
 
   const handleInputChange = (
@@ -58,6 +62,8 @@ const SelectProperty: React.FC<ISelectProperty> = ({
       disabled={disabled}
       onOpen={handleOpen}
       onClose={handleClose}
+      error={error}
+      helperText={helperText}
     />
   );
 };

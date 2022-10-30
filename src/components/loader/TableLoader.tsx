@@ -1,4 +1,6 @@
-import { Box, Card, Grid, Skeleton, Stack } from '@mui/material';
+import Grid from '@mui/material/Grid';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 export const TableLoader = () => (
   <Stack>

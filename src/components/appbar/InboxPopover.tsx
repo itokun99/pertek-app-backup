@@ -1,4 +1,5 @@
-import { Popover, PopoverProps, Typography } from '@mui/material';
+import Popover, { PopoverProps } from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
 
 const InboxPopover = (props: PopoverProps) => {
   return (

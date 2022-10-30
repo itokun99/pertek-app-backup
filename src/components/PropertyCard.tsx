@@ -1,11 +1,19 @@
-import { TaskAltOutlined } from '@mui/icons-material';
-import { Box, Card, CardActionArea, Grid, Skeleton, Stack, Typography, useTheme } from '@mui/material';
+import TaskAltOutlined from '@mui/icons-material/TaskAltOutlined';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
+import { useTheme } from '@mui/material/styles';
+
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
-import { doFetch } from '../lib/dataFetcher';
-import { AlertContext } from '../provider/AlertProvider';
-import { NetworkContext, NetworkState } from '../provider/NetworkProvider';
-import { Property, SidebarContext } from '../provider/SidebarProvider';
+import { doFetch } from '@lib/dataFetcher';
+import { AlertContext } from '@provider/AlertProvider';
+import { NetworkContext, NetworkState } from '@provider/NetworkProvider';
+import { Property, SidebarContext } from '@provider/SidebarProvider';
 import { ErrorComponent } from './error/ErrorComponent';
 
 const PropertyCard = () => {

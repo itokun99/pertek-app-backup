@@ -1,4 +1,4 @@
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { ReactElement } from 'react';
 import ProtectedPage from '../../src/template/ProtectedPage';
 

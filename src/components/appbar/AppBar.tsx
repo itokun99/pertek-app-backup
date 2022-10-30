@@ -1,15 +1,23 @@
-import { useRouter } from 'next/router';
 import { PropsWithChildren, useContext, useState } from 'react';
-
-import { AppBar, Toolbar, Box, IconButton, Avatar, Grid, useTheme, Badge, Stack, Tooltip } from '@mui/material';
-import { AuthContext } from '../../provider/AuthProvider';
-import { Mail, Notifications, WifiOffOutlined } from '@mui/icons-material';
-import { motion } from 'framer-motion';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar';
+import Grid from '@mui/material/Grid';
+import Badge from '@mui/material/Badge';
+import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
+import { useTheme } from '@mui/material/styles';
+import { AuthContext } from '@provider/AuthProvider';
+import Mail from '@mui/icons-material/Mail';
+import Notifications from '@mui/icons-material/Notifications';
+import WifiOffOutlined from '@mui/icons-material/WifiOffOutlined';
 import NotificationPopover from './NotificationPopover';
 import InboxPopover from './InboxPopover';
 import AccountPopover from './AccountPopover';
-import { NotificationContext } from '../../provider/NotificationProvider';
-import { NetworkContext } from '../../provider/NetworkProvider';
+import { NotificationContext } from '@provider/NotificationProvider';
+import { NetworkContext } from '@provider/NetworkProvider';
 
 export const popoverDefaultProps = {
   anchorOrigin: {
@@ -70,10 +78,6 @@ const AppBarComponent = () => {
               </Tooltip>
             )}
             <Box
-              component={motion.div}
-              whileHover='hover'
-              whileTap='tap'
-              variants={boxVariant}
               sx={{
                 display: 'inline-flex',
               }}
@@ -89,11 +93,7 @@ const AppBarComponent = () => {
             </Box>
             <InboxPopover open={popover?.name === 'inbox'} anchorEl={popover?.anchor} onClose={unmountPopover} />
             <Box
-              component={motion.div}
-              whileTap='tap'
-              whileHover='hover'
-              variants={boxVariant}
-              // sx={{ ml: theme.spacing(2) }}
+            // sx={{ ml: theme.spacing(2) }}
             >
               <IconButton
                 aria-label='Notification Button'
@@ -108,13 +108,7 @@ const AppBarComponent = () => {
             </Box>
             <NotificationPopover anchorEl={popover?.anchor} open={popover?.name === 'notif'} onClose={unmountPopover} />
 
-            <Box
-              // sx={{ mx: 2 }}
-              component={motion.div}
-              whileTap='tap'
-              variants={boxVariant}
-              whileHover='hover'
-            >
+            <Box>
               <IconButton
                 aria-label='My Profile Button'
                 sx={{

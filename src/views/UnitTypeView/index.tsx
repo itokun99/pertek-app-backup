@@ -1,36 +1,37 @@
 import Add from '@mui/icons-material/Add';
 import { Suspense, useMemo, useState, ReactElement, useContext, useEffect } from 'react';
 
-import useConfirmation from '../../hooks/useConfirmation';
-import useForm from '../../hooks/useForm';
-import { SelectOptionType, IUnitType } from '../../types';
-import { MyAnimatedButtonProps } from '../../components/buttons/AnimatedButton';
-// import FormDialog from "../../components/dialog/FormUnitType";
-import { AlertContext } from '../../provider/AlertProvider';
+import useConfirmation from '@hooks/useConfirmation';
+import useForm from '@hooks/useForm';
+import { SelectOptionType, IUnitType } from '@types';
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
+// import FormDialog from "@components/dialog/FormUnitType";
+import { AlertContext } from '@provider/AlertProvider';
 import useUnitType from './hook/useUnitType';
 import dynamic from 'next/dynamic';
 
-const ActionButton = dynamic(() => import('../../components/buttons/ActionButton'), {
+
+const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
 });
 
-const FormDialog = dynamic(() => import('../../components/dialog/FormUnitType'), {
+const FormDialog = dynamic(() => import('@components/dialog/FormUnitType'), {
   ssr: false,
   suspense: true,
 });
-const Section = dynamic(() => import('../../components/views/Section'), {
+const Section = dynamic(() => import('@components/views/Section'), {
   ssr: false,
   suspense: true,
 });
-const CardTable = dynamic(() => import('../../components/cards/CardTable'), {
+const CardTable = dynamic(() => import('@components/cards/CardTable'), {
   ssr: false,
   suspense: true,
 });
-const TableData = dynamic(() => import('../../components/tables/TableUnitType'), {
+const TableData = dynamic(() => import('@components/tables/TableUnitType'), {
   ssr: false,
   suspense: true,
 });
-const Confirmation = dynamic(() => import('../../components/dialog/Confirmation'), {
+const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   ssr: false,
   suspense: true,
 });
@@ -110,14 +111,10 @@ const UnitView = (): ReactElement => {
     setForm(name, value);
   };
 
-  const handleSelectChange = (
-    _event: React.SyntheticEvent<Element, Event>,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => {
-    setForm(name, newValue);
+  const handleSelectChange = (name: string, value: any) => {
+    setForm(name, value);
 
-    if (name === 'property' && form.property && String(form.property.value) !== String(newValue?.value)) {
+    if (name === 'property' && form.property && String(form.property.value) !== String(value?.value)) {
       setForm('cluster', null);
     }
   };

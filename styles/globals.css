@@ -36,5 +36,5 @@ a {
 }
 
 #nprogress .bar {
-  z-index: 99999999999;
+  z-index: 99999 !important;
 }

@@ -1,12 +1,16 @@
-import { Add } from '@mui/icons-material';
-import { Box, Grid, Stack, Typography, useTheme } from '@mui/material';
+import Add from '@mui/icons-material/Add';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 import dynamic from 'next/dynamic';
 import { ReactElement, Suspense } from 'react';
-import AnimatedButton from '../../src/components/buttons/AnimatedButton';
-// import { AnnouncementTable } from '../../src/components/tables/TableAnnouncement';
-import ProtectedPage from '../../src/template/ProtectedPage';
+import AnimatedButton from '@components/buttons/AnimatedButton';
+// import { AnnouncementTable } from '@components/tables/TableAnnouncement';
+import ProtectedPage from '@template/ProtectedPage';
 
-const AnnouncementTable = dynamic(() => import('../../src/components/tables/TableAnnouncement'), {
+const AnnouncementTable = dynamic(() => import('@components/tables/TableAnnouncement'), {
   ssr: false,
   suspense: true,
 });

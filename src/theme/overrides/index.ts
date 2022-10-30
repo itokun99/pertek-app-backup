@@ -41,7 +41,7 @@ import Autocomplete from './Autocomplete';
 import ToggleButton from './ToggleButton';
 import ControlLabel from './ControlLabel';
 import LoadingButton from './LoadingButton';
-import { Theme } from '@mui/material';
+import { Theme } from '@mui/material/styles';
 import AppBar from './AppBar';
 
 // ----------------------------------------------------------------------

@@ -26,12 +26,13 @@ export interface IContactDetail {
   identity_type:       string;
   profile_type:        string;
   address:             string;
+  npwp: string;
   last_login:          number | null | Date;
   property:            IContactProperty;
   role:                IContactRole;
   role_group:          IContactRole;
   emails:              IContactEmail[];
-  phones:              IContactPhone[];
+  phone_numbers:              IContactPhone[];
 }
 
 export interface IContactEmail {

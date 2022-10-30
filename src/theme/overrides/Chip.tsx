@@ -1,6 +1,7 @@
 //
-import { Theme, SvgIcon } from '@mui/material';
-import { CloseRounded } from '@mui/icons-material';
+import { Theme } from '@mui/material/styles';
+import SvgIcon from '@mui/material/SvgIcon';
+import CloseRounded from '@mui/icons-material/CloseRounded';
 
 // ----------------------------------------------------------------------
 

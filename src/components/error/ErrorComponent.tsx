@@ -1,5 +1,7 @@
-import { Cached } from '@mui/icons-material';
-import { Button, Container, Typography } from '@mui/material';
+import Cached from '@mui/icons-material/Cached';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 import { MouseEventHandler, PropsWithChildren } from 'react';
 
 export type ErrorComponentProps = PropsWithChildren & {

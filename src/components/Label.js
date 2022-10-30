@@ -1,8 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
-import { alpha, styled } from '@mui/material/styles';
+import { alpha, styled, Theme } from '@mui/material/styles';
 import { ReactElement, ReactNode } from 'react';
-import { Theme } from '@mui/material';
 
 // ----------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { Theme } from '@mui/material';
+import { Theme } from '@mui/material/styles';
 
 declare module '@mui/material/Typography' {
   interface TypographyPropsVariantOverrides {

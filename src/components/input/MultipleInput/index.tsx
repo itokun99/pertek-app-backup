@@ -13,6 +13,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+
 
 export type MultipleInputChangeType = (name: string, value: IMultipleInputItem[]) => void;
 
@@ -21,6 +23,7 @@ export interface IMultipleInputItem {
   value: string;
   checked?: boolean;
   disabled?: boolean;
+  loading?: boolean;
 }
 
 export function validateMultipleInput(datas: IMultipleInputItem[]): IMultipleInputItem[] {
@@ -54,8 +57,8 @@ interface IMultipleInputProps {
   onChange: MultipleInputChangeType;
   values: IMultipleInputItem[];
   withCheckbox?: boolean;
-  onDelete: (name: string, data: IMultipleInputItem) => void;
-  onSave: (name: string, data: IMultipleInputItem) => void;
+  onDelete: (name: string, data: IMultipleInputItem) => Promise<void>;
+  onSave: (name: string, data: IMultipleInputItem) => Promise<void>;
 }
 
 
@@ -141,15 +144,41 @@ function MultipleInput({
   }
 
   const handleClickDelete = (index: number, data: IMultipleInputItem) => {
+    const currentVal = [...values];
+
 
     if (activeEdit !== -1 && tempValue.length > 0) {
-      const currentVal = [...tempValue];
-      const currentValItem = currentVal[activeEdit];
-      onDelete(name, currentValItem);
+      currentVal[index] = {
+        ...currentVal[index],
+        loading: true
+      }
+      onChange(name, currentVal);
+      onDelete(name, data).then(() => {
+        const newVals = currentVal.filter(val => val.id !== data.id);
+        onChange(name, newVals);
+        setActiveEdit(-1);
+        setTempValue([]);
+      }).catch(() => {
+        currentVal[index] = {
+          ...currentVal[index],
+          loading: false
+        }
+        onChange(name, currentVal);
+      });
     } else if (Boolean(data.id)) {
-      onDelete(name, data);
+      onDelete(name, data).then(() => {
+        const newVals = currentVal.filter(val => val.id !== data.id);
+        onChange(name, newVals);
+        setActiveEdit(-1);
+        setTempValue([]);
+      }).catch(() => {
+        currentVal[index] = {
+          ...currentVal[index],
+          loading: false
+        }
+        onChange(name, currentVal);
+      });
     } else {
-      const currentVal = [...values];
 
       currentVal.splice(index, 1);
       onChange(name, currentVal);
@@ -188,12 +217,32 @@ function MultipleInput({
   }
 
 
-  const handleClickSave = () => {
+  const handleClickSave = (index: number, data: IMultipleInputItem) => {
     if (activeEdit !== -1) {
-      const index = activeEdit;
-      const currentVal = [...tempValue];
+      const currentVal = [...values];
       const currentValItem = currentVal[index];
-      onSave(name, currentValItem);
+      const newItem = {
+        ...currentValItem,
+        loading: true,
+      }
+      currentVal[index] = newItem;
+      onChange(name, currentVal);
+      onSave(name, data).then(() => {
+        currentVal[index] = {
+          ...currentVal[index],
+          loading: false,
+          disabled: true
+        }
+        onChange(name, currentVal);
+        setActiveEdit(-1);
+        setTempValue([]);
+      }).catch(() => {
+        currentVal[index] = {
+          ...currentVal[index],
+          loading: false
+        }
+        onChange(name, currentVal);
+      });
     }
   }
 
@@ -206,7 +255,8 @@ function MultipleInput({
 
             const hasId = Boolean(val.id);
             const isEditable = hasId && !val.disabled;
-            const inputDisabled = (index !== activeEdit && tempValue.length > 0) || false;
+            const isLoading = Boolean(val.loading);
+            const inputDisabled = (index !== activeEdit && tempValue.length > 0) || isLoading || false;
 
             return (
               <Box key={`multiple-input-key-${index}`} sx={{ display: 'flex', width: '100%' }}>
@@ -222,6 +272,9 @@ function MultipleInput({
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
+                          {isLoading && (
+                            <CircularProgress color="inherit" size={20} />
+                          )}
                           {withCheckbox && (
                             <Tooltip title="Verified">
                               <Checkbox disabled={val.disabled || inputDisabled} checked={val.checked} onChange={handleInputChange} name={getName(name, index, 'checkbox')} />
@@ -258,7 +311,7 @@ function MultipleInput({
                       <Tooltip title="Simpan">
                         <IconButton
                           // name={getName(name, index, 'add-button')}
-                          onClick={handleClickSave}
+                          onClick={() => handleClickSave(index, val)}
                         // disabled={getDisableAddButton(index, values.length) || inputDisabled}
                         >
                           <SaveIcon fontSize="inherit" />

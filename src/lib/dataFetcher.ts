@@ -1,4 +1,4 @@
-import { AlertModel } from "../provider/AlertProvider";
+import { AlertModel } from '../provider/AlertProvider';
 
 export type ListResponse = {
   items: Array<any>;
@@ -11,11 +11,11 @@ export interface FetcherResponseError {
 
 export type FetcherResponse<T = any> = {
   error?: FetcherResponseError;
-  data?: T
+  data?: T;
 };
 
 export type FetchDataParams = {
-  method?: "POST" | "GET" | "PUT" | "PATCH" | "DELETE";
+  method?: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE';
   headers?: {};
   body?: BodyInit | null | undefined;
 };
@@ -34,7 +34,7 @@ export const fetchData = async <T = any>(url: string, params?: FetchDataParams) 
     });
 
     if (apiResponse.status === 401) {
-      window.location.replace("/login");
+      window.location.replace('/login');
       return {};
     }
 
@@ -48,11 +48,10 @@ export const fetchData = async <T = any>(url: string, params?: FetchDataParams) 
 
     return { data: payload } as FetcherResponse<T>;
   } catch (e: any) {
-    let message =
-      "Unknown error occurs during fething the data. Please try again!";
+    let message = 'Unknown error occurs during fething the data. Please try again!';
 
     if (e instanceof DOMException) {
-      message = "Connection timed out!";
+      message = 'Connection timed out!';
     }
 
     if (e.message) {
@@ -78,14 +77,14 @@ export async function doFetch(
     setIsError(false);
   }
 
-  const { error, data } = await fetchData(`/api${asPath}`);
+  const { error, data } = await fetchData(`/api/property`);
 
   if (error) {
     setIsError(true);
 
     setAlert({
       message: {
-        severity: "error",
+        severity: 'error',
         content: error.message,
       },
     });

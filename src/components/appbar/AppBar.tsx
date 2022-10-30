@@ -77,7 +77,7 @@ const AppBarComponent = () => {
                 <WifiOffOutlined sx={{ color: theme.palette.grey[500] }} />
               </Tooltip>
             )}
-            <Box
+            {/* <Box
               sx={{
                 display: 'inline-flex',
               }}
@@ -92,9 +92,7 @@ const AppBarComponent = () => {
               </IconButton>
             </Box>
             <InboxPopover open={popover?.name === 'inbox'} anchorEl={popover?.anchor} onClose={unmountPopover} />
-            <Box
-            // sx={{ ml: theme.spacing(2) }}
-            >
+            <Box>
               <IconButton
                 aria-label='Notification Button'
                 onClick={(e: any) => {
@@ -106,7 +104,7 @@ const AppBarComponent = () => {
                 </Badge>
               </IconButton>
             </Box>
-            <NotificationPopover anchorEl={popover?.anchor} open={popover?.name === 'notif'} onClose={unmountPopover} />
+            <NotificationPopover anchorEl={popover?.anchor} open={popover?.name === 'notif'} onClose={unmountPopover} /> */}
 
             <Box>
               <IconButton

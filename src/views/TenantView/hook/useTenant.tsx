@@ -8,6 +8,7 @@ import { createTenant, updateTenant, deleteTenant, ICreateTenantPayload, getTena
 import { getTemplateTenant } from '@service/template';
 import { createUrlParamFromObj } from '@utils/helper';
 import { ApiProxyEndpoint } from '@config/apiProxyEndpoint';
+import { swrConfig } from '@config/swrConfig';
 
 interface IUseTenant {
   insert: (payload: ICreateTenantPayload) => Promise<void>;
@@ -43,13 +44,11 @@ export default function useTenant(): IUseTenant {
     error: responseError,
     isValidating,
     mutate,
-  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<ITenant[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  } = useSWR(
+    `${API_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<ITenant[]>>(url, { method: 'GET' }),
+    swrConfig
+  );
 
   const [ready, setReady] = useState<boolean>(false);
   const [loadingForm, setLoadingForm] = useState<boolean>(false);

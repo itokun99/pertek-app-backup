@@ -95,7 +95,7 @@ const FacilityView = (): ReactElement => {
                       <Stack direction='column' p={2}>
                         <Image
                           style={{ borderRadius: 8 }}
-                          src={f.pictures[0] ?? '/static/images/product_3.jpg'}
+                          src={f.pictures[0] ?? '/static/images/no-photos.png'}
                           alt={f.name}
                           layout='responsive'
                           width='100%'

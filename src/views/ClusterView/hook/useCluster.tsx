@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from 'react';
-import { useRouter } from 'next/router'
-import { AlertContext } from "../../../provider/AlertProvider";
+import { useRouter } from 'next/router';
+import { AlertContext } from '../../../provider/AlertProvider';
 import useSWR from 'swr';
-import { fetchData, FetcherResponseError } from "../../../lib/dataFetcher";
+import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
 import { ICluster, ApiResponseType } from '../../../types';
 import { createCluster, updateCluster, deleteCluster, ICreateClusterPayload } from '../../../service/cluster';
 import { createUrlParamFromObj } from '../../../utils/helper';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
-
+import { swrConfig } from '@config/swrConfig';
 
 interface IUseCluster {
   insert: (payload: ICreateClusterPayload) => Promise<void>;
@@ -22,27 +22,27 @@ interface IUseCluster {
   dataMeta?: ApiResponseType<Array<ICluster>>;
 }
 
-
-
 export default function useCluster(): IUseCluster {
-
   const API_URL = ApiProxyEndpoint.Cluster;
 
-  const router = useRouter()
-  const params = router.query
+  const router = useRouter();
+  const params = router.query;
   const paramString = createUrlParamFromObj({ ...params });
 
   // contexts
   const { setAlert } = useContext(AlertContext);
 
   // hooks / states
-  const { data: responseData, error: responseError, isValidating, mutate } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<ICluster[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true
-  });
+  const {
+    data: responseData,
+    error: responseError,
+    isValidating,
+    mutate,
+  } = useSWR(
+    `${API_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<ICluster[]>>(url, { method: 'GET' }),
+    swrConfig
+  );
 
   const [ready, setReady] = useState<boolean>(false);
   const dataMeta = responseData?.data;
@@ -52,74 +52,79 @@ export default function useCluster(): IUseCluster {
 
   // methods
   const insert = async (payload: ICreateClusterPayload) => {
-    createCluster(payload).then(() => {
-      setAlert({
-        message: {
-          severity: "success",
-          content: `Berhasil menambah Klaster Baru`,
-        },
+    createCluster(payload)
+      .then(() => {
+        setAlert({
+          message: {
+            severity: 'success',
+            content: `Berhasil menambah Klaster Baru`,
+          },
+        });
+        mutate();
+      })
+      .catch((err: FetcherResponseError) => {
+        setAlert({
+          message: {
+            severity: 'error',
+            content: err.message || '',
+          },
+        });
       });
-      mutate();
-    }).catch((err: FetcherResponseError) => {
-      setAlert({
-        message: {
-          severity: "error",
-          content: err.message || '',
-        },
-      });
-    })
   };
 
   const remove = async (id: number) => {
-    deleteCluster(id).then(() => {
-      setAlert({
-        message: {
-          severity: "success",
-          content: `Berhasil menghapus Klaster`,
-        },
+    deleteCluster(id)
+      .then(() => {
+        setAlert({
+          message: {
+            severity: 'success',
+            content: `Berhasil menghapus Klaster`,
+          },
+        });
+        mutate();
+      })
+      .catch((err: FetcherResponseError) => {
+        setAlert({
+          message: {
+            severity: 'error',
+            content: err?.message || '',
+          },
+        });
       });
-      mutate();
-    }).catch((err: FetcherResponseError) => {
-      setAlert({
-        message: {
-          severity: "error",
-          content: err?.message || '',
-        },
-      });
-    })
-  }
-
-  const update = async (id: number, payload: ICreateClusterPayload) => {
-    updateCluster(id, payload).then(() => {
-      setAlert({
-        message: {
-          severity: "success",
-          content: `Berhasil mengedit Klaster`,
-        },
-      });
-      mutate();
-    }).catch((err: FetcherResponseError) => {
-      setAlert({
-        message: {
-          severity: "error",
-          content: err?.message || '',
-        },
-      });
-    });
   };
 
+  const update = async (id: number, payload: ICreateClusterPayload) => {
+    updateCluster(id, payload)
+      .then(() => {
+        setAlert({
+          message: {
+            severity: 'success',
+            content: `Berhasil mengedit Klaster`,
+          },
+        });
+        mutate();
+      })
+      .catch((err: FetcherResponseError) => {
+        setAlert({
+          message: {
+            severity: 'error',
+            content: err?.message || '',
+          },
+        });
+      });
+  };
 
   const reload = (): void => {
-    mutate()
-  }
+    mutate();
+  };
 
   useEffect(() => {
     if (responseData && !ready) {
       setTimeout(() => {
         setReady(true);
-      }, 3000)
+      }, 3000);
     }
-  }, [responseData, ready])
+  }, [responseData, ready]);
 
   return {
     insert,
@@ -131,6 +136,6 @@ export default function useCluster(): IUseCluster {
     dataReady: ready,
     dataLoading,
     dataError,
-    dataMeta
-  }
+    dataMeta,
+  };
 }

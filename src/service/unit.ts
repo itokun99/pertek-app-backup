@@ -1,11 +1,12 @@
-import { fetchData } from '../lib/dataFetcher';
-import { ApiProxyEndpoint } from '../config/apiProxyEndpoint';
-import { IUnit, ApiResponseType } from '../types';
-import { createUrlParamFromObj } from '../utils/helper';
+import { fetchData } from "../lib/dataFetcher";
+import { ApiProxyEndpoint } from "../config/apiProxyEndpoint";
+import { IUnit, ApiResponseType } from "../types";
+import { createUrlParamFromObj } from "../utils/helper";
 
 export interface IGetUnitPayload {
   page?: number;
   limit?: number;
+  search?: string;
 }
 
 export interface ICreateUnitPayload {
@@ -20,12 +21,17 @@ export interface ICreateUnitPayload {
   template_invoice_id?: number[];
 }
 
-export async function getUnit(payload: IGetUnitPayload): Promise<ApiResponseType<IUnit[]> | undefined> {
+export async function getUnit(
+  payload: IGetUnitPayload
+): Promise<ApiResponseType<IUnit[]> | undefined> {
   const params = createUrlParamFromObj(payload);
 
-  const { data, error } = await fetchData<ApiResponseType<Array<IUnit>>>(`${ApiProxyEndpoint.Unit}${params}`, {
-    method: 'GET',
-  });
+  const { data, error } = await fetchData<ApiResponseType<Array<IUnit>>>(
+    `${ApiProxyEndpoint.Unit}${params}`,
+    {
+      method: "GET",
+    }
+  );
 
   if (error) {
     throw error;
@@ -37,7 +43,7 @@ export async function getUnit(payload: IGetUnitPayload): Promise<ApiResponseType
 export async function createUnit(payload: ICreateUnitPayload) {
   const { data, error } = await fetchData<{ message: string }>(ApiProxyEndpoint.Unit, {
     body: JSON.stringify(payload),
-    method: 'POST',
+    method: "POST",
   });
 
   // console.log("error ==>", error, data)
@@ -50,9 +56,12 @@ export async function createUnit(payload: ICreateUnitPayload) {
 }
 
 export async function deleteUnit(id: number) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Unit}?id=${id}`, {
-    method: 'DELETE',
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.Unit}?id=${id}`,
+    {
+      method: "DELETE",
+    }
+  );
 
   if (error) {
     throw error;
@@ -62,10 +71,13 @@ export async function deleteUnit(id: number) {
 }
 
 export async function updateUnit(id: number, payload: ICreateUnitPayload) {
-  const { data, error } = await fetchData<{ message: string }>(`${ApiProxyEndpoint.Unit}?id=${id}`, {
-    body: JSON.stringify(payload),
-    method: 'PUT',
-  });
+  const { data, error } = await fetchData<{ message: string }>(
+    `${ApiProxyEndpoint.Unit}?id=${id}`,
+    {
+      body: JSON.stringify(payload),
+      method: "PUT",
+    }
+  );
 
   if (error) {
     throw error;

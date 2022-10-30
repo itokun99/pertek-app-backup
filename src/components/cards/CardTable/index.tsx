@@ -32,7 +32,7 @@ const CardTable = ({
   searchField,
   errorMessage,
   tabs,
-  tabIndex = 0,
+  tabIndex,
   onChangeTab,
   searchValue,
   onChangeSearch,

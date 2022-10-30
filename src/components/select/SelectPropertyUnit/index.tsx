@@ -1,13 +1,12 @@
-import React from "react";
+import React, { useEffect, memo } from "react";
 import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import { SelectOptionType } from "@types";
-import SelectOption from '../SelectOption';
-import useContactList from './hook/useContactList';
-import { createOptions } from '@utils/helper';
-import { SelectOptionChangeType } from '../SelectOption';
+import SelectOption from "../SelectOption";
+import usePropertyUnit from "./hooks";
+import { createOptions } from "@utils/helper";
+import { SelectOptionChangeType } from "../SelectOption";
 
-
-interface ISelectContact {
+interface ISelectPropertyUnit {
   onChange: SelectOptionChangeType<SelectOptionType>;
   value?: SelectOptionType | null;
   disabled?: boolean;
@@ -15,18 +14,8 @@ interface ISelectContact {
   helperText?: string;
 }
 
-const SelectContact: React.FC<ISelectContact> = ({
-  onChange,
-  value,
-  disabled,
-  error,
-  helperText
-}) => {
-
-
-  const { data, loading, keyword, setKeyword, setOpen } = useContactList();
-
-
+const SelectPropertyUnit: React.FC<ISelectPropertyUnit> = ({ onChange, value, disabled, error, helperText }) => {
+  const { data, loading, keyword, setKeyword, setOpen } = usePropertyUnit();
 
   const handleInputChange = (
     _event: React.SyntheticEvent,
@@ -40,23 +29,19 @@ const SelectContact: React.FC<ISelectContact> = ({
     if (!disabled) {
       setOpen(true);
     }
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
-  const options: SelectOptionType[] = createOptions(data.map(v => ({
-    ...v,
-    fullName: `${v.first_name} ${v.last_name}`
-  })), 'fullName', 'id');
+  const options: SelectOptionType[] = createOptions(data, "name", "id");
 
   return (
     <SelectOption
-      type="auto-complete-select"
-      name="contact"
-      label="Kontak"
-      placeholder="Masukan Nama Kontak"
+      name="propertyUnit"
+      label="Property Unit"
+      placeholder="Masukan Nama Property Unit"
       loading={loading}
       value={value}
       inputValue={keyword}
@@ -66,10 +51,11 @@ const SelectContact: React.FC<ISelectContact> = ({
       disabled={disabled}
       onOpen={handleOpen}
       onClose={handleClose}
+      type="auto-complete-select"
       error={error}
       helperText={helperText}
     />
   );
 };
 
-export default SelectContact;
+export default memo(SelectPropertyUnit);

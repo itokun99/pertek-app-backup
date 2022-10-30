@@ -1,12 +1,12 @@
 import React, { memo } from "react";
-import { SelectChangeEvent } from '@mui/material/Select';
+import { SelectChangeEvent } from "@mui/material/Select";
 import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
 import { SelectOptionType } from "@types";
 import AutoCompleteSelect from "./AutoCompleteSelect";
 import BaseSelect from "./BaseSelect";
 
 export type SelectOptionChangeType<T = any> = (name: string, value: T) => void;
-interface ISelectOptionProps {
+export interface ISelectOptionProps {
   id?: string;
   name: string;
   onChange: SelectOptionChangeType;
@@ -25,8 +25,8 @@ interface ISelectOptionProps {
   helperText?: string;
   onOpen?: (event: React.SyntheticEvent) => void;
   onClose?: (event: React.SyntheticEvent) => void;
-  options: SelectOptionType[],
-  type?: 'base-select' | 'auto-complete-select';
+  options: SelectOptionType[];
+  type?: "base-select" | "auto-complete-select";
 }
 
 const SelectOption = ({
@@ -45,21 +45,22 @@ const SelectOption = ({
   helperText,
   onOpen,
   onClose,
-  type = 'base-select'
+  type = "base-select",
 }: ISelectOptionProps) => {
-
-  const handleAutoCompleteSelectChange = (_event: React.SyntheticEvent, newValue: SelectOptionType | null) => {
-    onChange(name, newValue)
-  }
+  const handleAutoCompleteSelectChange = (
+    _event: React.SyntheticEvent,
+    newValue: SelectOptionType | null
+  ) => {
+    onChange(name, newValue);
+  };
 
   const handleBaseSelectChange = (event: SelectChangeEvent) => {
     const { name, value } = event.target;
     onChange(name, value);
   };
 
-
   switch (type) {
-    case 'auto-complete-select':
+    case "auto-complete-select":
       return (
         <AutoCompleteSelect
           name={name}
@@ -93,7 +94,7 @@ const SelectOption = ({
           error={error}
           helperText={helperText}
         />
-      )
+      );
   }
 };
 

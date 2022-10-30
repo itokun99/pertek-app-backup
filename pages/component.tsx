@@ -1,60 +1,24 @@
-import React, { useEffect, useState } from 'react'
-import BaseTable from '../src/components/tables/BaseTable';
-import { ColumnType } from '../src/components/tables/BaseTable/BaseTable.interface';
-import ProtectedPage from '../src/template/ProtectedPage';
-
-
-const jsonData = [
-  {
-    id: 1,
-    name: 'Muhammad Irva',
-    email: 'justirva@gmail.com',
-  },
-  {
-    id: 2,
-    name: 'Indrawan Lisanto',
-    email: 'indrawan@gmail.com'
-  },
-  {
-    id: 3,
-    name: 'Prawito',
-    email: 'prawito@gmail.com',
-  }
-]
-
-const columns: ColumnType[] = [
-  {
-    title: 'Name',
-    selector: 'name',
-    // todo: create sorting table with router params
-    sorter: () => console.info('test')
-  },
-  {
-    title: 'Field 2',
-    selector: 'email',
-    render: (text: string, record: object) => <button onClick={() => console.info({ text: text, record: record })}>{text}</button>
-  },
-]
+import SelectFamilyStatus from "@components/select/SelectFamilyStatus";
+import SelectPropertyUnit from "@components/select/SelectPropertyUnit";
+import SelectResidentStatus from "@components/select/SelectResidentStatus";
+import React, { useState } from "react";
+import ProtectedPage from "../src/template/ProtectedPage";
 
 const Component = () => {
+  const [form, setForm] = useState(null);
 
-  const [selectedRow, onSelectedRow] = React.useState<object | null>(null)
-
-  console.info(`ss:`, selectedRow)
-
+  const handleSelectChange = (name: string, value: any) => {
+    console.info("name", name);
+    console.info("value", value);
+    setForm(value);
+  };
 
   return (
     <ProtectedPage>
-      <BaseTable
-        columns={columns}
-        field={jsonData}
-        isRowSelection
-        rowSelection={{
-          selector: 'id',
-          onSelected: (p) => onSelectedRow(p)
-        }} />
+      {/* <SelectFamilyStatus onChange={handleSelectChange} value={form} /> */}
+      <SelectPropertyUnit onChange={handleSelectChange} value={form} />
     </ProtectedPage>
-  )
-}
+  );
+};
 
-export default Component
+export default Component;

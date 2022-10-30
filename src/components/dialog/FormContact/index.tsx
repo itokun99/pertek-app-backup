@@ -54,8 +54,8 @@ interface IFormContactProps {
   loading: boolean;
   onClose: () => void;
   onSubmit: () => void;
-  onMultipleInputDelete: (name: string, data: IMultipleInputItem) => void;
-  onMultipleInputSave: (name: string, data: IMultipleInputItem) => void;
+  onMultipleInputDelete: (name: string, data: IMultipleInputItem) => Promise<void>;
+  onMultipleInputSave: (name: string, data: IMultipleInputItem) => Promise<void>;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: SelectOptionChangeType<SelectOptionType | string>;
   onMultipleInputChange: MultipleInputChangeType;

@@ -1,3 +1,4 @@
+import { swrConfig } from '@config/swrConfig';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -35,13 +36,11 @@ export default function useBooking(): IUseBooking {
     error: responseError,
     mutate,
     isValidating,
-  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IBooking[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  } = useSWR(
+    `${API_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<IBooking[]>>(url, { method: 'GET' }),
+    swrConfig
+  );
 
   console.log('responseData', responseData?.data?.items);
 

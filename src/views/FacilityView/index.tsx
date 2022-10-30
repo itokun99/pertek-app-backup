@@ -1,10 +1,9 @@
 import ActionButton from '@components/buttons/ActionButton';
 import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
-import CardTable from '@components/cards/CardTable';
 import { TabItem } from '@components/TabBar';
 import Section from '@components/views/Section';
 import { Add } from '@mui/icons-material';
-import { Avatar, Box, Button, Card, CardActionArea, Grid, Link, Typography, useTheme } from '@mui/material';
+import { Box, Button, Card, CardActionArea, Grid, Typography, useTheme } from '@mui/material';
 import { Stack } from '@mui/system';
 import { IFacility } from '@types';
 import dynamic from 'next/dynamic';
@@ -13,10 +12,10 @@ import { ChangeEvent, ReactElement, Suspense, SyntheticEvent, useMemo, useState 
 import { DetailViewFacility } from './details';
 import useFacility from './hooks/useFacility';
 
-const TableFacility = dynamic(() => import('@components/tables/TableFacility'), {
-  ssr: false,
-  suspense: true,
-});
+// const TableFacility = dynamic(() => import('@components/tables/TableFacility'), {
+//   ssr: false,
+//   suspense: true,
+// });
 
 const FacilityView = (): ReactElement => {
   const { facilities, currentFacility, isError, isLoading, isReady, reload, isValidating, setCurrentFacility } =
@@ -94,8 +93,11 @@ const FacilityView = (): ReactElement => {
                     <CardActionArea onClick={() => handleOpenDetail(f)}>
                       <Stack direction='column' p={2}>
                         <Image
-                          style={{ borderRadius: 8 }}
-                          src={f.pictures[0] ?? '/static/images/product_3.jpg'}
+                          style={{
+                            borderRadius: 8,
+                            ...(f.pictures.length === 0 && { backgroundColor: theme.palette.grey[300] }),
+                          }}
+                          src={f.pictures[0] ?? '/static/images/no-photo.png'}
                           alt={f.name}
                           layout='responsive'
                           width='100%'

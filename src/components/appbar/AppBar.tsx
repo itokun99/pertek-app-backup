@@ -18,6 +18,7 @@ import InboxPopover from './InboxPopover';
 import AccountPopover from './AccountPopover';
 import { NotificationContext } from '@provider/NotificationProvider';
 import { NetworkContext } from '@provider/NetworkProvider';
+import { Person } from '@mui/icons-material';
 
 export const popoverDefaultProps = {
   anchorOrigin: {
@@ -116,7 +117,9 @@ const AppBarComponent = () => {
                   mountPopover(e, 'account');
                 }}
               >
-                <Avatar src={user?.avatar ?? '/static/images/4.jpg'} alt='profile avatar' />
+                <Avatar src={user?.avatar} alt='profile avatar'>
+                  <Person />
+                </Avatar>
               </IconButton>
             </Box>
             <AccountPopover anchorEl={popover?.anchor} open={popover?.name === 'account'} onClose={unmountPopover} />

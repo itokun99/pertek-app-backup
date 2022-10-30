@@ -7,6 +7,7 @@ import { IUnit, ApiResponseType } from '../../../types';
 import { createUnit, updateUnit, deleteUnit, ICreateUnitPayload } from '../../../service/unit';
 import { createUrlParamFromObj } from '../../../utils/helper';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
+import { swrConfig } from '@config/swrConfig';
 
 interface IUseUnit {
   insert: (payload: ICreateUnitPayload) => Promise<void>;
@@ -37,13 +38,11 @@ export default function useUnit(): IUseUnit {
     error: responseError,
     isValidating,
     mutate,
-  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IUnit[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  } = useSWR(
+    `${API_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<IUnit[]>>(url, { method: 'GET' }),
+    swrConfig
+  );
 
   const [ready, setReady] = useState<boolean>(false);
   const dataMeta = responseData?.data;
@@ -100,7 +99,7 @@ export default function useUnit(): IUseUnit {
 
   const update = async (id: number, payload: ICreateUnitPayload): Promise<void> => {
     try {
-      await updateUnit(id, payload)
+      await updateUnit(id, payload);
       setAlert({
         message: {
           severity: 'success',

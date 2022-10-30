@@ -1,0 +1,42 @@
+image: node:lts-alpine
+tasks:
+
+  prepare_lint:
+    input_paths:
+      - package.json
+      - yarn.lock
+    command: yarn install
+
+  lint:
+    dependencies:
+      - prepare_lint
+    input_paths:
+      - .
+    command: yarn lint
+
+  prepare_build:
+    environment:
+      NODE_ENV: production
+    input_paths:
+      - package.json
+      - yarn.lock
+    output_paths:
+      - node_modules
+    command: |
+      yarn add typescript @types/node @types/nprogress @types/numeral
+      yarn install --production
+
+  build:
+    environment:
+      NODE_ENV: production
+    dependencies:
+      - prepare_build
+    input_paths:
+      - .
+    output_paths:
+      - public
+      - .next
+    command: |
+      rm -f .eslintrc.json
+      yarn build
+

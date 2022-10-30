@@ -11,10 +11,9 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: ['upcdn.io'],
+  },
 };
 
-module.exports = withBundleAnalyzer(
-  withPWA({
-    nextConfig,
-  })
-);
+module.exports = withBundleAnalyzer(withPWA(nextConfig));

@@ -10,3 +10,4 @@ export * from './property';
 export * from './property-unit';
 export * from './property-cluster';
 export * from './role';
+export * from './tenant';

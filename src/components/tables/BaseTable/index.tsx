@@ -137,46 +137,55 @@ const BaseTable: React.FC<IBaseTableProperties> = (props) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {tempData.map((row: KeyTypeString, index) => (
-              <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                {isRowSelection && (
-                  <TableCell component="th" scope="row" width={20} align="left">
-                    <Checkbox
-                      checked={Boolean(row && row?.checked)}
-                      onChange={(e, checked) => handleSelectedRow(e, row, checked)}
-                    />
-                  </TableCell>
-                )}
-                {columns.map((colItem, colKey) => {
-                  if (colItem.render) {
-                    return (
-                      <TableCell
-                        component="th"
-                        scope="row"
-                        align={colItem.align}
-                        width={colItem.width}
-                        key={colKey}
-                      >
-                        {colItem.selector && row
-                          ? colItem.render(row[colItem.selector], row)
-                          : null}
+            {tempData.length > 0 ? (
+              <>
+                {tempData.map((row: KeyTypeString, index) => (
+                  <TableRow key={index} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                    {isRowSelection && (
+                      <TableCell component="th" scope="row" width={20} align="left">
+                        <Checkbox
+                          checked={Boolean(row && row?.checked)}
+                          onChange={(e, checked) => handleSelectedRow(e, row, checked)}
+                        />
                       </TableCell>
-                    );
-                  }
-                  return (
-                    <TableCell
-                      component="th"
-                      scope="row"
-                      align={colItem.align}
-                      width={colItem.width}
-                      key={colKey}
-                    >
-                      {colItem.selector && row ? row[colItem.selector] : null}
-                    </TableCell>
-                  );
-                })}
+                    )}
+                    {columns.map((colItem, colKey) => {
+                      if (colItem.render) {
+                        return (
+                          <TableCell
+                            component="th"
+                            scope="row"
+                            align={colItem.align}
+                            width={colItem.width}
+                            key={colKey}
+                          >
+                            {colItem.selector && row
+                              ? colItem.render(row[colItem.selector], row)
+                              : null}
+                          </TableCell>
+                        );
+                      }
+                      return (
+                        <TableCell
+                          component="th"
+                          scope="row"
+                          align={colItem.align}
+                          width={colItem.width}
+                          key={colKey}
+                        >
+                          {colItem.selector && row ? row[colItem.selector] : null}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </>
+            ) : (
+              <TableRow>
+                <TableCell colSpan={columns.length} sx={{ textAlign: 'center', py: 4 }} >No Rows</TableCell>
               </TableRow>
-            ))}
+            )}
+
           </TableBody>
         </Table>
         {withPagination && <ServerPagination total={total} />}

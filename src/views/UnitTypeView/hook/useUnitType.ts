@@ -7,6 +7,7 @@ import { IUnitType, ApiResponseType } from '../../../types';
 import { createUnitType, updateUnitType, deleteUnitType, ICreateUnitTypePayload } from '../../../service/unit-type';
 import { createUrlParamFromObj } from '../../../utils/helper';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
+import { swrConfig } from '@config/swrConfig';
 
 interface IUseUnitType {
   insert: (payload: ICreateUnitTypePayload) => Promise<void>;
@@ -37,13 +38,11 @@ export default function useUnitType(): IUseUnitType {
     error: responseError,
     isValidating,
     mutate,
-  } = useSWR(`${API_URL}${paramString}`, (url) => fetchData<ApiResponseType<IUnitType[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  } = useSWR(
+    `${API_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<IUnitType[]>>(url, { method: 'GET' }),
+    swrConfig
+  );
 
   const [ready, setReady] = useState<boolean>(false);
   const dataMeta = responseData?.data;

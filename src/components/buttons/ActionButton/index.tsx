@@ -7,12 +7,12 @@ export interface ActionButtonProps {
 }
 
 const ActionButton = ({ buttons }: ActionButtonProps): JSX.Element => {
-  const id = useId();
+
   return (
     <Stack direction="row" gap={2}>
-      {buttons.map((button) => (
+      {buttons.map((button, i) => (
         <AnimatedButton
-          key={`action-button-${id}`}
+          key={`action-button-${i}`}
           {...button}
         />
       ))}

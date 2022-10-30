@@ -1,3 +1,4 @@
+import { swrConfig } from '@config/swrConfig';
 import {
   createFacilityAssistant,
   deleteFacilityAssistant,
@@ -45,13 +46,7 @@ export default function useFacilityAssistant(): IUseFacilityAssistant {
   } = useSWR(
     `${BASE_URL}${paramString}`,
     (url) => fetchData<ApiResponseType<IFacilityAssistant[]>>(url, { method: 'GET' }),
-    {
-      refreshWhenOffline: true,
-      refreshWhenHidden: true,
-      revalidateIfStale: true,
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-    }
+    swrConfig
   );
 
   const [isReady, setIsReady] = useState<boolean>(false);

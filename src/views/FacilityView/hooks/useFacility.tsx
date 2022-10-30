@@ -1,3 +1,4 @@
+import { swrConfig } from '@config/swrConfig';
 import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import useSWR from 'swr';
@@ -37,13 +38,11 @@ export default function useFacility(): IUseFacility {
     error: responseError,
     mutate,
     isValidating,
-  } = useSWR(`${BASE_URL}${paramString}`, (url) => fetchData<ApiResponseType<IFacility[]>>(url, { method: 'GET' }), {
-    refreshWhenOffline: true,
-    refreshWhenHidden: true,
-    revalidateIfStale: true,
-    revalidateOnFocus: true,
-    revalidateOnReconnect: true,
-  });
+  } = useSWR(
+    `${BASE_URL}${paramString}`,
+    (url) => fetchData<ApiResponseType<IFacility[]>>(url, { method: 'GET' }),
+    swrConfig
+  );
 
   console.log(responseData?.data);
 

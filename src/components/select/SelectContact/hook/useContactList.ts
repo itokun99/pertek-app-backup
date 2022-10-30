@@ -6,7 +6,6 @@ import { getContact } from '@service/contact';
 export default function useContactList() {
 
   const [keyword, setKeyword] = useState<string>('');
-  const [propertyId, setPropertyId] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
   const [data, setData] = useState<IContact[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -17,23 +16,21 @@ export default function useContactList() {
   const getData = useCallback(() => {
     setLoading(true);
     setError(false);
-    if(Boolean(propertyId)) {
-      getContact({ search, property_id: propertyId })
-        .then(res => {
-          setLoading(false);
-          setError(false);
-          if(res?.items) {
-            setData(res.items);
-          } else {
-            setError(true);
-            setData([]);
-          }
-        }).catch(() => {
+    getContact({ search })
+      .then(res => {
+        setLoading(false);
+        setError(false);
+        if(res?.items) {
+          setData(res.items);
+        } else {
           setError(true);
-          setLoading(false);
-        })
-    }
-  }, [propertyId, search]);
+          setData([]);
+        }
+      }).catch(() => {
+        setError(true);
+        setLoading(false);
+      })
+  }, [search]);
 
 
   useEffect(() => {
@@ -54,7 +51,6 @@ export default function useContactList() {
     loading,
     keyword,
     setOpen,
-    setKeyword,
-    setPropertyId
+    setKeyword
   }
 }

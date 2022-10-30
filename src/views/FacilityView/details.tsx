@@ -1,5 +1,5 @@
 import { DialogContainer } from '@components/dialog/DialogContainer';
-import { Avatar, Card, Grid, Stack, Typography } from '@mui/material';
+import { Avatar, Card, Grid, Stack, Typography, useTheme } from '@mui/material';
 import { Box } from '@mui/system';
 import { IFacility } from '@types';
 import { fGetTime } from '@utils/formatTime';
@@ -14,6 +14,8 @@ export interface DetailViewFacilityProps {
 }
 
 export const DetailViewFacility = ({ facility, onClose }: DetailViewFacilityProps) => {
+  const theme = useTheme();
+
   const now = new Date();
   const maxOrderGapDate = addSeconds(now, (facility?.max_order_gap ?? 0) * 60);
   const minOrderGapDate = addSeconds(now, (facility?.min_order_gap ?? 0) * 60);
@@ -34,10 +36,13 @@ export const DetailViewFacility = ({ facility, onClose }: DetailViewFacilityProp
           <Grid container spacing={3} flex={1}>
             <Grid item xs={12} md={3}>
               <Image
-                style={{ borderRadius: 16 }}
+                style={{
+                  borderRadius: 16,
+                  ...(facility?.pictures.length === 0 && { backgroundColor: theme.palette.grey[300] }),
+                }}
                 width='100%'
                 height='100%'
-                src={facility?.pictures[0] ?? '/static/images/product_3.jpg'}
+                src={facility?.pictures[0] ?? '/static/images/no-photo.png'}
                 alt={facility?.name}
                 layout='responsive'
               />

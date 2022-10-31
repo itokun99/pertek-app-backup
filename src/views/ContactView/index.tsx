@@ -211,8 +211,8 @@ const ContactView = (): ReactElement => {
       tax_number: Number(form.npwp),
       emails: validateMultipleInput(form.emails).map((email) => ({
         address: email.value,
-        verified: email.checked || false,
-        id: email.id,
+        verified: Boolean(email.checked),
+        id: email.id || 0,
       })),
       phone_numbers: validateMultipleInput(form.phones).map((phone) => phone.value),
     };
@@ -365,8 +365,8 @@ const ContactView = (): ReactElement => {
               value: String(data.role.id),
             },
             roleGroup: {
-              label: "",
-              value: "",
+              label: data.role_group?.name || '',
+              value: String(data.role_group?.id) || '',
             },
           });
         }

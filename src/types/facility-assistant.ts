@@ -1,8 +1,11 @@
-export interface IFacilityAssistant {
+import { BaseType } from './base';
+import { IContact } from './contact';
+import { IFacilityCategory } from './facility';
+
+export interface IFacilityAssistant extends BaseType {
   id: number;
-  first_name: string;
-  last_name: string;
-  status: string;
+  profile: IContact;
+  facility_category: IFacilityCategory;
   shifts: IFacilityAssistantShift[];
 }
 

@@ -30,7 +30,7 @@ export interface IUseFacilityAssistant {
 }
 
 export default function useFacilityAssistant(): IUseFacilityAssistant {
-  const BASE_URL = ApiProxyEndpoint.Facility;
+  const BASE_URL = ApiProxyEndpoint.FacilityAssistant;
 
   const router = useRouter();
   const params = router.query;

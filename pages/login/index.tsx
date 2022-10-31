@@ -138,7 +138,7 @@ const LoginPage = () => {
           </Stack>
           <Grid container>
             <Grid item xs textAlign='center' sx={{ mt: theme.spacing(5) }}>
-              <Typography variant='body2' color={alpha(theme.palette.grey[500], 0.8)}>
+              <Typography variant='body2' color={theme.palette.grey[600]}>
                 {' '}
                 Propertek PMS - v3.0.0
               </Typography>

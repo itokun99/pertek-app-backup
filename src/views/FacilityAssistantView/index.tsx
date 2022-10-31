@@ -3,11 +3,12 @@ import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
 import { TabItem } from '@components/TabBar';
 import Section from '@components/views/Section';
 import { Add } from '@mui/icons-material';
-import { Grid, useTheme } from '@mui/material';
+import { Card, CardActionArea, Grid, Typography, useTheme } from '@mui/material';
 import { IFacilityAssistant } from '@types';
 import dynamic from 'next/dynamic';
 import { ChangeEvent, ReactElement, Suspense, SyntheticEvent, useMemo, useState } from 'react';
 import { DetailViewFacilityAssistant } from './details';
+import { FacilityAssistantCard } from './FacilityAssistantCardItem';
 import useFacilityAssistant from './hooks/useFacilityAssistant';
 
 const TableFacilityAssistantView = dynamic(() => import('@components/tables/TableFacilityAssistant'), {
@@ -41,14 +42,8 @@ const FacilityAssitantView = (): ReactElement => {
   const actionButtons: MyAnimatedButtonProps[] = useMemo(() => {
     return [
       {
-        title: 'Fasilitas',
+        title: 'Asisten Fasilitas',
         color: 'info',
-        startIcon: <Add />,
-        onClick: () => {},
-      },
-      {
-        title: 'Kategori Fasilitas',
-        color: 'warning',
         startIcon: <Add />,
         onClick: () => {},
       },
@@ -83,20 +78,23 @@ const FacilityAssitantView = (): ReactElement => {
     setCurrentFacilityAssistant(null);
   };
 
+  console.log('currentFacilityAssistant', assistants);
+
   return (
     <>
       <Suspense>
         <Section
-          title='Fasilitas'
-          description='Kelola fasilitas properti Anda'
+          title='Asisten Fasilitas'
+          description='Kelola asisten fasilitas properti Anda'
           actionButton={<ActionButton buttons={actionButtons} />}
         >
-          <TableFacilityAssistantView
-            assistants={assistants}
-            onDelete={handleDelete}
-            onEdit={handleEdit}
-            openDetail={handleOpenDetail}
-          />
+          {assistants && (
+            <Grid container spacing={2}>
+              {assistants.map((assistant) => (
+                <FacilityAssistantCard assistant={assistant} onClick={handleOpenDetail} key={assistant.id} />
+              ))}
+            </Grid>
+          )}
         </Section>
       </Suspense>
       <Suspense>

@@ -130,9 +130,7 @@ export default function useUnitType(): IUseUnitType {
 
   useEffect(() => {
     if (responseData && !ready) {
-      setTimeout(() => {
-        setReady(true);
-      }, 3000);
+      setReady(true);
     }
   }, [responseData, ready]);
 

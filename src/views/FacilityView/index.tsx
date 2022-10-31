@@ -9,6 +9,7 @@ import { IFacility } from '@types';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { ChangeEvent, ReactElement, Suspense, SyntheticEvent, useMemo, useState } from 'react';
+import { FacilityCard } from './FacilityCardItem';
 import { DetailViewFacility } from './details';
 import useFacility from './hooks/useFacility';
 
@@ -86,33 +87,9 @@ const FacilityView = (): ReactElement => {
           actionButton={<ActionButton buttons={actionButtons} />}
         >
           <Grid container spacing={3}>
-            {facilities.map((f) => {
-              return (
-                <Grid key={f.id} item xs={12} md={3}>
-                  <Card key={f.id}>
-                    <CardActionArea onClick={() => handleOpenDetail(f)}>
-                      <Stack direction='column' p={2}>
-                        <Image
-                          style={{
-                            borderRadius: 8,
-                            ...(f.pictures.length === 0 && { backgroundColor: theme.palette.grey[300] }),
-                          }}
-                          src={f.pictures[0] ?? '/static/images/no-photo.png'}
-                          alt={f.name}
-                          layout='responsive'
-                          width='100%'
-                          height='100%'
-                        />
-                        <Box mt={5}>
-                          <Typography variant='subtitle1'>{f.name}</Typography>
-                          <Typography variant='body2'>{f.category.name}</Typography>
-                        </Box>
-                      </Stack>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              );
-            })}
+            {facilities.map((f) => (
+              <FacilityCard key={f.id} facility={f} onClick={handleOpenDetail} />
+            ))}
           </Grid>
         </Section>
       </Suspense>

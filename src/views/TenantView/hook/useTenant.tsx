@@ -149,12 +149,7 @@ export default function useTenant(): IUseTenant {
 
   useEffect(() => {
     if (responseData && !ready) {
-      // setImmediate(
-      // () =>
-      // setTimeout(() => {
       setReady(true);
-      // }, 3000);
-      // );
     }
   }, [responseData, ready]);
 

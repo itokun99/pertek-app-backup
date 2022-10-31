@@ -15,16 +15,13 @@ tasks:
     command: yarn lint
 
   prepare_build:
-    environment:
-      NODE_ENV: production
     input_paths:
       - package.json
       - yarn.lock
     output_paths:
       - node_modules
     command: |
-      yarn add typescript @types/node @types/nprogress @types/numeral
-      yarn install --production
+      yarn install
 
   build:
     environment:

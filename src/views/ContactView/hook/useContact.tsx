@@ -151,12 +151,7 @@ export default function useContact(): IUseContact {
 
   useEffect(() => {
     if (responseData && !ready) {
-      // setImmediate(
-      // () =>
-      // setTimeout(() => {
       setReady(true);
-      // }, 3000);
-      // );
     }
   }, [responseData, ready]);
 

@@ -20,8 +20,12 @@ export const DetailViewFacilityAssistant = ({ assistant, onClose }: DetailViewFa
                 style={{ borderRadius: 16 }}
                 width='100%'
                 height='100%'
-                src={'/static/images/product_3.jpg'}
-                alt={assistant?.first_name}
+                src={
+                  assistant?.profile.profile_picture !== ''
+                    ? assistant?.profile.profile_picture!
+                    : '/static/images/no-photo.png'
+                }
+                alt={assistant?.profile.first_name}
                 layout='responsive'
               />
             </Grid>

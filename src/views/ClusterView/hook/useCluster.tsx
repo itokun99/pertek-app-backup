@@ -120,9 +120,7 @@ export default function useCluster(): IUseCluster {
 
   useEffect(() => {
     if (responseData && !ready) {
-      setTimeout(() => {
-        setReady(true);
-      }, 3000);
+      setReady(true);
     }
   }, [responseData, ready]);
 

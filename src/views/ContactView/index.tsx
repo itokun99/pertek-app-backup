@@ -365,8 +365,8 @@ const ContactView = (): ReactElement => {
               value: String(data.role.id),
             },
             roleGroup: {
-              label: data.role_group.name,
-              value: String(data.role_group.id),
+              label: data.role_group?.name || '',
+              value: String(data.role_group?.id) || '',
             },
           });
         }

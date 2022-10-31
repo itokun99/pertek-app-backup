@@ -26,7 +26,7 @@ export interface ICreateContactPayload {
   last_login?: number;
   tax_number?: number;
   emails: { address: string; verified: boolean, id?: number }[];
-  phone_numbers: string[];
+  phone_numbers: string[] | { number:string }[];
 }
 
 export async function getContact(

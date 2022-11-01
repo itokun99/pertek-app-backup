@@ -1,38 +1,39 @@
-import Add from "@mui/icons-material/Add";
-import { useRouter } from "next/router";
-import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from "react";
+import Add from '@mui/icons-material/Add';
+import { useRouter } from 'next/router';
+import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from 'react';
 
-import useConfirmation from "@hooks/useConfirmation";
-import useForm from "@hooks/useForm";
-import { ITenant } from "@general-types";
-import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
-import { AlertContext } from "@provider/AlertProvider";
-import useTenant from "./hook/useTenant";
-import dynamic from "next/dynamic";
-import { TabItem } from "@components/TabBar";
-import FormDialog, { IForm, IFormError } from "@components/dialog/FormTenant";
-import { IMultipleInputItem, validateMultipleInput } from "@components/input/MultipleInput";
-import CloudDownload from "@mui/icons-material/CloudDownload";
-import CloudUpload from "@mui/icons-material/CloudUpload";
-import { ICreateTenantPayload } from "@service/tenant";
+import useConfirmation from '@hooks/useConfirmation';
+import useForm from '@hooks/useForm';
+import { ITenant } from '@general-types';
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
+import { AlertContext } from '@provider/AlertProvider';
+import useTenant from './hook/useTenant';
+import dynamic from 'next/dynamic';
+import { TabItem } from '@components/TabBar';
+import FormDialog, { IForm, IFormError } from '@components/dialog/FormTenant';
+import { IMultipleInputItem, validateMultipleInput } from '@components/input/MultipleInput';
+import CloudDownload from '@mui/icons-material/CloudDownload';
+import CloudUpload from '@mui/icons-material/CloudUpload';
+import { ICreateTenantPayload } from '@service/tenant';
+import Label from '@components/Label';
 
-const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
+const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
 });
 
-const Section = dynamic(() => import("@components/views/Section"), {
+const Section = dynamic(() => import('@components/views/Section'), {
   ssr: false,
   suspense: true,
 });
-const CardTable = dynamic(() => import("@components/cards/CardTable"), {
+const CardTable = dynamic(() => import('@components/cards/CardTable'), {
   ssr: false,
   suspense: true,
 });
-const TableData = dynamic(() => import("@components/tables/TableTenant"), {
+const TableData = dynamic(() => import('@components/tables/TableTenant'), {
   ssr: false,
   suspense: true,
 });
-const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
+const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   ssr: false,
   suspense: true,
 });
@@ -40,28 +41,28 @@ const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
 const initialForm: IForm = {
   id: 0,
   contact: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   propertyUnit: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   checkIn: null,
   checkOut: null,
-  familyStatus: "",
-  parentTenancy: "",
-  residentStatus: "",
+  familyStatus: '',
+  parentTenancy: '',
+  residentStatus: '',
 };
 
 const initialFormError: IFormError = {
-  contact: "",
-  checkIn: "",
-  checkOut: "",
-  familyStatus: "",
-  propertyUnit: "",
-  residentStatus: "",
-  parentTenancy: "",
+  contact: '',
+  checkIn: '',
+  checkOut: '',
+  familyStatus: '',
+  propertyUnit: '',
+  residentStatus: '',
+  parentTenancy: '',
 };
 
 const TenantView = (): ReactElement => {
@@ -71,14 +72,13 @@ const TenantView = (): ReactElement => {
   const router = useRouter();
 
   // states
-  const [tabIndex, setTabIndex] = useState<string | number>("");
-  const [search, setSearch] = useState<string>("");
+  const [tabIndex, setTabIndex] = useState<string | number>('');
+  const [search, setSearch] = useState<string>('');
   const [visibility, setVisibility] = useState(false);
 
   // custom hooks
   const [form, setForm, resetForm, setFormBulk] = useForm<IForm>(initialForm);
-  const [formError, setFormError, resetFormError, setFormErrorBulk] =
-    useForm<IFormError>(initialFormError);
+  const [formError, setFormError, resetFormError, setFormErrorBulk] = useForm<IFormError>(initialFormError);
 
   const {
     content: deleteConfirmation,
@@ -86,10 +86,10 @@ const TenantView = (): ReactElement => {
     visibility: deleteConfirmationVisibility,
   } = useConfirmation<number>(
     {
-      title: "Konfirmasi Hapus",
-      description: "Apakah kamu yakin ingin menghapus item ini?",
-      cancelText: "Kembali",
-      confirmText: "Ya",
+      title: 'Konfirmasi Hapus',
+      description: 'Apakah kamu yakin ingin menghapus item ini?',
+      cancelText: 'Kembali',
+      confirmText: 'Ya',
     },
     0
   );
@@ -115,28 +115,28 @@ const TenantView = (): ReactElement => {
   const tabs = useMemo(
     (): TabItem[] => [
       {
-        label: "",
-        text: "Semua",
-        color: "default",
-        value: "",
+        label: '',
+        text: 'Semua',
+        color: 'default',
+        value: '',
       },
       {
-        label: "",
-        text: "Pending",
-        color: "default",
-        value: "pending",
+        label: '',
+        text: 'Pending',
+        color: 'default',
+        value: 'pending',
       },
       {
-        label: "",
-        text: "Verified",
-        color: "default",
-        value: "verified",
+        label: '',
+        text: 'Verified',
+        color: 'default',
+        value: 'verified',
       },
       {
-        label: "",
-        text: "Blocked",
-        color: "default",
-        value: "blocked",
+        label: '',
+        text: 'Blocked',
+        color: 'default',
+        value: 'blocked',
       },
     ],
     []
@@ -151,7 +151,7 @@ const TenantView = (): ReactElement => {
     setForm(name, value);
 
     if (formError[name as keyof typeof formError]) {
-      setFormError(name, "");
+      setFormError(name, '');
     }
   };
 
@@ -159,11 +159,11 @@ const TenantView = (): ReactElement => {
     setForm(name, value);
 
     if (formError[name as keyof typeof formError]) {
-      setFormError(name, "");
+      setFormError(name, '');
     }
 
-    if (name === "propertyUnit") {
-      setForm("parentTenancy", "");
+    if (name === 'propertyUnit') {
+      setForm('parentTenancy', '');
     }
   };
 
@@ -171,11 +171,11 @@ const TenantView = (): ReactElement => {
     setTabIndex(value);
     const { query } = router;
     const queryPamaramaters = { ...query };
-    queryPamaramaters.status = (value as string) || "";
+    queryPamaramaters.status = (value as string) || '';
 
     // it should delete unnecessary params || todo: clear empty object
     Object.entries(queryPamaramaters).forEach(([queryKey]) => {
-      if (!["status"].includes(queryKey)) {
+      if (!['status'].includes(queryKey)) {
         delete queryPamaramaters[queryKey];
       }
     });
@@ -195,11 +195,11 @@ const TenantView = (): ReactElement => {
   const validateForm = (form: IForm, formError: IFormError) => {
     const error = { ...formError };
     if (!form.contact || !form.contact.value) {
-      error.contact = "Kontak harus diisi";
+      error.contact = 'Kontak harus diisi';
     }
 
     if (!form.propertyUnit || !form.propertyUnit.value) {
-      error.propertyUnit = "Properti Unit harus diisi";
+      error.propertyUnit = 'Properti Unit harus diisi';
     }
 
     // if (!form.parentTenancy) {
@@ -207,19 +207,19 @@ const TenantView = (): ReactElement => {
     // }
 
     if (!form.residentStatus) {
-      error.residentStatus = "Resident Status harus diisi";
+      error.residentStatus = 'Resident Status harus diisi';
     }
 
     if (!form.familyStatus) {
-      error.familyStatus = "Family Status harus diisi";
+      error.familyStatus = 'Family Status harus diisi';
     }
 
     if (!form.checkIn) {
-      error.checkIn = "Check In harus diisi";
+      error.checkIn = 'Check In harus diisi';
     }
 
     if (!form.checkOut) {
-      error.checkOut = "Check Out harus diisi";
+      error.checkOut = 'Check Out harus diisi';
     }
 
     return error;
@@ -228,7 +228,7 @@ const TenantView = (): ReactElement => {
   const handleSubmit = () => {
     // it should check if the form is empty
 
-    console.log("FORM", form);
+    console.log('FORM', form);
 
     const error = validateForm(form, formError);
     const isValid = Object.keys(error).every((key) => !error[key as keyof typeof formError]);
@@ -260,27 +260,27 @@ const TenantView = (): ReactElement => {
       })
       .catch((err) => {
         setLoadingForm(false);
-        console.log("err", err);
+        console.log('err', err);
       });
   };
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
-      title: "Tenant Baru",
+      title: 'Tenant Baru',
       onClick: (): void => setVisibility(true),
-      color: "info",
+      color: 'info',
       startIcon: <Add />,
     },
     {
-      title: "Template",
+      title: 'Template',
       onClick: downloadTemplate,
-      color: "info",
+      color: 'warning',
       startIcon: <CloudDownload />,
     },
     {
-      title: "Upload CSV",
+      title: 'Upload CSV',
       onClick: (): void => {},
-      color: "info",
+      color: 'success',
       startIcon: <CloudUpload />,
     },
   ];
@@ -314,7 +314,7 @@ const TenantView = (): ReactElement => {
             familyStatus: data.family_status,
             parentTenancy: String(data.parent_tenancy_id),
             propertyUnit: {
-              label: "",
+              label: '',
               value: String(data.property_unit_id),
             },
             residentStatus: data.resident_status,
@@ -343,13 +343,13 @@ const TenantView = (): ReactElement => {
     <>
       <Suspense>
         <Section
-          title="Tenant"
-          description="management kelola tenant"
+          title='Tenant'
+          description='Kelola tenant properti Anda'
           stackProps={{ mt: 12 }}
           actionButton={<ActionButton buttons={actionButton} />}
         >
           <CardTable
-            searchPlaceholder="Cari Tenant"
+            searchPlaceholder='Cari Tenant'
             searchValue={search}
             onChangeSearch={handleChangeSearch}
             tabs={tabs}

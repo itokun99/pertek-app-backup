@@ -11,6 +11,7 @@ import { fDate } from '@utils/formatTime';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { Chip, Theme } from '@mui/material';
+import { Block, ScheduleOutlined, Verified } from '@mui/icons-material';
 
 const optionActionCell = (
   record: ITenant,
@@ -36,27 +37,44 @@ const optionActionCell = (
   return options;
 };
 
-function createStatusLabel(status: string) {
+function createStatus(status: string) {
+  if (status === 'Pending') {
+    return <ScheduleOutlined color='warning' />;
+  }
+
+  if (status === 'Verified') {
+    return <Verified color='success' />;
+  }
+
+  if (status === 'Rejected') {
+    return <Block color='error' />;
+  }
+}
+
+function createLabel(status: string) {
+  let color = 'default';
   switch (status) {
     case 'Verified':
-      return (
-        <Label variant='ghost' color='success'>
-          {status}
-        </Label>
-      );
+    case 'Owner':
+      color = 'success';
+      break;
     case 'Pending':
-      return (
-        <Label variant='ghost' color='warning'>
-          {status}
-        </Label>
-      );
-    default:
-      return (
-        <Label variant='ghost' color='default'>
-          {status}
-        </Label>
-      );
+    case 'Agent':
+      color = 'warning';
+      break;
+    case 'Blocked':
+      color = 'error';
+      break;
+    case 'Tenant':
+      color = 'info';
+      break;
   }
+
+  return (
+    <Label variant='ghost' color={color}>
+      {status}
+    </Label>
+  );
 }
 
 export function generateColumns(
@@ -89,10 +107,18 @@ export function generateColumns(
       },
     },
     {
-      title: 'Status Tenant',
+      title: 'Status',
       selector: 'resident_status',
+      render: (text) => createStatus(text),
+    },
+    {
+      title: 'Role',
+      selector: 'tenancy_role',
       flex: 1,
-      render: (text) => createStatusLabel(text),
+      render: (text, record: ITenant) => {
+        console.log(record);
+        return createLabel(record.tenancy_role);
+      },
     },
     {
       title: 'No. Telp',

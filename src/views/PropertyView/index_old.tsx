@@ -14,9 +14,9 @@ import { doFetch } from '@lib/dataFetcher';
 import { AlertContext } from '@provider/AlertProvider';
 import { NetworkContext, NetworkState } from '@provider/NetworkProvider';
 import { Property, SidebarContext } from '@provider/SidebarProvider';
-import { ErrorComponent } from './error/ErrorComponent';
+import { ErrorComponent } from '../../components/error/ErrorComponent';
 
-const PropertyCard = () => {
+const PropertyView = () => {
   const theme = useTheme();
   const { isReady, asPath } = useRouter();
 
@@ -143,4 +143,4 @@ const PropertyCard = () => {
   );
 };
 
-export default PropertyCard;
+export default PropertyView;

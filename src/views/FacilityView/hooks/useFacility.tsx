@@ -44,8 +44,6 @@ export default function useFacility(): IUseFacility {
     swrConfig
   );
 
-  console.log(responseData?.data);
-
   const [isReady, setIsReady] = useState<boolean>(false);
   const [currentFacility, setCurrentFacility] = useState<IFacility | null>(null);
 

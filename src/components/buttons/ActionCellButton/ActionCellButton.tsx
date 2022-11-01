@@ -17,7 +17,7 @@ const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] 
 
   return (
     <>
-      <IconButton disableRipple onClick={handleClick}>
+      <IconButton aria-label='table row action button' disableRipple onClick={handleClick}>
         <MoreVert />
       </IconButton>
       <Popover
@@ -43,6 +43,7 @@ const ActionCellButton: React.FC<IActionCellButtonProperties> = ({ options = [] 
             <Button
               fullWidth
               style={{ justifyContent: 'flex-start' }}
+              aria-label={`${dt.label} button`}
               color={dt.color}
               onClick={(e) => {
                 dt?.onClick?.(e);

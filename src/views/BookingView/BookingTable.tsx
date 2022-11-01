@@ -19,12 +19,12 @@ export const BookingTableView = () => {
           color: 'info',
         },
         {
-          text: 'Ongoing',
-          color: 'warning',
-        },
-        {
           text: 'Booked',
           color: 'success',
+        },
+        {
+          text: 'Ongoing',
+          color: 'warning',
         },
         {
           text: 'No Show',

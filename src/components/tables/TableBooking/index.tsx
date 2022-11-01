@@ -4,8 +4,8 @@ import BaseTable from '../BaseTable';
 import { ColumnType } from '../BaseTable/BaseTable.interface';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { fDateTime } from '@utils/formatTime';
-import { Stack, Typography } from '@mui/material';
+import { fDate, fDateTime } from '@utils/formatTime';
+import { Avatar, Box, Stack, Theme, Typography, useTheme } from '@mui/material';
 import Label from '@components/Label';
 
 export interface TableBookingProps {
@@ -58,24 +58,50 @@ export function createBookingLabel(label: string) {
   }
 
   return (
-    <Label color={color} variant='ghost'>
+    <Label color={color} variant='outlined'>
       {label}
     </Label>
   );
 }
 
-function generateColumns(onEdit: (id: number, record: IBooking) => void, onDelete: (id: number) => void) {
+function getAvatarBgColor(status: string, theme: Theme) {
+  switch (status.toLowerCase()) {
+    case 'requested':
+      return theme.palette.info.main;
+    case 'ongoing':
+      return theme.palette.warning.main;
+    case 'booked':
+      return theme.palette.success.main;
+    case 'no show':
+    case 'canceled':
+      return theme.palette.error.main;
+
+    default:
+      return theme.palette.grey[600];
+  }
+}
+
+function generateColumns(onEdit: (id: number, record: IBooking) => void, onDelete: (id: number) => void, theme: Theme) {
   return [
     {
       title: 'Kode Booking',
       selector: 'code',
-      render: (_text) => <Typography variant='subtitle2'>{_text}</Typography>,
-    },
-    {
-      title: 'Fasilitas',
-      selector: 'facilitas',
       render: (_text, record: IBooking) => {
-        return record.facility.name;
+        return (
+          <Stack direction='row' spacing={2}>
+            <Avatar sx={{ bgcolor: getAvatarBgColor(record.status, theme) }}>
+              <Typography variant='subtitle3' color={theme.palette.background.default}>
+                {record.facility.code}
+              </Typography>
+            </Avatar>
+            <Box>
+              <Typography variant='subtitle2'>{_text}</Typography>
+              <Typography variant='subtitle2' color={theme.palette.grey[600]}>
+                {record.facility.name}
+              </Typography>
+            </Box>
+          </Stack>
+        );
       },
     },
     {
@@ -84,16 +110,23 @@ function generateColumns(onEdit: (id: number, record: IBooking) => void, onDelet
       render: (_text, record: IBooking) => {
         return (
           <Stack direction='column'>
-            <Typography variant='subtitle1'>
+            <Typography variant='subtitle2'>
               {record.contact.first_name} {record.contact.last_name}
             </Typography>
-            <Typography variant='body2'>{record.unit}</Typography>
+            <Typography variant='subtitle2' color={theme.palette.grey[600]}>
+              {record.unit}
+            </Typography>
           </Stack>
         );
       },
     },
     {
-      title: 'Slot Booking',
+      title: 'Tanggal Booking',
+      selector: 'created_at',
+      render: (_text) => fDateTime(_text),
+    },
+    {
+      title: 'Tanggal Penggunaan',
       selector: 'slot_date',
       render: (_text, record: IBooking) => {
         return fDateTime(record.slot_date);
@@ -116,9 +149,10 @@ function generateColumns(onEdit: (id: number, record: IBooking) => void, onDelet
 }
 
 export const TableBookingView = ({ onEdit, onDelete, data, isLoading, totalData }: TableBookingProps) => {
+  const theme = useTheme();
   return (
     <BaseTable
-      columns={generateColumns(onEdit, onDelete)}
+      columns={generateColumns(onEdit, onDelete, theme)}
       field={data}
       loading={isLoading}
       withPagination

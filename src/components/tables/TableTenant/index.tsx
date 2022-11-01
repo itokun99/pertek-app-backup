@@ -1,6 +1,7 @@
-import BaseTable from "../BaseTable";
-import { generateColumns } from "./index.enum";
+import BaseTable from '../BaseTable';
+import { generateColumns } from './index.enum';
 import { ITenant } from '@general-types';
+import { useTheme } from '@mui/material';
 
 export interface ITableTenantProps {
   data: Array<ITenant>;
@@ -11,16 +12,12 @@ export interface ITableTenantProps {
   onClickDelete: (id: number) => void;
 }
 
-const TenantTable = ({
-  data,
-  total,
-  loading,
-  onClickEdit,
-  onClickDelete
-}: ITableTenantProps) => {
+const TenantTable = ({ data, total, loading, onClickEdit, onClickDelete }: ITableTenantProps) => {
+  const theme = useTheme();
+
   return (
     <BaseTable
-      columns={generateColumns(onClickEdit, onClickDelete)}
+      columns={generateColumns(onClickEdit, onClickDelete, theme)}
       field={data}
       loading={loading}
       withPagination

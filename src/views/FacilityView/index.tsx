@@ -88,7 +88,9 @@ const FacilityView = (): ReactElement => {
         >
           <Grid container spacing={3}>
             {facilities.map((f) => (
-              <FacilityCard key={f.id} facility={f} onClick={handleOpenDetail} />
+              <Grid key={f.id} item xs={12} md={3}>
+                <FacilityCard key={f.id} facility={f} onClick={handleOpenDetail} />
+              </Grid>
             ))}
           </Grid>
         </Section>

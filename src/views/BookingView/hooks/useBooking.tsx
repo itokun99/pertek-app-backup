@@ -5,7 +5,13 @@ import useSWR from 'swr';
 import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
 import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
 import { AlertContext } from '../../../provider/AlertProvider';
-import { createBooking, deleteBooking, ICreateBookingPayload, updateBooking } from '../../../service/booking';
+import {
+  createBooking,
+  deleteBooking,
+  ICreateBookingPayload,
+  updateBooking,
+  updateBookingState,
+} from '../../../service/booking';
 import { ApiResponseType, IBooking } from '../../../types';
 import { createUrlParamFromObj } from '../../../utils/helper';
 
@@ -14,6 +20,7 @@ export interface IUseBooking {
   insert: (payload: ICreateBookingPayload) => Promise<void>;
   remove: (id: number) => Promise<void>;
   update: (id: number, payload: ICreateBookingPayload) => Promise<void>;
+  updateStatus: (id: number, status: string) => Promise<void>;
   reload: () => void;
   meta?: ApiResponseType<IBooking[]>;
   bookings: IBooking[];
@@ -41,8 +48,6 @@ export default function useBooking(): IUseBooking {
     (url) => fetchData<ApiResponseType<IBooking[]>>(url, { method: 'GET' }),
     swrConfig
   );
-
-  console.log('responseData', responseData?.data?.items);
 
   const [isReady, setIsReady] = useState<boolean>(false);
   const bookings = responseData?.data?.items || [];
@@ -80,6 +85,27 @@ export default function useBooking(): IUseBooking {
           message: {
             severity: 'success',
             content: `Berhasil mengubah Booking`,
+          },
+        });
+        mutate();
+      })
+      .catch((err: FetcherResponseError) => {
+        setAlert({
+          message: {
+            severity: 'error',
+            content: err?.message || '',
+          },
+        });
+      });
+  };
+
+  const updateStatus = async (booking_id: number, status: string) => {
+    updateBookingState(booking_id, { status, booking_id })
+      .then(() => {
+        setAlert({
+          message: {
+            severity: 'success',
+            content: `Berhasil mengubah status Booking`,
           },
         });
         mutate();
@@ -134,6 +160,7 @@ export default function useBooking(): IUseBooking {
     update,
     remove,
     reload,
+    updateStatus,
     isError,
     isLoading,
     isValidating,

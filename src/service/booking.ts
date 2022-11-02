@@ -1,3 +1,4 @@
+import { async } from '@firebase/util';
 import { ApiProxyEndpoint } from '../config/apiProxyEndpoint';
 import { fetchData } from '../lib/dataFetcher';
 
@@ -11,6 +12,11 @@ export interface ICreateBookingPayload {
   facility_assistance_id?: number[];
   description?: string;
   slot_date: Date;
+}
+
+export interface IUpdateBookingStatePayload {
+  booking_id: number;
+  status: string;
 }
 
 const BOOKING_URL = ApiProxyEndpoint.Booking;
@@ -48,6 +54,25 @@ export async function updateBooking(id: number, payload: ICreateBookingPayload) 
     body: JSON.stringify(payload),
     method: 'PUT',
   });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function updateBookingState(id: number, payload: IUpdateBookingStatePayload) {
+  const { data, error } = await fetchData<{ message: string }>(`${BOOKING_URL}?status`, {
+    body: JSON.stringify(payload),
+    method: 'PUT',
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
 // create function to get facility booking

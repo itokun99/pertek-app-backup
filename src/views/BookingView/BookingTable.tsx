@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import useBooking from './hooks/useBooking';
 
 export const BookingTableView = () => {
-  const { bookings, isReady, isLoading, isError } = useBooking();
+  const { bookings, isReady, updateStatus, isLoading, isError } = useBooking();
 
   const tabs: TabItem[] = useMemo(
     () =>
@@ -19,12 +19,12 @@ export const BookingTableView = () => {
           color: 'info',
         },
         {
-          text: 'Ongoing',
-          color: 'warning',
-        },
-        {
           text: 'Booked',
           color: 'success',
+        },
+        {
+          text: 'Ongoing',
+          color: 'warning',
         },
         {
           text: 'No Show',
@@ -63,6 +63,10 @@ export const BookingTableView = () => {
     console.log(id);
   };
 
+  const handleUpdateState = (id: number, state: string) => {
+    updateStatus(id, state);
+  };
+
   return (
     <CardTable
       searchPlaceholder='Cari booking...'
@@ -82,6 +86,7 @@ export const BookingTableView = () => {
         isLoading={isLoading}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onUpdateState={handleUpdateState}
       />
     </CardTable>
   );

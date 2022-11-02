@@ -71,7 +71,7 @@ function createLabel(status: string) {
   }
 
   return (
-    <Label variant='ghost' color={color}>
+    <Label variant='outlined' color={color}>
       {status}
     </Label>
   );
@@ -107,6 +107,13 @@ export function generateColumns(
       },
     },
     {
+      title: 'No. Telp',
+      selector: 'phone_number',
+      render: (_text, record: ITenant) => {
+        return <Typography variant='body2'>+{record.phones.length > 0 ? record.phones[0].number : '-'}</Typography>;
+      },
+    },
+    {
       title: 'Status',
       selector: 'resident_status',
       render: (text) => createStatus(text),
@@ -118,13 +125,6 @@ export function generateColumns(
       render: (text, record: ITenant) => {
         console.log(record);
         return createLabel(record.tenancy_role);
-      },
-    },
-    {
-      title: 'No. Telp',
-      selector: 'phone_number',
-      render: (_text, record: ITenant) => {
-        return <Typography variant='body2'>+{record.phones.length > 0 ? record.phones[0].number : '-'}</Typography>;
       },
     },
     {

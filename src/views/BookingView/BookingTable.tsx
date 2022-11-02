@@ -63,6 +63,8 @@ export const BookingTableView = () => {
     console.log(id);
   };
 
+  const handleUpdateState = (id: number, state: string) => {};
+
   return (
     <CardTable
       searchPlaceholder='Cari booking...'
@@ -82,6 +84,7 @@ export const BookingTableView = () => {
         isLoading={isLoading}
         onEdit={handleEdit}
         onDelete={handleDelete}
+        onUpdateState={handleUpdateState}
       />
     </CardTable>
   );

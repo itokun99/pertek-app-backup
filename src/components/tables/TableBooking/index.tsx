@@ -5,13 +5,41 @@ import { ColumnType } from '../BaseTable/BaseTable.interface';
 import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { fDate, fDateTime } from '@utils/formatTime';
-import { Avatar, Box, Stack, Theme, Typography, useTheme } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Icon,
+  IconButton,
+  Popover,
+  Stack,
+  Step,
+  StepButton,
+  StepConnector,
+  StepLabel,
+  Stepper,
+  Theme,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import Label from '@components/Label';
+import { ReactElement, useCallback, useState } from 'react';
+import {
+  AccessTime,
+  AccessTimeFilled,
+  Block,
+  Cancel,
+  CheckCircle,
+  GppGood,
+  PlayCircle,
+  RemoveCircle,
+} from '@mui/icons-material';
 
 export interface TableBookingProps {
   isLoading: boolean;
   data: IBooking[];
   totalData: number;
+  onUpdateState: (id: number, state: string) => void;
   onEdit: (id: number, record: IBooking) => void;
   onDelete: (id: number) => void;
 }
@@ -81,7 +109,12 @@ function getAvatarBgColor(status: string, theme: Theme) {
   }
 }
 
-function generateColumns(onEdit: (id: number, record: IBooking) => void, onDelete: (id: number) => void, theme: Theme) {
+function generateColumns(
+  onEdit: (id: number, record: IBooking) => void,
+  onDelete: (id: number) => void,
+  onStateClick: (e: any, booking: IBooking) => void,
+  theme: Theme
+): ColumnType[] {
   return [
     {
       title: 'Kode Booking',
@@ -135,7 +168,11 @@ function generateColumns(onEdit: (id: number, record: IBooking) => void, onDelet
     {
       title: 'Status',
       selector: 'status',
-      render: (_text) => createBookingLabel(_text),
+      render: (_text, record: IBooking) => (
+        <Button sx={{ p: 0 }} onClick={(e) => onStateClick(e, record)}>
+          {createBookingLabel(_text)}
+        </Button>
+      ),
     },
     {
       title: '',
@@ -148,15 +185,117 @@ function generateColumns(onEdit: (id: number, record: IBooking) => void, onDelet
   ] as ColumnType[];
 }
 
-export const TableBookingView = ({ onEdit, onDelete, data, isLoading, totalData }: TableBookingProps) => {
+export const TableBookingView = ({
+  onEdit,
+  onDelete,
+  onUpdateState,
+  data,
+  isLoading,
+  totalData,
+}: TableBookingProps) => {
   const theme = useTheme();
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null);
+  const [booking, setBooking] = useState<IBooking | null>(null);
+
+  const onStateClick = useCallback((e: any, booking: IBooking) => {
+    setAnchorEl(e.currentTarget);
+    setBooking(booking);
+  }, []);
+
   return (
-    <BaseTable
-      columns={generateColumns(onEdit, onDelete, theme)}
-      field={data}
-      loading={isLoading}
-      withPagination
-      total={totalData}
-    ></BaseTable>
+    <>
+      <StatusPopover anchorEl={anchorEl} booking={booking} onClose={() => setAnchorEl(null)} />
+      <BaseTable
+        columns={generateColumns(onEdit, onDelete, onStateClick, theme)}
+        field={data}
+        loading={isLoading}
+        withPagination
+        total={totalData}
+      />
+    </>
+  );
+};
+
+interface StatusPopoverProps {
+  anchorEl: Element | null;
+  booking: IBooking | null;
+  onClose?: () => void;
+}
+
+const StatusPopover = ({ anchorEl, booking, onClose }: StatusPopoverProps) => {
+  const theme = useTheme();
+
+  const shouldBeDisabled = useCallback(
+    (state: string, booking?: IBooking): { isTrue: boolean; isPositive: boolean } => {
+      let isTrue = true;
+      const isPositive = ['Requested', 'Ongoing', 'Done', 'Booked'].includes(booking?.status ?? '');
+
+      if (booking?.status === 'Ongoing' && state === 'Done') {
+        isTrue = false;
+      }
+
+      if (booking?.status === 'Requested' && state !== 'Requested') {
+        isTrue = false;
+      }
+
+      if (booking?.status === 'Booked' && state !== 'Requested') {
+        isTrue = false;
+      }
+
+      return { isTrue, isPositive };
+    },
+    []
+  );
+  return (
+    <Popover
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        horizontal: 'left',
+        vertical: 'top',
+      }}
+      transformOrigin={{
+        horizontal: 'right',
+        vertical: 'top',
+      }}
+      onClose={onClose}
+      open={Boolean(anchorEl)}
+      disableAutoFocus={true}
+      disableEnforceFocus={true}
+    >
+      <Stack sx={{ px: 2, py: 3 }} alignItems='start' justifyContent='start'>
+        <Stepper nonLinear activeStep={0} orientation='horizontal' alternativeLabel connector={<StepConnector />}>
+          {[
+            { label: 'Requested', icon: AccessTimeFilled },
+            { label: 'Booked', icon: GppGood },
+            { label: 'Ongoing', icon: PlayCircle },
+            { label: 'No Show', icon: RemoveCircle },
+            { label: 'Canceled', icon: Cancel },
+            { label: 'Done', icon: CheckCircle },
+          ].map((state) => {
+            const shouldDisabled = shouldBeDisabled(state.label, booking!);
+            return (
+              <Step
+                key={state.label}
+                style={{
+                  color:
+                    state.label === booking?.status
+                      ? shouldDisabled.isPositive
+                        ? theme.palette.success.main
+                        : theme.palette.error.main
+                      : shouldDisabled.isTrue
+                      ? theme.palette.grey[400]
+                      : theme.palette.success.light,
+                }}
+                active={booking?.status === state.label}
+              >
+                <StepButton disableRipple disabled={shouldDisabled.isTrue}>
+                  <StepLabel StepIconComponent={state.icon}>{state.label}</StepLabel>
+                </StepButton>
+              </Step>
+            );
+          })}
+        </Stepper>
+      </Stack>
+    </Popover>
   );
 };

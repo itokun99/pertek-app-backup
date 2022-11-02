@@ -204,7 +204,12 @@ export const TableBookingView = ({
 
   return (
     <>
-      <StatusPopover anchorEl={anchorEl} booking={booking} onClose={() => setAnchorEl(null)} />
+      <StatusPopover
+        anchorEl={anchorEl}
+        booking={booking}
+        onClose={() => setAnchorEl(null)}
+        onUpdateState={onUpdateState}
+      />
       <BaseTable
         columns={generateColumns(onEdit, onDelete, onStateClick, theme)}
         field={data}
@@ -220,9 +225,10 @@ interface StatusPopoverProps {
   anchorEl: Element | null;
   booking: IBooking | null;
   onClose?: () => void;
+  onUpdateState: (id: number, state: string) => void;
 }
 
-const StatusPopover = ({ anchorEl, booking, onClose }: StatusPopoverProps) => {
+const StatusPopover = ({ anchorEl, booking, onClose, onUpdateState }: StatusPopoverProps) => {
   const theme = useTheme();
 
   const shouldBeDisabled = useCallback(
@@ -288,7 +294,14 @@ const StatusPopover = ({ anchorEl, booking, onClose }: StatusPopoverProps) => {
                 }}
                 active={booking?.status === state.label}
               >
-                <StepButton disableRipple disabled={shouldDisabled.isTrue}>
+                <StepButton
+                  disableRipple
+                  disabled={shouldDisabled.isTrue}
+                  onClick={() => {
+                    onUpdateState(booking!.id, state.label);
+                    onClose?.();
+                  }}
+                >
                   <StepLabel StepIconComponent={state.icon}>{state.label}</StepLabel>
                 </StepButton>
               </Step>

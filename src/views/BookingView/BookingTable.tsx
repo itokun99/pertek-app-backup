@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react';
 import useBooking from './hooks/useBooking';
 
 export const BookingTableView = () => {
-  const { bookings, isReady, isLoading, isError } = useBooking();
+  const { bookings, isReady, updateStatus, isLoading, isError } = useBooking();
 
   const tabs: TabItem[] = useMemo(
     () =>
@@ -63,7 +63,9 @@ export const BookingTableView = () => {
     console.log(id);
   };
 
-  const handleUpdateState = (id: number, state: string) => {};
+  const handleUpdateState = (id: number, state: string) => {
+    updateStatus(id, state);
+  };
 
   return (
     <CardTable

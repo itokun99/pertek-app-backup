@@ -12,9 +12,7 @@ async function loginHandler(req: NextApiRequest, res: NextApiResponse) {
   const responseBody = await apiResponse.json();
 
   if (!apiResponse.ok) {
-    return res
-      .status(apiResponse.status)
-      .json({ message: responseBody.message });
+    return res.status(apiResponse.status).json({ message: responseBody.message });
   }
 
   req.session.user = {

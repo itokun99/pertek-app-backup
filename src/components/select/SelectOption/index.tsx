@@ -27,6 +27,7 @@ export interface ISelectOptionProps {
   onClose?: (event: React.SyntheticEvent) => void;
   options: SelectOptionType[];
   type?: "base-select" | "auto-complete-select";
+  displayEmpty?: boolean;
 }
 
 const SelectOption = ({
@@ -46,6 +47,7 @@ const SelectOption = ({
   onOpen,
   onClose,
   type = "base-select",
+  displayEmpty = false,
 }: ISelectOptionProps) => {
   const handleAutoCompleteSelectChange = (
     _event: React.SyntheticEvent,
@@ -93,6 +95,7 @@ const SelectOption = ({
           placeholder={placeholder}
           error={error}
           helperText={helperText}
+          displayEmpty={displayEmpty}
         />
       );
   }

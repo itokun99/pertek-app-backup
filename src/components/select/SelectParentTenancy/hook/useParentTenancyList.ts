@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ITenantParent } from '@general-types';
-import { getTenantParentByUnit } from '@service/tenant';
+import { useState, useEffect, useCallback } from "react";
+import { ITenantParent } from "@general-types";
+import { getTenantParentByUnit } from "@service/tenant";
 
-export default function useParentTenancyList() {
-  const [unitId, setUnitId] = useState<number>(0);
+export default function useParentTenancyList(unitId?: string) {
   const [data, setData] = useState<ITenantParent[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -11,35 +10,32 @@ export default function useParentTenancyList() {
   const getData = useCallback(() => {
     setLoading(true);
     setError(false);
-    if(Boolean(unitId)) {
+    if (unitId !== undefined && unitId !== "") {
       getTenantParentByUnit(unitId)
-        .then(data => {
+        .then((data) => {
           setLoading(false);
           setError(false);
-          if(data) {
+          if (data) {
             setData(data);
           } else {
             setError(true);
             setData([]);
           }
-        }).catch(() => {
+        })
+        .catch(() => {
           setError(true);
           setLoading(false);
-        })
+        });
     }
   }, [unitId]);
 
-
   useEffect(() => {
     getData();
-  }, [getData])
-
-  
+  }, [getData]);
 
   return {
     data,
     error,
     loading,
-    setUnitId
-  }
+  };
 }

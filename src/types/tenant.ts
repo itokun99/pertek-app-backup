@@ -16,6 +16,7 @@ export interface ITenant {
   family_status: string;
   unit: ITenantUnit;
   phones: { id: number; number: string }[];
+  contact_id: string;
 }
 
 export interface ITenantUnit {

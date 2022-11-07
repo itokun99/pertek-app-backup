@@ -11,13 +11,29 @@ export interface IGetTenantPayload {
 }
 
 export interface ICreateTenantPayload {
-  property_unit_id:  number;
-  contact_id:        number;
-  parent_tenancy_id: number;
-  resident_status:   string;
-  family_status:     string;
-  check_in:          Date|null;
-  check_out:         Date|null;
+  first_name: string;
+  last_name: string;
+  registration_status?: string;
+  public_id?: string;
+  role_id?: number;
+  role_group_id?: number;
+  profile_picture?: string;
+  identity?: string;
+  identity_type?: string;
+  profile_type?: string;
+  address: string;
+  last_login?: number;
+  tax_number?: number;
+  emails: { address: string; verified: boolean; id?: number }[];
+  phone_numbers: string[] | { number: string }[];
+  // default tenant
+  property_unit_id: string;
+  parent_tenant_id: string;
+  resident_status: string;
+  tenancy_role?: string;
+  family_status: string;
+  check_in: Date | null;
+  check_out: Date | null;
 }
 
 export async function getTenant(
@@ -40,12 +56,9 @@ export async function getTenant(
 }
 
 export async function getTenantById(id: number): Promise<ITenantDetail | undefined> {
-  const { data, error } = await fetchData<ITenantDetail>(
-    `${ApiProxyEndpoint.Tenant}?id=${id}`,
-    {
-      method: "GET",
-    }
-  );
+  const { data, error } = await fetchData<ITenantDetail>(`${ApiProxyEndpoint.Tenant}?id=${id}`, {
+    method: "GET",
+  });
 
   if (error) {
     throw error;
@@ -98,8 +111,7 @@ export async function updateTenant(id: number, payload: ICreateTenantPayload) {
   return data;
 }
 
-
-export async function getTenantParentByUnit(id: number): Promise<ITenantParent[] | undefined> {
+export async function getTenantParentByUnit(id: string): Promise<ITenantParent[] | undefined> {
   const { data, error } = await fetchData<ITenantParent[]>(
     `${ApiProxyEndpoint.TenantParent}?id=${id}`,
     {

@@ -15,6 +15,7 @@ interface IBaseSelectProps {
   name?: string;
   error?: boolean;
   helperText?: string;
+  displayEmpty?: boolean;
   options: SelectOptionType[];
   onChange: (event: SelectChangeEvent) => void;
 }
@@ -30,6 +31,7 @@ function BaseSelect({
   error,
   helperText,
   placeholder,
+  displayEmpty = false,
 }: IBaseSelectProps): JSX.Element {
   const labelId = useId();
   const selectId = useId();
@@ -47,11 +49,15 @@ function BaseSelect({
         disabled={disabled}
         placeholder={placeholder}
       >
-        {options.map((option) => (
-          <MenuItem key={`select-${id}-menu-item-${option.value}`} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
+        {options.length > 0 ? (
+          options.map((option) => (
+            <MenuItem key={`select-${id}-menu-item-${option.value}`} value={option.value}>
+              {option.label}
+            </MenuItem>
+          ))
+        ) : (
+          <MenuItem>DATA KOSONG</MenuItem>
+        )}
       </Select>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>

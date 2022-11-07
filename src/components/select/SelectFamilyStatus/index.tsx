@@ -9,8 +9,8 @@ type ISelectFamilyStatusProps = Omit<
 
 const familyStatusOptions: SelectOptionType[] = [
   {
-    label: "Houseband",
-    value: "Houseband",
+    label: "Husband",
+    value: "Husband",
   },
   {
     label: "Spouse",

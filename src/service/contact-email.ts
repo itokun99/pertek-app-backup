@@ -2,7 +2,7 @@ import { fetchData } from "@lib/dataFetcher";
 import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
 
 export interface ICreateContactEmailPayload {
-  contact_id: number;
+  contact_id: number | string;
   address: string;
   verified: boolean;
 }

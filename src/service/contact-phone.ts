@@ -2,7 +2,7 @@ import { fetchData } from "@lib/dataFetcher";
 import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
 
 export interface ICreateContactPhonePayload {
-  contact_id: number;
+  contact_id: number | string;
   number: string;
 }
 

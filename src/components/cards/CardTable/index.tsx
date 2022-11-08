@@ -1,11 +1,11 @@
-import { memo, MouseEventHandler, SyntheticEvent } from 'react';
-import Card from '@mui/material/Card';
-import Box from '@mui/material/Box';
+import { memo, MouseEventHandler, SyntheticEvent } from "react";
+import Card from "@mui/material/Card";
+import Box from "@mui/material/Box";
 
-import ErrorStack from '../../error/ErrorStack';
-import { TabBar, TabItem } from '../../TabBar';
-import SearchField from '@components/input/SearchField';
-import { useTheme } from '@mui/material';
+import ErrorStack from "../../error/ErrorStack";
+import { TabBar, TabItem } from "../../TabBar";
+import SearchField from "@components/input/SearchField";
+import { useTheme } from "@mui/material";
 
 export interface CardTableProps {
   error?: boolean;
@@ -15,8 +15,8 @@ export interface CardTableProps {
   searchField?: boolean;
   withTabs?: boolean;
   errorMessage?: string;
-  tabs: TabItem[];
-  tabIndex: number | string;
+  tabs?: TabItem[];
+  tabIndex?: number | string;
   onChangeTab?: (e: SyntheticEvent<Element, Event>, value: number | string) => void;
   searchValue: string;
   searchPlaceholder?: string;
@@ -42,7 +42,14 @@ const CardTable = ({
 
   const renderContent = (): React.ReactElement => {
     if (error) {
-      return <ErrorStack reloadButton={error} type={errorType} onReload={onReload} message={errorMessage} />;
+      return (
+        <ErrorStack
+          reloadButton={error}
+          type={errorType}
+          onReload={onReload}
+          message={errorMessage}
+        />
+      );
     }
 
     return (
@@ -55,7 +62,14 @@ const CardTable = ({
 
   return (
     <Card>
-      {withTabs && <TabBar theme={theme} value={tabIndex} onChange={onChangeTab} tabs={tabs} />}
+      {withTabs && (
+        <TabBar
+          theme={theme}
+          value={tabIndex as string | number}
+          onChange={onChangeTab}
+          tabs={tabs as TabItem[]}
+        />
+      )}
       {renderContent()}
     </Card>
   );

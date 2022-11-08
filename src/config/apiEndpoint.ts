@@ -3,20 +3,21 @@ const API_BASE_URL = process.env.API_BASE_URL;
 export const SendGridAPIKey = process.env.SENDGRID_API_KEY;
 
 const EndpointGroup = {
-  Announcement: '18S1unQy',
-  Helpdesk: '',
-  Auth: 'xG61OBxf',
-  Profile: '4ZHQKRkr',
-  Tenant: 'AyPV9ZMZ',
-  Invoice: 'KM9qpTln',
-  Property: 'dhVjwBnw',
-  Role: 'vMBtbFQW',
-  User: 'f_KrKkJn',
-  General: 'aQbHTGQV',
-  Complain: 'Ro92vKeQ',
-  Facility: 'JBGyX9le',
-  Booking: '4oTf-klT',
-  Menu: '2ENXJrQ4',
+  Announcement: "18S1unQy",
+  Helpdesk: "",
+  Auth: "xG61OBxf",
+  Profile: "4ZHQKRkr",
+  Tenant: "AyPV9ZMZ",
+  Invoice: "KM9qpTln",
+  Property: "dhVjwBnw",
+  Role: "vMBtbFQW",
+  User: "f_KrKkJn",
+  General: "aQbHTGQV",
+  Complain: "Ro92vKeQ",
+  Facility: "JBGyX9le",
+  Booking: "4oTf-klT",
+  Menu: "2ENXJrQ4",
+  Vendor: "_ivghxqu",
 };
 
 export const Endpoint = {
@@ -74,4 +75,7 @@ export const Endpoint = {
   Contact: `${API_BASE_URL}:${EndpointGroup.Profile}/contact`,
   ContactPhone: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_phone_number`,
   ContactEmail: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_email`,
+
+  // Vendor
+  Vendor: `${API_BASE_URL}:${EndpointGroup.Vendor}/vendor`,
 };

@@ -18,6 +18,10 @@ import MultipleInput, {
 import { IForm, IFormError } from "./FormStaff.interface";
 import SelectIdentityType from "@components/select/SelectIdentityType";
 import SelectProfileType from "@components/select/SelectProfileType";
+import { formatCurrency } from "@utils/formatCurrency";
+import SelectStatus from "./_components/SelectStatus";
+import SelectPosition from "./_components/SelectPosition/SelectPosition";
+import SelectCompanyDivision from "@components/select/SelectCompanyDivision";
 
 interface IFormStaffProps {
   edit: boolean;
@@ -200,28 +204,17 @@ const FormStaff: React.FC<IFormStaffProps> = ({
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField
-                value={form.position}
-                placeholder="Position"
-                label="Position"
-                name="position"
-                onChange={onInputChange}
-                fullWidth
-              />
+              <SelectPosition value={form.position} onChange={onSelectChange} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <SelectStatus value={form.status} onChange={onSelectChange} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <SelectCompanyDivision value={form.company_department_id} onChange={onSelectChange} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                value={form.status}
-                placeholder="Select Status"
-                label="Status"
-                name="status"
-                onChange={onInputChange}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sm={12}>
-              <TextField
-                value={form.base_salary} // todo: format currency
+                value={formatCurrency(form.base_salary, "Rp")} // todo: format currency
                 placeholder="Gaji"
                 label="Basic Salary"
                 name="base_salary"

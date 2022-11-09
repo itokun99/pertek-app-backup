@@ -42,7 +42,7 @@ export interface IContactStaffEntities {
     }[];
   };
   division: {
-    id: number;
+    id: string;
     name: string;
     description: string;
     created_at: string;

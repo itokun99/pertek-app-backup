@@ -19,6 +19,7 @@ const EndpointGroup = {
   Menu: "2ENXJrQ4",
   Vendor: "_ivghxqu",
   Staff: "IVhhAkF3",
+  Company: "Jz20SNg7",
 };
 
 export const Endpoint = {
@@ -80,4 +81,7 @@ export const Endpoint = {
 
   // Vendor
   Vendor: `${API_BASE_URL}:${EndpointGroup.Vendor}/vendor`,
+
+  // Company
+  CompanyDepartment: `${API_BASE_URL}:${EndpointGroup.Company}/company_department`,
 };

@@ -16,6 +16,7 @@ import { FetcherResponseError } from "@lib/dataFetcher";
 import { IContactStaffEntities } from "@types";
 import Cached from "@mui/icons-material/Cached";
 import { ICreateContactStaffPayload } from "@service/contact-staff";
+import { formatCurrency, formatRemoveNonDigit } from "@utils/formatCurrency";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -50,9 +51,12 @@ const initialForm: IForm = {
   npwp: "",
   profileType: "",
   // new payload
-  base_salary: 0,
+  base_salary: "10000",
   position: "",
-  company_department_id: "",
+  company_department_id: {
+    label: "",
+    value: "",
+  },
   join_date: "",
   staff_code: "",
   status: "",
@@ -172,6 +176,8 @@ const StaffView = (): ReactElement => {
       resetFormError();
     }
 
+    const basicSalary = formatRemoveNonDigit(String(form.base_salary));
+
     const payload: ICreateContactStaffPayload = {
       first_name: form.firstName,
       last_name: form.lastName,
@@ -182,12 +188,12 @@ const StaffView = (): ReactElement => {
       address: form.address,
       tax_number: Number(form.npwp),
       // new payload
-      base_salary: 0,
-      company_department_id: "",
-      join_date: "",
-      position: "",
-      status: "",
-      staff_code: "",
+      base_salary: basicSalary !== "" ? Number(basicSalary) : 0,
+      company_department_id: form.company_department_id?.value,
+      join_date: form.join_date,
+      position: form.position,
+      status: form.status,
+      staff_code: form.staff_code,
 
       phone_numbers: validateMultipleInput(form.phones).map((phone) => phone.value),
       emails: validateMultipleInput(form.emails).map((email) => ({
@@ -278,7 +284,7 @@ const StaffView = (): ReactElement => {
           } = data.contact || {};
 
           const {
-            base_salary = 0,
+            base_salary: baseSalary = "",
             position = "-",
             join_date: joinDate = "",
             staff_code: staffCode = "-",
@@ -294,9 +300,12 @@ const StaffView = (): ReactElement => {
             identityType,
             profileType,
             npwp: String(npwp),
-            base_salary,
+            base_salary: formatCurrency(String(baseSalary), "Rp"),
             position,
-            company_department_id: "",
+            company_department_id: {
+              value: data.division?.id,
+              label: data.division?.name,
+            },
             join_date: joinDate,
             staff_code: staffCode,
             status,

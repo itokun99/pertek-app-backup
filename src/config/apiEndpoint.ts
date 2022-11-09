@@ -18,6 +18,7 @@ const EndpointGroup = {
   Booking: "4oTf-klT",
   Menu: "2ENXJrQ4",
   Vendor: "_ivghxqu",
+  Staff: "IVhhAkF3",
 };
 
 export const Endpoint = {
@@ -75,6 +76,7 @@ export const Endpoint = {
   Contact: `${API_BASE_URL}:${EndpointGroup.Profile}/contact`,
   ContactPhone: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_phone_number`,
   ContactEmail: `${API_BASE_URL}:${EndpointGroup.Profile}/contact_email`,
+  ContactStaff: `${API_BASE_URL}:${EndpointGroup.Staff}/staff`,
 
   // Vendor
   Vendor: `${API_BASE_URL}:${EndpointGroup.Vendor}/vendor`,

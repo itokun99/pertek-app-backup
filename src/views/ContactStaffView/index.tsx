@@ -189,7 +189,7 @@ const StaffView = (): ReactElement => {
       tax_number: Number(form.npwp),
       // new payload
       base_salary: basicSalary !== "" ? Number(basicSalary) : 0,
-      company_department_id: form.company_department_id?.value,
+      department_id: form.company_department_id?.value,
       join_date: form.join_date,
       position: form.position,
       status: form.status,
@@ -203,7 +203,7 @@ const StaffView = (): ReactElement => {
       })),
     };
 
-    isEdit ? await update(form.id, payload) : await insert(payload);
+    isEdit ? await update(Number(form.id), payload) : await insert(payload);
 
     if (isEdit) {
       const newEmails = form.emails.filter((v) => !v.id && v.value.trim() !== "");

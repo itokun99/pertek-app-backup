@@ -19,7 +19,7 @@ export interface ICreateContactStaffPayload {
   address: string;
   tax_number: number;
   staff_code: string;
-  company_department_id: string;
+  department_id: string;
   join_date: string;
   status: string;
   position: string;

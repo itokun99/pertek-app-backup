@@ -3,7 +3,7 @@ import { SelectOptionType } from "@types";
 
 interface IContactForm {
   contactId: string;
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   identity: string;

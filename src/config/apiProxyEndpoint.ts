@@ -16,4 +16,6 @@ export enum ApiProxyEndpoint {
   RoleGroup = "/api/role-group",
   Template = "/api/template",
   Vendor = "/api/vendor",
+  Staff = "/api/contact-staff",
+  CompanyDepartment = "/api/company",
 }

@@ -13,3 +13,5 @@ export * from "./role";
 export * from "./tenant";
 export * from "./upload";
 export * from "./vendor";
+export * from "./contact-staff";
+export * from "./company";

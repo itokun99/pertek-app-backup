@@ -2,7 +2,7 @@
  * a Contact Staff Entity
  */
 export interface IContactStaffEntities {
-  id: number;
+  id: string;
   staff_code: string;
   public_id: string;
   join_date: string;
@@ -41,7 +41,7 @@ export interface IContactStaffEntities {
       updated_at: number;
     }[];
   };
-  division: {
+  department: {
     id: string;
     name: string;
     description: string;

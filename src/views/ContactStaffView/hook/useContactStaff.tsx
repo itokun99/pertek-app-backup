@@ -19,7 +19,7 @@ interface IUserContactStaff {
   insert: (payload: ICreateContactStaffPayload) => Promise<void>;
   inquiry: (id: number) => Promise<IContactStaffEntities | null | undefined>;
   remove: (id: number) => Promise<void>;
-  update: (id: number, payload: ICreateContactStaffPayload) => Promise<void>;
+  update: (id: string, payload: ICreateContactStaffPayload) => Promise<void>;
   reload: () => void;
   items: Array<IContactStaffEntities>;
   isReady: boolean;
@@ -108,7 +108,7 @@ export default function useContactStaff(): IUserContactStaff {
     }
   };
 
-  const update = async (id: number, payload: ICreateContactStaffPayload) => {
+  const update = async (id: string, payload: ICreateContactStaffPayload) => {
     try {
       await updateStaff(id, payload);
       setAlert({

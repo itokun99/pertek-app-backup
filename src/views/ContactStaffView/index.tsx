@@ -42,7 +42,7 @@ const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
 
 const initialForm: IForm = {
   contactId: "",
-  id: 0,
+  id: "0",
   firstName: "",
   lastName: "",
   identity: "",
@@ -203,7 +203,7 @@ const StaffView = (): ReactElement => {
       })),
     };
 
-    isEdit ? await update(Number(form.id), payload) : await insert(payload);
+    isEdit ? await update(form.id, payload) : await insert(payload);
 
     if (isEdit) {
       const newEmails = form.emails.filter((v) => !v.id && v.value.trim() !== "");
@@ -303,8 +303,8 @@ const StaffView = (): ReactElement => {
             base_salary: formatCurrency(String(baseSalary), "Rp"),
             position,
             company_department_id: {
-              value: data.division?.id,
-              label: data.division?.name,
+              value: data.department?.id,
+              label: data.department?.name,
             },
             join_date: joinDate,
             staff_code: staffCode,

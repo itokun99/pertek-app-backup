@@ -90,7 +90,7 @@ export async function deleteStaff(id: number) {
   return data;
 }
 
-export async function updateStaff(id: string, payload: ICreateContactStaffPayload) {
+export async function updateStaff(id: number, payload: ICreateContactStaffPayload) {
   const { data, error } = await fetchData<{ message: string }>(
     `${ApiProxyEndpoint.Staff}?id=${id}`,
     {

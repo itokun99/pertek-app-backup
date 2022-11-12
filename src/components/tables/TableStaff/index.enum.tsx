@@ -12,8 +12,8 @@ import { Theme } from "@mui/material";
 
 const optionActionCell = (
   record: IContactStaffEntities,
-  onClickEdit: (id: string, record: IContactStaffEntities) => void,
-  onClickDelete: (id: string) => void
+  onClickEdit: (id: number, record: IContactStaffEntities) => void,
+  onClickDelete: (id: number) => void
 ) => {
   // you can abstract your record interface here
   const { id } = record || {};
@@ -35,8 +35,8 @@ const optionActionCell = (
 };
 
 export function generateColumns(
-  onClickEdit: (id: string, record: IContactStaffEntities) => void,
-  onClickDelete: (id: string) => void,
+  onClickEdit: (id: number, record: IContactStaffEntities) => void,
+  onClickDelete: (id: number) => void,
   theme: Theme
 ): ColumnType[] {
   return [

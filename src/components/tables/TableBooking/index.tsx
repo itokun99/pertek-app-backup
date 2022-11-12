@@ -34,6 +34,7 @@ import {
   PlayCircle,
   RemoveCircle,
 } from '@mui/icons-material';
+import Link from 'next/link';
 
 export interface TableBookingProps {
   isLoading: boolean;
@@ -120,6 +121,7 @@ function generateColumns(
       title: 'Kode Booking',
       selector: 'code',
       render: (_text, record: IBooking) => {
+        console.log(record);
         return (
           <Stack direction='row' spacing={2}>
             <Avatar sx={{ bgcolor: getAvatarBgColor(record.status, theme) }}>
@@ -128,7 +130,9 @@ function generateColumns(
               </Typography>
             </Avatar>
             <Box>
-              <Typography variant='subtitle2'>{_text}</Typography>
+              <Typography variant='subtitle2'>
+                <Link href='#'>{_text}</Link>
+              </Typography>
               <Typography variant='subtitle2' color={theme.palette.grey[600]}>
                 {record.facility.name}
               </Typography>
@@ -160,9 +164,9 @@ function generateColumns(
     },
     {
       title: 'Tanggal Penggunaan',
-      selector: 'slot_date',
+      selector: 'slot_booking',
       render: (_text, record: IBooking) => {
-        return fDateTime(record.slot_date);
+        return fDateTime(record.start as unknown as string) + ' - ' + fDateTime(record.end as unknown as string);
       },
     },
     {
@@ -185,14 +189,7 @@ function generateColumns(
   ] as ColumnType[];
 }
 
-export const TableBookingView = ({
-  onEdit,
-  onDelete,
-  onUpdateState,
-  data,
-  isLoading,
-  totalData,
-}: TableBookingProps) => {
+export const TableBooking = ({ onEdit, onDelete, onUpdateState, data, isLoading, totalData }: TableBookingProps) => {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<Element | null>(null);
   const [booking, setBooking] = useState<IBooking | null>(null);

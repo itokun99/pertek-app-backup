@@ -1,7 +1,7 @@
 import { DialogContainer } from '@components/dialog/DialogContainer';
 import { Grid, Stack, Typography } from '@mui/material';
 import { IFacilityAssistant } from '@types';
-import { BookingTableView } from '@views/BookingView/BookingTable';
+import { BookingTableView } from '@views/BookingView/TableView';
 import Image from 'next/image';
 
 export interface DetailViewFacilityAssistantProps {

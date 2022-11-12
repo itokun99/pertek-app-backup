@@ -1,14 +1,9 @@
-import {
-  createContext,
-  PropsWithChildren,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import useSWR from "swr";
-import { SidebarMenu, SidebarMenuGroup } from "../components/sidebar";
-import { useRouter } from "next/router";
-import { doFetch } from "../lib/dataFetcher";
+import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import useSWR from 'swr';
+import { SidebarMenu, SidebarMenuGroup } from '../components/sidebar';
+import { useRouter } from 'next/router';
+import { doFetch } from '../lib/dataFetcher';
+import { useMediaQuery, useTheme } from '@mui/material';
 
 export type Property = {
   id: number;
@@ -29,6 +24,8 @@ export interface SidebarContextInterface {
   activeMenu?: ActiveMenu;
   activeProperty?: Property;
   open: boolean;
+  rootMenuId: string;
+  setRootMenuId: (id: string) => void;
   setActiveProperty: (property: Property) => void;
   setOpen: (state: boolean) => void;
   setActiveMenu: (data: { parentId: string; childId: string }) => void;
@@ -37,6 +34,8 @@ export interface SidebarContextInterface {
 export const SidebarContext = createContext<SidebarContextInterface>({
   menuGroups: [],
   open: true,
+  rootMenuId: '',
+  setRootMenuId: (_) => {},
   setActiveProperty: (_) => {},
   setOpen: (_) => null,
   setActiveMenu: (_) => {},
@@ -45,12 +44,26 @@ export const SidebarContext = createContext<SidebarContextInterface>({
 export const SidebarProvider = ({ children }: PropsWithChildren) => {
   const { isReady } = useRouter();
 
-  const [open, setOpen] = useState(true);
+  const theme = useTheme();
+
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
+  const [open, setOpen] = useState(false);
+  const [rootMenuId, setRootMenuId] = useState('');
   const [activeMenu, setActiveMenu] = useState<ActiveMenu | undefined>();
   const [activeProperty, setActiveProperty] = useState<Property | undefined>();
   // const [data, setData] = useState<[] | undefined>();
 
-  const { data } = useSWR("/api/menu");
+  useEffect(() => {
+    setOpen(!isMobile);
+  }, [isMobile]);
+
+  // useEffect(() => {
+  //   if (isReady) {
+  //   }
+  // }, []);
+
+  const { data } = useSWR('/api/menu');
   // useEffect(() => {
   //   if (isReady) {
   //     const activePropertyInLocalStorage =
@@ -71,7 +84,7 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
 
   const updateProperty = (property: Property) => {
     if (window) {
-      window.localStorage.setItem("activeProperty", JSON.stringify(property));
+      window.localStorage.setItem('activeProperty', JSON.stringify(property));
     }
     setActiveProperty(property);
   };
@@ -82,14 +95,14 @@ export const SidebarProvider = ({ children }: PropsWithChildren) => {
       setOpen,
       activeMenu,
       activeProperty,
+      rootMenuId,
+      setRootMenuId,
       setActiveMenu,
       setActiveProperty: updateProperty,
       menuGroups: data?.items || [],
     }),
-    [open, activeMenu, activeProperty, data]
+    [open, activeMenu, activeProperty, data, rootMenuId]
   );
 
-  return (
-    <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>
-  );
+  return <SidebarContext.Provider value={value}>{children}</SidebarContext.Provider>;
 };

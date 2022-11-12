@@ -44,9 +44,8 @@ export interface RootListItemProps {
 const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSpacing }: RootListItemProps) => {
   const { url, id, sub_menus, icon, name } = item;
 
-  const parentId = useMemo(() => `${url}-${id}`, [url, id]);
-
   const [shouldExpand, setShouldExpand] = useState(isActive);
+  const { setRootMenuId } = useContext(SidebarContext);
 
   const handleClick = () => {
     if (hasChildren && open) {
@@ -54,6 +53,7 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
       return;
     }
     setShouldExpand(true);
+    setRootMenuId(id);
     router.push(url);
   };
 
@@ -62,7 +62,7 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
   return (
     <>
       <ListItemButton
-        key={parentId}
+        key={id}
         onClick={handleClick}
         sx={{
           pr: open ? 1 : 2,
@@ -117,7 +117,7 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
       </ListItemButton>
       {hasChildren && (
         <Collapse in={shouldExpand && open} unmountOnExit>
-          <SidebarSubList parentId={parentId} menus={sub_menus || []} />
+          <SidebarSubList parentId={id} menus={sub_menus || []} />
         </Collapse>
       )}
     </>
@@ -141,7 +141,7 @@ const ListSubheader = ({ title, open }: ListSubHeaderProps) => {
 };
 
 export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
-  const { open } = useContext(SidebarContext);
+  const { open, rootMenuId } = useContext(SidebarContext);
   const router = useRouter();
   const theme = useTheme();
 
@@ -151,12 +151,7 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
       {menuGroup.menus.map((item, key) => {
         const hasChildren = item.sub_menus && item.sub_menus.length > 0;
 
-        const isActive = (() => {
-          if (hasChildren) {
-            return router.pathname.split('/')[1] === item.url.split('/')[1];
-          }
-          return router.pathname === item.url;
-        })();
+        const isActive = rootMenuId === item.id;
 
         const params = {
           theme,

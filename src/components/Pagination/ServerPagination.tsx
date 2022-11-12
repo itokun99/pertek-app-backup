@@ -22,6 +22,7 @@ const ServerPagination: React.FC<{ total: number }> = ({ total = 0 }) => {
   };
 
   useEffect(() => {
+    console.log('page is', page);
     if (initialRender.current) {
       router.push({
         pathname,

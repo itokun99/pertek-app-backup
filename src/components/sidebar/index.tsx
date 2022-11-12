@@ -21,7 +21,7 @@ export interface SidebarSubMenu {
 }
 
 export interface SidebarMenu {
-  id: number;
+  id: string;
   name: string;
   url: string;
   icon: string;

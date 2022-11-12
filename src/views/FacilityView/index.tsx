@@ -13,11 +13,6 @@ import { FacilityCard } from './FacilityCardItem';
 import { DetailViewFacility } from './details';
 import useFacility from './hooks/useFacility';
 
-// const TableFacility = dynamic(() => import('@components/tables/TableFacility'), {
-//   ssr: false,
-//   suspense: true,
-// });
-
 const FacilityView = (): ReactElement => {
   const { facilities, currentFacility, isError, isLoading, isReady, reload, isValidating, setCurrentFacility } =
     useFacility();
@@ -88,7 +83,7 @@ const FacilityView = (): ReactElement => {
         >
           <Grid container spacing={3}>
             {facilities.map((f) => (
-              <Grid key={f.id} item xs={12} md={3}>
+              <Grid key={f.id} item xs={12} sm={6} md={4} lg={2.4}>
                 <FacilityCard key={f.id} facility={f} onClick={handleOpenDetail} />
               </Grid>
             ))}

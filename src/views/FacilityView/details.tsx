@@ -1,11 +1,9 @@
 import { DialogContainer } from '@components/dialog/DialogContainer';
-import { Avatar, Card, Grid, Stack, Typography, useTheme } from '@mui/material';
-import { Box } from '@mui/system';
+import { Grid, Stack, Typography, useTheme } from '@mui/material';
 import { IFacility } from '@types';
 import { fGetTime } from '@utils/formatTime';
-import BookingView from '@views/BookingView';
-import { BookingTableView } from '@views/BookingView/BookingTable';
-import { addSeconds, formatDistance, formatDistanceToNow, formatDuration, intervalToDuration } from 'date-fns';
+import { BookingTableView } from '@views/BookingView/TableView';
+import { addSeconds, formatDuration, intervalToDuration } from 'date-fns';
 import Image from 'next/image';
 
 export interface DetailViewFacilityProps {

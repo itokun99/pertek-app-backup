@@ -1,5 +1,5 @@
 import Section from '@components/views/Section';
-import { BookingTableView } from './BookingTable';
+import { BookingTableView } from './TableView';
 
 const BookingView = () => {
   return (

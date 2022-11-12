@@ -1,4 +1,7 @@
-import { Box, Button, Grid, Stack, Typography } from '@mui/material';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 const NotFoundPage = () => {
   return (

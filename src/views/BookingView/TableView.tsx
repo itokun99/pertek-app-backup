@@ -1,6 +1,6 @@
 import CardTable from '@components/cards/CardTable';
 import { TabItem } from '@components/TabBar';
-import { TableBookingView } from '@components/tables/TableBooking';
+import { TableBooking } from '@components/tables/TableBooking';
 import { useMemo, useState } from 'react';
 import useBooking from './hooks/useBooking';
 
@@ -80,7 +80,7 @@ export const BookingTableView = () => {
       onChangeTab={handleTabChange}
       error={isError}
     >
-      <TableBookingView
+      <TableBooking
         data={bookings}
         totalData={bookings.length}
         isLoading={isLoading}

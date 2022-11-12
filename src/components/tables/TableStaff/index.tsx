@@ -1,7 +1,7 @@
-import BaseTable from "../BaseTable";
-import { generateColumns } from "./index.enum";
-import { IContactStaffEntities } from "@general-types";
-import { useTheme } from "@mui/material";
+import BaseTable from '../BaseTable';
+import { generateColumns } from './index.enum';
+import { IContactStaffEntities } from '@general-types';
+import { useTheme } from '@mui/material';
 
 export interface ITableStaffProperties {
   data: Array<IContactStaffEntities>;
@@ -12,13 +12,7 @@ export interface ITableStaffProperties {
   onClickDelete: (id: number) => void;
 }
 
-const StaffTable = ({
-  data,
-  total,
-  loading,
-  onClickEdit,
-  onClickDelete,
-}: ITableStaffProperties) => {
+const StaffTable = ({ data, total, loading, onClickEdit, onClickDelete }: ITableStaffProperties) => {
   const theme = useTheme();
 
   return (

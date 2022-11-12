@@ -16,6 +16,7 @@ export interface IBooking extends BaseType {
   duration: number;
   facility_assistances: any[];
   description: string;
-  slot_date: string;
+  start: number;
+  end: number;
   status: string;
 }

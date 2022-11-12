@@ -42,7 +42,7 @@ const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
 
 const initialForm: IForm = {
   contactId: "",
-  id: "0",
+  id: 0,
   firstName: "",
   lastName: "",
   identity: "",
@@ -51,7 +51,7 @@ const initialForm: IForm = {
   npwp: "",
   profileType: "",
   // new payload
-  base_salary: "10000",
+  base_salary: "0",
   position: "",
   company_department_id: {
     label: "",

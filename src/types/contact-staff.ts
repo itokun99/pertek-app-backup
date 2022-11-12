@@ -2,7 +2,7 @@
  * a Contact Staff Entity
  */
 export interface IContactStaffEntities {
-  id: string;
+  id: number;
   staff_code: string;
   public_id: string;
   join_date: string;

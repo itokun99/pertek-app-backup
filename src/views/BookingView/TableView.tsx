@@ -1,93 +1,123 @@
-import CardTable from '@components/cards/CardTable';
-import { TabItem } from '@components/TabBar';
-import { TableBooking } from '@components/tables/TableBooking';
-import { useMemo, useState } from 'react';
-import useBooking from './hooks/useBooking';
+import CardTable from "@components/cards/CardTable";
+import FormStatusBooking from "@components/dialog/FormStatusBooking";
+import { TabItem } from "@components/TabBar";
+import { TableBooking } from "@components/tables/TableBooking";
+import useForm from "@hooks/useForm";
+import { IBooking } from "@types";
+import { useRouter } from "next/router";
+import { Suspense, useMemo, useState } from "react";
+import useBooking from "./hooks/useBooking";
 
 export const BookingTableView = () => {
-  const { bookings, isReady, updateStatus, isLoading, isError } = useBooking();
+  const router = useRouter();
+  const { bookings, isReady, updateStatus, isLoading, isError, reload } = useBooking();
 
   const tabs: TabItem[] = useMemo(
     () =>
       [
         {
-          text: 'All',
-          color: 'default',
+          text: "All",
+          color: "default",
+          value: "",
         },
         {
-          text: 'Requested',
-          color: 'info',
+          text: "Requested",
+          color: "info",
+          value: "requested",
         },
         {
-          text: 'Booked',
-          color: 'success',
+          text: "Booked",
+          color: "success",
+          value: "booked",
         },
         {
-          text: 'Ongoing',
-          color: 'warning',
+          text: "Ongoing",
+          color: "warning",
+          value: "ongoing",
         },
         {
-          text: 'No Show',
-          color: 'error',
+          text: "No Show",
+          color: "error",
+          value: "no-show",
         },
         {
-          text: 'Canceled',
-          color: 'error',
+          text: "Canceled",
+          color: "error",
+          value: "canceled",
         },
         {
-          text: 'Done',
-          color: 'default',
+          text: "Done",
+          color: "default",
+          value: "done",
         },
       ] as TabItem[],
     []
   );
-  const [tabIndex, setTabIndex] = useState(0);
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [tabIndex, setTabIndex] = useState<string | number>("");
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [modalControll, setModalControll] = useForm({
+    statusBooking: false,
+  });
+  const [selectedBooking, setSelectedBooking] = useState<IBooking | null>(null);
 
-  const handleTabChange = (e: React.SyntheticEvent<Element, Event>, value: number | string) => {
-    const index = typeof value === 'string' ? parseInt(value) : value;
-    setTabIndex(index);
+  const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
+    setTabIndex(value);
+    const { query } = router;
+    const queryPamaramaters = { ...query };
+    queryPamaramaters.status = (value as string) || "";
+
+    Object.entries(queryPamaramaters).forEach(([queryKey]) => {
+      if (!["status"].includes(queryKey)) {
+        delete queryPamaramaters[queryKey];
+      }
+    });
+
+    router.push({ query: { ...queryPamaramaters } }, undefined, { shallow: true });
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
 
-  const handleReload = () => {};
-
-  const handleEdit = (id: number, record: any) => {
-    console.log(id);
+  const handleEdit = (_id: number, record: IBooking) => {
+    setModalControll("statusBooking", true);
+    setSelectedBooking(record);
   };
 
   const handleDelete = (id: number) => {
     console.log(id);
   };
 
-  const handleUpdateState = (id: number, state: string) => {
-    updateStatus(id, state);
-  };
-
   return (
-    <CardTable
-      searchPlaceholder='Cari booking...'
-      searchValue={searchKeyword}
-      onChangeSearch={handleSearch}
-      tabs={tabs}
-      tabIndex={tabIndex}
-      withTabs
-      searchField
-      onReload={handleReload}
-      onChangeTab={handleTabChange}
-      error={isError}
-    >
-      <TableBooking
-        data={bookings}
-        totalData={bookings.length}
-        isLoading={isLoading}
-        onEdit={handleEdit}
-        onDelete={handleDelete}
-        onUpdateState={handleUpdateState}
-      />
-    </CardTable>
+    <>
+      <CardTable
+        searchPlaceholder="Cari booking..."
+        searchValue={searchKeyword}
+        onChangeSearch={handleSearch}
+        tabs={tabs}
+        tabIndex={tabIndex}
+        withTabs
+        searchField
+        onReload={reload}
+        onChangeTab={handleTabChange}
+        error={isError}
+      >
+        <TableBooking
+          data={bookings}
+          totalData={bookings?.length}
+          isLoading={isLoading}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      </CardTable>
+      <Suspense>
+        <FormStatusBooking
+          visible={modalControll.statusBooking}
+          onClose={() => setModalControll("statusBooking", false)}
+          onUpdateState={updateStatus}
+          booking={selectedBooking}
+        />
+      </Suspense>
+    </>
   );
 };

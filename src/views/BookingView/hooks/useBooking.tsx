@@ -1,19 +1,19 @@
-import { swrConfig } from '@config/swrConfig';
-import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
-import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
-import { AlertContext } from '../../../provider/AlertProvider';
+import { swrConfig } from "@config/swrConfig";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
+import { ApiProxyEndpoint } from "../../../config/apiProxyEndpoint";
+import { fetchData, FetcherResponseError } from "../../../lib/dataFetcher";
+import { AlertContext } from "../../../provider/AlertProvider";
 import {
   createBooking,
   deleteBooking,
   ICreateBookingPayload,
   updateBooking,
   updateBookingState,
-} from '../../../service/booking';
-import { ApiResponseType, IBooking } from '../../../types';
-import { createUrlParamFromObj } from '../../../utils/helper';
+} from "../../../service/booking";
+import { ApiResponseType, IBooking } from "../../../types";
+import { createUrlParamFromObj } from "../../../utils/helper";
 
 // create booking hooks interface
 export interface IUseBooking {
@@ -45,7 +45,7 @@ export default function useBooking(): IUseBooking {
     isValidating,
   } = useSWR(
     `${API_URL}${paramString}`,
-    (url) => fetchData<ApiResponseType<IBooking[]>>(url, { method: 'GET' }),
+    (url) => fetchData<ApiResponseType<IBooking[]>>(url, { method: "GET" }),
     swrConfig
   );
 
@@ -61,7 +61,7 @@ export default function useBooking(): IUseBooking {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil membuat Booking`,
           },
         });
@@ -70,8 +70,8 @@ export default function useBooking(): IUseBooking {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });
@@ -83,7 +83,7 @@ export default function useBooking(): IUseBooking {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil mengubah Booking`,
           },
         });
@@ -92,8 +92,8 @@ export default function useBooking(): IUseBooking {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });
@@ -104,7 +104,7 @@ export default function useBooking(): IUseBooking {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil mengubah status Booking`,
           },
         });
@@ -113,8 +113,8 @@ export default function useBooking(): IUseBooking {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });
@@ -126,7 +126,7 @@ export default function useBooking(): IUseBooking {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil menghapus Booking`,
           },
         });
@@ -135,8 +135,8 @@ export default function useBooking(): IUseBooking {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });

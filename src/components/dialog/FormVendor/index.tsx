@@ -24,7 +24,6 @@ import MultipleInput, {
 import { IForm, IFormError } from "./FormVendor.interface";
 import SelectIdentityType from "@components/select/SelectIdentityType";
 import SelectProfileType from "@components/select/SelectProfileType";
-import SelectTenancyRole from "@components/select/SelectTenancyRole";
 
 interface IFormVendorProps {
   edit: boolean;
@@ -32,6 +31,7 @@ interface IFormVendorProps {
   form: IForm;
   loading: boolean;
   formError: IFormError;
+  onUploadImage: () => void;
   onClose: () => void;
   onSubmit: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -45,6 +45,7 @@ const FormVendor: React.FC<IFormVendorProps> = ({
   edit,
   visible,
   onClose,
+  onUploadImage,
   onInputChange,
   onSelectChange,
   onSubmit,
@@ -184,7 +185,7 @@ const FormVendor: React.FC<IFormVendorProps> = ({
           </Box>
           <Grid container direction="row" spacing={2}>
             <Grid item xs={12} sm={12}>
-              Upload Profile picture here
+              <Button onClick={onUploadImage}>Upload Foto Profile</Button>
             </Grid>
           </Grid>
         </Grid>

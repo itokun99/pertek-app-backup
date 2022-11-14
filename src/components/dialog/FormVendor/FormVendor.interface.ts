@@ -12,6 +12,7 @@ interface IContactForm {
   address: string;
   emails: IMultipleInputItem[];
   phones: IMultipleInputItem[];
+  profilePicture: string;
 }
 
 interface IContactFormError {

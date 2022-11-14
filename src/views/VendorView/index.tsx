@@ -16,6 +16,7 @@ import { FetcherResponseError } from "@lib/dataFetcher";
 import { ICreateVendorPayload } from "@service/vendor";
 import { IVendorEntities } from "@types";
 import Cached from "@mui/icons-material/Cached";
+import FormUploadImage from "@components/dialog/FormUploadImage";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -50,6 +51,7 @@ const initialForm: IForm = {
   profileType: "",
   emails: [],
   phones: [],
+  profilePicture: "",
 };
 
 const initialFormError: IFormError = {
@@ -69,6 +71,14 @@ const VendorView = (): ReactElement => {
   // states
   const [search, setSearch] = useState<string>("");
   const [visibility, setVisibility] = useState(false);
+  const [visibilityUploadImage, setVisibilityUploadImage] = useState(false);
+
+  // file
+  const [assetsFile, changeAssetsFile] = useState<File | null>(null);
+  const [Preview, setPreviewImage] = useState<{ image: string; name: string | undefined }>({
+    image: "",
+    name: "",
+  });
 
   // custom hooks
   const [form, setForm, resetForm, setFormBulk] = useForm<IForm>(initialForm);
@@ -180,8 +190,6 @@ const VendorView = (): ReactElement => {
       })),
     };
 
-    console.info(`payload:`, payload);
-
     isEdit ? await update(form.id, payload) : await insert(payload);
 
     if (isEdit) {
@@ -261,10 +269,12 @@ const VendorView = (): ReactElement => {
             tax_number: npwp = "-",
             phones: phoneNumbers = [],
             emails,
+            profile_picture: profilePicture = "",
           } = data.contact || {};
           setFormBulk({
             id: data.id,
             contactId: String(contactId),
+            profilePicture,
             firstName,
             lastName,
             address,
@@ -356,6 +366,25 @@ const VendorView = (): ReactElement => {
     }
   };
 
+  const handleUploadImage = () => {
+    const body = new FormData();
+    body.append("file", assetsFile as File);
+    fetch("https://esri.propertek.id/profile", {
+      body,
+      method: "POST",
+      headers: {
+        Authorization: "Bearer YZ_mpyvWP6rz^rhgwnqtUw5aM3SMRQn7",
+        "Content-Type": "multipart/form-data; boundary=<calculated when request is sent>",
+      },
+    })
+      .then((response) => {
+        console.log(response.json());
+        response.json();
+      })
+      .then((success) => console.info("success", success))
+      .catch((error) => console.error("error", error));
+  };
+
   const handleMultipleInputChange = (name: string, value: IMultipleInputItem[]) => {
     setForm(name, value);
   };
@@ -368,6 +397,24 @@ const VendorView = (): ReactElement => {
 
   const handleConfirmDelete = () => {
     deleteConfirmationHandler.confirm().then((id) => remove(id));
+  };
+
+  const handleChangeImage = (file: File | null, image: string) => {
+    changeAssetsFile(file);
+    setPreviewImage({ image, name: file?.name });
+  };
+
+  const handleRemoveImage = () => {
+    changeAssetsFile(null);
+    setPreviewImage({ image: "", name: "" });
+    setForm("profilePicture", "");
+  };
+
+  const handleCloseUploadImage = () => {
+    setVisibilityUploadImage(false);
+    changeAssetsFile(null);
+    setPreviewImage({ image: "", name: "" });
+    setForm("profilePicture", "");
   };
 
   return (
@@ -413,6 +460,19 @@ const VendorView = (): ReactElement => {
           onClose={handleClose}
           form={form}
           formError={formError}
+          onUploadImage={() => setVisibilityUploadImage(true)}
+        />
+      </Suspense>
+
+      <Suspense>
+        <FormUploadImage
+          visible={visibilityUploadImage}
+          onClose={handleCloseUploadImage}
+          loading={false}
+          onSubmit={handleUploadImage}
+          handleRemoveImage={handleRemoveImage}
+          handleChangeImage={handleChangeImage}
+          Preview={Preview}
         />
       </Suspense>
 

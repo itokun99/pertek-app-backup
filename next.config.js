@@ -1,6 +1,3 @@
-const crypto = require('crypto');
-const { v4 } = require('uuid');
-
 const productionMode = process.env.NODE_ENV === 'production';
 
 const withPWA = require('next-pwa')({
@@ -40,10 +37,6 @@ function getSecurityHeaders() {
       value: 'SAMEORIGIN',
     },
     {
-      key: 'X-XSS-Protection',
-      value: '1; mode=block',
-    },
-    {
       key: 'X-Content-Type-Options',
       value: 'nosniff',
     },
@@ -68,10 +61,6 @@ const nextConfig = {
     domains: ['linodeobjects.com'],
   },
   async headers() {
-    // const hash = crypto.createHash('sha256');
-    // hash.update(v4());
-    // const digestHash = hash.digest('base64');
-
     return [
       {
         source: '/:path*',

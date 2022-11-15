@@ -1,11 +1,63 @@
+const crypto = require('crypto');
+const { v4 } = require('uuid');
+
+const productionMode = process.env.NODE_ENV === 'production';
+
 const withPWA = require('next-pwa')({
   dest: 'public',
-  disable: process.env.NODE_ENV === 'development',
+  disable: process.env.NODE_ENV !== 'production',
 });
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
+
+function getSecurityHeaders() {
+  const hash = 'hasj';
+  const ContentSecurityPolicy = `
+  default-src 'self';
+  base-uri 'none';
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' 'sha256-${hash}';
+  object-src 'none';
+  font-src 'self' *.googleapis.com *.gstatic.com;
+  img-src * 'self';
+  script-src-attr 'none';
+  style-src 'self' 'unsafe-inline' *.googleapis.com *.gstatic.com;
+  connect-src 'self' *.googleapis.com *.gstatic.com google-analytics.com *.googletagmanager.com;
+`;
+
+  const securityHeaders = [
+    {
+      key: 'X-DNS-Prefetch-Control',
+      value: 'on',
+    },
+    {
+      key: 'Strict-Transport-Security',
+      value: 'max-age=31536000; includeSubDomains; preload',
+    },
+    {
+      key: 'X-Frame-Options',
+      value: 'SAMEORIGIN',
+    },
+    {
+      key: 'X-XSS-Protection',
+      value: '1; mode=block',
+    },
+    {
+      key: 'X-Content-Type-Options',
+      value: 'nosniff',
+    },
+    {
+      key: 'Referrer-Policy',
+      value: 'origin-when-cross-origin',
+    },
+    // {
+    //   key: 'Content-Security-Policy',
+    //   value: ContentSecurityPolicy.replace(/\s{2,}/g, ' ').trim(),
+    // },
+  ];
+  return securityHeaders;
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -13,7 +65,19 @@ const nextConfig = {
   output: 'standalone',
   swcMinify: true,
   images: {
-    domains: ['upcdn.io'],
+    domains: ['linodeobjects.com'],
+  },
+  async headers() {
+    // const hash = crypto.createHash('sha256');
+    // hash.update(v4());
+    // const digestHash = hash.digest('base64');
+
+    return [
+      {
+        source: '/:path*',
+        headers: getSecurityHeaders(),
+      },
+    ];
   },
 };
 

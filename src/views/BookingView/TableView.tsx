@@ -1,16 +1,29 @@
 import CardTable from "@components/cards/CardTable";
-import FormStatusBooking from "@components/dialog/FormStatusBooking";
+import Confirmation from "@components/dialog/Confirmation";
+import FormStatusBooking from "@components/dialog/ModalBooking/FormStatusBooking";
 import { TabItem } from "@components/TabBar";
 import { TableBooking } from "@components/tables/TableBooking";
+import useConfirmation from "@hooks/useConfirmation";
 import useForm from "@hooks/useForm";
 import { IBooking } from "@types";
 import { useRouter } from "next/router";
 import { Suspense, useMemo, useState } from "react";
 import useBooking from "./hooks/useBooking";
+import Section from "@components/views/Section";
+import dynamic from "next/dynamic";
+import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
+import Add from "@mui/icons-material/Add";
+import Cached from "@mui/icons-material/Cached";
+import FormBooking from "@components/dialog/ModalBooking/FormBooking";
+import { IForm } from "@components/dialog/ModalBooking/FormBooking/FormBooking.interface";
+
+const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
+  ssr: false,
+});
 
 export const BookingTableView = () => {
   const router = useRouter();
-  const { bookings, isReady, updateStatus, isLoading, isError, reload } = useBooking();
+  const { bookings, remove, updateStatus, isLoading, isError, reload } = useBooking();
 
   const tabs: TabItem[] = useMemo(
     () =>
@@ -38,7 +51,7 @@ export const BookingTableView = () => {
         {
           text: "No Show",
           color: "error",
-          value: "no-show",
+          value: "no+show",
         },
         {
           text: "Canceled",
@@ -53,12 +66,58 @@ export const BookingTableView = () => {
       ] as TabItem[],
     []
   );
+
+  const [form, setForm, resetForm, setFormBulk] = useForm<IForm>({
+    facility_id: "",
+    tenant_id: "",
+    property_unit_id: "",
+    assistances: [],
+    description: "",
+    price: 0,
+    penalty: 0,
+    status: "",
+    slot_date: "",
+    slot: {
+      start: "",
+      end: "",
+    },
+  });
   const [tabIndex, setTabIndex] = useState<string | number>("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [modalControll, setModalControll] = useForm({
     statusBooking: false,
+    addBooking: false,
   });
   const [selectedBooking, setSelectedBooking] = useState<IBooking | null>(null);
+
+  const actionButton: Array<MyAnimatedButtonProps> = [
+    {
+      title: "Buat Booking Baru",
+      onClick: (): void => setModalControll("addBooking", true),
+      color: "info",
+      startIcon: <Add />,
+    },
+    {
+      title: "Muat Ulang",
+      onClick: (): void => reload(),
+      color: "inherit",
+      startIcon: <Cached />,
+    },
+  ];
+
+  const {
+    content: deleteConfirmation,
+    handler: deleteConfirmationHandler,
+    visibility: deleteConfirmationVisibility,
+  } = useConfirmation<number>(
+    {
+      title: "Konfirmasi Hapus",
+      description: "Apakah kamu yakin ingin menghapus item ini?",
+      cancelText: "Kembali",
+      confirmText: "Ya",
+    },
+    0
+  );
 
   const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
     setTabIndex(value);
@@ -85,37 +144,76 @@ export const BookingTableView = () => {
   };
 
   const handleDelete = (id: number) => {
-    console.log(id);
+    deleteConfirmationHandler.open();
+    deleteConfirmationHandler.setState(id);
   };
+
+  const handleConfirmDelete = () => {
+    deleteConfirmationHandler.confirm().then((id) => remove(id));
+  };
+
+  const handleSubmit = () => {};
 
   return (
     <>
-      <CardTable
-        searchPlaceholder="Cari booking..."
-        searchValue={searchKeyword}
-        onChangeSearch={handleSearch}
-        tabs={tabs}
-        tabIndex={tabIndex}
-        withTabs
-        searchField
-        onReload={reload}
-        onChangeTab={handleTabChange}
-        error={isError}
+      <Section
+        title="Booking Fasilitas"
+        description="Kelola pemesanan fasilitas properti Anda"
+        actionButton={<ActionButton buttons={actionButton} />}
       >
-        <TableBooking
-          data={bookings}
-          totalData={bookings?.length}
-          isLoading={isLoading}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
-      </CardTable>
+        <CardTable
+          searchPlaceholder="Cari booking..."
+          searchValue={searchKeyword}
+          onChangeSearch={handleSearch}
+          tabs={tabs}
+          tabIndex={tabIndex}
+          withTabs
+          searchField
+          onReload={reload}
+          onChangeTab={handleTabChange}
+          error={isError}
+        >
+          <TableBooking
+            data={bookings}
+            totalData={bookings?.length}
+            isLoading={isLoading}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        </CardTable>
+      </Section>
       <Suspense>
         <FormStatusBooking
           visible={modalControll.statusBooking}
           onClose={() => setModalControll("statusBooking", false)}
           onUpdateState={updateStatus}
           booking={selectedBooking}
+        />
+      </Suspense>
+
+      <Suspense>
+        <Confirmation
+          open={deleteConfirmationVisibility}
+          title={deleteConfirmation.title}
+          description={deleteConfirmation.description}
+          cancelText={deleteConfirmation.cancelText}
+          confirmText={deleteConfirmation.confirmText}
+          onClose={deleteConfirmationHandler.close}
+          onCancel={deleteConfirmationHandler.cancel}
+          onConfirm={handleConfirmDelete}
+        />
+      </Suspense>
+
+      <Suspense>
+        <FormBooking
+          loading={false}
+          onInputChange={() => {}}
+          onSelectChange={() => {}}
+          onSubmit={handleSubmit}
+          visible={modalControll.addBooking}
+          onClose={() => setModalControll("addBooking", false)}
+          form={form}
+          // formError={formError}
         />
       </Suspense>
     </>

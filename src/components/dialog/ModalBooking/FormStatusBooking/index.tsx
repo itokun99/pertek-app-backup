@@ -12,7 +12,7 @@ import {
 
 // additional
 import Button from "@mui/material/Button";
-import BaseDialogForm from "../BaseDialogForm";
+import BaseDialogForm from "../../BaseDialogForm";
 import Step from "@mui/material/Step/Step";
 import StepConnector from "@mui/material/StepConnector/StepConnector";
 import Stack from "@mui/material/Stack";

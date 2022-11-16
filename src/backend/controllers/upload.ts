@@ -1,5 +1,4 @@
 import { uploadFile } from '@backend/repos/upload';
-import { isInvalidSession, unauthorized } from '@lib/apiAuthHelpers';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { createController } from './base';
 

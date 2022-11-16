@@ -1,5 +1,5 @@
 import { NextApiRequest } from 'next';
-import { clearSession, buildAuthorization } from './apiAuthHelpers';
+import { clearSession } from './apiAuthHelpers';
 
 export const requestDelete = async (req: NextApiRequest, url: string, headers?: {}) => {
   const res = await fetcher(url, 'DELETE', headers, req.body);

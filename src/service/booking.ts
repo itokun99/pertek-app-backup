@@ -1,4 +1,3 @@
-import { async } from "@firebase/util";
 import { ApiProxyEndpoint } from "../config/apiProxyEndpoint";
 import { fetchData } from "../lib/dataFetcher";
 

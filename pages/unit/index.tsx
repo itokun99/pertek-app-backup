@@ -1,8 +1,8 @@
-import { Suspense, ReactElement } from "react";
-import dynamic from "next/dynamic";
-import ProtectedPage from "../../src/template/ProtectedPage";
+import dynamic from 'next/dynamic';
+import { ReactElement } from 'react';
+import ProtectedPage from '../../src/template/ProtectedPage';
 
-const UnitView = dynamic(() => import("../../src/views/UnitView"), {
+const UnitView = dynamic(() => import('../../src/views/UnitView'), {
   ssr: false,
 });
 

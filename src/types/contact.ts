@@ -1,5 +1,3 @@
-import { IProperty } from "./property";
-
 export interface IContactEmail {
   id: number;
   address: string;
@@ -16,43 +14,43 @@ export interface IContactRole {
 }
 
 export interface IContactDetail {
-  id:                  number;
-  first_name:          string;
-  last_name:           string;
+  id: number;
+  first_name: string;
+  last_name: string;
   registration_status: string;
-  public_id:           string;
-  profile_picture:     string;
-  identity:            string;
-  identity_type:       string;
-  profile_type:        string;
-  address:             string;
+  public_id: string;
+  profile_picture: string;
+  identity: string;
+  identity_type: string;
+  profile_type: string;
+  address: string;
   npwp: string;
-  last_login:          number | null | Date;
-  property:            IContactProperty;
-  role:                IContactRole;
-  role_group:          IContactRole;
-  emails:              IContactEmail[];
-  phone_numbers:              IContactPhone[];
+  last_login: number | null | Date;
+  property: IContactProperty;
+  role: IContactRole;
+  role_group: IContactRole;
+  emails: IContactEmail[];
+  phone_numbers: IContactPhone[];
 }
 
 export interface IContactEmail {
-  id:       number;
-  address:  string;
+  id: number;
+  address: string;
   verified: boolean;
 }
 
 export interface IContactPhone {
-  id:     number;
+  id: number;
   number: string;
 }
 
 export interface IContactProperty {
-  id:   number;
+  id: number;
   name: string;
 }
 
 export interface IContactRole {
-  id:   number;
+  id: number;
   name: string;
 }
 

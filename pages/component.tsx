@@ -1,15 +1,13 @@
-import SelectFamilyStatus from "@components/select/SelectFamilyStatus";
-import SelectPropertyUnit from "@components/select/SelectPropertyUnit";
-import SelectResidentStatus from "@components/select/SelectResidentStatus";
-import React, { useState } from "react";
-import ProtectedPage from "../src/template/ProtectedPage";
+import SelectPropertyUnit from '@components/select/SelectPropertyUnit';
+import { useState } from 'react';
+import ProtectedPage from '../src/template/ProtectedPage';
 
 const Component = () => {
   const [form, setForm] = useState(null);
 
   const handleSelectChange = (name: string, value: any) => {
-    console.info("name", name);
-    console.info("value", value);
+    console.info('name', name);
+    console.info('value', value);
     setForm(value);
   };
 

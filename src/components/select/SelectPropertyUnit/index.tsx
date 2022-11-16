@@ -1,10 +1,9 @@
-import React, { useEffect, memo } from "react";
-import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-import { SelectOptionType } from "@types";
-import SelectOption from "../SelectOption";
-import usePropertyUnit from "./hooks";
-import { createOptions } from "@utils/helper";
-import { SelectOptionChangeType } from "../SelectOption";
+import { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
+import { SelectOptionType } from '@types';
+import { createOptions } from '@utils/helper';
+import React, { memo } from 'react';
+import SelectOption, { SelectOptionChangeType } from '../SelectOption';
+import usePropertyUnit from './hooks';
 
 interface ISelectPropertyUnit {
   onChange: SelectOptionChangeType<SelectOptionType>;
@@ -35,13 +34,13 @@ const SelectPropertyUnit: React.FC<ISelectPropertyUnit> = ({ onChange, value, di
     setOpen(false);
   };
 
-  const options: SelectOptionType[] = createOptions(data, "name", "id");
+  const options: SelectOptionType[] = createOptions(data, 'name', 'id');
 
   return (
     <SelectOption
-      name="propertyUnit"
-      label="Property Unit"
-      placeholder="Masukan Nama Property Unit"
+      name='propertyUnit'
+      label='Property Unit'
+      placeholder='Masukan Nama Property Unit'
       loading={loading}
       value={value}
       inputValue={keyword}
@@ -51,7 +50,7 @@ const SelectPropertyUnit: React.FC<ISelectPropertyUnit> = ({ onChange, value, di
       disabled={disabled}
       onOpen={handleOpen}
       onClose={handleClose}
-      type="auto-complete-select"
+      type='auto-complete-select'
       error={error}
       helperText={helperText}
     />

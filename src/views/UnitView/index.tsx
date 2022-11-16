@@ -1,15 +1,15 @@
 import Add from '@mui/icons-material/Add';
-import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from 'react';
+import { ReactElement, Suspense, useContext, useEffect, useMemo, useState } from 'react';
 
+import { TabItem } from '@components/TabBar';
+import dynamic from 'next/dynamic';
+import { MyAnimatedButtonProps } from '../../components/buttons/AnimatedButton';
 import useConfirmation from '../../hooks/useConfirmation';
 import useForm from '../../hooks/useForm';
-import { SelectOptionType, IUnit } from '../../types';
-import { MyAnimatedButtonProps } from '../../components/buttons/AnimatedButton';
 import { AlertContext } from '../../provider/AlertProvider';
-import useUnit from './hook/useUnit';
 import { ICreateUnitPayload } from '../../service/unit';
-import dynamic from 'next/dynamic';
-import { TabItem } from '@components/TabBar';
+import { IUnit } from '../../types';
+import useUnit from './hook/useUnit';
 
 const ActionButton = dynamic(() => import('../../components/buttons/ActionButton'), {
   ssr: false,
@@ -106,11 +106,16 @@ const UnitView = (): ReactElement => {
   const { units, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload } = useUnit();
 
   // other hooks
-  const tabs = useMemo((): TabItem[] => [{
-    label: "",
-    text: "Semua",
-    color: "default"
-  }], []);
+  const tabs = useMemo(
+    (): TabItem[] => [
+      {
+        label: '',
+        text: 'Semua',
+        color: 'default',
+      },
+    ],
+    []
+  );
 
   // variables
   const isEdit = Boolean(form.id);
@@ -120,7 +125,6 @@ const UnitView = (): ReactElement => {
     const { name, value } = event.target;
     setForm(name, value);
   };
-
 
   const handleSelectChange = (name: string, value: any) => {
     setForm(name, value);

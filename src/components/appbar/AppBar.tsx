@@ -1,24 +1,19 @@
-import { PropsWithChildren, useContext, useState } from 'react';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
-import Badge from '@mui/material/Badge';
-import Stack from '@mui/material/Stack';
-import Tooltip from '@mui/material/Tooltip';
-import { useTheme } from '@mui/material/styles';
-import { AuthContext } from '@provider/AuthProvider';
-import Mail from '@mui/icons-material/Mail';
-import Notifications from '@mui/icons-material/Notifications';
-import WifiOffOutlined from '@mui/icons-material/WifiOffOutlined';
-import NotificationPopover from './NotificationPopover';
-import InboxPopover from './InboxPopover';
-import AccountPopover from './AccountPopover';
-import { NotificationContext } from '@provider/NotificationProvider';
-import { NetworkContext } from '@provider/NetworkProvider';
 import { Person } from '@mui/icons-material';
+import WifiOffOutlined from '@mui/icons-material/WifiOffOutlined';
+import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import { useTheme } from '@mui/material/styles';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import { AuthContext } from '@provider/AuthProvider';
+import { NetworkContext } from '@provider/NetworkProvider';
+import { NotificationContext } from '@provider/NotificationProvider';
+import { PropsWithChildren, useContext, useState } from 'react';
+import AccountPopover from './AccountPopover';
 
 export const popoverDefaultProps = {
   anchorOrigin: {

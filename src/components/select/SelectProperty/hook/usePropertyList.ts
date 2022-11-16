@@ -1,15 +1,10 @@
-import { useState, useCallback, useEffect } from "react";
-import useSWR from "swr";
-import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
-import { fetchData } from "@lib/dataFetcher";
-import { useRouter } from "next/router";
-import { createUrlParamFromObj } from "@utils/helper";
-import { ApiResponseType, IProperty } from "@general-types";
-import useDebounce from "@hooks/useDebounce";
-import { getProperty } from "@service/property";
+import { IProperty } from '@general-types';
+import useDebounce from '@hooks/useDebounce';
+import { getProperty } from '@service/property';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function usePropertyList() {
-  const [keyword, setKeyword] = useState<string>("");
+  const [keyword, setKeyword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<IProperty[]>([]);
   const [error, setError] = useState<boolean>(false);

@@ -1,9 +1,8 @@
+import { useMediaQuery, useTheme } from '@mui/material';
+import { useRouter } from 'next/router';
 import { createContext, PropsWithChildren, useEffect, useMemo, useState } from 'react';
 import useSWR from 'swr';
-import { SidebarMenu, SidebarMenuGroup } from '../components/sidebar';
-import { useRouter } from 'next/router';
-import { doFetch } from '../lib/dataFetcher';
-import { useMediaQuery, useTheme } from '@mui/material';
+import { SidebarMenuGroup } from '../components/sidebar';
 
 export type Property = {
   id: number;

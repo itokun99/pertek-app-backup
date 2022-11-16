@@ -1,5 +1,5 @@
-import { createContext, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react';
 import { Unsubscribe } from 'firebase/firestore';
+import { createContext, PropsWithChildren, useCallback, useMemo, useState } from 'react';
 
 export interface NotificationItem {
   id: number;

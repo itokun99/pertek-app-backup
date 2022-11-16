@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import { Box, Card, CardActionArea, Grid, Stack, Typography, useTheme } from '@mui/material';
+import { Box, Card, CardActionArea, Stack, Typography, useTheme } from '@mui/material';
 import { IFacility } from '@types';
+import Image from 'next/image';
 
 export interface FacilityCardProps {
   facility: IFacility;

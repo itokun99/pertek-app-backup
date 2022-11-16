@@ -1,30 +1,20 @@
-import React from "react";
-import { Grid, TextField } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
+import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Grid, TextField } from '@mui/material';
+import React from 'react';
 
 // additional
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import { SelectOptionType } from "@types";
-import SelectPropertyUnit from "@components/select/SelectPropertyUnit";
-import SelectContact from "@components/select/SelectContact";
-import SelectParentTenancy from "@components/select/SelectParentTenancy";
-import { SelectOptionChangeType } from "@components/select/SelectOption";
-import SelectResidentStatus from "@components/select/SelectResidentStatus";
-import SelectFamilyStatus from "@components/select/SelectFamilyStatus";
-import BaseDialogForm from "../BaseDialogForm";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
-import MultipleInput, {
-  IMultipleInputItem,
-  MultipleInputChangeType,
-} from "../../input/MultipleInput";
-import { IForm, IFormError } from "./FormVendor.interface";
-import SelectIdentityType from "@components/select/SelectIdentityType";
-import SelectProfileType from "@components/select/SelectProfileType";
-import SelectTenancyRole from "@components/select/SelectTenancyRole";
+import SelectIdentityType from '@components/select/SelectIdentityType';
+import { SelectOptionChangeType } from '@components/select/SelectOption';
+import SelectProfileType from '@components/select/SelectProfileType';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import { SelectOptionType } from '@types';
+import MultipleInput, { IMultipleInputItem, MultipleInputChangeType } from '../../input/MultipleInput';
+import BaseDialogForm from '../BaseDialogForm';
+import { IForm, IFormError } from './FormVendor.interface';
 
 interface IFormVendorProps {
   edit: boolean;
@@ -32,6 +22,7 @@ interface IFormVendorProps {
   form: IForm;
   loading: boolean;
   formError: IFormError;
+  onUploadImage: () => void;
   onClose: () => void;
   onSubmit: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -45,6 +36,7 @@ const FormVendor: React.FC<IFormVendorProps> = ({
   edit,
   visible,
   onClose,
+  onUploadImage,
   onInputChange,
   onSelectChange,
   onSubmit,
@@ -60,20 +52,20 @@ const FormVendor: React.FC<IFormVendorProps> = ({
     <BaseDialogForm
       fullScreen
       visible={visible}
-      title={edit ? "Edit Vendor" : "Tambah Vendor"}
+      title={edit ? 'Edit Vendor' : 'Tambah Vendor'}
       onClose={onClose}
       action={
         <>
-          <Button variant="outlined" color="error" onClick={onClose}>
+          <Button variant='outlined' color='error' onClick={onClose}>
             Cancel
           </Button>
           <LoadingButton
-            color="primary"
+            color='primary'
             onClick={onSubmit}
             loading={loading}
-            loadingPosition="start"
+            loadingPosition='start'
             startIcon={<SaveIcon />}
-            variant="contained"
+            variant='contained'
             disabled={isSAveButtonDisabled}
           >
             Simpan
@@ -81,20 +73,20 @@ const FormVendor: React.FC<IFormVendorProps> = ({
         </>
       }
     >
-      <Grid container direction="row" spacing={2}>
+      <Grid container direction='row' spacing={2}>
         <Grid item xs={12} md={6}>
           <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant='h6' sx={{ mb: 1 }}>
               Personal Data
             </Typography>
             <Divider sx={{ mb: 3 }} />
-            <Grid container direction="row" spacing={2}>
+            <Grid container direction='row' spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
                   value={form.firstName}
-                  placeholder="Masukan nama depan"
-                  label="Nama Depan"
-                  name="firstName"
+                  placeholder='Masukan nama depan'
+                  label='Nama Depan'
+                  name='firstName'
                   onChange={onInputChange}
                   fullWidth
                   error={Boolean(formError.firstName)}
@@ -104,9 +96,9 @@ const FormVendor: React.FC<IFormVendorProps> = ({
               <Grid item xs={12} sm={6}>
                 <TextField
                   value={form.lastName}
-                  placeholder="Masukan nama belakang"
-                  label="Nama Belakang"
-                  name="lastName"
+                  placeholder='Masukan nama belakang'
+                  label='Nama Belakang'
+                  name='lastName'
                   onChange={onInputChange}
                   fullWidth
                   error={Boolean(formError.lastName)}
@@ -133,12 +125,12 @@ const FormVendor: React.FC<IFormVendorProps> = ({
                 <Grid item xs={8}>
                   <TextField
                     value={form.identity}
-                    placeholder="Masukan Nomor Identitas"
-                    label="Nomor Identitas"
-                    name="identity"
+                    placeholder='Masukan Nomor Identitas'
+                    label='Nomor Identitas'
+                    name='identity'
                     onChange={onInputChange}
                     fullWidth
-                    inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                    inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                     error={Boolean(formError.identity)}
                     helperText={formError.identity}
                   />
@@ -147,12 +139,12 @@ const FormVendor: React.FC<IFormVendorProps> = ({
               <Grid item xs={12}>
                 <TextField
                   value={form.npwp}
-                  placeholder="Masukan Nomor NPWP"
-                  label="Nomor NPWP"
-                  name="npwp"
+                  placeholder='Masukan Nomor NPWP'
+                  label='Nomor NPWP'
+                  name='npwp'
                   onChange={onInputChange}
                   fullWidth
-                  inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+                  inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
                   error={Boolean(formError.npwp)}
                   helperText={formError.npwp}
                 />
@@ -162,9 +154,9 @@ const FormVendor: React.FC<IFormVendorProps> = ({
                   minRows={2}
                   value={form.address}
                   multiline
-                  placeholder="Masukan alamat lengkap"
-                  label="Alamat"
-                  name="address"
+                  placeholder='Masukan alamat lengkap'
+                  label='Alamat'
+                  name='address'
                   onChange={onInputChange}
                   fullWidth
                   error={Boolean(formError.address)}
@@ -177,33 +169,33 @@ const FormVendor: React.FC<IFormVendorProps> = ({
 
         <Grid item xs={12} md={6}>
           <Box>
-            <Typography variant="h6" textAlign="center" sx={{ mb: 1 }}>
+            <Typography variant='h6' textAlign='center' sx={{ mb: 1 }}>
               Profile Picture
             </Typography>
             <Divider sx={{ mb: 3 }} />
           </Box>
-          <Grid container direction="row" spacing={2}>
+          <Grid container direction='row' spacing={2}>
             <Grid item xs={12} sm={12}>
-              Upload Profile picture here
+              <Button onClick={onUploadImage}>Upload Foto Profile</Button>
             </Grid>
           </Grid>
         </Grid>
 
         <Grid item xs={12} md={12}>
           <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant='h6' sx={{ mb: 1 }}>
               Kontak Data
             </Typography>
             <Divider sx={{ mb: 3 }} />
             {/* content */}
-            <Grid container direction="row" spacing={2}>
+            <Grid container direction='row' spacing={2}>
               <Grid item xs={12} md={6}>
                 <MultipleInput
-                  type="email"
+                  type='email'
                   onChange={onMultipleInputChange}
                   values={form.emails}
-                  label="Email"
-                  name="emails"
+                  label='Email'
+                  name='emails'
                   withCheckbox
                   onDelete={onMultipleInputDelete}
                   onSave={onMultipleInputSave}
@@ -211,11 +203,11 @@ const FormVendor: React.FC<IFormVendorProps> = ({
               </Grid>
               <Grid item xs={12} md={6}>
                 <MultipleInput
-                  type="text"
+                  type='text'
                   onChange={onMultipleInputChange}
                   values={form.phones}
-                  label="Nomor Telepon"
-                  name="phones"
+                  label='Nomor Telepon'
+                  name='phones'
                   onDelete={onMultipleInputDelete}
                   onSave={onMultipleInputSave}
                 />

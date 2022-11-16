@@ -2,15 +2,19 @@ import { ApiProxyEndpoint } from "../config/apiProxyEndpoint";
 import { fetchData } from "../lib/dataFetcher";
 
 export interface ICreateBookingPayload {
-  facility_id: number;
-  facility_category_id: number;
-  tenant_profile_id: number;
-  property_id: number;
-  property_unit_id: number;
-  duration: number;
-  facility_assistance_id?: number[];
-  description?: string;
-  slot_date: Date;
+  facility_id: string;
+  contact_id: string;
+  property_unit_id: string;
+  assistances: string[];
+  description: string;
+  price: string;
+  penalty: number;
+  status: string;
+  slot_date: string;
+  slot: {
+    start: string;
+    end: string;
+  };
 }
 
 export interface IUpdateBookingStatePayload {

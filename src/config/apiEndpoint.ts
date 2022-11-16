@@ -45,6 +45,7 @@ export const Endpoint = {
 
   Property: `${API_BASE_URL}:${EndpointGroup.Property}/property`,
   PropertyUnitType: `${API_BASE_URL}:${EndpointGroup.Property}/property_unit_type`,
+  PropertyUnitByContact: `${API_BASE_URL}:${EndpointGroup.Property}/property_unit_by_contact`,
 
   Role: `${API_BASE_URL}:${EndpointGroup.Role}/role`,
   RoleGroup: `${API_BASE_URL}:${EndpointGroup.Role}/role_group`,

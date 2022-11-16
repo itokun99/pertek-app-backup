@@ -2,18 +2,18 @@ import { swrConfig } from "@config/swrConfig";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
-import { ApiProxyEndpoint } from "../../../config/apiProxyEndpoint";
-import { fetchData, FetcherResponseError } from "../../../lib/dataFetcher";
-import { AlertContext } from "../../../provider/AlertProvider";
+import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
+import { fetchData, FetcherResponseError } from "@lib/dataFetcher";
+import { AlertContext } from "@provider/AlertProvider";
 import {
   createBooking,
   deleteBooking,
   ICreateBookingPayload,
   updateBooking,
   updateBookingState,
-} from "../../../service/booking";
-import { ApiResponseType, IBooking } from "../../../types";
-import { createUrlParamFromObj } from "../../../utils/helper";
+} from "@service/booking";
+import { ApiResponseType, IBooking } from "@types";
+import { createUrlParamFromObj } from "@utils/helper";
 
 // create booking hooks interface
 export interface IUseBooking {
@@ -58,7 +58,7 @@ export default function useBooking(): IUseBooking {
   // create insert function
   const insert = async (payload: ICreateBookingPayload) => {
     createBooking(payload)
-      .then(() => {
+      .then((res) => {
         setAlert({
           message: {
             severity: "success",
@@ -66,6 +66,8 @@ export default function useBooking(): IUseBooking {
           },
         });
         mutate();
+        console.info(res);
+        return res;
       })
       .catch((err: FetcherResponseError) => {
         setAlert({

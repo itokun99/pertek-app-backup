@@ -1,27 +1,26 @@
-import Link from '@mui/material/Link';
-import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
-import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/ActionCellButton";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import { GridColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
 import { IUnitType } from '../../../types';
+import ActionCellButton, { IActionCellButtonProperties } from '../../buttons/ActionCellButton';
 
-
-
-
-
-const optionActionCell = (record: IUnitType, onClickEdit: (id: number, record: IUnitType) => void, onClickDelete: (id: number) => void) => {
+const optionActionCell = (
+  record: IUnitType,
+  onClickEdit: (id: number, record: IUnitType) => void,
+  onClickDelete: (id: number) => void
+) => {
   // you can abstract your record interface here
   const { id } = record || {};
-  const options: IActionCellButtonProperties["options"] = [
+  const options: IActionCellButtonProperties['options'] = [
     {
-      label: "Edit",
+      label: 'Edit',
       icon: <ModeEditOutlineOutlinedIcon />,
       onClick: () => onClickEdit(id, record),
     },
     {
-      label: "Delete",
+      label: 'Delete',
       icon: <DeleteOutlineOutlinedIcon />,
-      color: "error",
+      color: 'error',
       onClick: () => onClickDelete(id),
     },
   ];
@@ -29,28 +28,30 @@ const optionActionCell = (record: IUnitType, onClickEdit: (id: number, record: I
   return options;
 };
 
-
-export function generateColumns(onClickEdit: (id: number, record: IUnitType) => void, onClickDelete: (id: number) => void): GridColDef[] {
+export function generateColumns(
+  onClickEdit: (id: number, record: IUnitType) => void,
+  onClickDelete: (id: number) => void
+): GridColDef[] {
   return [
     {
-      headerName: "Nama Klaster",
-      field: "name",
+      headerName: 'Nama Klaster',
+      field: 'name',
       flex: 1,
     },
     {
-      headerName: "Properti",
-      field: "property_id",
+      headerName: 'Properti',
+      field: 'property_id',
       flex: 1,
       renderCell: (params: any) => {
         const { property } = params.row || {};
-        return property ? property.name : "-";
+        return property ? property.name : '-';
       },
     },
     {
-      headerName: "",
-      field: "action",
+      headerName: '',
+      field: 'action',
       sortable: false,
-      align: "right",
+      align: 'right',
       renderCell: ({ row }) => {
         return <ActionCellButton options={optionActionCell(row, onClickEdit, onClickDelete)} />;
       },

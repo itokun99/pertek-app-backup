@@ -1,10 +1,9 @@
 // import { DataGrid } from "@mui/x-data-grid";
-import { PropsWithChildren, memo, useState, useEffect } from "react";
-import { generateColumns } from "./index.enum";
-import LinearProgress from "@mui/material/LinearProgress";
-import { TableLoader } from "../../loader/TableLoader";
-import { IUnit } from "../../../types";
-import BaseTable from "../BaseTable";
+import { memo, PropsWithChildren } from 'react';
+import { IUnit } from '../../../types';
+import { TableLoader } from '../../loader/TableLoader';
+import BaseTable from '../BaseTable';
+import { generateColumns } from './index.enum';
 
 export interface ITableUnitProps {
   data: Array<IUnit>;
@@ -27,12 +26,7 @@ const TableCluster = ({
 
   return (
     <>
-      <BaseTable
-        columns={generateColumns(onClickEdit, onClickDelete)}
-        field={data}
-        loading={loading}
-        withPagination
-      />
+      <BaseTable columns={generateColumns(onClickEdit, onClickDelete)} field={data} loading={loading} withPagination />
     </>
   );
 };

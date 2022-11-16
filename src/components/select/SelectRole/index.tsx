@@ -1,11 +1,9 @@
-import React, { useEffect, memo } from "react";
-import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-import { SelectOptionType } from "@types";
-import SelectOption from '../SelectOption';
-import useRoleList from './hook/useRoleList';
+import { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
+import { SelectOptionType } from '@types';
 import { createOptions } from '@utils/helper';
-import { SelectOptionChangeType } from '../SelectOption';
-
+import React, { memo } from 'react';
+import SelectOption, { SelectOptionChangeType } from '../SelectOption';
+import useRoleList from './hook/useRoleList';
 
 interface ISelectRole {
   onChange: SelectOptionChangeType<SelectOptionType>;
@@ -13,16 +11,8 @@ interface ISelectRole {
   disabled?: boolean;
 }
 
-const SelectRole: React.FC<ISelectRole> = ({
-  onChange,
-  value,
-  disabled
-}) => {
-
-
+const SelectRole: React.FC<ISelectRole> = ({ onChange, value, disabled }) => {
   const { data, loading, keyword, setKeyword, setOpen } = useRoleList();
-
-
 
   const handleInputChange = (
     _event: React.SyntheticEvent,
@@ -36,19 +26,19 @@ const SelectRole: React.FC<ISelectRole> = ({
     if (!disabled) {
       setOpen(true);
     }
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
-  const options: SelectOptionType[] = createOptions(data, 'name', 'id')
+  const options: SelectOptionType[] = createOptions(data, 'name', 'id');
 
   return (
     <SelectOption
-      name="role"
-      label="Role"
-      placeholder="Masukan Nama Role"
+      name='role'
+      label='Role'
+      placeholder='Masukan Nama Role'
       loading={loading}
       value={value}
       inputValue={keyword}
@@ -58,7 +48,7 @@ const SelectRole: React.FC<ISelectRole> = ({
       disabled={disabled}
       onOpen={handleOpen}
       onClose={handleClose}
-      type="auto-complete-select"
+      type='auto-complete-select'
     />
   );
 };

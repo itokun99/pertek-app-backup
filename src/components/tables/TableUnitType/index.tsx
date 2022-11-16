@@ -1,16 +1,16 @@
-import { DataGrid } from "@mui/x-data-grid";
-import { PropsWithChildren, memo, useState, useEffect } from "react";
-import { generateColumns } from "./index.enum";
 import LinearProgress from '@mui/material/LinearProgress';
-import { TableLoader } from '../../loader/TableLoader';
+import { DataGrid } from '@mui/x-data-grid';
+import { memo, PropsWithChildren } from 'react';
 import { IUnitType } from '../../../types';
+import { TableLoader } from '../../loader/TableLoader';
+import { generateColumns } from './index.enum';
 
 export interface ITableUnitTypeProps {
-  data: Array<IUnitType>,
-  loading: boolean,
-  ready: boolean,
-  onClickEdit: (id: number, record: IUnitType) => void,
-  onClickDelete: (id: number) => void
+  data: Array<IUnitType>;
+  loading: boolean;
+  ready: boolean;
+  onClickEdit: (id: number, record: IUnitType) => void;
+  onClickDelete: (id: number) => void;
 }
 
 const TableUnitType = ({
@@ -18,18 +18,17 @@ const TableUnitType = ({
   ready,
   loading = false,
   onClickEdit,
-  onClickDelete
+  onClickDelete,
 }: PropsWithChildren & ITableUnitTypeProps) => {
-
   if (!ready) {
-    return <TableLoader />
+    return <TableLoader />;
   }
 
   return (
     <DataGrid
       components={{ LoadingOverlay: LinearProgress }}
       headerHeight={40}
-      density={"comfortable"}
+      density={'comfortable'}
       disableColumnSelector
       checkboxSelection
       hideFooterSelectedRowCount

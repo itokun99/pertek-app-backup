@@ -1,93 +1,92 @@
-import Add from "@mui/icons-material/Add";
-import { useRouter } from "next/router";
-import { useMemo, useState, ReactElement, useContext, useEffect, Suspense } from "react";
+import Add from '@mui/icons-material/Add';
+import { useRouter } from 'next/router';
+import { ReactElement, Suspense, useContext, useEffect, useMemo, useState } from 'react';
 
-import useConfirmation from "@hooks/useConfirmation";
-import useForm from "@hooks/useForm";
-import { ITenant } from "@general-types";
-import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
-import { AlertContext } from "@provider/AlertProvider";
-import useTenant from "./hook/useTenant";
-import dynamic from "next/dynamic";
-import { TabItem } from "@components/TabBar";
-import FormDialog from "@components/dialog/FormTenant";
-import { IMultipleInputItem, validateMultipleInput } from "@components/input/MultipleInput";
-import CloudDownload from "@mui/icons-material/CloudDownload";
-import CloudUpload from "@mui/icons-material/CloudUpload";
-import { ICreateTenantPayload } from "@service/tenant";
-import Label from "@components/Label";
-import { IForm, IFormError } from "@components/dialog/FormTenant/FormTenant.interface";
-import { deleteContactEmail, updateContactEmail } from "@service/contact-email";
-import { deleteContactPhone, updateContactPhone } from "@service/contact-phone";
-import { FetcherResponseError } from "@lib/dataFetcher";
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
+import FormDialog from '@components/dialog/FormTenant';
+import { IForm, IFormError } from '@components/dialog/FormTenant/FormTenant.interface';
+import { IMultipleInputItem, validateMultipleInput } from '@components/input/MultipleInput';
+import { TabItem } from '@components/TabBar';
+import { ITenant } from '@general-types';
+import useConfirmation from '@hooks/useConfirmation';
+import useForm from '@hooks/useForm';
+import { FetcherResponseError } from '@lib/dataFetcher';
+import CloudDownload from '@mui/icons-material/CloudDownload';
+import CloudUpload from '@mui/icons-material/CloudUpload';
+import { AlertContext } from '@provider/AlertProvider';
+import { deleteContactEmail, updateContactEmail } from '@service/contact-email';
+import { deleteContactPhone, updateContactPhone } from '@service/contact-phone';
+import { ICreateTenantPayload } from '@service/tenant';
+import dynamic from 'next/dynamic';
+import useTenant from './hook/useTenant';
 
-const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
+const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
 });
 
-const Section = dynamic(() => import("@components/views/Section"), {
+const Section = dynamic(() => import('@components/views/Section'), {
   ssr: false,
   suspense: true,
 });
-const CardTable = dynamic(() => import("@components/cards/CardTable"), {
+const CardTable = dynamic(() => import('@components/cards/CardTable'), {
   ssr: false,
   suspense: true,
 });
-const TableData = dynamic(() => import("@components/tables/TableTenant"), {
+const TableData = dynamic(() => import('@components/tables/TableTenant'), {
   ssr: false,
   suspense: true,
 });
-const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
+const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   ssr: false,
   suspense: true,
 });
 
 const initialForm: IForm = {
   id: 0,
-  firstName: "",
-  lastName: "",
-  identity: "",
-  identityType: "",
-  address: "",
-  npwp: "",
-  profileType: "",
+  firstName: '',
+  lastName: '',
+  identity: '',
+  identityType: '',
+  address: '',
+  npwp: '',
+  profileType: '',
   role: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   roleGroup: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   propertyUnit: {
-    label: "",
-    value: "",
+    label: '',
+    value: '',
   },
   emails: [],
   phones: [],
   checkIn: null,
   checkOut: null,
-  familyStatus: "",
-  parentTenancy: "",
-  tenancy_role: "Tenant",
-  residentStatus: "",
+  familyStatus: '',
+  parentTenancy: '',
+  tenancy_role: 'Tenant',
+  residentStatus: '',
 };
 
 const initialFormError: IFormError = {
-  firstName: "",
-  lastName: "",
-  address: "",
-  identity: "",
-  identityType: "",
-  profileType: "",
-  npwp: "",
-  checkIn: "",
-  checkOut: "",
-  familyStatus: "",
-  propertyUnit: "",
-  residentStatus: "",
-  parentTenancy: "",
-  tenancy_role: "",
+  firstName: '',
+  lastName: '',
+  address: '',
+  identity: '',
+  identityType: '',
+  profileType: '',
+  npwp: '',
+  checkIn: '',
+  checkOut: '',
+  familyStatus: '',
+  propertyUnit: '',
+  residentStatus: '',
+  parentTenancy: '',
+  tenancy_role: '',
 };
 
 const TenantView = (): ReactElement => {
@@ -97,14 +96,13 @@ const TenantView = (): ReactElement => {
   const router = useRouter();
 
   // states
-  const [tabIndex, setTabIndex] = useState<string | number>("");
-  const [search, setSearch] = useState<string>("");
+  const [tabIndex, setTabIndex] = useState<string | number>('');
+  const [search, setSearch] = useState<string>('');
   const [visibility, setVisibility] = useState(false);
 
   // custom hooks
   const [form, setForm, resetForm, setFormBulk] = useForm<IForm>(initialForm);
-  const [formError, setFormError, resetFormError, setFormErrorBulk] =
-    useForm<IFormError>(initialFormError);
+  const [formError, setFormError, resetFormError, setFormErrorBulk] = useForm<IFormError>(initialFormError);
 
   const {
     content: deleteConfirmation,
@@ -112,10 +110,10 @@ const TenantView = (): ReactElement => {
     visibility: deleteConfirmationVisibility,
   } = useConfirmation<number>(
     {
-      title: "Konfirmasi Hapus",
-      description: "Apakah kamu yakin ingin menghapus item ini?",
-      cancelText: "Kembali",
-      confirmText: "Ya",
+      title: 'Konfirmasi Hapus',
+      description: 'Apakah kamu yakin ingin menghapus item ini?',
+      cancelText: 'Kembali',
+      confirmText: 'Ya',
     },
     0
   );
@@ -141,28 +139,28 @@ const TenantView = (): ReactElement => {
   const tabs = useMemo(
     (): TabItem[] => [
       {
-        label: "",
-        text: "Semua",
-        color: "default",
-        value: "",
+        label: '',
+        text: 'Semua',
+        color: 'default',
+        value: '',
       },
       {
-        label: "",
-        text: "Pending",
-        color: "default",
-        value: "pending",
+        label: '',
+        text: 'Pending',
+        color: 'default',
+        value: 'pending',
       },
       {
-        label: "",
-        text: "Verified",
-        color: "default",
-        value: "verified",
+        label: '',
+        text: 'Verified',
+        color: 'default',
+        value: 'verified',
       },
       {
-        label: "",
-        text: "Blocked",
-        color: "default",
-        value: "blocked",
+        label: '',
+        text: 'Blocked',
+        color: 'default',
+        value: 'blocked',
       },
     ],
     []
@@ -177,7 +175,7 @@ const TenantView = (): ReactElement => {
     setForm(name, value);
 
     if (formError[name as keyof typeof formError]) {
-      setFormError(name, "");
+      setFormError(name, '');
     }
   };
 
@@ -185,11 +183,11 @@ const TenantView = (): ReactElement => {
     setForm(name, value);
 
     if (formError[name as keyof typeof formError]) {
-      setFormError(name, "");
+      setFormError(name, '');
     }
 
-    if (name === "propertyUnit") {
-      setForm("parentTenancy", "");
+    if (name === 'propertyUnit') {
+      setForm('parentTenancy', '');
     }
   };
 
@@ -197,11 +195,11 @@ const TenantView = (): ReactElement => {
     setTabIndex(value);
     const { query } = router;
     const queryPamaramaters = { ...query };
-    queryPamaramaters.status = (value as string) || "";
+    queryPamaramaters.status = (value as string) || '';
 
     // it should delete unnecessary params || todo: clear empty object
     Object.entries(queryPamaramaters).forEach(([queryKey]) => {
-      if (!["status"].includes(queryKey)) {
+      if (!['status'].includes(queryKey)) {
         delete queryPamaramaters[queryKey];
       }
     });
@@ -222,23 +220,23 @@ const TenantView = (): ReactElement => {
     const error = { ...formError };
 
     if (!form.propertyUnit || !form.propertyUnit.value) {
-      error.propertyUnit = "Properti Unit harus diisi";
+      error.propertyUnit = 'Properti Unit harus diisi';
     }
 
     if (!form.residentStatus) {
-      error.residentStatus = "Resident Status harus diisi";
+      error.residentStatus = 'Resident Status harus diisi';
     }
 
     if (!form.familyStatus) {
-      error.familyStatus = "Family Status harus diisi";
+      error.familyStatus = 'Family Status harus diisi';
     }
 
     if (!form.checkIn) {
-      error.checkIn = "Check In harus diisi";
+      error.checkIn = 'Check In harus diisi';
     }
 
     if (!form.checkOut) {
-      error.checkOut = "Check Out harus diisi";
+      error.checkOut = 'Check Out harus diisi';
     }
 
     return error;
@@ -258,7 +256,7 @@ const TenantView = (): ReactElement => {
     const payload: ICreateTenantPayload = {
       first_name: form.firstName,
       last_name: form.lastName,
-      profile_picture: "",
+      profile_picture: '',
       identity: form.identity,
       identity_type: form.identityType,
       profile_type: form.profileType,
@@ -290,27 +288,27 @@ const TenantView = (): ReactElement => {
       })
       .catch((err) => {
         setLoadingForm(false);
-        console.log("err", err);
+        console.log('err', err);
       });
   };
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
-      title: "Tenant Baru",
+      title: 'Tenant Baru',
       onClick: (): void => setVisibility(true),
-      color: "info",
+      color: 'info',
       startIcon: <Add />,
     },
     {
-      title: "Template",
+      title: 'Template',
       onClick: downloadTemplate,
-      color: "warning",
+      color: 'warning',
       startIcon: <CloudDownload />,
     },
     {
-      title: "Upload CSV",
+      title: 'Upload CSV',
       onClick: (): void => {},
-      color: "success",
+      color: 'success',
       startIcon: <CloudUpload />,
     },
   ];
@@ -356,18 +354,15 @@ const TenantView = (): ReactElement => {
       });
   };
 
-  const handleMultipleInputSingeDelete = async (
-    name: string,
-    data: IMultipleInputItem
-  ): Promise<void> => {
+  const handleMultipleInputSingeDelete = async (name: string, data: IMultipleInputItem): Promise<void> => {
     try {
-      const response = await (name === "emails"
+      const response = await (name === 'emails'
         ? deleteContactEmail(data.id as number)
         : deleteContactPhone(data.id as number));
       setAlert({
         message: {
-          severity: "success",
-          content: `${name === "emails" ? "Email" : "Nomor Telepon"} kontak berhasil dihapus`,
+          severity: 'success',
+          content: `${name === 'emails' ? 'Email' : 'Nomor Telepon'} kontak berhasil dihapus`,
         },
       });
       return;
@@ -375,21 +370,18 @@ const TenantView = (): ReactElement => {
       const error = err as FetcherResponseError;
       setAlert({
         message: {
-          severity: "error",
-          content: error?.message || "Terjadi kesalahan",
+          severity: 'error',
+          content: error?.message || 'Terjadi kesalahan',
         },
       });
       throw err;
     }
   };
 
-  const handleMultipleInputSingleSave = async (
-    name: string,
-    data: IMultipleInputItem
-  ): Promise<void> => {
+  const handleMultipleInputSingleSave = async (name: string, data: IMultipleInputItem): Promise<void> => {
     try {
       const response =
-        name === "emails"
+        name === 'emails'
           ? await updateContactEmail(data.id as number, {
               contact_id: form.id,
               address: data.value,
@@ -401,8 +393,8 @@ const TenantView = (): ReactElement => {
             });
       setAlert({
         message: {
-          severity: "success",
-          content: `${name === "emails" ? "Email" : "Nomor Telepon"} kontak berhasil diperbarui`,
+          severity: 'success',
+          content: `${name === 'emails' ? 'Email' : 'Nomor Telepon'} kontak berhasil diperbarui`,
         },
       });
       return;
@@ -410,8 +402,8 @@ const TenantView = (): ReactElement => {
       const error = err as FetcherResponseError;
       setAlert({
         message: {
-          severity: "error",
-          content: error?.message || "Terjadi kesalahan",
+          severity: 'error',
+          content: error?.message || 'Terjadi kesalahan',
         },
       });
       throw err;
@@ -435,7 +427,7 @@ const TenantView = (): ReactElement => {
   // lifecycle methods
   useEffect(() => {
     if (form.parentTenancy) {
-      setForm("residentStatus", "Verified");
+      setForm('residentStatus', 'Verified');
     }
   }, [form.parentTenancy, setForm]);
 
@@ -443,13 +435,13 @@ const TenantView = (): ReactElement => {
     <>
       <Suspense>
         <Section
-          title="Tenant"
-          description="Kelola tenant properti Anda"
+          title='Tenant'
+          description='Kelola tenant properti Anda'
           stackProps={{ mt: 12 }}
           actionButton={<ActionButton buttons={actionButton} />}
         >
           <CardTable
-            searchPlaceholder="Cari Tenant"
+            searchPlaceholder='Cari Tenant'
             searchValue={search}
             onChangeSearch={handleChangeSearch}
             tabs={tabs}

@@ -1,15 +1,14 @@
 import Add from '@mui/icons-material/Add';
-import { Suspense, useMemo, useState, ReactElement, useContext, useEffect } from 'react';
+import { ReactElement, Suspense, useContext, useMemo, useState } from 'react';
 
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
 import useConfirmation from '@hooks/useConfirmation';
 import useForm from '@hooks/useForm';
-import { SelectOptionType, IUnitType } from '@types';
-import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
+import { IUnitType } from '@types';
 // import FormDialog from "@components/dialog/FormUnitType";
 import { AlertContext } from '@provider/AlertProvider';
-import useUnitType from './hook/useUnitType';
 import dynamic from 'next/dynamic';
-
+import useUnitType from './hook/useUnitType';
 
 const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
@@ -36,8 +35,8 @@ const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   suspense: true,
 });
 
-import { ICreateUnitTypePayload } from '../../service/unit-type';
 import { TabItem } from '@components/TabBar';
+import { ICreateUnitTypePayload } from '../../service/unit-type';
 
 interface IFormSelectable {
   label: string;

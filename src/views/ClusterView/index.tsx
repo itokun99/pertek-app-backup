@@ -1,53 +1,45 @@
-import Add from "@mui/icons-material/Add";
-import {
-  Suspense,
-  useMemo,
-  useState,
-  ReactElement,
-  useContext
-} from "react";
+import Add from '@mui/icons-material/Add';
+import { ReactElement, Suspense, useContext, useMemo, useState } from 'react';
 
-import useConfirmation from "../../hooks/useConfirmation";
+import useConfirmation from '../../hooks/useConfirmation';
 import useForm from '../../hooks/useForm';
 
-import { SelectOptionType, ICluster } from '../../types';
+import { ICluster } from '../../types';
 
 // import ActionButton from "../../components/buttons/ActionButton";
-import { MyAnimatedButtonProps } from "../../components/buttons/AnimatedButton";
-import { AlertContext } from "../../provider/AlertProvider";
+import { MyAnimatedButtonProps } from '../../components/buttons/AnimatedButton';
+import { AlertContext } from '../../provider/AlertProvider';
 
-import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-import dynamic from "next/dynamic";
+import { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
+import dynamic from 'next/dynamic';
 
-import useCluster from './hook/useCluster';
 import { TabItem } from '@components/TabBar';
+import useCluster from './hook/useCluster';
 
-
-const ActionButton = dynamic(() => import("../../components/buttons/ActionButton"), {
-  ssr: false
+const ActionButton = dynamic(() => import('../../components/buttons/ActionButton'), {
+  ssr: false,
 });
 
-const FormCluster = dynamic(() => import("../../components/dialog/FormKlaster"), {
+const FormCluster = dynamic(() => import('../../components/dialog/FormKlaster'), {
   ssr: false,
-  suspense: true
+  suspense: true,
 });
 const Section = dynamic(() => import('../../components/views/Section'), {
   ssr: false,
-  suspense: true
+  suspense: true,
 });
 const CardTable = dynamic(() => import('../../components/cards/CardTable'), {
   ssr: false,
-  suspense: true
+  suspense: true,
 });
 const TableData = dynamic(() => import('../../components/tables/TableCluster'), {
   ssr: false,
-  suspense: true
+  suspense: true,
 });
-const Confirmation = dynamic(() => import("../../components/dialog/Confirmation"), {
+const Confirmation = dynamic(() => import('../../components/dialog/Confirmation'), {
   ssr: false,
-  suspense: true
+  suspense: true,
 });
-
 
 interface IFormProperty {
   label: string;
@@ -57,29 +49,28 @@ interface IForm {
   id: number;
   name: string;
   description: string;
-  property: IFormProperty,
+  property: IFormProperty;
   propertyInput: string;
 }
 
 const initialForm: IForm = {
   id: 0,
-  name: "",
-  description: "",
-  propertyInput: "",
+  name: '',
+  description: '',
+  propertyInput: '',
   property: {
-    label: "",
-    value: 0
-  }
-}
+    label: '',
+    value: 0,
+  },
+};
 
 const ClusterView = (): ReactElement => {
-
   // contexts
   const { setAlert } = useContext(AlertContext);
 
   // states
   const [tabIndex] = useState<number>(0);
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
   const [visibility, setVisibility] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -88,41 +79,36 @@ const ClusterView = (): ReactElement => {
   const {
     content: deleteConfirmation,
     handler: deleteConfirmationHandler,
-    visibility:
-    deleteConfirmationVisibility
-  } = useConfirmation<number>({
-    title: 'Konfirmasi Hapus',
-    description: 'Apakah kamu yakin ingin menghapus item ini?',
-    cancelText: 'Kembali',
-    confirmText: 'Ya'
-  }, 0);
+    visibility: deleteConfirmationVisibility,
+  } = useConfirmation<number>(
+    {
+      title: 'Konfirmasi Hapus',
+      description: 'Apakah kamu yakin ingin menghapus item ini?',
+      cancelText: 'Kembali',
+      confirmText: 'Ya',
+    },
+    0
+  );
 
-  const {
-    clusters,
-    insert,
-    remove,
-    update,
-    dataLoading,
-    dataError,
-    dataReady,
-    isValidating,
-    reload,
-    dataMeta
-  } = useCluster();
+  const { clusters, insert, remove, update, dataLoading, dataError, dataReady, isValidating, reload, dataMeta } =
+    useCluster();
 
-  const totalData = dataMeta?.itemsTotal || clusters.length
+  const totalData = dataMeta?.itemsTotal || clusters.length;
 
   // other hooks
-  const tabs = useMemo((): TabItem[] => [{
-    label: "",
-    text: "Semua",
-    color: "default"
-  }], []);
-
+  const tabs = useMemo(
+    (): TabItem[] => [
+      {
+        label: '',
+        text: 'Semua',
+        color: 'default',
+      },
+    ],
+    []
+  );
 
   // variables
   const isEdit = Boolean(form.id);
-
 
   // handlers
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,10 +116,13 @@ const ClusterView = (): ReactElement => {
     setForm(name, value);
   };
 
-
-  const handleInputSelectChange = (_event: React.SyntheticEvent, value: string, _reason: AutocompleteInputChangeReason) => {
+  const handleInputSelectChange = (
+    _event: React.SyntheticEvent,
+    value: string,
+    _reason: AutocompleteInputChangeReason
+  ) => {
     setForm('propertyInput', value);
-  }
+  };
 
   const handleSelectChange = (name: string, value: any) => {
     setForm(name, value);
@@ -141,11 +130,11 @@ const ClusterView = (): ReactElement => {
 
   const handleSubmit = () => {
     // it should check if the form is empty
-    if (form.name === "" || Object.values(form.property).every((dt) => dt === "")) {
+    if (form.name === '' || Object.values(form.property).every((dt) => dt === '')) {
       setAlert({
         message: {
-          severity: "warning",
-          content: "Form tidak boleh kosong!",
+          severity: 'warning',
+          content: 'Form tidak boleh kosong!',
         },
       });
       return;
@@ -157,18 +146,17 @@ const ClusterView = (): ReactElement => {
       description: form.description,
     };
 
-
     (isEdit ? update(form.id, payload) : insert(payload)).then(() => {
       setVisibility(false);
       resetForm();
-    })
+    });
   };
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
-      title: "Kluster Baru",
+      title: 'Kluster Baru',
       onClick: (): void => setVisibility(true),
-      color: "info",
+      color: 'info',
       startIcon: <Add />,
     },
   ];
@@ -181,7 +169,7 @@ const ClusterView = (): ReactElement => {
   const handleClose = (): void => {
     setVisibility(false);
     resetForm();
-  }
+  };
 
   const handleClickEditRow = (id: number, record: ICluster) => {
     // open();
@@ -189,38 +177,37 @@ const ClusterView = (): ReactElement => {
     setFormBulk({
       id: id,
       name: record.name,
-      description: "",
+      description: '',
       propertyInput: record.property.name,
       property: {
         label: record.property.name,
-        value: record.property.id
-      }
-    })
+        value: record.property.id,
+      },
+    });
 
     setVisibility(true);
-  }
+  };
 
   const handleClickDeleteRow = (id: number) => {
-    deleteConfirmationHandler.open()
+    deleteConfirmationHandler.open();
     deleteConfirmationHandler.setState(id);
-
-  }
+  };
 
   const handleConfirmDelete = () => {
-    deleteConfirmationHandler.confirm().then(id => remove(id))
-  }
+    deleteConfirmationHandler.confirm().then((id) => remove(id));
+  };
 
   return (
     <>
       <Suspense>
         <Section
-          title="Klaster"
-          description="Kelola kluster properti"
+          title='Klaster'
+          description='Kelola kluster properti'
           stackProps={{ mt: 12 }}
           actionButton={<ActionButton buttons={actionButton} />}
         >
           <CardTable
-            searchPlaceholder="Cari klaster"
+            searchPlaceholder='Cari klaster'
             searchValue={search}
             onChangeSearch={handleChangeSearch}
             tabs={tabs}
@@ -230,7 +217,14 @@ const ClusterView = (): ReactElement => {
             error={Boolean(dataError)}
             onReload={reload}
           >
-            <TableData total={totalData} ready={dataReady} data={clusters} loading={dataLoading || isValidating} onClickEdit={handleClickEditRow} onClickDelete={handleClickDeleteRow} />
+            <TableData
+              total={totalData}
+              ready={dataReady}
+              data={clusters}
+              loading={dataLoading || isValidating}
+              onClickEdit={handleClickEditRow}
+              onClickDelete={handleClickDeleteRow}
+            />
           </CardTable>
         </Section>
       </Suspense>
@@ -257,7 +251,6 @@ const ClusterView = (): ReactElement => {
           onClose={deleteConfirmationHandler.close}
           onCancel={deleteConfirmationHandler.cancel}
           onConfirm={handleConfirmDelete}
-
         />
       </Suspense>
     </>

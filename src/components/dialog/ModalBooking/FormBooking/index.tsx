@@ -1,21 +1,19 @@
-import React from "react";
-import { Grid, TextField } from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
+import SaveIcon from '@mui/icons-material/Save';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Grid, TextField } from '@mui/material';
+import React from 'react';
 
 // additional
-import Button from "@mui/material/Button";
-import { SelectOptionType } from "@types";
-import { SelectOptionChangeType } from "@components/select/SelectOption";
-import BaseDialogForm from "@components/dialog/BaseDialogForm";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
+import BaseDialogForm from '@components/dialog/BaseDialogForm';
+import { SelectOptionChangeType } from '@components/select/SelectOption';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
+import { SelectOptionType } from '@types';
 
-import { IForm } from "./FormBooking.interface";
-import SelectIdentityType from "@components/select/SelectIdentityType";
-import SelectProfileType from "@components/select/SelectProfileType";
-import SelectStatusBooking from "../_components/SelectStatusBooking";
+import SelectStatusBooking from '../_components/SelectStatusBooking';
+import { IForm } from './FormBooking.interface';
 
 interface IFormBookingProps {
   visible: boolean;
@@ -40,39 +38,39 @@ const FormBooking: React.FC<IFormBookingProps> = ({
     <BaseDialogForm
       fullScreen
       visible={visible}
-      title="Buat Booking Facility"
+      title='Buat Booking Facility'
       onClose={onClose}
       action={
         <>
-          <Button variant="outlined" color="error" onClick={onClose}>
+          <Button variant='outlined' color='error' onClick={onClose}>
             Cancel
           </Button>
           <LoadingButton
-            color="primary"
+            color='primary'
             onClick={onSubmit}
             loading={loading}
-            loadingPosition="start"
+            loadingPosition='start'
             startIcon={<SaveIcon />}
-            variant="contained"
+            variant='contained'
           >
             Simpan
           </LoadingButton>
         </>
       }
     >
-      <Grid container direction="row" spacing={2}>
+      <Grid container direction='row' spacing={2}>
         <Grid item xs={12} md={6}>
           <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>
+            <Typography variant='h6' sx={{ mb: 1 }}>
               Personal Data
             </Typography>
             <Divider sx={{ mb: 3 }} />
-            <Grid container direction="row" spacing={2}>
+            <Grid container direction='row' spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Slot Date"
-                  type="date"
-                  name="slot_date"
+                  label='Slot Date'
+                  type='date'
+                  name='slot_date'
                   fullWidth
                   onChange={onInputChange}
                   value={form.slot_date}
@@ -86,9 +84,9 @@ const FormBooking: React.FC<IFormBookingProps> = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Open Hours"
-                  name="open_hour"
-                  type="time"
+                  label='Open Hours'
+                  name='open_hour'
+                  type='time'
                   onChange={onInputChange}
                   fullWidth
                   InputLabelProps={{
@@ -100,9 +98,9 @@ const FormBooking: React.FC<IFormBookingProps> = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Close Hours"
-                  name="close_hour"
-                  type="time"
+                  label='Close Hours'
+                  name='close_hour'
+                  type='time'
                   onChange={onInputChange}
                   fullWidth
                   InputLabelProps={{
@@ -115,9 +113,9 @@ const FormBooking: React.FC<IFormBookingProps> = ({
               <Grid item xs={12} sm={12}>
                 <TextField
                   value={form.description}
-                  placeholder="Masukan Deskripsi"
-                  label="Deskripsi"
-                  name="description"
+                  placeholder='Masukan Deskripsi'
+                  label='Deskripsi'
+                  name='description'
                   onChange={onInputChange}
                   fullWidth
                   minRows={3}

@@ -1,6 +1,5 @@
-import { async } from "@firebase/util";
-import { ApiProxyEndpoint } from "../config/apiProxyEndpoint";
-import { fetchData } from "../lib/dataFetcher";
+import { ApiProxyEndpoint } from '../config/apiProxyEndpoint';
+import { fetchData } from '../lib/dataFetcher';
 
 export interface ICreateBookingPayload {
   facility_id: number;
@@ -24,7 +23,7 @@ const BOOKING_URL = ApiProxyEndpoint.Booking;
 export async function createBooking(payload: ICreateBookingPayload) {
   const { data, error } = await fetchData<{ message: string }>(BOOKING_URL, {
     body: JSON.stringify(payload),
-    method: "POST",
+    method: 'POST',
   });
 
   if (error) {
@@ -38,7 +37,7 @@ export async function createBooking(payload: ICreateBookingPayload) {
 export async function cancleBooking(payload: ICreateBookingPayload) {
   const { data, error } = await fetchData<{ message: string }>(BOOKING_URL, {
     body: JSON.stringify(payload),
-    method: "PUT",
+    method: 'PUT',
   });
 
   if (error) {
@@ -52,7 +51,7 @@ export async function cancleBooking(payload: ICreateBookingPayload) {
 export async function updateBooking(id: number, payload: ICreateBookingPayload) {
   const { data, error } = await fetchData<{ message: string }>(BOOKING_URL, {
     body: JSON.stringify(payload),
-    method: "PUT",
+    method: 'PUT',
   });
 
   if (error) {
@@ -65,7 +64,7 @@ export async function updateBooking(id: number, payload: ICreateBookingPayload) 
 export async function updateBookingState(id: number, payload: IUpdateBookingStatePayload) {
   const { data, error } = await fetchData<{ message: string }>(`${BOOKING_URL}?status`, {
     body: JSON.stringify(payload),
-    method: "PUT",
+    method: 'PUT',
   });
 
   if (error) {
@@ -79,7 +78,7 @@ export async function updateBookingState(id: number, payload: IUpdateBookingStat
 export async function getBooking(payload: ICreateBookingPayload) {
   const { data, error } = await fetchData<{ message: string }>(BOOKING_URL, {
     body: JSON.stringify(payload),
-    method: "GET",
+    method: 'GET',
   });
 
   if (error) {
@@ -92,7 +91,7 @@ export async function getBooking(payload: ICreateBookingPayload) {
 // create function to delete booking
 export async function deleteBooking(id: number) {
   const { data, error } = await fetchData<{ message: string }>(`${BOOKING_URL}?id=${id}`, {
-    method: "DELETE",
+    method: 'DELETE',
   });
 
   if (error) {

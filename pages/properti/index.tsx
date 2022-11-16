@@ -1,8 +1,6 @@
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import ProtectedPage from '@template/ProtectedPage';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
-import ProtectedPage from '@template/ProtectedPage';
 
 const PropertyView = dynamic(() => import('@views/PropertyView'), {
   ssr: false,

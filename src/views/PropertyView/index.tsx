@@ -1,6 +1,6 @@
 import Section from '@components/views/Section';
+import { Box, Card, CardActionArea, Grid, Typography, useTheme } from '@mui/material';
 import Image from 'next/image';
-import { Avatar, Box, Card, CardActionArea, Grid, Stack, Typography, useTheme } from '@mui/material';
 import { useProperty } from './hooks/useProperty';
 
 const PropertyView = () => {

@@ -3,17 +3,17 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActionArea from '@mui/material/CardActionArea';
 import Grid from '@mui/material/Grid';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import { useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
 
-import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
 import { doFetch } from '@lib/dataFetcher';
 import { AlertContext } from '@provider/AlertProvider';
-import { NetworkContext, NetworkState } from '@provider/NetworkProvider';
+import { NetworkContext } from '@provider/NetworkProvider';
 import { Property, SidebarContext } from '@provider/SidebarProvider';
+import { useRouter } from 'next/router';
+import { useContext, useEffect, useState } from 'react';
 import { ErrorComponent } from '../../components/error/ErrorComponent';
 
 const PropertyView = () => {

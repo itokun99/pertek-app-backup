@@ -5,7 +5,6 @@ import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
 import useConfirmation from '@hooks/useConfirmation';
 import useForm from '@hooks/useForm';
 import { IUnitType } from '@types';
-// import FormDialog from "@components/dialog/FormUnitType";
 import { AlertContext } from '@provider/AlertProvider';
 import dynamic from 'next/dynamic';
 import useUnitType from './hook/useUnitType';
@@ -23,10 +22,6 @@ const Section = dynamic(() => import('@components/views/Section'), {
   suspense: true,
 });
 const CardTable = dynamic(() => import('@components/cards/CardTable'), {
-  ssr: false,
-  suspense: true,
-});
-const TableData = dynamic(() => import('@components/tables/TableUnitType'), {
   ssr: false,
   suspense: true,
 });
@@ -202,15 +197,7 @@ const UnitView = (): ReactElement => {
             searchField
             error={Boolean(dataError)}
             onReload={reload}
-          >
-            <TableData
-              ready={dataReady}
-              data={unitTypes}
-              loading={dataLoading || isValidating}
-              onClickEdit={handleClickEditRow}
-              onClickDelete={handleClickDeleteRow}
-            />
-          </CardTable>
+          ></CardTable>
         </Section>
       </Suspense>
 

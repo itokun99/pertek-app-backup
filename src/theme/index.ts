@@ -6,7 +6,7 @@ import ComponentsOverrides from './overrides';
 import shadows, { customShadows } from './shadows';
 
 import { TypographyOptions } from '@mui/material/styles/createTypography';
-import type {} from '@mui/x-data-grid/themeAugmentation';
+// import type {} from '@mui/x-data-grid/themeAugmentation';
 
 declare module '@mui/material/styles' {
   interface Theme {

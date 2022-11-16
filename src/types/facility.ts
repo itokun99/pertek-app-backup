@@ -1,4 +1,4 @@
-import { BaseType } from './base';
+import { BaseType } from "./base";
 
 export interface IFacility extends BaseType {
   id: number;
@@ -15,6 +15,12 @@ export interface IFacility extends BaseType {
   description: string;
   pictures: string[];
   category: IFacilityCategory;
+  booking_slots: IFacilityBookingSlot[];
+}
+
+export interface IFacilityBookingSlot {
+  end: string;
+  start: string;
 }
 
 // facility category interface

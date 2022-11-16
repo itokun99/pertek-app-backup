@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React from "react";
 import { Grid, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -14,30 +13,10 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 
 import { IForm } from "./FormBooking.interface";
-import SelectIdentityType from "@components/select/SelectIdentityType";
-import SelectProfileType from "@components/select/SelectProfileType";
 import SelectStatusBooking from "../_components/SelectStatusBooking";
 import { formatCurrency } from "@utils/formatCurrency";
 import SelectFacility from "../_components/SelectFacility";
 import SelectBookingSlot from "../_components/SelectBookingSlot";
-=======
-import SaveIcon from '@mui/icons-material/Save';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { Grid, TextField } from '@mui/material';
-import React from 'react';
-
-// additional
-import BaseDialogForm from '@components/dialog/BaseDialogForm';
-import { SelectOptionChangeType } from '@components/select/SelectOption';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import { SelectOptionType } from '@types';
-
-import SelectStatusBooking from '../_components/SelectStatusBooking';
-import { IForm } from './FormBooking.interface';
->>>>>>> 7a1378a9760afcb4ac8d02adf9e2f1d8d2398ca6
 
 interface IFormBookingProps {
   visible: boolean;

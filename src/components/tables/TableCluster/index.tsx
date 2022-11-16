@@ -1,18 +1,16 @@
-import { DataGrid } from "@mui/x-data-grid";
-import { PropsWithChildren, memo, useState, useEffect } from "react";
-import { generateColumns } from "./TableCluster.enum";
-import LinearProgress from '@mui/material/LinearProgress';
-import { TableLoader } from '../../loader/TableLoader';
+import { memo, PropsWithChildren } from 'react';
 import { ICluster } from '../../../types';
+import { TableLoader } from '../../loader/TableLoader';
 import BaseTable from '../BaseTable';
+import { generateColumns } from './TableCluster.enum';
 
 export interface ITableClusterProps {
-  data: Array<ICluster>,
-  loading: boolean,
-  ready: boolean,
+  data: Array<ICluster>;
+  loading: boolean;
+  ready: boolean;
   total: number;
-  onClickEdit: (id: number, record: ICluster) => void,
-  onClickDelete: (id: number) => void
+  onClickEdit: (id: number, record: ICluster) => void;
+  onClickDelete: (id: number) => void;
 }
 
 const TableCluster = ({
@@ -21,11 +19,10 @@ const TableCluster = ({
   total,
   loading = false,
   onClickEdit,
-  onClickDelete
+  onClickDelete,
 }: PropsWithChildren & ITableClusterProps) => {
-
   if (!ready) {
-    return <TableLoader />
+    return <TableLoader />;
   }
 
   return (

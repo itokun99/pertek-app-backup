@@ -1,10 +1,10 @@
-import React, { memo, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import React, { memo } from 'react';
 
 interface IConfirmationProps {
   open: boolean;
@@ -27,28 +27,21 @@ function Confirmation({
   onConfirm,
   onCancel,
 }: IConfirmationProps): React.ReactElement {
-
   return (
     <Dialog
       open={open}
       onClose={onClose}
       keepMounted
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      aria-labelledby='alert-dialog-title'
+      aria-describedby='alert-dialog-description'
     >
-      <DialogTitle id="alert-dialog-title">
-        {title}
-      </DialogTitle>
+      <DialogTitle id='alert-dialog-title'>{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          {description}
-        </DialogContentText>
+        <DialogContentText id='alert-dialog-description'>{description}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>{cancelText}</Button>
-        <Button onClick={onConfirm}>
-          {confirmText}
-        </Button>
+        <Button onClick={onConfirm}>{confirmText}</Button>
       </DialogActions>
     </Dialog>
   );

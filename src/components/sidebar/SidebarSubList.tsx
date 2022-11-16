@@ -1,6 +1,5 @@
 import { FiberManualRecord } from '@mui/icons-material';
 import { List, ListItem, ListItemButton, ListItemIcon, Typography, useTheme } from '@mui/material';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { SidebarSubMenu } from '.';

@@ -1,6 +1,6 @@
-import { Suspense, ReactElement } from 'react';
-import dynamic from 'next/dynamic';
 import ProtectedPage from '@template/ProtectedPage';
+import dynamic from 'next/dynamic';
+import { ReactElement } from 'react';
 
 const ContactView = dynamic(() => import('@views/ContactView'), {
   ssr: false,

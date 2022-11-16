@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { ERROR, GRADIENTS, INFO, PRIMARY, SUCCESS, WARNING } from '../theme/palette';
+import { ERROR, INFO, PRIMARY, SUCCESS, WARNING } from '../theme/palette';
 
 const PRIMARY_NAME = ['A', 'N', 'H', 'L', 'Q', '9', '8'];
 const INFO_NAME = ['F', 'G', 'T', 'I', 'J', '1', '2', '3'];

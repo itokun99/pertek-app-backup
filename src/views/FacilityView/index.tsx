@@ -3,14 +3,11 @@ import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
 import { TabItem } from '@components/TabBar';
 import Section from '@components/views/Section';
 import { Add } from '@mui/icons-material';
-import { Box, Button, Card, CardActionArea, Grid, Typography, useTheme } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Grid, useTheme } from '@mui/material';
 import { IFacility } from '@types';
-import dynamic from 'next/dynamic';
-import Image from 'next/image';
 import { ChangeEvent, ReactElement, Suspense, SyntheticEvent, useMemo, useState } from 'react';
-import { FacilityCard } from './FacilityCardItem';
 import { DetailViewFacility } from './details';
+import { FacilityCard } from './FacilityCardItem';
 import useFacility from './hooks/useFacility';
 
 const FacilityView = (): ReactElement => {

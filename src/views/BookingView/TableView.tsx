@@ -68,12 +68,13 @@ export const BookingTableView = () => {
   );
 
   const [form, setForm, resetForm, setFormBulk] = useForm<IForm>({
-    facility_id: "",
+    facility: null,
+    bookingSlot: null,
     tenant_id: "",
     property_unit_id: "",
     assistances: [],
     description: "",
-    price: 0,
+    price: "0",
     penalty: 0,
     status: "",
     slot_date: "",
@@ -118,6 +119,28 @@ export const BookingTableView = () => {
     },
     0
   );
+
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setForm(name, value);
+  };
+
+  const handleSelectChange = (name: string, value: any) => {
+    console.info(value);
+    setForm(name, value);
+  };
+
+  const onSelectFacility = (_event: any, value: any) => {
+    setForm("facility", value);
+
+    if (form.facility === null) {
+      setForm("bookingSlot", null);
+    }
+  };
+
+  const onSelectBookingSlot = (_event: any, value: any) => {
+    setForm("bookingSlot", value);
+  };
 
   const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
     setTabIndex(value);
@@ -207,8 +230,10 @@ export const BookingTableView = () => {
       <Suspense>
         <FormBooking
           loading={false}
-          onInputChange={() => {}}
-          onSelectChange={() => {}}
+          onInputChange={handleInputChange}
+          onSelectFacility={onSelectFacility}
+          onSelectBookingSlot={onSelectBookingSlot}
+          onSelectChange={handleSelectChange}
           onSubmit={handleSubmit}
           visible={modalControll.addBooking}
           onClose={() => setModalControll("addBooking", false)}

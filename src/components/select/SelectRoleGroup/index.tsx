@@ -1,11 +1,9 @@
-import React, { useEffect, memo } from "react";
-import { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-import { SelectOptionType } from "@types";
-import SelectOption from '../SelectOption';
-import useRoleGroupList from './hook/useRoleGroupList';
+import { AutocompleteInputChangeReason } from '@mui/material/Autocomplete';
+import { SelectOptionType } from '@types';
 import { createOptions } from '@utils/helper';
-import { SelectOptionChangeType } from '../SelectOption';
-
+import React, { memo } from 'react';
+import SelectOption, { SelectOptionChangeType } from '../SelectOption';
+import useRoleGroupList from './hook/useRoleGroupList';
 
 interface ISelectRoleGroup {
   onChange: SelectOptionChangeType<SelectOptionType>;
@@ -13,16 +11,8 @@ interface ISelectRoleGroup {
   disabled?: boolean;
 }
 
-const SelectRoleGroup: React.FC<ISelectRoleGroup> = ({
-  onChange,
-  value,
-  disabled
-}) => {
-
-
+const SelectRoleGroup: React.FC<ISelectRoleGroup> = ({ onChange, value, disabled }) => {
   const { data, loading, keyword, setKeyword, setOpen } = useRoleGroupList();
-
-
 
   const handleInputChange = (
     _event: React.SyntheticEvent,
@@ -36,19 +26,19 @@ const SelectRoleGroup: React.FC<ISelectRoleGroup> = ({
     if (!disabled) {
       setOpen(true);
     }
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
-  }
+  };
 
-  const options: SelectOptionType[] = createOptions(data, 'name', 'id')
+  const options: SelectOptionType[] = createOptions(data, 'name', 'id');
 
   return (
     <SelectOption
-      name="roleGroup"
-      label="Role Group"
-      placeholder="Masukan Nama Role Group"
+      name='roleGroup'
+      label='Role Group'
+      placeholder='Masukan Nama Role Group'
       loading={loading}
       value={value}
       inputValue={keyword}
@@ -58,7 +48,7 @@ const SelectRoleGroup: React.FC<ISelectRoleGroup> = ({
       disabled={disabled}
       onOpen={handleOpen}
       onClose={handleClose}
-      type="auto-complete-select"
+      type='auto-complete-select'
     />
   );
 };

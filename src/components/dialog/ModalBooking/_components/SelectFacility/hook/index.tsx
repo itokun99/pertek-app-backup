@@ -1,34 +1,34 @@
-import { IProperty } from '@general-types';
-import useDebounce from '@hooks/useDebounce';
-import { getProperty } from '@service/property';
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from "react";
+import { IFacility } from "@general-types";
+import useDebounce from "@hooks/useDebounce";
+import { getFacilitiesWithParams } from "@service/facility";
 
-export default function usePropertyList() {
-  const [keyword, setKeyword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<IProperty[]>([]);
-  const [error, setError] = useState<boolean>(false);
+export default function useFacilityList() {
+  const [keyword, setKeyword] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
+  const [data, setData] = useState<IFacility[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
   const search = useDebounce(keyword, 1000);
 
   const getData = useCallback(() => {
-    setError(false);
     setLoading(true);
-    getProperty({ search })
-      .then((response) => {
+    setError(false);
+    getFacilitiesWithParams({ search })
+      .then((res) => {
         setLoading(false);
         setError(false);
-        if (response?.items) {
-          setData(response?.items);
+        if (res?.items) {
+          setData(res.items);
         } else {
-          setData([]);
           setError(true);
+          setData([]);
         }
       })
       .catch(() => {
         setError(true);
-        setData([]);
+        setLoading(false);
       });
   }, [search]);
 

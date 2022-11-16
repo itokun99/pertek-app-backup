@@ -1,18 +1,18 @@
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import MuiListSubheader from '@mui/material/ListSubheader';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Icon from '@mui/material/Icon';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
-import Typography from '@mui/material/Typography';
+import Icon from '@mui/material/Icon';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import MuiListSubheader from '@mui/material/ListSubheader';
 import Stack from '@mui/material/Stack';
 import { alpha, Theme, useTheme } from '@mui/material/styles';
-import { NextRouter, useRouter } from 'next/router';
-import { useContext, useMemo, useRef, useState } from 'react';
-import { SidebarMenu } from '.';
+import Typography from '@mui/material/Typography';
 import { SidebarContext } from '@provider/SidebarProvider';
+import { NextRouter, useRouter } from 'next/router';
+import { useContext, useState } from 'react';
+import { SidebarMenu } from '.';
 import { SidebarSubList } from './SidebarSubList';
 
 export interface SidebarMenuGroup {

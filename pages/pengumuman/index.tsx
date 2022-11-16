@@ -1,19 +1,12 @@
+import AnimatedButton from '@components/buttons/AnimatedButton';
 import Add from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
-import dynamic from 'next/dynamic';
-import { ReactElement, Suspense } from 'react';
-import AnimatedButton from '@components/buttons/AnimatedButton';
-// import { AnnouncementTable } from '@components/tables/TableAnnouncement';
+import Typography from '@mui/material/Typography';
 import ProtectedPage from '@template/ProtectedPage';
-
-const AnnouncementTable = dynamic(() => import('@components/tables/TableAnnouncement'), {
-  ssr: false,
-  suspense: true,
-});
+import { ReactElement, Suspense } from 'react';
 
 const PengumumanIndex = () => {
   const theme = useTheme();
@@ -37,9 +30,7 @@ const PengumumanIndex = () => {
           </Grid>
         </Grid>
       </Box>
-      <Suspense>
-        <AnnouncementTable />
-      </Suspense>
+      <Suspense></Suspense>
     </Stack>
   );
 };

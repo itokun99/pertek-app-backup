@@ -13,9 +13,10 @@ import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 
 import { IForm } from "./FormBooking.interface";
-import SelectIdentityType from "@components/select/SelectIdentityType";
-import SelectProfileType from "@components/select/SelectProfileType";
 import SelectStatusBooking from "../_components/SelectStatusBooking";
+import { formatCurrency } from "@utils/formatCurrency";
+import SelectFacility from "../_components/SelectFacility";
+import SelectBookingSlot from "../_components/SelectBookingSlot";
 
 interface IFormBookingProps {
   visible: boolean;
@@ -25,6 +26,8 @@ interface IFormBookingProps {
   onSubmit: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: SelectOptionChangeType<SelectOptionType | string>;
+  onSelectFacility: (event: any, value: any) => void;
+  onSelectBookingSlot: (event: any, value: any) => void;
 }
 
 const FormBooking: React.FC<IFormBookingProps> = ({
@@ -32,6 +35,8 @@ const FormBooking: React.FC<IFormBookingProps> = ({
   onClose,
   onInputChange,
   onSelectChange,
+  onSelectFacility,
+  onSelectBookingSlot,
   onSubmit,
   form,
   loading,
@@ -68,6 +73,17 @@ const FormBooking: React.FC<IFormBookingProps> = ({
             </Typography>
             <Divider sx={{ mb: 3 }} />
             <Grid container direction="row" spacing={2}>
+              <Grid item xs={12} sm={12}>
+                <SelectFacility value={form.facility} onChange={onSelectFacility} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <SelectBookingSlot
+                  data={form.facility !== null ? form.facility?.value.booking_slots : []}
+                  value={form.bookingSlot}
+                  onChange={onSelectBookingSlot}
+                  disabled={form.facility === null}
+                />
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   label="Slot Date"
@@ -86,30 +102,12 @@ const FormBooking: React.FC<IFormBookingProps> = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  label="Open Hours"
-                  name="open_hour"
-                  type="time"
+                  value={formatCurrency(form.price, "Rp")} // todo: format currency
+                  placeholder="harga"
+                  label="Price"
+                  name="price"
                   onChange={onInputChange}
                   fullWidth
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  // error={Boolean(formError.firstName)}
-                  // helperText=""
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  label="Close Hours"
-                  name="close_hour"
-                  type="time"
-                  onChange={onInputChange}
-                  fullWidth
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  // error={Boolean(formError.firstName)}
-                  // helperText=""
                 />
               </Grid>
               <Grid item xs={12} sm={12}>

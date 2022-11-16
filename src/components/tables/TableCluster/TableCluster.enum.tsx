@@ -1,23 +1,26 @@
-import { GridColDef } from "@mui/x-data-grid/models/colDef/gridColDef";
-import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/ActionCellButton";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import ActionCellButton, { IActionCellButtonProperties } from '../../buttons/ActionCellButton';
+import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { ICluster } from '../../../types';
 import { ColumnType } from '../BaseTable/BaseTable.interface';
 
-const optionActionCell = (record: ICluster, onClickEdit: (id: number, record: ICluster) => void, onClickDelete: (id: number) => void) => {
+const optionActionCell = (
+  record: ICluster,
+  onClickEdit: (id: number, record: ICluster) => void,
+  onClickDelete: (id: number) => void
+) => {
   // you can abstract your record interface here
   const { id } = record || {};
-  const options: IActionCellButtonProperties["options"] = [
+  const options: IActionCellButtonProperties['options'] = [
     {
-      label: "Edit",
+      label: 'Edit',
       icon: <ModeEditOutlineOutlinedIcon />,
       onClick: () => onClickEdit(id, record),
     },
     {
-      label: "Delete",
+      label: 'Delete',
       icon: <DeleteOutlineOutlinedIcon />,
-      color: "error",
+      color: 'error',
       onClick: () => onClickDelete(id),
     },
   ];
@@ -25,24 +28,26 @@ const optionActionCell = (record: ICluster, onClickEdit: (id: number, record: IC
   return options;
 };
 
-
-export function generateColumns(onClickEdit: (id: number, record: ICluster) => void, onClickDelete: (id: number) => void): ColumnType[] {
+export function generateColumns(
+  onClickEdit: (id: number, record: ICluster) => void,
+  onClickDelete: (id: number) => void
+): ColumnType[] {
   return [
     {
-      title: "Nama Klaster",
-      selector: "name"
+      title: 'Nama Klaster',
+      selector: 'name',
     },
     {
-      title: "Properti",
-      selector: "property_id",
+      title: 'Properti',
+      selector: 'property_id',
       render: (_text, record: ICluster) => {
-        return record ? record.name : "-";
+        return record ? record.name : '-';
       },
     },
     {
-      title: "",
-      selector: "action",
-      align: "right",
+      title: '',
+      selector: 'action',
+      align: 'right',
       render: (_text, record: ICluster) => {
         return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete)} />;
       },

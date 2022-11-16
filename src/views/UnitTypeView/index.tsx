@@ -1,15 +1,13 @@
 import Add from '@mui/icons-material/Add';
-import { Suspense, useMemo, useState, ReactElement, useContext, useEffect } from 'react';
+import { ReactElement, Suspense, useContext, useMemo, useState } from 'react';
 
+import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
 import useConfirmation from '@hooks/useConfirmation';
 import useForm from '@hooks/useForm';
-import { SelectOptionType, IUnitType } from '@types';
-import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
-// import FormDialog from "@components/dialog/FormUnitType";
+import { IUnitType } from '@types';
 import { AlertContext } from '@provider/AlertProvider';
-import useUnitType from './hook/useUnitType';
 import dynamic from 'next/dynamic';
-
+import useUnitType from './hook/useUnitType';
 
 const ActionButton = dynamic(() => import('@components/buttons/ActionButton'), {
   ssr: false,
@@ -27,17 +25,13 @@ const CardTable = dynamic(() => import('@components/cards/CardTable'), {
   ssr: false,
   suspense: true,
 });
-const TableData = dynamic(() => import('@components/tables/TableUnitType'), {
-  ssr: false,
-  suspense: true,
-});
 const Confirmation = dynamic(() => import('@components/dialog/Confirmation'), {
   ssr: false,
   suspense: true,
 });
 
-import { ICreateUnitTypePayload } from '../../service/unit-type';
 import { TabItem } from '@components/TabBar';
+import { ICreateUnitTypePayload } from '../../service/unit-type';
 
 interface IFormSelectable {
   label: string;
@@ -203,15 +197,7 @@ const UnitView = (): ReactElement => {
             searchField
             error={Boolean(dataError)}
             onReload={reload}
-          >
-            <TableData
-              ready={dataReady}
-              data={unitTypes}
-              loading={dataLoading || isValidating}
-              onClickEdit={handleClickEditRow}
-              onClickDelete={handleClickDeleteRow}
-            />
-          </CardTable>
+          ></CardTable>
         </Section>
       </Suspense>
 

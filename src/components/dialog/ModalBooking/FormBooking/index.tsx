@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Grid, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
@@ -8,15 +8,15 @@ import Button from "@mui/material/Button";
 import { SelectOptionType } from "@types";
 import { SelectOptionChangeType } from "@components/select/SelectOption";
 import BaseDialogForm from "@components/dialog/BaseDialogForm";
-import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import Divider from "@mui/material/Divider";
 
 import { IForm } from "./FormBooking.interface";
 import SelectStatusBooking from "../_components/SelectStatusBooking";
 import { formatCurrency } from "@utils/formatCurrency";
 import SelectFacility from "../_components/SelectFacility";
 import SelectBookingSlot from "../_components/SelectBookingSlot";
+import SelectTenant from "@components/select/SelectTenant";
+import SelectUnitByContactID from "../_components/SelectUnitByContactId";
 
 interface IFormBookingProps {
   visible: boolean;
@@ -26,8 +26,7 @@ interface IFormBookingProps {
   onSubmit: () => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange: SelectOptionChangeType<SelectOptionType | string>;
-  onSelectFacility: (event: any, value: any) => void;
-  onSelectBookingSlot: (event: any, value: any) => void;
+  onCustomSelect: (event: any, value: any, name: string) => void;
 }
 
 const FormBooking: React.FC<IFormBookingProps> = ({
@@ -35,8 +34,7 @@ const FormBooking: React.FC<IFormBookingProps> = ({
   onClose,
   onInputChange,
   onSelectChange,
-  onSelectFacility,
-  onSelectBookingSlot,
+  onCustomSelect,
   onSubmit,
   form,
   loading,
@@ -45,7 +43,7 @@ const FormBooking: React.FC<IFormBookingProps> = ({
     <BaseDialogForm
       fullScreen
       visible={visible}
-      title="Buat Booking Facility"
+      title="Form Pemesanan Fasilitas"
       onClose={onClose}
       action={
         <>
@@ -68,19 +66,32 @@ const FormBooking: React.FC<IFormBookingProps> = ({
       <Grid container direction="row" spacing={2}>
         <Grid item xs={12} md={6}>
           <Box>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Personal Data
-            </Typography>
-            <Divider sx={{ mb: 3 }} />
             <Grid container direction="row" spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <SelectTenant value={form.tenant} onChange={onSelectChange} />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <SelectUnitByContactID
+                  value={form.propertyUnit}
+                  onChange={onSelectChange}
+                  contactId={String(form.tenant?.value)}
+                />
+              </Grid>
               <Grid item xs={12} sm={12}>
-                <SelectFacility value={form.facility} onChange={onSelectFacility} />
+                <SelectFacility
+                  value={form.facility}
+                  onChange={(event: React.SyntheticEvent, value: any) =>
+                    onCustomSelect(event, value, "facility")
+                  }
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <SelectBookingSlot
                   data={form.facility !== null ? form.facility?.value.booking_slots : []}
                   value={form.bookingSlot}
-                  onChange={onSelectBookingSlot}
+                  onChange={(event: React.SyntheticEvent, value: any) =>
+                    onCustomSelect(event, value, "bookingSlot")
+                  }
                   disabled={form.facility === null}
                 />
               </Grid>
@@ -95,6 +106,7 @@ const FormBooking: React.FC<IFormBookingProps> = ({
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  InputProps={{ inputProps: { min: new Date().toISOString().split("T")[0] } }}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>

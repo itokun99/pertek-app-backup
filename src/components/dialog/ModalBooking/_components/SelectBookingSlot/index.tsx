@@ -4,7 +4,7 @@ import { IFacilityBookingSlot } from "@types";
 
 interface ISelectBookingSlot {
   data: IFacilityBookingSlot[];
-  onChange: (event: any, value: any) => void;
+  onChange: (event: any, value: any, name: string) => void;
   value: {
     label: string;
     value: IFacilityBookingSlot;
@@ -25,7 +25,6 @@ const SelectBookingSlot: React.FC<ISelectBookingSlot> = ({
     ? data.map((item) => ({ label: `${item.start} - ${item.end}`, value: item }))
     : [];
 
-  console.info("value", value);
   return (
     <>
       <Autocomplete
@@ -39,6 +38,7 @@ const SelectBookingSlot: React.FC<ISelectBookingSlot> = ({
           <TextField
             {...params}
             label="Booking Slot"
+            name="bookingSlot"
             placeholder="Select Booking Slot"
             disabled={disabled}
             fullWidth

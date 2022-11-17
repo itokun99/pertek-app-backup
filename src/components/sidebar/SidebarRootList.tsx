@@ -62,6 +62,7 @@ const RootListItem = ({ item, open, theme, router, isActive, hasChildren, iconSp
   return (
     <>
       <ListItemButton
+        aria-label={name}
         key={id}
         onClick={handleClick}
         sx={{

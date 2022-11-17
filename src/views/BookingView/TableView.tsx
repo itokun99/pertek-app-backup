@@ -16,6 +16,7 @@ import Add from "@mui/icons-material/Add";
 import Cached from "@mui/icons-material/Cached";
 import FormBooking from "@components/dialog/ModalBooking/FormBooking";
 import { IForm } from "@components/dialog/ModalBooking/FormBooking/FormBooking.interface";
+import { formatRemoveNonDigit } from "@utils/formatCurrency";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -23,7 +24,7 @@ const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
 
 export const BookingTableView = () => {
   const router = useRouter();
-  const { bookings, remove, updateStatus, isLoading, isError, reload } = useBooking();
+  const { bookings, remove, updateStatus, isLoading, isError, reload, insert } = useBooking();
 
   const tabs: TabItem[] = useMemo(
     () =>
@@ -67,16 +68,16 @@ export const BookingTableView = () => {
     []
   );
 
-  const [form, setForm, resetForm, setFormBulk] = useForm<IForm>({
+  const [form, setForm, resetForm] = useForm<IForm>({
     facility: null,
     bookingSlot: null,
-    tenant_id: "",
-    property_unit_id: "",
+    tenant: null,
+    propertyUnit: null,
     assistances: [],
     description: "",
     price: "0",
     penalty: 0,
-    status: "",
+    status: "Requested",
     slot_date: "",
     slot: {
       start: "",
@@ -85,7 +86,8 @@ export const BookingTableView = () => {
   });
   const [tabIndex, setTabIndex] = useState<string | number>("");
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [modalControll, setModalControll] = useForm({
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
+  const [modalControll, setModalControll, resetModalControll] = useForm({
     statusBooking: false,
     addBooking: false,
   });
@@ -93,7 +95,7 @@ export const BookingTableView = () => {
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
-      title: "Buat Booking Baru",
+      title: "Pesan Fasilitas",
       onClick: (): void => setModalControll("addBooking", true),
       color: "info",
       startIcon: <Add />,
@@ -126,20 +128,15 @@ export const BookingTableView = () => {
   };
 
   const handleSelectChange = (name: string, value: any) => {
-    console.info(value);
     setForm(name, value);
-  };
 
-  const onSelectFacility = (_event: any, value: any) => {
-    setForm("facility", value);
-
-    if (form.facility === null) {
-      setForm("bookingSlot", null);
+    if (form.tenant === null) {
+      setForm("propertyUnit", null);
     }
   };
 
-  const onSelectBookingSlot = (_event: any, value: any) => {
-    setForm("bookingSlot", value);
+  const onCustomSelectChange = (_event: any, value: any, name: string) => {
+    setForm(name, value);
   };
 
   const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
@@ -155,6 +152,11 @@ export const BookingTableView = () => {
     });
 
     router.push({ query: { ...queryPamaramaters } }, undefined, { shallow: true });
+  };
+
+  const handleClose = (): void => {
+    resetModalControll();
+    resetForm();
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -175,7 +177,34 @@ export const BookingTableView = () => {
     deleteConfirmationHandler.confirm().then((id) => remove(id));
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    setLoadingForm(true);
+    const payload = {
+      facility_id: String(form.facility?.value.id),
+      contact_id: String(form.tenant?.value),
+      property_unit_id: String(form.propertyUnit),
+      assistances: [],
+      description: form.description,
+      price: formatRemoveNonDigit(form.price),
+      penalty: form.penalty,
+      status: form.status,
+      slot_date: form.slot_date,
+      slot: {
+        start: String(form.bookingSlot?.value.start),
+        end: String(form.bookingSlot?.value.end),
+      },
+    };
+    try {
+      const response = await insert(payload);
+      console.info(response);
+      resetModalControll();
+      resetForm();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoadingForm(false);
+    }
+  };
 
   return (
     <>
@@ -229,14 +258,13 @@ export const BookingTableView = () => {
 
       <Suspense>
         <FormBooking
-          loading={false}
+          loading={loadingForm}
           onInputChange={handleInputChange}
-          onSelectFacility={onSelectFacility}
-          onSelectBookingSlot={onSelectBookingSlot}
+          onCustomSelect={onCustomSelectChange}
           onSelectChange={handleSelectChange}
           onSubmit={handleSubmit}
           visible={modalControll.addBooking}
-          onClose={() => setModalControll("addBooking", false)}
+          onClose={handleClose}
           form={form}
           // formError={formError}
         />

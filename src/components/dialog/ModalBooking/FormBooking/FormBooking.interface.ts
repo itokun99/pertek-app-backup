@@ -1,4 +1,4 @@
-import { IFacility, IFacilityBookingSlot } from "@types";
+import { IFacility, IFacilityBookingSlot, SelectOptionType } from "@types";
 
 export interface IForm {
   facility: {
@@ -9,14 +9,14 @@ export interface IForm {
     label: string;
     value: IFacilityBookingSlot;
   } | null;
-  tenant_id: string;
+  propertyUnit: SelectOptionType | null;
+  tenant: SelectOptionType | null;
   assistances: string[];
   description: string;
   price: string;
   penalty: number;
   status: string;
   slot_date: string;
-  property_unit_id: string;
   slot: {
     start: string;
     end: string;

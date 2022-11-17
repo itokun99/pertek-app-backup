@@ -49,15 +49,11 @@ function BaseSelect({
         disabled={disabled}
         placeholder={placeholder}
       >
-        {options.length > 0 ? (
-          options.map((option) => (
-            <MenuItem key={`select-${id}-menu-item-${option.value}`} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))
-        ) : (
-          <MenuItem>DATA KOSONG</MenuItem>
-        )}
+        {options.map((option) => (
+          <MenuItem key={`select-${id}-menu-item-${option.value}`} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
       </Select>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>

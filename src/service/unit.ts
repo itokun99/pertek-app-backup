@@ -21,6 +21,21 @@ export interface ICreateUnitPayload {
   template_invoice_id?: number[];
 }
 
+export async function getUnitByContactId(id: string): Promise<IUnit[] | undefined> {
+  const { data, error } = await fetchData<ApiResponseType<Array<IUnit>>>(
+    `${ApiProxyEndpoint.UnitByContactId}?id=${id}`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  return data?.items;
+}
+
 export async function getUnit(
   payload: IGetUnitPayload
 ): Promise<ApiResponseType<IUnit[]> | undefined> {

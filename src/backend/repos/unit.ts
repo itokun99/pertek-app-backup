@@ -4,6 +4,19 @@ import { apiRequest } from "../../lib/apiCall";
 import { createRequestParams } from "../../lib/urllib";
 import { ApiResponseType, IUnit, IUnitType } from "@general-types";
 
+export async function getUnitByContactID(
+  req: NextApiRequest
+): Promise<[Response, IUnit & { message: string }]> {
+  const { id } = req.query;
+  const response = await apiRequest({
+    req,
+    url: `${Endpoint.PropertyUnitByContact}/${id}`,
+    method: "GET",
+  });
+  const responseBody: IUnit & { message: string } = await response.json();
+  return [response, responseBody];
+}
+
 export async function getUnit(req: NextApiRequest): Promise<[Response, ApiResponseType<IUnit>]> {
   const params = createRequestParams(req.query);
   const response = await apiRequest({ req, url: `${Endpoint.Unit}?${params}`, method: "GET" });

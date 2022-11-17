@@ -146,8 +146,10 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
   const theme = useTheme();
 
   return (
-    <List>
-      <ListSubheader title={menuGroup.name} open={open} />
+    <div>
+      <List>
+        <ListSubheader title={menuGroup.name} open={open} />
+      </List>
       {menuGroup.menus.map((item, key) => {
         const hasChildren = item.sub_menus && item.sub_menus.length > 0;
 
@@ -165,6 +167,6 @@ export const SidebarRootList = ({ menuGroup }: SidebarRootListProps) => {
 
         return <RootListItem {...params} key={key} />;
       })}
-    </List>
+    </div>
   );
 };

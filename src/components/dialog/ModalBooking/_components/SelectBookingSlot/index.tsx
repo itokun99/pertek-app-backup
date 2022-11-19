@@ -44,6 +44,7 @@ const SelectBookingSlot: React.FC<ISelectBookingSlot> = ({
             fullWidth
             error={error}
             helperText={helperText}
+            InputLabelProps={{ shrink: true }}
             InputProps={{
               ...params.InputProps,
               endAdornment: <>{params.InputProps.endAdornment}</>,

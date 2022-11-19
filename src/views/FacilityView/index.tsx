@@ -1,12 +1,13 @@
 import ActionButton from "@components/buttons/ActionButton";
 import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
 import FormCategory from "@components/dialog/ModalCategory/FormCategory";
+import FormFacility from "@components/dialog/ModalFacility/FormFacility";
 import { TabItem } from "@components/TabBar";
 import Section from "@components/views/Section";
 import { Add } from "@mui/icons-material";
 import { Grid, useTheme } from "@mui/material";
 import { IFacility } from "@types";
-import { ChangeEvent, ReactElement, Suspense, SyntheticEvent, useMemo, useState } from "react";
+import React, { ReactElement, Suspense, useMemo } from "react";
 import { DetailViewFacility } from "./details";
 import { FacilityCard } from "./FacilityCardItem";
 import useFacility from "./hooks/useFacility";
@@ -25,10 +26,12 @@ const FacilityView = (): ReactElement => {
     setModalControll,
     resetModalControll,
 
+    // form facility
+    formFacility,
     // form category
     loadingForm,
     formCategory,
-    handleFormCategoryChange,
+    handleOnInputChange,
     handleAddCategory,
     handleCloseModalCategory,
   } = useFacility();
@@ -50,7 +53,7 @@ const FacilityView = (): ReactElement => {
         title: "Fasilitas",
         color: "info",
         startIcon: <Add />,
-        onClick: () => {},
+        onClick: () => setModalControll("formFacility", true),
       },
       {
         title: "Kategori Fasilitas",
@@ -59,21 +62,7 @@ const FacilityView = (): ReactElement => {
         onClick: () => setModalControll("addCategory", true),
       },
     ];
-  }, []);
-
-  const [searchKeyword, setSearchKeyword] = useState("");
-  const [tabIndex, setTabIndex] = useState(0);
-
-  const theme = useTheme();
-
-  const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>): void => {
-    setSearchKeyword(e.target.value);
-  };
-
-  const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number | string): void => {
-    const index = typeof value === "string" ? parseInt(value) : value;
-    setTabIndex(index);
-  };
+  }, [setModalControll]);
 
   const handleEdit = (id: number, record: IFacility): void => {
     console.log(id);
@@ -112,9 +101,25 @@ const FacilityView = (): ReactElement => {
         )}
       </Suspense>
       <Suspense>
+        <FormFacility
+          loading={loadingForm}
+          onInputChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleOnInputChange(event, "facility")
+          }
+          edit={Boolean(formFacility.id)}
+          onSelectChange={() => {}}
+          onSubmit={() => {}}
+          visible={modalControll.formFacility}
+          onClose={handleCloseModalCategory}
+          form={formFacility}
+        />
+      </Suspense>
+      <Suspense>
         <FormCategory
           loading={loadingForm}
-          onInputChange={handleFormCategoryChange}
+          onInputChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+            handleOnInputChange(event, "category")
+          }
           onSubmit={handleAddCategory}
           visible={modalControll.addCategory}
           onClose={handleCloseModalCategory}

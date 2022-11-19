@@ -1,3 +1,4 @@
+import { IForm } from "@components/dialog/ModalFacility/FormFacility.interface";
 import { swrConfig } from "@config/swrConfig";
 import useForm from "@hooks/useForm";
 import { createFacilityCategory } from "@service/facility-category";
@@ -33,14 +34,20 @@ export interface IUseFacility {
   setModalControll: <T>(field: string, value: T) => void;
   resetModalControll: () => void;
   modalControll: {
+    formFacility: boolean;
     addCategory: boolean;
   };
+  //form facility
+  formFacility: IForm;
   // form category
   formCategory: {
     name: string;
     description: string;
   };
-  handleFormCategoryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOnInputChange: (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "facility" | "category"
+  ) => void;
   handleAddCategory: () => void;
   handleCloseModalCategory: () => void;
   loadingForm: boolean;
@@ -70,6 +77,29 @@ export default function useFacility(): IUseFacility {
   const [currentFacility, setCurrentFacility] = useState<IFacility | null>(null);
   const [loadingForm, setLoadingForm] = useState<boolean>(false);
 
+  const [formFacility, setFormFacility, resetFormFacility] = useForm<IForm>({
+    id: "",
+    name: "",
+    code: "",
+    description: "",
+    category_id: "",
+    facility_type: "Dedicated",
+    max_capacity: 0,
+    slot_duration: 0,
+    min_order_duration: 0,
+    max_order_duration: 0,
+    min_order_gap: 0,
+    max_order_gap: 0,
+    max_cancel_gap: 0,
+    price: 0,
+    status: "Open",
+    pictures: [],
+    slot_start: "",
+    slot_end: "",
+    open_hour: "",
+    close_hour: "",
+  });
+
   // form category
   const [formCategory, setFormCategory, resetFormCategory] = useForm({
     name: "",
@@ -77,6 +107,7 @@ export default function useFacility(): IUseFacility {
   });
   // modal state
   const [modalControll, setModalControll, resetModalControll] = useForm({
+    formFacility: false,
     addCategory: false,
   });
 
@@ -196,9 +227,21 @@ export default function useFacility(): IUseFacility {
     resetFormCategory();
   };
   // handler
-  const handleFormCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleOnInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "facility" | "category"
+  ) => {
     const { name, value } = event.target;
-    setFormCategory(name, value);
+    switch (type) {
+      case "facility":
+        setFormFacility(name, value);
+        break;
+      case "category":
+        setFormCategory(name, value);
+        break;
+      default:
+        break;
+    }
   };
 
   return {
@@ -220,9 +263,11 @@ export default function useFacility(): IUseFacility {
     resetModalControll,
 
     loadingForm,
+    handleOnInputChange,
+    // form facility
+    formFacility,
     // form category
     formCategory,
-    handleFormCategoryChange,
     handleAddCategory,
     handleCloseModalCategory,
   };

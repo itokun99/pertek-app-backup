@@ -1,9 +1,11 @@
+import { SelectOptionType } from "@types";
+
 export type IForm = {
   id: string;
   name: string;
   code: string;
   description: string;
-  category_id: string;
+  category: SelectOptionType | null;
   facility_type: string;
   max_capacity: number;
   slot_duration: number;

@@ -13,6 +13,7 @@ import { IForm } from "./FormFacility.interface";
 import SelectFacilityStatus from "./_components/SelectFacilityStatus";
 import SelectFacilityType from "./_components/SelectFacilityType";
 import { formatCurrency } from "@utils/formatCurrency";
+import SelectFacilityCategory from "./_components/SelectFacilityCategory";
 
 interface IFormFacilityProps {
   edit: boolean;
@@ -88,7 +89,7 @@ const FormFacility: React.FC<IFormFacilityProps> = ({
                 <SelectFacilityType value={form.facility_type} onChange={onSelectChange} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
+                {/* <TextField
                   value={form.code}
                   placeholder="Pilih Kategori Fasilitas"
                   label="Kategori Fasilitas"
@@ -96,7 +97,8 @@ const FormFacility: React.FC<IFormFacilityProps> = ({
                   onChange={onInputChange}
                   fullWidth
                   InputLabelProps={{ shrink: true }}
-                />
+                /> */}
+                <SelectFacilityCategory value={form.category} onChange={onSelectChange} />
               </Grid>
 
               <Grid item xs={12} sm={6}>

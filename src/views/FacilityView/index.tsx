@@ -32,6 +32,7 @@ const FacilityView = (): ReactElement => {
     loadingForm,
     formCategory,
     handleOnInputChange,
+    handleSelectChange,
     handleAddCategory,
     handleCloseModalCategory,
   } = useFacility();
@@ -107,7 +108,7 @@ const FacilityView = (): ReactElement => {
             handleOnInputChange(event, "facility")
           }
           edit={Boolean(formFacility.id)}
-          onSelectChange={() => {}}
+          onSelectChange={handleSelectChange}
           onSubmit={() => {}}
           visible={modalControll.formFacility}
           onClose={handleCloseModalCategory}

@@ -1,6 +1,7 @@
 import { fetchData } from "@lib/dataFetcher";
 import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
-import { IFacilityCategory } from "@general-types";
+import { ApiResponseType, IFacilityCategory } from "@general-types";
+import { createUrlParamFromObj } from "@utils/helper";
 
 export interface IGetFacilityCategory {
   page?: number;
@@ -11,6 +12,25 @@ export interface IGetFacilityCategory {
 export interface ICreateFacilityCategoryPayload {
   name: string;
   description: string;
+}
+
+export async function getFacilityCategory(
+  payload: IGetFacilityCategory
+): Promise<ApiResponseType<IFacilityCategory[]> | undefined> {
+  const params = createUrlParamFromObj(payload);
+
+  const { data, error } = await fetchData<ApiResponseType<Array<IFacilityCategory>>>(
+    `${ApiProxyEndpoint.FacilityCategory}${params}`,
+    {
+      method: "GET",
+    }
+  );
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
 }
 
 export async function getFacilityCategoryById(id: number): Promise<IFacilityCategory | undefined> {

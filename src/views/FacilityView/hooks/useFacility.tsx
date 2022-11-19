@@ -48,6 +48,7 @@ export interface IUseFacility {
     event: React.ChangeEvent<HTMLInputElement>,
     type: "facility" | "category"
   ) => void;
+  handleSelectChange: (name: string, value: any) => void;
   handleAddCategory: () => void;
   handleCloseModalCategory: () => void;
   loadingForm: boolean;
@@ -82,7 +83,10 @@ export default function useFacility(): IUseFacility {
     name: "",
     code: "",
     description: "",
-    category_id: "",
+    category: {
+      label: "",
+      value: "",
+    },
     facility_type: "Dedicated",
     max_capacity: 0,
     slot_duration: 0,
@@ -225,6 +229,7 @@ export default function useFacility(): IUseFacility {
   const handleCloseModalCategory = () => {
     resetModalControll();
     resetFormCategory();
+    resetFormFacility();
   };
   // handler
   const handleOnInputChange = (
@@ -242,6 +247,10 @@ export default function useFacility(): IUseFacility {
       default:
         break;
     }
+  };
+
+  const handleSelectChange = (name: string, value: any) => {
+    setFormFacility(name, value);
   };
 
   return {
@@ -264,6 +273,7 @@ export default function useFacility(): IUseFacility {
 
     loadingForm,
     handleOnInputChange,
+    handleSelectChange,
     // form facility
     formFacility,
     // form category

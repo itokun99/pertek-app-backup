@@ -1,13 +1,20 @@
-import { swrConfig } from '@config/swrConfig';
-import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
-import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
-import { AlertContext } from '../../../provider/AlertProvider';
-import { createFacility, deleteFacility, ICreateFacilityPayload, updateFacility } from '../../../service/facility';
-import { ApiResponseType, IFacility } from '../../../types';
-import { createUrlParamFromObj } from '../../../utils/helper';
+import { swrConfig } from "@config/swrConfig";
+import useForm from "@hooks/useForm";
+import { createFacilityCategory } from "@service/facility-category";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
+import { ApiProxyEndpoint } from "../../../config/apiProxyEndpoint";
+import { fetchData, FetcherResponseError } from "../../../lib/dataFetcher";
+import { AlertContext } from "../../../provider/AlertProvider";
+import {
+  createFacility,
+  deleteFacility,
+  ICreateFacilityPayload,
+  updateFacility,
+} from "../../../service/facility";
+import { ApiResponseType, IFacility } from "../../../types";
+import { createUrlParamFromObj } from "../../../utils/helper";
 
 export interface IUseFacility {
   insert: (payload: ICreateFacilityPayload) => Promise<void>;
@@ -22,6 +29,21 @@ export interface IUseFacility {
   isValidating: boolean;
   isLoading: boolean;
   isError: boolean;
+  // modal
+  setModalControll: <T>(field: string, value: T) => void;
+  resetModalControll: () => void;
+  modalControll: {
+    addCategory: boolean;
+  };
+  // form category
+  formCategory: {
+    name: string;
+    description: string;
+  };
+  handleFormCategoryChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleAddCategory: () => void;
+  handleCloseModalCategory: () => void;
+  loadingForm: boolean;
 }
 
 export default function useFacility(): IUseFacility {
@@ -40,12 +62,23 @@ export default function useFacility(): IUseFacility {
     isValidating,
   } = useSWR(
     `${BASE_URL}${paramString}`,
-    (url) => fetchData<ApiResponseType<IFacility[]>>(url, { method: 'GET' }),
+    (url) => fetchData<ApiResponseType<IFacility[]>>(url, { method: "GET" }),
     swrConfig
   );
 
   const [isReady, setIsReady] = useState<boolean>(false);
   const [currentFacility, setCurrentFacility] = useState<IFacility | null>(null);
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
+
+  // form category
+  const [formCategory, setFormCategory, resetFormCategory] = useForm({
+    name: "",
+    description: "",
+  });
+  // modal state
+  const [modalControll, setModalControll, resetModalControll] = useForm({
+    addCategory: false,
+  });
 
   const facilities = responseData?.data?.items || [];
   const isLoading = !responseData;
@@ -57,7 +90,7 @@ export default function useFacility(): IUseFacility {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil menambahkan Fasilitas`,
           },
         });
@@ -66,8 +99,8 @@ export default function useFacility(): IUseFacility {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err.message || '',
+            severity: "error",
+            content: err.message || "",
           },
         });
       });
@@ -79,7 +112,7 @@ export default function useFacility(): IUseFacility {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil menghapus Fasilitas`,
           },
         });
@@ -88,8 +121,8 @@ export default function useFacility(): IUseFacility {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });
@@ -100,7 +133,7 @@ export default function useFacility(): IUseFacility {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil mengedit Fasilitas`,
           },
         });
@@ -109,8 +142,8 @@ export default function useFacility(): IUseFacility {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
       });
@@ -126,6 +159,48 @@ export default function useFacility(): IUseFacility {
     }
   }, [responseData, isReady]);
 
+  // hook category blok
+  const handleAddCategory = () => {
+    const payload = {
+      name: formCategory.name,
+      description: formCategory.description,
+    };
+    setLoadingForm(true);
+    createFacilityCategory(payload)
+      .then(() => {
+        setAlert({
+          message: {
+            severity: "success",
+            content: `Berhasil menambahkan Fasilitas`,
+          },
+        });
+        setLoadingForm(false);
+        resetFormCategory();
+        resetModalControll();
+      })
+      .catch((err: FetcherResponseError) => {
+        setAlert({
+          message: {
+            severity: "error",
+            content: err.message || "",
+          },
+        });
+      })
+      .finally(() => {
+        setLoadingForm(false);
+      });
+  };
+
+  const handleCloseModalCategory = () => {
+    resetModalControll();
+    resetFormCategory();
+  };
+  // handler
+  const handleFormCategoryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormCategory(name, value);
+  };
+
   return {
     meta,
     insert,
@@ -139,5 +214,16 @@ export default function useFacility(): IUseFacility {
     isReady,
     isValidating,
     isError,
+    // modal
+    modalControll,
+    setModalControll,
+    resetModalControll,
+
+    loadingForm,
+    // form category
+    formCategory,
+    handleFormCategoryChange,
+    handleAddCategory,
+    handleCloseModalCategory,
   };
 }

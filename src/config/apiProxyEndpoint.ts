@@ -3,6 +3,7 @@ export enum ApiProxyEndpoint {
   Facility = "/api/facility",
   FacilityAssistant = "/api/facility-assistant",
   FacilityAssistantSchedule = "/api/facility-assistant-schedule",
+  FacilityCategory = "api/facility-category",
   Booking = "/api/booking",
   Property = "/api/property",
   Unit = "/api/unit",

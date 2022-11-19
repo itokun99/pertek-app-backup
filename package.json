@@ -14,7 +14,6 @@
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.90",
     "@mui/material": "^5.9.0",
-    "@mui/x-data-grid": "^5.15.1",
     "@next-auth/prisma-adapter": "^1.0.4",
     "@next/bundle-analyzer": "^12.3.1",
     "crypto": "^1.0.1",

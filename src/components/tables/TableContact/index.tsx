@@ -1,9 +1,8 @@
-// import { DataGrid } from "@mui/x-data-grid";
-import { PropsWithChildren, memo } from "react";
-import { generateColumns } from "./index.enum";
-import { TableLoader } from "../../loader/TableLoader";
-import { IContact } from "@general-types";
-import BaseTable from "../BaseTable";
+import { PropsWithChildren, memo } from 'react';
+import { generateColumns } from './index.enum';
+import { TableLoader } from '../../loader/TableLoader';
+import { IContact } from '@general-types';
+import BaseTable from '../BaseTable';
 
 export interface ITableContactProps {
   data: Array<IContact>;

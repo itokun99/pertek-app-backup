@@ -1,4 +1,3 @@
-// import { DataGrid } from "@mui/x-data-grid";
 import { memo, PropsWithChildren } from 'react';
 import { IUnit } from '../../../types';
 import { TableLoader } from '../../loader/TableLoader';

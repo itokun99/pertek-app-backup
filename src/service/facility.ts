@@ -5,8 +5,24 @@ import { fetchData } from "../lib/dataFetcher";
 
 export interface ICreateFacilityPayload {
   name: string;
+  code: string;
   description: string;
-  category_id: number;
+  category_id: string;
+  facility_type: string;
+  max_capacity: number;
+  slot_duration: number;
+  min_order_duration: number;
+  max_order_duration: number;
+  min_order_gap: number;
+  max_order_gap: number;
+  max_cancel_gap: number;
+  price: number;
+  status: string;
+  pictures: string[];
+  slot_start: string;
+  slot_end: string;
+  open_hour: string;
+  close_hour: string;
 }
 
 export interface IGetFacilitiesPayload {

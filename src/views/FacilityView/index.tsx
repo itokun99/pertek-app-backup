@@ -28,6 +28,7 @@ const FacilityView = (): ReactElement => {
 
     // form facility
     formFacility,
+    insert,
     // form category
     loadingForm,
     formCategory,
@@ -109,7 +110,7 @@ const FacilityView = (): ReactElement => {
           }
           edit={Boolean(formFacility.id)}
           onSelectChange={handleSelectChange}
-          onSubmit={() => {}}
+          onSubmit={insert}
           visible={modalControll.formFacility}
           onClose={handleCloseModalCategory}
           form={formFacility}

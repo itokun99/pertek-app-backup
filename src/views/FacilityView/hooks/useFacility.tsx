@@ -2,6 +2,7 @@ import { IForm } from "@components/dialog/ModalFacility/FormFacility.interface";
 import { swrConfig } from "@config/swrConfig";
 import useForm from "@hooks/useForm";
 import { createFacilityCategory } from "@service/facility-category";
+import { formatRemoveNonDigit } from "@utils/formatCurrency";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import useSWR from "swr";
@@ -18,7 +19,7 @@ import { ApiResponseType, IFacility } from "../../../types";
 import { createUrlParamFromObj } from "../../../utils/helper";
 
 export interface IUseFacility {
-  insert: (payload: ICreateFacilityPayload) => Promise<void>;
+  insert: () => Promise<void>;
   remove: (id: number) => Promise<void>;
   update: (id: number, payload: ICreateFacilityPayload) => Promise<void>;
   reload: () => void;
@@ -120,7 +121,35 @@ export default function useFacility(): IUseFacility {
   const isError = responseError || responseData?.error;
   const meta = responseData?.data;
 
-  const insert = async (payload: ICreateFacilityPayload) => {
+  const handleCloseModalCategory = () => {
+    resetModalControll();
+    resetFormCategory();
+    resetFormFacility();
+  };
+
+  const insert = async () => {
+    const payload: ICreateFacilityPayload = {
+      name: formFacility.name,
+      code: formFacility.code,
+      description: formFacility.description,
+      category_id: String(formFacility.category?.value),
+      facility_type: formFacility.facility_type,
+      max_capacity: formFacility.max_capacity,
+      slot_duration: formFacility.slot_duration,
+      min_order_duration: formFacility.min_order_duration,
+      max_order_duration: formFacility.max_order_duration,
+      min_order_gap: formFacility.min_order_gap,
+      max_order_gap: formFacility.max_order_gap,
+      max_cancel_gap: formFacility.max_cancel_gap,
+      price: Number(formatRemoveNonDigit(String(formFacility.price))),
+      status: formFacility.status,
+      pictures: formFacility.pictures,
+      slot_start: formFacility.slot_start,
+      slot_end: formFacility.slot_end,
+      open_hour: formFacility.open_hour,
+      close_hour: formFacility.close_hour,
+    };
+    setLoadingForm(true);
     createFacility(payload)
       .then(() => {
         setAlert({
@@ -130,6 +159,7 @@ export default function useFacility(): IUseFacility {
           },
         });
         mutate();
+        handleCloseModalCategory();
       })
       .catch((err: FetcherResponseError) => {
         setAlert({
@@ -138,6 +168,9 @@ export default function useFacility(): IUseFacility {
             content: err.message || "",
           },
         });
+      })
+      .finally(() => {
+        setLoadingForm(false);
       });
   };
 
@@ -226,11 +259,6 @@ export default function useFacility(): IUseFacility {
       });
   };
 
-  const handleCloseModalCategory = () => {
-    resetModalControll();
-    resetFormCategory();
-    resetFormFacility();
-  };
   // handler
   const handleOnInputChange = (
     event: React.ChangeEvent<HTMLInputElement>,

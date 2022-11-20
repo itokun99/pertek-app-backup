@@ -4,7 +4,7 @@ import FormCategory from "@components/dialog/ModalCategory/FormCategory";
 import FormFacility from "@components/dialog/ModalFacility/FormFacility";
 import { TabItem } from "@components/TabBar";
 import Section from "@components/views/Section";
-import { Add } from "@mui/icons-material";
+import { Add, Cached } from "@mui/icons-material";
 import { Grid, useTheme } from "@mui/material";
 import { IFacility } from "@types";
 import React, { ReactElement, Suspense, useMemo } from "react";
@@ -63,6 +63,12 @@ const FacilityView = (): ReactElement => {
         startIcon: <Add />,
         onClick: () => setModalControll("addCategory", true),
       },
+      {
+        title: "Muat Ulang",
+        onClick: (): void => reload(),
+        color: "inherit",
+        startIcon: <Cached />,
+      },
     ];
   }, [setModalControll]);
 
@@ -90,7 +96,7 @@ const FacilityView = (): ReactElement => {
         >
           <Grid container spacing={3}>
             {facilities.map((f) => (
-              <Grid key={f.id} item xs={12} sm={6} md={4} lg={2.4}>
+              <Grid key={f.id} item xs={12} sm={6} md={6} lg={3}>
                 <FacilityCard key={f.id} facility={f} onClick={handleOpenDetail} />
               </Grid>
             ))}

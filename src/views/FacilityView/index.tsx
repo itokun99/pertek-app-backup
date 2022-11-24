@@ -1,9 +1,11 @@
 import ActionButton from "@components/buttons/ActionButton";
 import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
+import Confirmation from "@components/dialog/Confirmation";
 import FormCategory from "@components/dialog/ModalCategory/FormCategory";
 import FormFacility from "@components/dialog/ModalFacility/FormFacility";
 import { TabItem } from "@components/TabBar";
 import Section from "@components/views/Section";
+import useConfirmation from "@hooks/useConfirmation";
 import { Add, Cached } from "@mui/icons-material";
 import { Grid, useTheme } from "@mui/material";
 import { IFacility } from "@types";
@@ -29,6 +31,9 @@ const FacilityView = (): ReactElement => {
     // form facility
     formFacility,
     insert,
+    update,
+    remove,
+    inquiry,
     // form category
     loadingForm,
     formCategory,
@@ -70,20 +75,41 @@ const FacilityView = (): ReactElement => {
         startIcon: <Cached />,
       },
     ];
-  }, [setModalControll]);
+  }, [setModalControll, reload]);
 
-  const handleEdit = (id: number, record: IFacility): void => {
-    console.log(id);
-  };
+  const {
+    content: deleteConfirmation,
+    handler: deleteConfirmationHandler,
+    visibility: deleteConfirmationVisibility,
+  } = useConfirmation<number>(
+    {
+      title: "Konfirmasi Hapus",
+      description: "Apakah kamu yakin ingin menghapus item ini?",
+      cancelText: "Kembali",
+      confirmText: "Ya",
+    },
+    0
+  );
 
-  const handleOpenDetail = (facility: IFacility) => {
+  const handleOpenDetail = (facility: IFacility | null) => {
     setCurrentFacility(facility);
   };
 
-  const handleDelete = (id: number) => {};
+  const handleDelete = (id: number) => {
+    deleteConfirmationHandler.open();
+    deleteConfirmationHandler.setState(id);
+  };
+
+  const handleEdit = (id: number) => {
+    inquiry(id);
+  };
 
   const handleCloseDetail = () => {
     setCurrentFacility(null);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteConfirmationHandler.confirm().then((id) => remove(id));
   };
 
   return (
@@ -97,7 +123,13 @@ const FacilityView = (): ReactElement => {
           <Grid container spacing={3}>
             {facilities.map((f) => (
               <Grid key={f.id} item xs={12} sm={6} md={6} lg={3}>
-                <FacilityCard key={f.id} facility={f} onClick={handleOpenDetail} />
+                <FacilityCard
+                  key={f.id}
+                  facility={f}
+                  onClickEdit={handleEdit}
+                  onClickDelete={handleDelete}
+                  onClickDetail={handleOpenDetail}
+                />
               </Grid>
             ))}
           </Grid>
@@ -116,7 +148,7 @@ const FacilityView = (): ReactElement => {
           }
           edit={Boolean(formFacility.id)}
           onSelectChange={handleSelectChange}
-          onSubmit={insert}
+          onSubmit={formFacility.id ? update : insert}
           visible={modalControll.formFacility}
           onClose={handleCloseModalCategory}
           form={formFacility}
@@ -132,6 +164,18 @@ const FacilityView = (): ReactElement => {
           visible={modalControll.addCategory}
           onClose={handleCloseModalCategory}
           form={formCategory}
+        />
+      </Suspense>
+      <Suspense>
+        <Confirmation
+          open={deleteConfirmationVisibility}
+          title={deleteConfirmation.title}
+          description={deleteConfirmation.description}
+          cancelText={deleteConfirmation.cancelText}
+          confirmText={deleteConfirmation.confirmText}
+          onClose={deleteConfirmationHandler.close}
+          onCancel={deleteConfirmationHandler.cancel}
+          onConfirm={handleConfirmDelete}
         />
       </Suspense>
     </>

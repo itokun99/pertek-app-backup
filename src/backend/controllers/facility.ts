@@ -1,21 +1,27 @@
-import { createController } from './base';
+import { createController } from "./base";
 
-import { createFacility, deleteFacility, getFacility, updateFacility } from '../repos/facility';
-import { NextApiRequest, NextApiResponse } from 'next';
-import { isInvalidSession, unauthorized } from '../../lib/apiAuthHelpers';
+import {
+  createFacility,
+  deleteFacility,
+  getFacility,
+  updateFacility,
+  getFacilityById,
+} from "../repos/facility";
+import { NextApiRequest, NextApiResponse } from "next";
+import { isInvalidSession, unauthorized } from "../../lib/apiAuthHelpers";
 
 async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
   if (isInvalidSession(req)) {
     return unauthorized(res);
   }
 
-  const [response, payload] = await getFacility(req);
+  const [response, payload] = req.query?.id ? await getFacilityById(req) : await getFacility(req);
 
   if (!response.ok) {
-    return res.status(response.status).json({ message: payload.message });
+    return res.status(response.status).json({ message: payload?.message });
   }
 
-  return res.status(response.status).json(payload);
+  return res.status(200).json(payload);
 }
 
 async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
@@ -29,7 +35,7 @@ async function handlerPost(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  return res.status(response.status).json({ message: 'Success', data: payload });
+  return res.status(response.status).json({ message: "Success", data: payload });
 }
 
 async function handlerPut(req: NextApiRequest, res: NextApiResponse) {
@@ -43,7 +49,7 @@ async function handlerPut(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  return res.status(response.status).json({ message: 'Success', data: payload });
+  return res.status(response.status).json({ message: "Success", data: payload });
 }
 
 async function handlerDelete(req: NextApiRequest, res: NextApiResponse) {
@@ -57,7 +63,7 @@ async function handlerDelete(req: NextApiRequest, res: NextApiResponse) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  return res.status(response.status).json({ message: 'Success', data: payload });
+  return res.status(response.status).json({ message: "Success", data: payload });
 }
 
 const facilityController = createController({

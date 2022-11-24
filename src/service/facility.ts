@@ -62,6 +62,18 @@ export async function getFacilities() {
   return data;
 }
 
+export async function getFacilityById(id: number): Promise<IFacility | undefined> {
+  const { data, error } = await fetchData<IFacility>(`${ApiProxyEndpoint.Facility}?id=${id}`, {
+    method: "GET",
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
 // create facility function
 export async function createFacility(payload: ICreateFacilityPayload) {
   const { data, error } = await fetchData<{ message: string }>(ApiProxyEndpoint.Facility, {
@@ -77,7 +89,7 @@ export async function createFacility(payload: ICreateFacilityPayload) {
 }
 
 // create function to update facility
-export async function updateFacility(id: number, payload: ICreateFacilityPayload) {
+export async function updateFacility(id: string, payload: ICreateFacilityPayload) {
   const { data, error } = await fetchData<{ message: string }>(
     `${ApiProxyEndpoint.Facility}?id=${id}`,
     {

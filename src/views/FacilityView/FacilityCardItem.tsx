@@ -8,17 +8,20 @@ import OpenInFullSharpIcon from "@mui/icons-material/OpenInFullSharp";
 import ActionCellButton from "@components/buttons/ActionCellButton/ActionCellButton";
 export interface FacilityCardProps {
   facility: IFacility;
-  onClick: (facility: IFacility) => void;
+  onClickEdit: (id: number, record: IFacility | null) => void;
+  onClickDelete: (id: number) => void;
+  onClickDetail: (record: IFacility | null) => void;
 }
 
-export const FacilityCard = ({ facility, onClick }: FacilityCardProps) => {
+export const FacilityCard = ({
+  facility,
+  onClickEdit,
+  onClickDelete,
+  onClickDetail,
+}: FacilityCardProps) => {
   const theme = useTheme();
 
-  const optionActionCell = (
-    record: IFacility | null,
-    onClickEdit: (id: number, record: IFacility | null) => void,
-    onClickDelete: (id: number) => void
-  ) => {
+  const optionActionCell = (record: IFacility | null) => {
     // you can abstract your record interface here
     const { id } = (record as { id: number }) || {};
     const options: IActionCellButtonProperties["options"] = [
@@ -26,7 +29,7 @@ export const FacilityCard = ({ facility, onClick }: FacilityCardProps) => {
         label: "Detail",
         icon: <OpenInFullSharpIcon />,
         color: "inherit",
-        onClick: () => onClick(facility),
+        onClick: () => onClickDetail(facility),
       },
       {
         label: "Edit",
@@ -66,14 +69,7 @@ export const FacilityCard = ({ facility, onClick }: FacilityCardProps) => {
               <Typography variant="body2">{facility.category.name}</Typography>
             </Grid>
             <Grid item xs={1}>
-              <ActionCellButton
-                options={optionActionCell(
-                  null,
-                  () => {},
-                  () => {}
-                )}
-              />
-              ;
+              <ActionCellButton options={optionActionCell(facility)} />;
             </Grid>
           </Grid>
         </Box>

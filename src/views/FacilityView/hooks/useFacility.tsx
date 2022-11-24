@@ -14,6 +14,7 @@ import {
   deleteFacility,
   ICreateFacilityPayload,
   updateFacility,
+  getFacilityById,
 } from "../../../service/facility";
 import { ApiResponseType, IFacility } from "../../../types";
 import { createUrlParamFromObj } from "../../../utils/helper";
@@ -21,7 +22,8 @@ import { createUrlParamFromObj } from "../../../utils/helper";
 export interface IUseFacility {
   insert: () => Promise<void>;
   remove: (id: number) => Promise<void>;
-  update: (id: number, payload: ICreateFacilityPayload) => Promise<void>;
+  update: () => Promise<void>;
+  inquiry: (id: number) => Promise<IFacility | null | undefined>;
   reload: () => void;
   setCurrentFacility: (facility: IFacility | null) => void;
   currentFacility: IFacility | null;
@@ -79,7 +81,7 @@ export default function useFacility(): IUseFacility {
   const [currentFacility, setCurrentFacility] = useState<IFacility | null>(null);
   const [loadingForm, setLoadingForm] = useState<boolean>(false);
 
-  const [formFacility, setFormFacility, resetFormFacility] = useForm<IForm>({
+  const [formFacility, setFormFacility, resetFormFacility, setBulkFormFacility] = useForm<IForm>({
     id: "",
     name: "",
     code: "",
@@ -196,8 +198,30 @@ export default function useFacility(): IUseFacility {
       });
   };
 
-  const update = async (id: number, payload: ICreateFacilityPayload) => {
-    updateFacility(id, payload)
+  const update = async () => {
+    setLoadingForm(true);
+    const payload: ICreateFacilityPayload = {
+      name: formFacility.name,
+      code: formFacility.code,
+      description: formFacility.description,
+      category_id: String(formFacility.category?.value),
+      facility_type: formFacility.facility_type,
+      max_capacity: formFacility.max_capacity,
+      slot_duration: formFacility.slot_duration,
+      min_order_duration: formFacility.min_order_duration,
+      max_order_duration: formFacility.max_order_duration,
+      min_order_gap: formFacility.min_order_gap,
+      max_order_gap: formFacility.max_order_gap,
+      max_cancel_gap: formFacility.max_cancel_gap,
+      price: Number(formatRemoveNonDigit(String(formFacility.price))),
+      status: formFacility.status,
+      pictures: formFacility.pictures,
+      slot_start: formFacility.slot_start,
+      slot_end: formFacility.slot_end,
+      open_hour: formFacility.open_hour,
+      close_hour: formFacility.close_hour,
+    };
+    updateFacility(formFacility.id, payload)
       .then(() => {
         setAlert({
           message: {
@@ -206,6 +230,7 @@ export default function useFacility(): IUseFacility {
           },
         });
         mutate();
+        handleCloseModalCategory();
       })
       .catch((err: FetcherResponseError) => {
         setAlert({
@@ -214,7 +239,54 @@ export default function useFacility(): IUseFacility {
             content: err?.message || "",
           },
         });
+      })
+      .finally(() => {
+        setLoadingForm(false);
       });
+  };
+
+  const inquiry = async (id: number): Promise<IFacility | null | undefined> => {
+    try {
+      setModalControll("formFacility", true);
+      const data = await getFacilityById(id);
+      if (data) {
+        setBulkFormFacility({
+          id: data.id,
+          name: data.name,
+          code: data.code,
+          description: data.description,
+          category: {
+            label: data.category.name,
+            value: String(data.category.id),
+          },
+          facility_type: "Dedicated",
+          max_capacity: data.max_capacity,
+          slot_duration: data.slot_duration,
+          min_order_duration: data.min_order_duration,
+          max_order_duration: data.max_order_duration,
+          min_order_gap: data.min_order_gap,
+          max_order_gap: data.max_order_gap,
+          max_cancel_gap: data.max_cancel_gap,
+          price: data.price,
+          status: data.status,
+          pictures: data.pictures,
+          slot_start: data.slot_start,
+          slot_end: data.slot_end,
+          open_hour: data.open_hour,
+          close_hour: data.close_hour,
+        });
+      }
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: "error",
+          content: error?.message || "Terjadi kesalahan",
+        },
+      });
+      setModalControll("formFacility", false);
+      return null;
+    }
   };
 
   const reload = (): void => {
@@ -286,6 +358,7 @@ export default function useFacility(): IUseFacility {
     insert,
     remove,
     update,
+    inquiry,
     setCurrentFacility,
     currentFacility,
     facilities,

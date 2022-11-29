@@ -74,7 +74,7 @@ export const DetailViewFacility = ({ facility, onClose }: DetailViewFacilityProp
                       </Typography>
                       <Typography variant="body1">{facility?.status}</Typography>
                       <Typography variant="body1">
-                        {fGetTime(facility?.open_hour!)} - {fGetTime(facility?.close_hour!)}
+                        {/* {fGetTime(facility?.open_hour!)} - {fGetTime(facility?.close_hour!)} */}
                       </Typography>
                       <Typography variant="body1">
                         {minOrderDuration} - {maxOrderDuration}

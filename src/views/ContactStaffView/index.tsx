@@ -17,6 +17,7 @@ import { IContactStaffEntities } from "@types";
 import Cached from "@mui/icons-material/Cached";
 import { ICreateContactStaffPayload } from "@service/contact-staff";
 import { formatCurrency, formatRemoveNonDigit } from "@utils/formatCurrency";
+import Button from "@mui/material/Button/Button";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -407,6 +408,8 @@ const StaffView = (): ReactElement => {
     deleteConfirmationHandler.confirm().then((id) => remove(id));
   };
 
+  const renderFilter = () => <Button>Filter</Button>;
+
   return (
     <>
       <Suspense>
@@ -422,6 +425,7 @@ const StaffView = (): ReactElement => {
             onChangeSearch={handleChangeSearch}
             searchField
             onReload={reload}
+            rightContent={renderFilter()}
             error={Boolean(isError)}
           >
             <TableData

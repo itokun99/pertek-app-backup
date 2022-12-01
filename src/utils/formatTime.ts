@@ -1,18 +1,21 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
-import { id } from 'date-fns/locale';
+import { format, getTime, formatDistanceToNow } from "date-fns";
+import { id } from "date-fns/locale";
 
 // ----------------------------------------------------------------------
 
 export function fDate(date: string) {
-  return format(new Date(date), 'dd MMMM yyyy');
+  return format(new Date(date), "dd MMMM yyyy");
 }
 
 export function fGetTime(date: string | number) {
-  return format(new Date(date), 'hh:mm a');
+  if (date === null || date === "" || date === undefined) {
+    return;
+  }
+  return format(new Date(date), "hh:mm a");
 }
 
 export function fDateTime(date: string) {
-  return format(new Date(date), 'dd MMM yyyy p');
+  return format(new Date(date), "dd MMM yyyy p");
 }
 
 export function fTimestamp(date: string) {
@@ -20,7 +23,7 @@ export function fTimestamp(date: string) {
 }
 
 export function fDateTimeSuffix(date: string) {
-  return format(new Date(date), 'dd/MM/yyyy hh:mm p');
+  return format(new Date(date), "dd/MM/yyyy hh:mm p");
 }
 
 export function fToNow(date: string) {

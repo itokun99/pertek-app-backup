@@ -1,34 +1,41 @@
-import { ITenant } from '@general-types';
-import { Block, ScheduleOutlined, Verified } from '@mui/icons-material';
-import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import ModeEditOutlineOutlinedIcon from '@mui/icons-material/ModeEditOutlineOutlined';
-import { Theme } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
-import { createTextAvatar } from '@utils/createAvatar';
-import ActionCellButton, { IActionCellButtonProperties } from '../../buttons/ActionCellButton';
-import Label from '../../Label';
-import { ColumnType } from '../BaseTable/BaseTable.interface';
+import { ITenant } from "@general-types";
+import { Block, ScheduleOutlined, Verified } from "@mui/icons-material";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import { Theme } from "@mui/material";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Link from "@mui/material/Link";
+import Typography from "@mui/material/Typography";
+import { createTextAvatar } from "@utils/createAvatar";
+import ActionCellButton, { IActionCellButtonProperties } from "../../buttons/ActionCellButton";
+import Label from "../../Label";
+import { ColumnType } from "../BaseTable/BaseTable.interface";
+import OpenInFullSharpIcon from "@mui/icons-material/OpenInFullSharp";
 
 const optionActionCell = (
   record: ITenant,
   onClickEdit: (id: number, record: ITenant) => void,
-  onClickDelete: (id: number) => void
+  onClickDelete: (id: number) => void,
+  onClickDetail: (id: number, record: ITenant) => void
 ) => {
   // you can abstract your record interface here
   const { id } = record || {};
-  const options: IActionCellButtonProperties['options'] = [
+  const options: IActionCellButtonProperties["options"] = [
     {
-      label: 'Edit',
+      label: "Detail",
+      icon: <OpenInFullSharpIcon />,
+      onClick: () => onClickDetail(id, record),
+    },
+    {
+      label: "Edit",
       icon: <ModeEditOutlineOutlinedIcon />,
       onClick: () => onClickEdit(id, record),
     },
     {
-      label: 'Delete',
+      label: "Delete",
       icon: <DeleteOutlineOutlinedIcon />,
-      color: 'error',
+      color: "error",
       onClick: () => onClickDelete(id),
     },
   ];
@@ -37,40 +44,40 @@ const optionActionCell = (
 };
 
 function createStatus(status: string) {
-  if (status === 'Pending') {
-    return <ScheduleOutlined color='warning' />;
+  if (status === "Pending") {
+    return <ScheduleOutlined color="warning" />;
   }
 
-  if (status === 'Verified') {
-    return <Verified color='success' />;
+  if (status === "Verified") {
+    return <Verified color="success" />;
   }
 
-  if (status === 'Rejected') {
-    return <Block color='error' />;
+  if (status === "Rejected") {
+    return <Block color="error" />;
   }
 }
 
 function createLabel(status: string) {
-  let color = 'default';
+  let color = "default";
   switch (status) {
-    case 'Verified':
-    case 'Owner':
-      color = 'success';
+    case "Verified":
+    case "Owner":
+      color = "success";
       break;
-    case 'Pending':
-    case 'Agent':
-      color = 'warning';
+    case "Pending":
+    case "Agent":
+      color = "warning";
       break;
-    case 'Blocked':
-      color = 'error';
+    case "Blocked":
+      color = "error";
       break;
-    case 'Tenant':
-      color = 'info';
+    case "Tenant":
+      color = "info";
       break;
   }
 
   return (
-    <Label variant='outlined' color={color}>
+    <Label variant="outlined" color={color}>
       {status}
     </Label>
   );
@@ -79,25 +86,26 @@ function createLabel(status: string) {
 export function generateColumns(
   onClickEdit: (id: number, record: ITenant) => void,
   onClickDelete: (id: number) => void,
+  onClickDetail: (id: number, record: ITenant) => void,
   theme: Theme
 ): ColumnType[] {
   return [
     {
-      title: 'Nama Tenant',
-      selector: 'first_name',
+      title: "Nama Tenant",
+      selector: "first_name",
       render: (text, record: ITenant) => {
         const avatar = createTextAvatar(text);
 
         return (
           <>
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               <Avatar sx={{ backgroundColor: avatar.color }}>{avatar.name}</Avatar>
               <Box sx={{ ml: 1 }}>
                 <Link href={`#`} color={theme.palette.text.primary}>
-                  <Typography variant='subtitle1'>{`${record.first_name} ${record.last_name}`}</Typography>
+                  <Typography variant="subtitle1">{`${record.first_name} ${record.last_name}`}</Typography>
                 </Link>
                 <Link href={`/unit/${record.unit_id}`} color={theme.palette.grey[600]}>
-                  <Typography variant='subtitle2'>{record.unit.name}</Typography>
+                  <Typography variant="subtitle2">{record.unit.name}</Typography>
                 </Link>
               </Box>
             </Box>
@@ -106,10 +114,14 @@ export function generateColumns(
       },
     },
     {
-      title: 'No. Telp',
-      selector: 'phone_number',
+      title: "No. Telp",
+      selector: "phone_number",
       render: (_text, record: ITenant) => {
-        return <Typography variant='body2'>+{record?.phones.length > 0 ? record?.phones[0].number : '-'}</Typography>;
+        return (
+          <Typography variant="body2">
+            +{record?.phones.length > 0 ? record?.phones[0].number : "-"}
+          </Typography>
+        );
       },
     },
     // {
@@ -145,11 +157,15 @@ export function generateColumns(
     //   },
     // },
     {
-      title: '',
-      selector: 'action',
-      align: 'right',
+      title: "",
+      selector: "action",
+      align: "right",
       render: (_text, record: ITenant) => {
-        return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete)} />;
+        return (
+          <ActionCellButton
+            options={optionActionCell(record, onClickEdit, onClickDelete, onClickDetail)}
+          />
+        );
       },
     },
   ] as ColumnType[];

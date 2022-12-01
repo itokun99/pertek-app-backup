@@ -84,5 +84,5 @@ export const Endpoint = {
   Vendor: `${API_BASE_URL}:${EndpointGroup.Vendor}/vendor`,
 
   // Company
-  CompanyDepartment: `${API_BASE_URL}:${EndpointGroup.Company}/company_department`,
+  CompanyDepartment: `${API_BASE_URL}:${EndpointGroup.Company}/division`,
 };

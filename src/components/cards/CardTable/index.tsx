@@ -1,6 +1,7 @@
 import { memo, MouseEventHandler, SyntheticEvent } from "react";
 import Card from "@mui/material/Card";
 import Box from "@mui/material/Box";
+import React from "react";
 
 import ErrorStack from "../../error/ErrorStack";
 import { TabBar, TabItem } from "../../TabBar";
@@ -21,6 +22,7 @@ export interface CardTableProps {
   searchValue: string;
   searchPlaceholder?: string;
   onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  rightContent?: React.ReactNode;
 }
 
 const CardTable = ({
@@ -37,6 +39,7 @@ const CardTable = ({
   searchValue,
   onChangeSearch,
   searchPlaceholder,
+  rightContent,
 }: CardTableProps): React.ReactElement => {
   const theme = useTheme();
 
@@ -54,7 +57,10 @@ const CardTable = ({
 
     return (
       <Box mx={2}>
-        {searchField && <SearchField width={400} placeholder={searchPlaceholder} />}
+        <Box style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          {searchField && <SearchField width={400} placeholder={searchPlaceholder} />}
+          <div style={{ display: "flex", justifyContent: "flex-end" }}>{rightContent}</div>
+        </Box>
         <Box mb={2}>{children}</Box>
       </Box>
     );

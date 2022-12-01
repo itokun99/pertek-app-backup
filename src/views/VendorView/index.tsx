@@ -1,4 +1,4 @@
-import { useState, ReactElement, useContext, Suspense } from "react";
+import { useState, ReactElement, useContext, Suspense, useMemo } from "react";
 import dynamic from "next/dynamic";
 import useConfirmation from "@hooks/useConfirmation";
 import useForm from "@hooks/useForm";
@@ -17,6 +17,8 @@ import { ICreateVendorPayload } from "@service/vendor";
 import { IVendorEntities } from "@types";
 import Cached from "@mui/icons-material/Cached";
 import FormUploadImage from "@components/dialog/FormUploadImage";
+import { TabItem } from "@components/TabBar";
+import { useRouter } from "next/router";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -65,6 +67,7 @@ const initialFormError: IFormError = {
 };
 
 const VendorView = (): ReactElement => {
+  const router = useRouter();
   // contexts
   const { setAlert } = useContext(AlertContext);
 
@@ -72,6 +75,7 @@ const VendorView = (): ReactElement => {
   const [search, setSearch] = useState<string>("");
   const [visibility, setVisibility] = useState(false);
   const [visibilityUploadImage, setVisibilityUploadImage] = useState(false);
+  const [tabIndex, setTabIndex] = useState<string | number>("");
 
   // file
   const [assetsFile, changeAssetsFile] = useState<File | null>(null);
@@ -367,6 +371,8 @@ const VendorView = (): ReactElement => {
   };
 
   const handleUploadImage = () => {
+    // console.log("assetsFile ===>", assetsFile);
+
     const body = new FormData();
     body.append("file", assetsFile as File);
     fetch("https://esri.propertek.id/profile", {
@@ -417,6 +423,43 @@ const VendorView = (): ReactElement => {
     setForm("profilePicture", "");
   };
 
+  const handleTabChange = (_e: React.SyntheticEvent<Element, Event>, value: number | string) => {
+    setTabIndex(value);
+    const { query } = router;
+    const queryPamaramaters = { ...query };
+    queryPamaramaters.type = (value as string) || "";
+
+    Object.entries(queryPamaramaters).forEach(([queryKey]) => {
+      if (!["type"].includes(queryKey)) {
+        delete queryPamaramaters[queryKey];
+      }
+    });
+
+    router.push({ query: { ...queryPamaramaters } }, undefined, { shallow: true });
+  };
+
+  const tabs: TabItem[] = useMemo(
+    () =>
+      [
+        {
+          text: "All",
+          color: "default",
+          value: "",
+        },
+        {
+          text: "Corporate",
+          color: "info",
+          value: "Corporate",
+        },
+        {
+          text: "Personal",
+          color: "success",
+          value: "Personal",
+        },
+      ] as TabItem[],
+    []
+  );
+
   return (
     <>
       <Suspense>
@@ -433,6 +476,10 @@ const VendorView = (): ReactElement => {
             searchField
             onReload={reload}
             error={Boolean(isError)}
+            onChangeTab={handleTabChange}
+            withTabs
+            tabs={tabs}
+            tabIndex={tabIndex}
           >
             <TableData
               ready={isReady}

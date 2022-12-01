@@ -1,9 +1,8 @@
-import { memo } from 'react';
+import { memo } from "react";
 import { SelectOptionType } from "@general-types";
-import TextField from '@mui/material/TextField';
-import CircularProgress from '@mui/material/CircularProgress';
+import TextField from "@mui/material/TextField";
+import CircularProgress from "@mui/material/CircularProgress";
 import Autocomplete, { AutocompleteInputChangeReason } from "@mui/material/Autocomplete";
-
 
 interface IAutoCompleteSelect {
   name?: string;
@@ -23,11 +22,7 @@ interface IAutoCompleteSelect {
     value: string,
     reason: AutocompleteInputChangeReason
   ) => void;
-  onChange: (
-    event: React.SyntheticEvent,
-    newValue: SelectOptionType | null,
-    name: string
-  ) => void;
+  onChange: (event: React.SyntheticEvent, newValue: SelectOptionType | null, name: string) => void;
 }
 
 function AutoCompleteSelect({
@@ -43,7 +38,7 @@ function AutoCompleteSelect({
   onChange,
   onInputChange,
   onOpen,
-  onClose
+  onClose,
 }: IAutoCompleteSelect): JSX.Element {
   return (
     <Autocomplete
@@ -60,25 +55,29 @@ function AutoCompleteSelect({
       onClose={onClose}
       isOptionEqualToValue={(options, value) => options.value === value.value}
       onInputChange={onInputChange}
-      renderInput={(params) => <TextField {...params}
-        label={label}
-        placeholder={placeholder}
-        fullWidth
-        error={error}
-        helperText={helperText}
-        InputProps={{
-          ...params.InputProps,
-          endAdornment: (
-            <>
-              {loading ? <CircularProgress color="inherit" size={20} /> : null}
-              {params.InputProps.endAdornment}
-            </>
-          ),
-        }}
-      />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          placeholder={placeholder}
+          fullWidth
+          error={error}
+          helperText={helperText}
+          InputLabelProps={{ shrink: true }}
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <>
+                {loading ? <CircularProgress color="inherit" size={20} /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
+          }}
+        />
+      )}
       fullWidth
     />
-  )
+  );
 }
 
-export default memo(AutoCompleteSelect)
+export default memo(AutoCompleteSelect);

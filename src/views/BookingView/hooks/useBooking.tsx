@@ -14,6 +14,8 @@ import {
 } from "@service/booking";
 import { ApiResponseType, IBooking } from "@types";
 import { createUrlParamFromObj } from "@utils/helper";
+import useForm from "@hooks/useForm";
+import { IForm } from "@components/dialog/ModalBooking/FormBooking/FormBooking.interface";
 
 // create booking hooks interface
 export interface IUseBooking {
@@ -28,6 +30,18 @@ export interface IUseBooking {
   isValidating: boolean;
   isError: boolean;
   isReady: boolean;
+  //modal
+  setModalControll: <T>(field: string, value: T) => void;
+  resetModalControll: () => void;
+  modalControll: {
+    statusBooking: boolean;
+    addBooking: boolean;
+  };
+  // form
+  form: IForm;
+  setForm: <T>(field: string, value: T) => void;
+  resetForm: () => void;
+  loadingForm: boolean;
 }
 
 export default function useBooking(): IUseBooking {
@@ -50,6 +64,27 @@ export default function useBooking(): IUseBooking {
   );
 
   const [isReady, setIsReady] = useState<boolean>(false);
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
+  const [modalControll, setModalControll, resetModalControll] = useForm({
+    statusBooking: false,
+    addBooking: false,
+  });
+  const [form, setForm, resetForm] = useForm<IForm>({
+    facility: null,
+    bookingSlot: null,
+    tenant: null,
+    propertyUnit: null,
+    assistances: [],
+    description: "",
+    penalty: 0,
+    status: "Requested",
+    slot_date: "",
+    slot: {
+      start: "",
+      end: "",
+    },
+  });
+
   const bookings = responseData?.data?.items || [];
   const isLoading = !responseData;
   const isError = responseError || responseData?.error;
@@ -57,6 +92,7 @@ export default function useBooking(): IUseBooking {
 
   // create insert function
   const insert = async (payload: ICreateBookingPayload) => {
+    setLoadingForm(true);
     createBooking(payload)
       .then((res) => {
         setAlert({
@@ -66,7 +102,9 @@ export default function useBooking(): IUseBooking {
           },
         });
         mutate();
-        console.info(res);
+        resetModalControll();
+        resetForm();
+        setLoadingForm(false);
         return res;
       })
       .catch((err: FetcherResponseError) => {
@@ -76,6 +114,9 @@ export default function useBooking(): IUseBooking {
             content: err?.message || "",
           },
         });
+      })
+      .finally(() => {
+        setLoadingForm(false);
       });
   };
 
@@ -168,5 +209,14 @@ export default function useBooking(): IUseBooking {
     isValidating,
     isReady,
     bookings,
+    // state modal
+    setModalControll,
+    modalControll,
+    resetModalControll,
+    // state form
+    form,
+    setForm,
+    resetForm,
+    loadingForm,
   };
 }

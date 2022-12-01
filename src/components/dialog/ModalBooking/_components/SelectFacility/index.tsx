@@ -64,6 +64,7 @@ const SelectFacility: React.FC<ISelectFacility> = ({
             fullWidth
             error={error}
             helperText={helperText}
+            InputLabelProps={{ shrink: true }}
             InputProps={{
               ...params.InputProps,
               endAdornment: (

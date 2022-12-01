@@ -7,7 +7,7 @@ export interface ICreateBookingPayload {
   property_unit_id: string;
   assistances: string[];
   description: string;
-  price: string;
+  price: number;
   penalty: number;
   status: string;
   slot_date: string;

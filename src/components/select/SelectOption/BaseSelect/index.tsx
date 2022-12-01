@@ -38,7 +38,9 @@ function BaseSelect({
 
   return (
     <FormControl fullWidth disabled={disabled} error={error}>
-      <InputLabel id={labelId}>{label}</InputLabel>
+      <InputLabel id={labelId} shrink>
+        {label}
+      </InputLabel>
       <Select
         name={name}
         labelId={labelId}

@@ -13,7 +13,6 @@ export interface IForm {
   tenant: SelectOptionType | null;
   assistances: string[];
   description: string;
-  price: string;
   penalty: number;
   status: string;
   slot_date: string;

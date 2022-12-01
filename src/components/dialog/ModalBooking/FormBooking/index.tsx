@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Grid, TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
@@ -41,7 +41,6 @@ const FormBooking: React.FC<IFormBookingProps> = ({
 }) => {
   return (
     <BaseDialogForm
-      fullScreen
       visible={visible}
       title="Form Pemesanan Fasilitas"
       onClose={onClose}
@@ -64,7 +63,7 @@ const FormBooking: React.FC<IFormBookingProps> = ({
       }
     >
       <Grid container direction="row" spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <Box>
             <Grid container direction="row" spacing={2}>
               <Grid item xs={12} sm={6}>
@@ -114,12 +113,14 @@ const FormBooking: React.FC<IFormBookingProps> = ({
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  value={formatCurrency(form.price, "Rp")} // todo: format currency
+                  value={formatCurrency(String(form.facility?.value.price), "Rp")} // todo: format currency
                   placeholder="harga"
                   label="Price"
                   name="price"
+                  disabled
                   onChange={onInputChange}
                   fullWidth
+                  InputLabelProps={{ shrink: true }}
                 />
               </Grid>
               <Grid item xs={12} sm={12}>
@@ -132,6 +133,7 @@ const FormBooking: React.FC<IFormBookingProps> = ({
                   fullWidth
                   minRows={3}
                   multiline
+                  InputLabelProps={{ shrink: true }}
                   // error={Boolean(formError.firstName)}
                   // helperText=""
                 />

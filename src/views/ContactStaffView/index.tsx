@@ -18,6 +18,8 @@ import Cached from "@mui/icons-material/Cached";
 import { ICreateContactStaffPayload } from "@service/contact-staff";
 import { formatCurrency, formatRemoveNonDigit } from "@utils/formatCurrency";
 import Button from "@mui/material/Button/Button";
+import DetailDialog from "@components/dialog/DetailDialog";
+import useDetail from "@components/dialog/DetailDialog/hooks/useDetail";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -119,6 +121,10 @@ const StaffView = (): ReactElement => {
     setLoadingForm,
   } = useContactStaff();
 
+  const [showDetail, setShowDetail] = useState(false);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const { detail, setDetail, removeDetail } = useDetail();
+
   // variables
   const isEdit = Boolean(form.id);
 
@@ -214,20 +220,20 @@ const StaffView = (): ReactElement => {
         await Promise.all([
           ...(newEmails.length > 0
             ? newEmails.map((email) =>
-                createContactEmail({
-                  address: email.value,
-                  verified: Boolean(email.checked),
-                  contact_id: form.contactId,
-                })
-              )
+              createContactEmail({
+                address: email.value,
+                verified: Boolean(email.checked),
+                contact_id: form.contactId,
+              })
+            )
             : []),
           ...(newPhones.length > 0
             ? newPhones.map((phone) =>
-                createContactPhone({
-                  contact_id: form.contactId,
-                  number: phone.value,
-                })
-              )
+              createContactPhone({
+                contact_id: form.contactId,
+                number: phone.value,
+              })
+            )
             : []),
         ]);
       }
@@ -261,6 +267,77 @@ const StaffView = (): ReactElement => {
     setVisibility(false);
     resetForm();
     resetFormError();
+  };
+
+  const handleCloseDetail = () => {
+    setShowDetail(false);
+    removeDetail();
+  };
+
+  const handleClickDetail = (id: number) => {
+    setShowDetail(true);
+    setLoadingDetail(true);
+
+    console.log('id ==>', id);
+    inquiry(id)
+      .then((data) => {
+        setLoadingDetail(false);
+        console.log("data staff ==>", data);
+        setDetail({
+          title: `${data?.contact.first_name} ${data?.contact.last_name}`,
+          thumbnail: data?.contact.profile_picture || '',
+          datas: [
+            {
+              label: "Posisi",
+              value: data?.position || '-'
+            },
+            {
+              label: "Kode Staff",
+              value: data?.staff_code || '-'
+            },
+            {
+              label: "Status",
+              value: data?.status || '-'
+            },
+            {
+              label: "Tanggal Join",
+              value: data?.join_date || '-'
+            },
+            {
+              label: "Departemen",
+              value: data?.department.name || '-'
+            },
+            {
+              label: "No. Identitas",
+              value: `${data?.contact.identity_type} - ${data?.contact.identity}`
+            },
+            {
+              label: "No. Pajak / NPWP",
+              value: data?.contact.tax_number ? `${data?.contact.tax_number}` : '-'
+            },
+            {
+              label: "Tipe Profil",
+              value: data?.contact.profile_type || '-'
+            },
+            {
+              label: "Alamat",
+              value: data?.contact.address || '-'
+            },
+            ...(data?.contact && data?.contact.emails.length > 0 ? data.contact.emails.map((mail, index) => ({
+              label: index === 0 ? 'Email' : '',
+              value: `${mail.address} - ${mail.verified ? 'Terverifikasi' : 'Tidak Terverfikasi'}`
+            })) : []),
+            ...(data?.contact && data?.contact.phones.length > 0 ? data.contact.phones.map((data, index) => ({
+              label: index === 0 ? 'Telepon' : '',
+              value: `${data.number}`
+            })) : [])
+          ]
+        })
+      })
+      .catch((err) => {
+        setLoadingDetail(false);
+        console.log("error staff ==>", err);
+      })
   };
 
   const handleClickEditRow = (id: number, _record: IContactStaffEntities) => {
@@ -367,14 +444,14 @@ const StaffView = (): ReactElement => {
       const response =
         name === "emails"
           ? await updateContactEmail(data.id as number, {
-              contact_id: form.id,
-              address: data.value,
-              verified: data.checked as boolean,
-            })
+            contact_id: form.id,
+            address: data.value,
+            verified: data.checked as boolean,
+          })
           : await updateContactPhone(data.id as number, {
-              contact_id: form.id,
-              number: data.value,
-            });
+            contact_id: form.id,
+            number: data.value,
+          });
       setAlert({
         message: {
           severity: "success",
@@ -435,6 +512,7 @@ const StaffView = (): ReactElement => {
               loading={isLoading || isValidating}
               onClickEdit={handleClickEditRow}
               onClickDelete={handleClickDeleteRow}
+              onClickDetail={handleClickDetail}
             />
           </CardTable>
         </Section>
@@ -469,6 +547,15 @@ const StaffView = (): ReactElement => {
           onConfirm={handleConfirmDelete}
         />
       </Suspense>
+      <DetailDialog
+        title={detail.title}
+        loading={false}
+        dialogTitle="Detail Karyawan"
+        thumbnail={detail.thumbnail}
+        datas={detail.datas}
+        visible={showDetail}
+        onClose={handleCloseDetail}
+      />
     </>
   );
 };

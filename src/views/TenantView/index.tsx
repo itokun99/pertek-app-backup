@@ -5,6 +5,7 @@ import { ReactElement, Suspense, useContext, useEffect, useMemo, useState } from
 import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
 import FormDialog from "@components/dialog/FormTenant";
 import DetailDialog from "@components/dialog/DetailDialog";
+import useDetail from "@components/dialog/DetailDialog/hooks/useDetail";
 import { IForm, IFormError } from "@components/dialog/FormTenant/FormTenant.interface";
 import { IMultipleInputItem, validateMultipleInput } from "@components/input/MultipleInput";
 import { TabItem } from "@components/TabBar";
@@ -43,7 +44,7 @@ const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
 });
 
 const initialForm: IForm = {
-  id: 0,
+  id: "",
   firstName: "",
   lastName: "",
   identity: "",
@@ -90,18 +91,6 @@ const initialFormError: IFormError = {
   tenancy_role: "",
 };
 
-interface IDetail {
-  thumbnail: string;
-  title: string;
-  datas: { label: string; value: string }[];
-}
-
-const initStateDetail: IDetail = {
-  thumbnail: "",
-  title: "",
-  datas: [],
-};
-
 const TenantView = (): ReactElement => {
   // contexts
   const { setAlert } = useContext(AlertContext);
@@ -119,20 +108,21 @@ const TenantView = (): ReactElement => {
     useForm<IFormError>(initialFormError);
 
   const [showDetail, setShowDetail] = useState(false);
-  const [detail, setDetail] = useState<IDetail>(initStateDetail);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const { detail, setDetail, removeDetail } = useDetail();
 
   const {
     content: deleteConfirmation,
     handler: deleteConfirmationHandler,
     visibility: deleteConfirmationVisibility,
-  } = useConfirmation<number>(
+  } = useConfirmation<string>(
     {
       title: "Konfirmasi Hapus",
       description: "Apakah kamu yakin ingin menghapus item ini?",
       cancelText: "Kembali",
       confirmText: "Ya",
     },
-    0
+    ""
   );
 
   const {
@@ -324,7 +314,7 @@ const TenantView = (): ReactElement => {
     },
     {
       title: "Upload CSV",
-      onClick: (): void => {},
+      onClick: (): void => { },
       color: "success",
       startIcon: <CloudUpload />,
     },
@@ -343,11 +333,25 @@ const TenantView = (): ReactElement => {
 
   const handleCloseDetail = () => {
     setShowDetail(false);
-    setDetail(initStateDetail);
+    removeDetail();
   };
 
-  const handleClickDetail = (id: number, _record: ITenant) => {
+  const handleClickDetail = (id: string, _record: ITenant) => {
     setShowDetail(true);
+    setLoadingDetail(true);
+
+    console.log('id ==>', id);
+
+
+    inquiry(id)
+      .then((data) => {
+        setLoadingDetail(false);
+        console.log("data tenant ==>", data);
+      })
+      .catch((err) => {
+        setLoadingDetail(false);
+        console.log("error tenant ==>", err);
+      })
 
     // setLoadingForm(true);
     // inquiry(id)
@@ -376,7 +380,7 @@ const TenantView = (): ReactElement => {
     //   });
   };
 
-  const handleClickEditRow = (id: number, _record: ITenant) => {
+  const handleClickEditRow = (id: string, _record: ITenant) => {
     setVisibility(true);
 
     setLoadingForm(true);
@@ -441,14 +445,14 @@ const TenantView = (): ReactElement => {
       const response =
         name === "emails"
           ? await updateContactEmail(data.id as number, {
-              contact_id: form.id,
-              address: data.value,
-              verified: data.checked as boolean,
-            })
+            contact_id: form.id,
+            address: data.value,
+            verified: data.checked as boolean,
+          })
           : await updateContactPhone(data.id as number, {
-              contact_id: form.id,
-              number: data.value,
-            });
+            contact_id: form.id,
+            number: data.value,
+          });
       setAlert({
         message: {
           severity: "success",
@@ -473,7 +477,7 @@ const TenantView = (): ReactElement => {
   };
 
   // TODO: have problem with api params
-  const handleClickDeleteRow = (id: number) => {
+  const handleClickDeleteRow = (id: string) => {
     deleteConfirmationHandler.open();
     deleteConfirmationHandler.setState(id);
   };

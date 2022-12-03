@@ -314,7 +314,7 @@ const TenantView = (): ReactElement => {
     },
     {
       title: "Upload CSV",
-      onClick: (): void => { },
+      onClick: (): void => {},
       color: "success",
       startIcon: <CloudUpload />,
     },
@@ -340,44 +340,69 @@ const TenantView = (): ReactElement => {
     setShowDetail(true);
     setLoadingDetail(true);
 
-    console.log('id ==>', id);
-
+    console.log("id ==>", id);
 
     inquiry(id)
       .then((data) => {
         setLoadingDetail(false);
         console.log("data tenant ==>", data);
+
+        if (data?.id === 0) {
+          console.log("error data ==>", data);
+          return;
+        }
+
+        setDetail({
+          title: `${data?.contact.first_name} ${data?.contact.last_name}`,
+          thumbnail: data?.contact.profile_picture || "",
+          datas: [
+            {
+              label: "Role",
+              value: data?.tenancy_role || "-",
+            },
+            {
+              label: "Resident Status",
+              value: data?.resident_status || "-",
+            },
+            {
+              label: "Family Status",
+              value: data?.family_status || "-",
+            },
+            {
+              label: "Check in",
+              value: String(data?.check_in) || "-",
+            },
+            {
+              label: "Check Out",
+              value: String(data?.check_out) || "-",
+            },
+            {
+              label: "No. Identitas",
+              value: data?.contact.identity
+                ? `${data?.contact.identity_type} - ${data?.contact.identity}`
+                : "-",
+            },
+            {
+              label: "No. Pajak / NPWP",
+              value: data?.contact.identity
+                ? `${data?.contact.identity_type} - ${data?.contact.identity}`
+                : "-",
+            },
+            {
+              label: "Tipe Profil",
+              value: data?.contact.profile_type || "-",
+            },
+            {
+              label: "Alamat",
+              value: data?.contact.address || "-",
+            },
+          ],
+        });
       })
       .catch((err) => {
         setLoadingDetail(false);
         console.log("error tenant ==>", err);
-      })
-
-    // setLoadingForm(true);
-    // inquiry(id)
-    //   .then((data) => {
-    //     if (data) {
-    //       console.info(`data: `, data);
-    //       //     setFormBulk({
-    //       //       checkIn: data.check_in,
-    //       //       checkOut: data.check_out,
-    //       //       id: data.id,
-    //       //       familyStatus: data.family_status,
-    //       //       parentTenancy: String(data.parent_tenancy_id),
-    //       //       propertyUnit: {
-    //       //         label: "",
-    //       //         value: String(data.property_unit_id),
-    //       //       },
-    //       //       residentStatus: data.resident_status,
-    //       //     });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     setLoadingForm(false);
-    //   });
+      });
   };
 
   const handleClickEditRow = (id: string, _record: ITenant) => {
@@ -445,14 +470,14 @@ const TenantView = (): ReactElement => {
       const response =
         name === "emails"
           ? await updateContactEmail(data.id as number, {
-            contact_id: form.id,
-            address: data.value,
-            verified: data.checked as boolean,
-          })
+              contact_id: form.id,
+              address: data.value,
+              verified: data.checked as boolean,
+            })
           : await updateContactPhone(data.id as number, {
-            contact_id: form.id,
-            number: data.value,
-          });
+              contact_id: form.id,
+              number: data.value,
+            });
       setAlert({
         message: {
           severity: "success",

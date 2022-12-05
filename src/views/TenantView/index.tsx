@@ -345,7 +345,7 @@ const TenantView = (): ReactElement => {
     inquiry(id)
       .then((data) => {
         setLoadingDetail(false);
-        // console.log("data tenant ==>", data);
+        console.log("data tenant ==>", data);
 
         if (data?.id === 0) {
           // console.log("error data ==>", data);
@@ -370,11 +370,11 @@ const TenantView = (): ReactElement => {
             },
             {
               label: "Check in",
-              value: String(data?.check_in) || "-",
+              value: data?.check_in ? String(data?.check_in) : "-",
             },
             {
               label: "Check Out",
-              value: String(data?.check_out) || "-",
+              value: data?.check_out ? String(data?.check_out) : "-",
             },
             {
               label: "No. Identitas",
@@ -396,7 +396,27 @@ const TenantView = (): ReactElement => {
               label: "Alamat",
               value: data?.contact.address || "-",
             },
-          ],
+            {
+              label: "Unit Properti",
+              value: data?.property_unit.name || '-',
+            },
+            {
+              label: "Tipe Unit",
+              value: data?.property_unit.unit_type.type_name || '-',
+            },
+            {
+              label: "Total Area",
+              value: data?.property_unit.total_area ? `${data?.property_unit.total_area} m²` : '-',
+            },
+            {
+              label: "Kapasitas Listrik",
+              value: data?.property_unit.electrical_capacity ? `${data?.property_unit.electrical_capacity} watt` : '-',
+            },
+            ...(data?.families && data.families.length > 0 ? data?.families.map((fam, index) => ({
+              label: `Keluarga ${index + 1}`,
+              value: `${fam.contact.first_name} ${fam.contact.last_name}`
+            })) : [])
+          ]
         });
       })
       .catch((err) => {

@@ -27,6 +27,8 @@ export interface IFacility extends BaseType {
   };
   category: IFacilityCategory;
   booking_slots: IFacilityBookingSlot[];
+  default_open_hour: string;
+  default_close_hour: string;
 }
 
 export interface IFacilityBookingSlot {

@@ -10,6 +10,7 @@ export interface ITableVendorProperties {
   total: number;
   onClickEdit: (id: number, record: IVendorEntities) => void;
   onClickDelete: (id: number) => void;
+  onClickDetail: (id: number) => void;
 }
 
 const VendorTable = ({
@@ -18,12 +19,13 @@ const VendorTable = ({
   loading,
   onClickEdit,
   onClickDelete,
+  onClickDetail
 }: ITableVendorProperties) => {
   const theme = useTheme();
 
   return (
     <BaseTable
-      columns={generateColumns(onClickEdit, onClickDelete, theme)}
+      columns={generateColumns(onClickEdit, onClickDelete, onClickDetail, theme)}
       field={data}
       loading={loading}
       withPagination

@@ -18,6 +18,9 @@ import Cached from "@mui/icons-material/Cached";
 import { ICreateContactStaffPayload } from "@service/contact-staff";
 import { formatCurrency, formatRemoveNonDigit } from "@utils/formatCurrency";
 import Button from "@mui/material/Button/Button";
+import DetailDialog from "@components/dialog/DetailDialog";
+import useDetail from "@components/dialog/DetailDialog/hooks/useDetail";
+import DialogFilter from "./components/DialogFilter";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -118,6 +121,11 @@ const StaffView = (): ReactElement => {
     loadingForm,
     setLoadingForm,
   } = useContactStaff();
+
+  const [showDetail, setShowDetail] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const { detail, setDetail, removeDetail } = useDetail();
 
   // variables
   const isEdit = Boolean(form.id);
@@ -261,6 +269,81 @@ const StaffView = (): ReactElement => {
     setVisibility(false);
     resetForm();
     resetFormError();
+  };
+
+  const handleCloseDetail = () => {
+    setShowDetail(false);
+    removeDetail();
+  };
+
+  const handleClickDetail = (id: number) => {
+    setShowDetail(true);
+    setLoadingDetail(true);
+    inquiry(id)
+      .then((data) => {
+        setLoadingDetail(false);
+        console.log("data staff ==>", data);
+        setDetail({
+          title: `${data?.contact.first_name} ${data?.contact.last_name}`,
+          thumbnail: data?.contact.profile_picture || "",
+          datas: [
+            {
+              label: "Posisi",
+              value: data?.position || "-",
+            },
+            {
+              label: "Kode Staff",
+              value: data?.staff_code || "-",
+            },
+            {
+              label: "Status",
+              value: data?.status || "-",
+            },
+            {
+              label: "Tanggal Join",
+              value: data?.join_date || "-",
+            },
+            {
+              label: "Departemen",
+              value: data?.department.name || "-",
+            },
+            {
+              label: "No. Identitas",
+              value: `${data?.contact.identity_type} - ${data?.contact.identity}`,
+            },
+            {
+              label: "No. Pajak / NPWP",
+              value: data?.contact.tax_number ? `${data?.contact.tax_number}` : "-",
+            },
+            {
+              label: "Tipe Profil",
+              value: data?.contact.profile_type || "-",
+            },
+            {
+              label: "Alamat",
+              value: data?.contact.address || "-",
+            },
+            ...(data?.contact && data?.contact.emails.length > 0
+              ? data.contact.emails.map((mail, index) => ({
+                  label: index === 0 ? "Email" : "",
+                  value: `${mail.address} - ${
+                    mail.verified ? "Terverifikasi" : "Tidak Terverfikasi"
+                  }`,
+                }))
+              : []),
+            ...(data?.contact && data?.contact.phones.length > 0
+              ? data.contact.phones.map((data, index) => ({
+                  label: index === 0 ? "Telepon" : "",
+                  value: `${data.number}`,
+                }))
+              : []),
+          ],
+        });
+      })
+      .catch((err) => {
+        setLoadingDetail(false);
+        console.log("error staff ==>", err);
+      });
   };
 
   const handleClickEditRow = (id: number, _record: IContactStaffEntities) => {
@@ -408,7 +491,7 @@ const StaffView = (): ReactElement => {
     deleteConfirmationHandler.confirm().then((id) => remove(id));
   };
 
-  const renderFilter = () => <Button>Filter</Button>;
+  const renderFilter = () => <Button onClick={() => setShowFilter(!showFilter)}>Filter</Button>;
 
   return (
     <>
@@ -435,6 +518,7 @@ const StaffView = (): ReactElement => {
               loading={isLoading || isValidating}
               onClickEdit={handleClickEditRow}
               onClickDelete={handleClickDeleteRow}
+              onClickDetail={handleClickDetail}
             />
           </CardTable>
         </Section>
@@ -468,6 +552,19 @@ const StaffView = (): ReactElement => {
           onCancel={deleteConfirmationHandler.cancel}
           onConfirm={handleConfirmDelete}
         />
+      </Suspense>
+      <DetailDialog
+        title={detail.title}
+        loading={false}
+        dialogTitle="Detail Karyawan"
+        thumbnail={detail.thumbnail}
+        datas={detail.datas}
+        visible={showDetail}
+        onClose={handleCloseDetail}
+      />
+
+      <Suspense>
+        <DialogFilter visible={showFilter} onClose={() => setShowFilter(!showFilter)} />
       </Suspense>
     </>
   );

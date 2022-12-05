@@ -55,7 +55,7 @@ export async function getTenant(
   return data;
 }
 
-export async function getTenantById(id: number): Promise<ITenantDetail | undefined> {
+export async function getTenantById(id: string): Promise<ITenantDetail | undefined> {
   const { data, error } = await fetchData<ITenantDetail>(`${ApiProxyEndpoint.Tenant}?id=${id}`, {
     method: "GET",
   });
@@ -80,7 +80,7 @@ export async function createTenant(payload: ICreateTenantPayload) {
   return data;
 }
 
-export async function deleteTenant(id: number) {
+export async function deleteTenant(id: string) {
   const { data, error } = await fetchData<{ message: string }>(
     `${ApiProxyEndpoint.Tenant}?id=${id}`,
     {
@@ -95,7 +95,7 @@ export async function deleteTenant(id: number) {
   return data;
 }
 
-export async function updateTenant(id: number, payload: ICreateTenantPayload) {
+export async function updateTenant(id: string, payload: ICreateTenantPayload) {
   const { data, error } = await fetchData<{ message: string }>(
     `${ApiProxyEndpoint.Tenant}?id=${id}`,
     {

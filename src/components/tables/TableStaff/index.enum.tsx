@@ -9,15 +9,23 @@ import Link from "@mui/material/Link";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import { Theme } from "@mui/material";
+import OpenInFullSharpIcon from "@mui/icons-material/OpenInFullSharp";
+
 
 const optionActionCell = (
   record: IContactStaffEntities,
   onClickEdit: (id: number, record: IContactStaffEntities) => void,
-  onClickDelete: (id: number) => void
+  onClickDelete: (id: number) => void,
+  onClickDetail: (id: number) => void
 ) => {
   // you can abstract your record interface here
   const { id } = record || {};
   const options: IActionCellButtonProperties["options"] = [
+    {
+      label: "Detail",
+      icon: <OpenInFullSharpIcon />,
+      onClick: () => onClickDetail(id),
+    },
     {
       label: "Edit",
       icon: <ModeEditOutlineOutlinedIcon />,
@@ -37,6 +45,7 @@ const optionActionCell = (
 export function generateColumns(
   onClickEdit: (id: number, record: IContactStaffEntities) => void,
   onClickDelete: (id: number) => void,
+  onClickDetail: (id: number) => void,
   theme: Theme
 ): ColumnType[] {
   return [
@@ -102,7 +111,7 @@ export function generateColumns(
       selector: "action",
       align: "right",
       render: (_text, record: IContactStaffEntities) => {
-        return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete)} />;
+        return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete, onClickDetail)} />;
       },
     },
   ] as ColumnType[];

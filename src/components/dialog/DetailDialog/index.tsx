@@ -63,7 +63,13 @@ const DetailDialog: React.FC<IDetailDialogProps> = ({
                     <Stack direction="column" spacing={2} mr={2}>
                       {datas.map(({ label }, index) => {
                         return (
-                          <Typography key={`label-${index}`} variant="subtitle1">
+                          <Typography
+                            sx={{
+                              height: !label ? "24px" : "auto",
+                            }}
+                            key={`label-${index}`}
+                            variant="subtitle1"
+                          >
                             {label}
                           </Typography>
                         );

@@ -8,8 +8,8 @@ import OpenInFullSharpIcon from "@mui/icons-material/OpenInFullSharp";
 import ActionCellButton from "@components/buttons/ActionCellButton/ActionCellButton";
 export interface FacilityCardProps {
   facility: IFacility;
-  onClickEdit: (id: number, record: IFacility | null) => void;
-  onClickDelete: (id: number) => void;
+  onClickEdit: (id: string, record: IFacility | null) => void;
+  onClickDelete: (id: string) => void;
   onClickDetail: (record: IFacility | null) => void;
 }
 
@@ -23,7 +23,7 @@ export const FacilityCard = ({
 
   const optionActionCell = (record: IFacility | null) => {
     // you can abstract your record interface here
-    const { id } = (record as { id: number }) || {};
+    const { id } = (record as { id: string }) || {};
     const options: IActionCellButtonProperties["options"] = [
       {
         label: "Detail",

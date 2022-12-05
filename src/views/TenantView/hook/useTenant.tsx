@@ -12,9 +12,9 @@ import { swrConfig } from '@config/swrConfig';
 
 interface IUseTenant {
   insert: (payload: ICreateTenantPayload) => Promise<void>;
-  inquiry: (id: number) => Promise<ITenantDetail | null | undefined>;
-  remove: (id: number) => Promise<void>;
-  update: (id: number, payload: ICreateTenantPayload) => Promise<void>;
+  inquiry: (id: string) => Promise<ITenantDetail | null | undefined>;
+  remove: (id: string) => Promise<void>;
+  update: (id: string, payload: ICreateTenantPayload) => Promise<void>;
   downloadTemplate: () => void;
   reload: () => void;
   items: Array<ITenant>;
@@ -81,7 +81,7 @@ export default function useTenant(): IUseTenant {
     }
   };
 
-  const remove = async (id: number): Promise<void> => {
+  const remove = async (id: string): Promise<void> => {
     try {
       await deleteTenant(id);
       setAlert({
@@ -104,7 +104,7 @@ export default function useTenant(): IUseTenant {
     }
   };
 
-  const update = async (id: number, payload: ICreateTenantPayload) => {
+  const update = async (id: string, payload: ICreateTenantPayload) => {
     try {
       await updateTenant(id, payload);
       setAlert({
@@ -127,7 +127,7 @@ export default function useTenant(): IUseTenant {
     }
   };
 
-  const inquiry = async (id: number): Promise<ITenantDetail | null | undefined> => {
+  const inquiry = async (id: string): Promise<ITenantDetail | null | undefined> => {
     try {
       const data = await getTenantById(id);
       return data;

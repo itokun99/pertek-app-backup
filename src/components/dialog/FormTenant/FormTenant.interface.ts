@@ -26,7 +26,7 @@ interface IContactFormError {
 }
 
 export interface IForm extends IContactForm {
-  id: number;
+  id: string;
   propertyUnit: SelectOptionType;
   parentTenancy: string;
   tenancy_role: string;

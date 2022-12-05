@@ -21,9 +21,9 @@ import { createUrlParamFromObj } from "../../../utils/helper";
 
 export interface IUseFacility {
   insert: () => Promise<void>;
-  remove: (id: number) => Promise<void>;
+  remove: (id: string) => Promise<void>;
   update: () => Promise<void>;
-  inquiry: (id: number) => Promise<IFacility | null | undefined>;
+  inquiry: (id: string) => Promise<IFacility | null | undefined>;
   reload: () => void;
   setCurrentFacility: (facility: IFacility | null) => void;
   currentFacility: IFacility | null;
@@ -177,7 +177,7 @@ export default function useFacility(): IUseFacility {
   };
 
   // create remove function
-  const remove = async (id: number) => {
+  const remove = async (id: string) => {
     deleteFacility(id)
       .then(() => {
         setAlert({
@@ -245,7 +245,7 @@ export default function useFacility(): IUseFacility {
       });
   };
 
-  const inquiry = async (id: number): Promise<IFacility | null | undefined> => {
+  const inquiry = async (id: string): Promise<IFacility | null | undefined> => {
     try {
       setModalControll("formFacility", true);
       const data = await getFacilityById(id);

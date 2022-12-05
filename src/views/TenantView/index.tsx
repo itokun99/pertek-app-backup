@@ -5,6 +5,7 @@ import { ReactElement, Suspense, useContext, useEffect, useMemo, useState } from
 import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
 import FormDialog from "@components/dialog/FormTenant";
 import DetailDialog from "@components/dialog/DetailDialog";
+import useDetail from "@components/dialog/DetailDialog/hooks/useDetail";
 import { IForm, IFormError } from "@components/dialog/FormTenant/FormTenant.interface";
 import { IMultipleInputItem, validateMultipleInput } from "@components/input/MultipleInput";
 import { TabItem } from "@components/TabBar";
@@ -43,7 +44,7 @@ const Confirmation = dynamic(() => import("@components/dialog/Confirmation"), {
 });
 
 const initialForm: IForm = {
-  id: 0,
+  id: "",
   firstName: "",
   lastName: "",
   identity: "",
@@ -90,18 +91,6 @@ const initialFormError: IFormError = {
   tenancy_role: "",
 };
 
-interface IDetail {
-  thumbnail: string;
-  title: string;
-  datas: { label: string; value: string }[];
-}
-
-const initStateDetail: IDetail = {
-  thumbnail: "",
-  title: "",
-  datas: [],
-};
-
 const TenantView = (): ReactElement => {
   // contexts
   const { setAlert } = useContext(AlertContext);
@@ -119,20 +108,21 @@ const TenantView = (): ReactElement => {
     useForm<IFormError>(initialFormError);
 
   const [showDetail, setShowDetail] = useState(false);
-  const [detail, setDetail] = useState<IDetail>(initStateDetail);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const { detail, setDetail, removeDetail } = useDetail();
 
   const {
     content: deleteConfirmation,
     handler: deleteConfirmationHandler,
     visibility: deleteConfirmationVisibility,
-  } = useConfirmation<number>(
+  } = useConfirmation<string>(
     {
       title: "Konfirmasi Hapus",
       description: "Apakah kamu yakin ingin menghapus item ini?",
       cancelText: "Kembali",
       confirmText: "Ya",
     },
-    0
+    ""
   );
 
   const {
@@ -343,40 +333,103 @@ const TenantView = (): ReactElement => {
 
   const handleCloseDetail = () => {
     setShowDetail(false);
-    setDetail(initStateDetail);
+    removeDetail();
   };
 
-  const handleClickDetail = (id: number, _record: ITenant) => {
+  const handleClickDetail = (id: string, _record: ITenant) => {
     setShowDetail(true);
+    setLoadingDetail(true);
 
-    // setLoadingForm(true);
-    // inquiry(id)
-    //   .then((data) => {
-    //     if (data) {
-    //       console.info(`data: `, data);
-    //       //     setFormBulk({
-    //       //       checkIn: data.check_in,
-    //       //       checkOut: data.check_out,
-    //       //       id: data.id,
-    //       //       familyStatus: data.family_status,
-    //       //       parentTenancy: String(data.parent_tenancy_id),
-    //       //       propertyUnit: {
-    //       //         label: "",
-    //       //         value: String(data.property_unit_id),
-    //       //       },
-    //       //       residentStatus: data.resident_status,
-    //       //     });
-    //     }
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   })
-    //   .finally(() => {
-    //     setLoadingForm(false);
-    //   });
+    // console.log("id ==>", id);
+
+    inquiry(id)
+      .then((data) => {
+        setLoadingDetail(false);
+        console.log("data tenant ==>", data);
+
+        if (data?.id === 0) {
+          // console.log("error data ==>", data);
+          return;
+        }
+
+        setDetail({
+          title: `${data?.contact.first_name} ${data?.contact.last_name}`,
+          thumbnail: data?.contact.profile_picture || "",
+          datas: [
+            {
+              label: "Role",
+              value: data?.tenancy_role || "-",
+            },
+            {
+              label: "Resident Status",
+              value: data?.resident_status || "-",
+            },
+            {
+              label: "Family Status",
+              value: data?.family_status || "-",
+            },
+            {
+              label: "Check in",
+              value: data?.check_in ? String(data?.check_in) : "-",
+            },
+            {
+              label: "Check Out",
+              value: data?.check_out ? String(data?.check_out) : "-",
+            },
+            {
+              label: "No. Identitas",
+              value: data?.contact.identity
+                ? `${data?.contact.identity_type} - ${data?.contact.identity}`
+                : "-",
+            },
+            {
+              label: "No. Pajak / NPWP",
+              value: data?.contact.identity
+                ? `${data?.contact.identity_type} - ${data?.contact.identity}`
+                : "-",
+            },
+            {
+              label: "Tipe Profil",
+              value: data?.contact.profile_type || "-",
+            },
+            {
+              label: "Alamat",
+              value: data?.contact.address || "-",
+            },
+            {
+              label: "Unit Properti",
+              value: data?.property_unit.name || "-",
+            },
+            {
+              label: "Tipe Unit",
+              value: data?.property_unit.unit_type.type_name || "-",
+            },
+            {
+              label: "Total Area",
+              value: data?.property_unit.total_area ? `${data?.property_unit.total_area} m²` : "-",
+            },
+            {
+              label: "Kapasitas Listrik",
+              value: data?.property_unit.electrical_capacity
+                ? `${data?.property_unit.electrical_capacity} watt`
+                : "-",
+            },
+            ...(data?.families && data.families.length > 0
+              ? data?.families.map((fam, index) => ({
+                  label: `Keluarga ${index + 1}`,
+                  value: `${fam.contact.first_name} ${fam.contact.last_name}`,
+                }))
+              : []),
+          ],
+        });
+      })
+      .catch((err) => {
+        setLoadingDetail(false);
+        console.log("error tenant ==>", err);
+      });
   };
 
-  const handleClickEditRow = (id: number, _record: ITenant) => {
+  const handleClickEditRow = (id: string, _record: ITenant) => {
     setVisibility(true);
 
     setLoadingForm(true);
@@ -473,7 +526,7 @@ const TenantView = (): ReactElement => {
   };
 
   // TODO: have problem with api params
-  const handleClickDeleteRow = (id: number) => {
+  const handleClickDeleteRow = (id: string) => {
     deleteConfirmationHandler.open();
     deleteConfirmationHandler.setState(id);
   };

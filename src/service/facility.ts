@@ -62,7 +62,7 @@ export async function getFacilities() {
   return data;
 }
 
-export async function getFacilityById(id: number): Promise<IFacility | undefined> {
+export async function getFacilityById(id: string): Promise<IFacility | undefined> {
   const { data, error } = await fetchData<IFacility>(`${ApiProxyEndpoint.Facility}?id=${id}`, {
     method: "GET",
   });
@@ -106,7 +106,7 @@ export async function updateFacility(id: string, payload: ICreateFacilityPayload
 }
 
 // create function to delete facility
-export async function deleteFacility(id: number) {
+export async function deleteFacility(id: string) {
   const { data, error } = await fetchData<{ message: string }>(
     `${ApiProxyEndpoint.Facility}?id=${id}`,
     {

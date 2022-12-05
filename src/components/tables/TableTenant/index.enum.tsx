@@ -15,12 +15,13 @@ import OpenInFullSharpIcon from "@mui/icons-material/OpenInFullSharp";
 
 const optionActionCell = (
   record: ITenant,
-  onClickEdit: (id: number, record: ITenant) => void,
-  onClickDelete: (id: number) => void,
-  onClickDetail: (id: number, record: ITenant) => void
+  onClickEdit: (id: string, record: ITenant) => void,
+  onClickDelete: (id: string) => void,
+  onClickDetail: (id: string, record: ITenant) => void
 ) => {
   // you can abstract your record interface here
   const { id } = record || {};
+  console.log("optionActionCell ==>", record);
   const options: IActionCellButtonProperties["options"] = [
     {
       label: "Detail",
@@ -84,9 +85,9 @@ function createLabel(status: string) {
 }
 
 export function generateColumns(
-  onClickEdit: (id: number, record: ITenant) => void,
-  onClickDelete: (id: number) => void,
-  onClickDetail: (id: number, record: ITenant) => void,
+  onClickEdit: (id: string, record: ITenant) => void,
+  onClickDelete: (id: string) => void,
+  onClickDetail: (id: string, record: ITenant) => void,
   theme: Theme
 ): ColumnType[] {
   return [

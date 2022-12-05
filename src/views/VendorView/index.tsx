@@ -19,6 +19,8 @@ import Cached from "@mui/icons-material/Cached";
 import FormUploadImage from "@components/dialog/FormUploadImage";
 import { TabItem } from "@components/TabBar";
 import { useRouter } from "next/router";
+import DetailDialog from "@components/dialog/DetailDialog";
+import useDetail from "@components/dialog/DetailDialog/hooks/useDetail";
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -118,6 +120,10 @@ const VendorView = (): ReactElement => {
     loadingForm,
     setLoadingForm,
   } = useVendor();
+
+  const [showDetail, setShowDetail] = useState(false);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const { detail, setDetail, removeDetail } = useDetail();
 
   // variables
   const isEdit = Boolean(form.id);
@@ -252,6 +258,63 @@ const VendorView = (): ReactElement => {
     setVisibility(false);
     resetForm();
     resetFormError();
+  };
+
+  const handleCloseDetail = () => {
+    setShowDetail(false);
+    removeDetail();
+  };
+
+  const handleClickDetail = (id: number) => {
+    setShowDetail(true);
+    setLoadingDetail(true);
+
+    console.log("id ==>", id);
+    inquiry(id)
+      .then((data) => {
+        setLoadingDetail(false);
+        console.log("data vendor ==>", data);
+        setDetail({
+          title: `${data?.contact.first_name} ${data?.contact.last_name}`,
+          thumbnail: data?.contact.profile_picture || "",
+          datas: [
+            {
+              label: "No. Identitas",
+              value: `${data?.contact.identity_type} - ${data?.contact.identity}`,
+            },
+            {
+              label: "No. Pajak / NPWP",
+              value: data?.contact.tax_number ? `${data?.contact.tax_number}` : "-",
+            },
+            {
+              label: "Tipe Profil",
+              value: data?.contact.profile_type || "-",
+            },
+            {
+              label: "Alamat",
+              value: data?.contact.address || "-",
+            },
+            ...(data?.contact && data?.contact.emails.length > 0
+              ? data.contact.emails.map((mail, index) => ({
+                  label: index === 0 ? "Email" : "",
+                  value: `${mail.address} - ${
+                    mail.verified ? "Terverifikasi" : "Tidak Terverfikasi"
+                  }`,
+                }))
+              : []),
+            ...(data?.contact && data?.contact.phones.length > 0
+              ? data.contact.phones.map((data, index) => ({
+                  label: index === 0 ? "Telepon" : "",
+                  value: `${data.number}`,
+                }))
+              : []),
+          ],
+        });
+      })
+      .catch((err) => {
+        setLoadingDetail(false);
+        console.log("error staff ==>", err);
+      });
   };
 
   const handleClickEditRow = (id: number, _record: IVendorEntities) => {
@@ -488,6 +551,7 @@ const VendorView = (): ReactElement => {
               loading={isLoading || isValidating}
               onClickEdit={handleClickEditRow}
               onClickDelete={handleClickDeleteRow}
+              onClickDetail={handleClickDetail}
             />
           </CardTable>
         </Section>
@@ -535,6 +599,16 @@ const VendorView = (): ReactElement => {
           onConfirm={handleConfirmDelete}
         />
       </Suspense>
+
+      <DetailDialog
+        title={detail.title}
+        loading={false}
+        dialogTitle="Detail Vendor"
+        thumbnail={detail.thumbnail}
+        datas={detail.datas}
+        visible={showDetail}
+        onClose={handleCloseDetail}
+      />
     </>
   );
 };

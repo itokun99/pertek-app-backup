@@ -8,9 +8,9 @@ export interface ITableTenantProps {
   loading: boolean;
   ready: boolean;
   total: number;
-  onClickEdit: (id: number, record: ITenant) => void;
-  onClickDelete: (id: number) => void;
-  onClickDetail: (id: number, record: ITenant) => void;
+  onClickEdit: (id: string, record: ITenant) => void;
+  onClickDelete: (id: string) => void;
+  onClickDetail: (id: string, record: ITenant) => void;
 }
 
 const TenantTable = ({

@@ -95,12 +95,12 @@ const FacilityView = (): ReactElement => {
     setCurrentFacility(facility);
   };
 
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: string) => {
     deleteConfirmationHandler.open();
-    deleteConfirmationHandler.setState(id);
+    deleteConfirmationHandler.setState(Number(id));
   };
 
-  const handleEdit = (id: number) => {
+  const handleEdit = (id: string) => {
     inquiry(id);
   };
 
@@ -109,7 +109,7 @@ const FacilityView = (): ReactElement => {
   };
 
   const handleConfirmDelete = () => {
-    deleteConfirmationHandler.confirm().then((id) => remove(id));
+    deleteConfirmationHandler.confirm().then((id: any) => remove(id));
   };
 
   return (

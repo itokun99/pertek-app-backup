@@ -314,7 +314,7 @@ const TenantView = (): ReactElement => {
     },
     {
       title: "Upload CSV",
-      onClick: (): void => { },
+      onClick: (): void => {},
       color: "success",
       startIcon: <CloudUpload />,
     },
@@ -398,25 +398,29 @@ const TenantView = (): ReactElement => {
             },
             {
               label: "Unit Properti",
-              value: data?.property_unit.name || '-',
+              value: data?.property_unit.name || "-",
             },
             {
               label: "Tipe Unit",
-              value: data?.property_unit.unit_type.type_name || '-',
+              value: data?.property_unit.unit_type.type_name || "-",
             },
             {
               label: "Total Area",
-              value: data?.property_unit.total_area ? `${data?.property_unit.total_area} m²` : '-',
+              value: data?.property_unit.total_area ? `${data?.property_unit.total_area} m²` : "-",
             },
             {
               label: "Kapasitas Listrik",
-              value: data?.property_unit.electrical_capacity ? `${data?.property_unit.electrical_capacity} watt` : '-',
+              value: data?.property_unit.electrical_capacity
+                ? `${data?.property_unit.electrical_capacity} watt`
+                : "-",
             },
-            ...(data?.families && data.families.length > 0 ? data?.families.map((fam, index) => ({
-              label: `Keluarga ${index + 1}`,
-              value: `${fam.contact.first_name} ${fam.contact.last_name}`
-            })) : [])
-          ]
+            ...(data?.families && data.families.length > 0
+              ? data?.families.map((fam, index) => ({
+                  label: `Keluarga ${index + 1}`,
+                  value: `${fam.contact.first_name} ${fam.contact.last_name}`,
+                }))
+              : []),
+          ],
         });
       })
       .catch((err) => {
@@ -490,14 +494,14 @@ const TenantView = (): ReactElement => {
       const response =
         name === "emails"
           ? await updateContactEmail(data.id as number, {
-            contact_id: form.id,
-            address: data.value,
-            verified: data.checked as boolean,
-          })
+              contact_id: form.id,
+              address: data.value,
+              verified: data.checked as boolean,
+            })
           : await updateContactPhone(data.id as number, {
-            contact_id: form.id,
-            number: data.value,
-          });
+              contact_id: form.id,
+              number: data.value,
+            });
       setAlert({
         message: {
           severity: "success",

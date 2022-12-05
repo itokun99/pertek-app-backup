@@ -314,7 +314,7 @@ const TenantView = (): ReactElement => {
     },
     {
       title: "Upload CSV",
-      onClick: (): void => {},
+      onClick: (): void => { },
       color: "success",
       startIcon: <CloudUpload />,
     },
@@ -340,15 +340,15 @@ const TenantView = (): ReactElement => {
     setShowDetail(true);
     setLoadingDetail(true);
 
-    console.log("id ==>", id);
+    // console.log("id ==>", id);
 
     inquiry(id)
       .then((data) => {
         setLoadingDetail(false);
-        console.log("data tenant ==>", data);
+        // console.log("data tenant ==>", data);
 
         if (data?.id === 0) {
-          console.log("error data ==>", data);
+          // console.log("error data ==>", data);
           return;
         }
 
@@ -470,14 +470,14 @@ const TenantView = (): ReactElement => {
       const response =
         name === "emails"
           ? await updateContactEmail(data.id as number, {
-              contact_id: form.id,
-              address: data.value,
-              verified: data.checked as boolean,
-            })
+            contact_id: form.id,
+            address: data.value,
+            verified: data.checked as boolean,
+          })
           : await updateContactPhone(data.id as number, {
-              contact_id: form.id,
-              number: data.value,
-            });
+            contact_id: form.id,
+            number: data.value,
+          });
       setAlert({
         message: {
           severity: "success",

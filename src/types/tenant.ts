@@ -1,5 +1,5 @@
 export interface ITenant {
-  id: number;
+  id: string;
   first_name: string;
   last_name: string;
   registration_status: string;

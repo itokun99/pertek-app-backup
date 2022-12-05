@@ -20,24 +20,24 @@ const optionActionCell = (
   onClickDetail: (id: string, record: ITenant) => void
 ) => {
   // you can abstract your record interface here
-  const { contact_id } = record || {};
+  const { id } = record || {};
   console.log("optionActionCell ==>", record);
   const options: IActionCellButtonProperties["options"] = [
     {
       label: "Detail",
       icon: <OpenInFullSharpIcon />,
-      onClick: () => onClickDetail(contact_id, record),
+      onClick: () => onClickDetail(id, record),
     },
     {
       label: "Edit",
       icon: <ModeEditOutlineOutlinedIcon />,
-      onClick: () => onClickEdit(contact_id, record),
+      onClick: () => onClickEdit(id, record),
     },
     {
       label: "Delete",
       icon: <DeleteOutlineOutlinedIcon />,
       color: "error",
-      onClick: () => onClickDelete(contact_id),
+      onClick: () => onClickDelete(id),
     },
   ];
 

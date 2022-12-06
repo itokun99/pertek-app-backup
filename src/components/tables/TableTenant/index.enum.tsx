@@ -99,7 +99,10 @@ export function generateColumns(
 
         return (
           <>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{ display: "flex", alignItems: "center" }}
+              onClick={() => onClickDetail(record.id, record)}
+            >
               <Avatar sx={{ backgroundColor: avatar.color }}>{avatar.name}</Avatar>
               <Box sx={{ ml: 1 }}>
                 <Link href={`#`} color={theme.palette.text.primary}>

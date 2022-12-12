@@ -10,11 +10,17 @@ import { Add, Cached } from "@mui/icons-material";
 import { Grid, useTheme } from "@mui/material";
 import { IFacility } from "@types";
 import React, { ReactElement, Suspense, useMemo } from "react";
+import { useRouter } from 'next/router'
+
 import { DetailViewFacility } from "./details";
 import { FacilityCard } from "./FacilityCardItem";
 import useFacility from "./hooks/useFacility";
 
 const FacilityView = (): ReactElement => {
+
+
+  const router = useRouter();
+
   const {
     facilities,
     currentFacility,
@@ -92,7 +98,13 @@ const FacilityView = (): ReactElement => {
   );
 
   const handleOpenDetail = (facility: IFacility | null) => {
-    setCurrentFacility(facility);
+    // setCurrentFacility(facility);
+    router.push({
+      pathname: '/fasilitas/[facility_id]',
+      query: {
+        facility_id: facility?.id || ''
+      }
+    });
   };
 
   const handleDelete = (id: string) => {

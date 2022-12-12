@@ -11,7 +11,6 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { Theme } from "@mui/material";
 import OpenInFullSharpIcon from "@mui/icons-material/OpenInFullSharp";
 
-
 const optionActionCell = (
   record: IContactStaffEntities,
   onClickEdit: (id: number, record: IContactStaffEntities) => void,
@@ -59,7 +58,10 @@ export function generateColumns(
 
         return (
           <>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{ display: "flex", alignItems: "center" }}
+              onClick={() => onClickDetail(record.id)}
+            >
               <Avatar sx={{ backgroundColor: avatar.color }}>{avatar.name}</Avatar>
               <Box sx={{ ml: 1 }}>
                 <Link href={`#`} color={theme.palette.text.primary}>
@@ -111,7 +113,11 @@ export function generateColumns(
       selector: "action",
       align: "right",
       render: (_text, record: IContactStaffEntities) => {
-        return <ActionCellButton options={optionActionCell(record, onClickEdit, onClickDelete, onClickDetail)} />;
+        return (
+          <ActionCellButton
+            options={optionActionCell(record, onClickEdit, onClickDelete, onClickDetail)}
+          />
+        );
       },
     },
   ] as ColumnType[];

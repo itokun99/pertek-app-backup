@@ -3,8 +3,7 @@ import dynamic from 'next/dynamic';
 import { ReactElement } from 'react';
 
 const FasilitasView = dynamic(() => import('../../src/views/FacilityView'), {
-  ssr: false,
-  suspense: true,
+  ssr: false
 });
 
 const FasilitasPage = () => <FasilitasView />;

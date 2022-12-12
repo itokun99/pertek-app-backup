@@ -6,7 +6,7 @@ import { TableBooking } from "@components/tables/TableBooking";
 import useConfirmation from "@hooks/useConfirmation";
 import { IBooking } from "@types";
 import { useRouter } from "next/router";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useMemo, useState, useEffect } from "react";
 import useBooking from "./hooks/useBooking";
 import Section from "@components/views/Section";
 import dynamic from "next/dynamic";
@@ -136,6 +136,8 @@ const BookingTableView = () => {
     setTabIndex(value);
     const { query } = router;
     const queryPamaramaters = { ...query };
+    console.log("queryPamaramaters", queryPamaramaters);
+    const facility_id = queryPamaramaters?.facility_id || '';
     queryPamaramaters.status = (value as string) || "";
 
     Object.entries(queryPamaramaters).forEach(([queryKey]) => {
@@ -144,7 +146,8 @@ const BookingTableView = () => {
       }
     });
 
-    router.push({ query: { ...queryPamaramaters } }, undefined, { shallow: true });
+
+    router.push({ pathname: '/fasilitas/[facility_id]', query: { ...queryPamaramaters, facility_id } }, undefined, { shallow: true });
   };
 
   const handleClose = (): void => {
@@ -189,6 +192,16 @@ const BookingTableView = () => {
 
     await insert(payload);
   };
+
+  useEffect(() => {
+    if (Boolean(router?.query?.status)) {
+      setTabIndex(String(router.query.status))
+    } else {
+      setTabIndex("");
+
+    }
+  }, [router?.query?.status])
+
 
   return (
     <>
@@ -250,7 +263,7 @@ const BookingTableView = () => {
           visible={modalControll.addBooking}
           onClose={handleClose}
           form={form}
-          // formError={formError}
+        // formError={formError}
         />
       </Suspense>
     </>

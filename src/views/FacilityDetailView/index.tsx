@@ -55,6 +55,8 @@ const FacilityDetailView = (): ReactElement => {
           title="Detail Fasilitas"
           description="Kelola fasilitas properti Anda"
           actionButton={<ActionButton buttons={actionButtons} />}
+          backButton
+          backUrl={'/fasilitas' as unknown as URL}
         >
           <DetailViewFacility facility={facilities} />
         </Section>

@@ -19,7 +19,7 @@ interface IDetailDialogProps {
   dialogTitle: string;
   title: string;
   thumbnail: string;
-  datas: { label: string; value: string }[];
+  datas: { label: string; value: string | React.ReactElement }[];
   onClose: () => void;
 }
 

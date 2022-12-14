@@ -10,28 +10,8 @@ import useFacility from "./hooks/useFacility";
 const FacilityDetailView = (): ReactElement => {
   const {
     facilities,
-    currentFacility,
-    isError,
-    isLoading,
-    isReady,
     reload,
-    isValidating,
-    setCurrentFacility,
-    formFacility,
-    inquiry,
-    loadingForm
   } = useFacility();
-
-  const tabs = useMemo(
-    () =>
-      [
-        {
-          text: "All",
-          color: "default",
-        },
-      ] as TabItem[],
-    []
-  );
 
   const actionButtons: MyAnimatedButtonProps[] = useMemo(() => {
     return [
@@ -43,10 +23,6 @@ const FacilityDetailView = (): ReactElement => {
       },
     ];
   }, [reload]);
-
-  console.log("facilities ===>", facilities);
-
-
 
   return (
     <>

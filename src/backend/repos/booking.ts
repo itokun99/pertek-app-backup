@@ -11,6 +11,13 @@ export async function getBooking(req: NextApiRequest): Promise<[Response, ApiRes
   return [response, responseBody];
 }
 
+export async function getBookingById(req: NextApiRequest): Promise<[Response, IBooking & { message: string }]> {
+  const { id } = req.query;
+  const response = await apiRequest({ req, url: `${Endpoint.Booking}/${id}`, method: 'GET' });
+  const responseBody: IBooking & { message: string } = await response.json();
+  return [response, responseBody];
+}
+
 export async function createBooking(req: NextApiRequest): Promise<[Response, ApiResponseType<IBooking>]> {
   const apiResponse = await apiRequest({
     req,

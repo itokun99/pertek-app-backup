@@ -4,7 +4,7 @@ import { ReactElement, Suspense } from "react";
 
 const BookingView = dynamic(() => import("@views/BookingView"), {
   ssr: false,
-  suspense: true,
+  suspense: false,
 });
 
 const FacilityBookingPage = () => {

@@ -1,12 +1,13 @@
-import { BaseType } from './base';
-import { IContact } from './contact';
-import { IFacilityCategory } from './facility';
+import { BaseType } from "./base";
+import { IContact, IContactDetail } from "./contact";
+import { IFacilityCategory } from "./facility";
 
 export interface IFacilityAssistant extends BaseType {
   id: number;
   profile: IContact;
   facility_category: IFacilityCategory;
   shifts: IFacilityAssistantShift[];
+  contact: IContactDetail;
 }
 
 export interface IFacilityAssistantShift {

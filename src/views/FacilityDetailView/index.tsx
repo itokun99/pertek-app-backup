@@ -8,30 +8,7 @@ import { DetailViewFacility } from "./details";
 import useFacility from "./hooks/useFacility";
 
 const FacilityDetailView = (): ReactElement => {
-  const {
-    facilities,
-    currentFacility,
-    isError,
-    isLoading,
-    isReady,
-    reload,
-    isValidating,
-    setCurrentFacility,
-    formFacility,
-    inquiry,
-    loadingForm
-  } = useFacility();
-
-  const tabs = useMemo(
-    () =>
-      [
-        {
-          text: "All",
-          color: "default",
-        },
-      ] as TabItem[],
-    []
-  );
+  const { facilities, reload } = useFacility();
 
   const actionButtons: MyAnimatedButtonProps[] = useMemo(() => {
     return [
@@ -44,10 +21,6 @@ const FacilityDetailView = (): ReactElement => {
     ];
   }, [reload]);
 
-  console.log("facilities ===>", facilities);
-
-
-
   return (
     <>
       <Suspense>
@@ -55,6 +28,8 @@ const FacilityDetailView = (): ReactElement => {
           title="Detail Fasilitas"
           description="Kelola fasilitas properti Anda"
           actionButton={<ActionButton buttons={actionButtons} />}
+          backButton
+          backUrl={"/fasilitas"}
         >
           <DetailViewFacility facility={facilities} />
         </Section>

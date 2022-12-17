@@ -39,6 +39,8 @@ const FacilityDetailView = (): ReactElement => {
           title="Detail Assistant"
           description="Detai data assistant"
           actionButton={<ActionButton buttons={actionButtons} />}
+          backButton
+          backUrl="/fasilitas-asisten"
         >
           {assistant && <Detail assistant={assistant} />}
         </Section>

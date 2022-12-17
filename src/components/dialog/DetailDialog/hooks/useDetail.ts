@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export interface IDetailState {
   title: string;
   thumbnail: string;
   datas: {
     label: string;
-    value: string;
+    value: string | React.ReactElement;
   }[];
 }
 

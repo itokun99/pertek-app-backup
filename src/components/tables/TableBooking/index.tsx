@@ -9,6 +9,8 @@ import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined
 import { fDateTime } from "@utils/formatTime";
 import { Avatar, Box, Stack, Theme, Typography, useTheme } from "@mui/material";
 import Label from "@components/Label";
+import OpenInFullSharpIcon from "@mui/icons-material/OpenInFullSharp";
+
 
 import Link from "next/link";
 
@@ -18,16 +20,23 @@ export interface TableBookingProps {
   totalData: number;
   onEdit: (id: number, record: IBooking) => void;
   onDelete: (id: number) => void;
+  onClickDetail: (id: number) => void;
 }
 
 const optionActionCell = (
   record: IBooking,
   onEdit: (id: number, record: IBooking) => void,
-  onDelete: (id: number) => void
+  onDelete: (id: number) => void,
+  onClickDetail: (id: number) => void,
 ) => {
   // you can abstract your record interface here
   const { id } = record || {};
   const options: IActionCellButtonProperties["options"] = [
+    {
+      label: "Detail",
+      icon: <OpenInFullSharpIcon />,
+      onClick: () => onClickDetail(id),
+    },
     {
       label: "Update Status",
       icon: <ModeEditOutlineOutlinedIcon />,
@@ -88,6 +97,7 @@ function getAvatarBgColor(status: string, theme: Theme) {
 function generateColumns(
   onEdit: (id: number, record: IBooking) => void,
   onDelete: (id: number) => void,
+  onClickDetail: (id: number) => void,
   theme: Theme
 ): ColumnType[] {
   return [
@@ -157,7 +167,7 @@ function generateColumns(
       selector: "action",
       align: "right",
       render: (_text, record: IBooking) => {
-        return <ActionCellButton options={optionActionCell(record, onEdit, onDelete)} />;
+        return <ActionCellButton options={optionActionCell(record, onEdit, onDelete, onClickDetail)} />;
       },
     },
   ] as ColumnType[];
@@ -169,11 +179,12 @@ export const TableBooking = ({
   data,
   isLoading,
   totalData,
+  onClickDetail
 }: TableBookingProps) => {
   const theme = useTheme();
   return (
     <BaseTable
-      columns={generateColumns(onEdit, onDelete, theme)}
+      columns={generateColumns(onEdit, onDelete, onClickDetail, theme)}
       field={data}
       loading={isLoading}
       withPagination

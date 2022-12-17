@@ -8,6 +8,7 @@ export interface IFacilityAssistant extends BaseType {
   facility_category: IFacilityCategory;
   shifts: IFacilityAssistantShift[];
   contact: IContactDetail;
+  staff_code: string;
 }
 
 export interface IFacilityAssistantShift {

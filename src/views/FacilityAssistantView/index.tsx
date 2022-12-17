@@ -8,6 +8,7 @@ import useConfirmation from "@hooks/useConfirmation";
 import { Add } from "@mui/icons-material";
 import { IFacilityAssistant } from "@types";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { ReactElement, Suspense, useMemo } from "react";
 import useFacilityAssistant from "./hooks/useFacilityAssistant";
 
@@ -20,6 +21,8 @@ const TableFacilityAssistantView = dynamic(
 );
 
 const FacilityAssitantView = (): ReactElement => {
+  const router = useRouter();
+
   const {
     assistants,
     remove,
@@ -66,7 +69,13 @@ const FacilityAssitantView = (): ReactElement => {
   };
 
   const handleOpenDetail = (assistant: IFacilityAssistant) => {
-    setCurrentFacilityAssistant(assistant);
+    // setCurrentFacilityAssistant(assistant);
+    router.push({
+      pathname: "/fasilitas-asisten/[assistant_id]",
+      query: {
+        assistant_id: assistant.id,
+      },
+    });
   };
 
   const handleSelectChange = (name: string, value: any) => {

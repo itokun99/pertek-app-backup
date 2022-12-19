@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { isInvalidSession, unauthorized } from '../../lib/apiAuthHelpers';
-import { createBooking, deleteBooking, getBooking, updateBooking, updateStatusBooking } from '../repos/booking';
+import { createBooking, deleteBooking, getBooking, getBookingById, updateBooking, updateStatusBooking } from '../repos/booking';
 import { createController } from './base';
 
 async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
@@ -8,13 +8,13 @@ async function handlerGet(req: NextApiRequest, res: NextApiResponse) {
     return unauthorized(res);
   }
 
-  const [response, payload] = await getBooking(req);
+  const [response, payload] = req.query?.id ? await getBookingById(req) : await getBooking(req);
 
   if (!response.ok) {
     return res.status(response.status).json({ message: payload.message });
   }
 
-  return res.status(response.status).json(payload);
+  return res.status(200).json(payload);
 }
 
 async function handlerPost(req: NextApiRequest, res: NextApiResponse) {

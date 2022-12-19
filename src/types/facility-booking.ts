@@ -19,4 +19,7 @@ export interface IBooking extends BaseType {
   start: number;
   end: number;
   status: string;
+  price: number;
+  penalty: number;
+  slot_date: string;
 }

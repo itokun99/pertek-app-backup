@@ -1,106 +1,141 @@
-import ActionButton from '@components/buttons/ActionButton';
-import { MyAnimatedButtonProps } from '@components/buttons/AnimatedButton';
-import { TabItem } from '@components/TabBar';
-import Section from '@components/views/Section';
-import { Add } from '@mui/icons-material';
-import { Card, CardActionArea, Grid, Typography, useTheme } from '@mui/material';
-import { IFacilityAssistant } from '@types';
-import dynamic from 'next/dynamic';
-import { ChangeEvent, ReactElement, Suspense, SyntheticEvent, useMemo, useState } from 'react';
-import { DetailViewFacilityAssistant } from './details';
-import { FacilityAssistantCard } from './FacilityAssistantCardItem';
-import useFacilityAssistant from './hooks/useFacilityAssistant';
+import ActionButton from "@components/buttons/ActionButton";
+import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
+import Confirmation from "@components/dialog/Confirmation";
+import FormFacilityAsisten from "@components/dialog/ModalFacilityAsisten/FormFacilityAsisten";
+import { TabItem } from "@components/TabBar";
+import Section from "@components/views/Section";
+import useConfirmation from "@hooks/useConfirmation";
+import { Add } from "@mui/icons-material";
+import { IFacilityAssistant } from "@types";
+import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { ReactElement, Suspense, useMemo } from "react";
+import useFacilityAssistant from "./hooks/useFacilityAssistant";
 
-const TableFacilityAssistantView = dynamic(() => import('@components/tables/TableFacilityAssistant'), {
-  ssr: false,
-  suspense: true,
-});
+const TableFacilityAssistantView = dynamic(
+  () => import("@components/tables/TableFacilityAssistant"),
+  {
+    ssr: false,
+    suspense: true,
+  }
+);
 
 const FacilityAssitantView = (): ReactElement => {
+  const router = useRouter();
+
   const {
     assistants,
-    currentFacilityAssistant,
-    isError,
-    isLoading,
-    isReady,
-    reload,
-    isValidating,
+    remove,
+    inquiry,
     setCurrentFacilityAssistant,
+    onSubmit,
+    // modal
+    modalControll,
+    setModalControll,
+    resetModalControll,
+    // form
+    form,
+    setForm,
+    resetForm,
   } = useFacilityAssistant();
-
-  const tabs = useMemo(
-    () =>
-      [
-        {
-          text: 'All',
-          color: 'default',
-        },
-      ] as TabItem[],
-    []
-  );
 
   const actionButtons: MyAnimatedButtonProps[] = useMemo(() => {
     return [
       {
-        title: 'Asisten Fasilitas',
-        color: 'info',
+        title: "Asisten Fasilitas",
+        color: "info",
         startIcon: <Add />,
-        onClick: () => {},
+        onClick: () => setModalControll("formFacilityAsisten", true),
       },
     ];
   }, []);
 
-  const [searchKeyword, setSearchKeyword] = useState('');
-  const [tabIndex, setTabIndex] = useState(0);
+  const {
+    content: deleteConfirmation,
+    handler: deleteConfirmationHandler,
+    visibility: deleteConfirmationVisibility,
+  } = useConfirmation<number>(
+    {
+      title: "Konfirmasi Hapus",
+      description: "Apakah kamu yakin ingin menghapus item ini?",
+      cancelText: "Kembali",
+      confirmText: "Ya",
+    },
+    0
+  );
 
-  const theme = useTheme();
-
-  const handleChangeSearch = (e: ChangeEvent<HTMLInputElement>): void => {
-    setSearchKeyword(e.target.value);
-  };
-
-  const handleTabChange = (e: SyntheticEvent<Element, Event>, value: number | string): void => {
-    const index = typeof value === 'string' ? parseInt(value) : value;
-    setTabIndex(index);
-  };
-
-  const handleEdit = (id: number, record: IFacilityAssistant): void => {
-    console.log(id);
+  const handleEdit = (id: string): void => {
+    inquiry(id);
   };
 
   const handleOpenDetail = (assistant: IFacilityAssistant) => {
-    setCurrentFacilityAssistant(assistant);
+    // setCurrentFacilityAssistant(assistant);
+    router.push({
+      pathname: "/fasilitas-asisten/[assistant_id]",
+      query: {
+        assistant_id: assistant.id,
+      },
+    });
   };
 
-  const handleDelete = (id: number) => {};
-
-  const handleCloseDetail = () => {
-    setCurrentFacilityAssistant(null);
+  const handleSelectChange = (name: string, value: any) => {
+    setForm(name, value);
   };
 
-  console.log('currentFacilityAssistant', assistants);
+  const handleDelete = (id: number) => {
+    deleteConfirmationHandler.open();
+    deleteConfirmationHandler.setState(id);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteConfirmationHandler.confirm().then((id) => remove(id));
+  };
+
+  const handleCloseModal = () => {
+    resetModalControll();
+    resetForm();
+  };
 
   return (
     <>
       <Suspense>
         <Section
-          title='Asisten Fasilitas'
-          description='Kelola asisten fasilitas properti Anda'
+          title="Asisten Fasilitas"
+          description="Kelola asisten fasilitas properti Anda"
           actionButton={<ActionButton buttons={actionButtons} />}
         >
-          {assistants && (
-            <Grid container spacing={2}>
-              {assistants.map((assistant) => (
-                <FacilityAssistantCard assistant={assistant} onClick={handleOpenDetail} key={assistant.id} />
-              ))}
-            </Grid>
-          )}
+          <TableFacilityAssistantView
+            assistants={assistants}
+            onDelete={handleDelete}
+            onEdit={handleEdit}
+            openDetail={handleOpenDetail}
+          />
         </Section>
       </Suspense>
       <Suspense>
-        {currentFacilityAssistant && (
-          <DetailViewFacilityAssistant assistant={currentFacilityAssistant} onClose={handleCloseDetail} />
-        )}
+        <FormFacilityAsisten
+          visible={modalControll.formFacilityAsisten}
+          edit={false}
+          loading={false}
+          onClose={handleCloseModal}
+          form={form}
+          onInputChange={() => {}}
+          onSelectChange={handleSelectChange}
+          onSubmit={onSubmit}
+        />
+      </Suspense>
+
+      <Suspense>
+        <Confirmation
+          open={deleteConfirmationVisibility}
+          title={deleteConfirmation.title}
+          description={deleteConfirmation.description}
+          cancelText={deleteConfirmation.cancelText}
+          confirmText={deleteConfirmation.confirmText}
+          onClose={deleteConfirmationHandler.close}
+          onCancel={deleteConfirmationHandler.cancel}
+          onConfirm={handleConfirmDelete}
+        />
       </Suspense>
     </>
   );

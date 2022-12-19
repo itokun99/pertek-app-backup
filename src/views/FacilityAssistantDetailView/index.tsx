@@ -4,11 +4,22 @@ import { TabItem } from "@components/TabBar";
 import Section from "@components/views/Section";
 import Cached from "@mui/icons-material/Cached";
 import React, { ReactElement, Suspense, useMemo } from "react";
-import { DetailViewFacility } from "./details";
-import useFacility from "./hooks/useFacility";
+import Detail from "./components/Detail";
+import useAssistantDetail from "./hooks/useAssitantDetail";
 
 const FacilityDetailView = (): ReactElement => {
-  const { facilities, reload } = useFacility();
+  const { assistant, isError, isLoading, isReady, isValidating, reload } = useAssistantDetail();
+
+  const tabs = useMemo(
+    () =>
+      [
+        {
+          text: "All",
+          color: "default",
+        },
+      ] as TabItem[],
+    []
+  );
 
   const actionButtons: MyAnimatedButtonProps[] = useMemo(() => {
     return [
@@ -25,13 +36,13 @@ const FacilityDetailView = (): ReactElement => {
     <>
       <Suspense>
         <Section
-          title="Detail Fasilitas"
-          description="Kelola fasilitas properti Anda"
+          title="Detail Assistant"
+          description="Detai data assistant"
           actionButton={<ActionButton buttons={actionButtons} />}
           backButton
-          backUrl={"/fasilitas"}
+          backUrl="/fasilitas-asisten"
         >
-          <DetailViewFacility facility={facilities} />
+          {assistant && <Detail assistant={assistant} />}
         </Section>
       </Suspense>
     </>

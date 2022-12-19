@@ -1,23 +1,25 @@
-import { swrConfig } from '@config/swrConfig';
+import { IForm } from "@components/dialog/ModalFacilityAsisten/FormFacilityAsisten";
+import { swrConfig } from "@config/swrConfig";
+import useForm from "@hooks/useForm";
 import {
   createFacilityAssistant,
   deleteFacilityAssistant,
   ICreateFacilityAssitantPayload,
   updateFacilityAssistant,
-} from '@service/facility-assistant';
-import { useRouter } from 'next/router';
-import { useContext, useEffect, useState } from 'react';
-import useSWR from 'swr';
-import { ApiProxyEndpoint } from '../../../config/apiProxyEndpoint';
-import { fetchData, FetcherResponseError } from '../../../lib/dataFetcher';
-import { AlertContext } from '../../../provider/AlertProvider';
-import { ApiResponseType, IFacilityAssistant } from '../../../types';
-import { createUrlParamFromObj } from '../../../utils/helper';
+  getFacilityAssitantsById,
+} from "@service/facility-assistant";
+import { useRouter } from "next/router";
+import { useContext, useEffect, useState } from "react";
+import useSWR from "swr";
+import { ApiProxyEndpoint } from "@config/apiProxyEndpoint";
+import { fetchData, FetcherResponseError } from "@lib/dataFetcher";
+import { AlertContext } from "../../../provider/AlertProvider";
+import { ApiResponseType, IFacilityAssistant } from "@types";
+import { createUrlParamFromObj } from "@utils/helper";
 
 export interface IUseFacilityAssistant {
-  insert: (payload: ICreateFacilityAssitantPayload) => Promise<void>;
   remove: (id: number) => Promise<void>;
-  update: (id: number, payload: ICreateFacilityAssitantPayload) => Promise<void>;
+  inquiry: (id: string) => Promise<IFacilityAssistant | null | undefined>;
   reload: () => void;
   setCurrentFacilityAssistant: (assistant: IFacilityAssistant | null) => void;
   currentFacilityAssistant: IFacilityAssistant | null;
@@ -27,6 +29,18 @@ export interface IUseFacilityAssistant {
   isValidating: boolean;
   isLoading: boolean;
   isError: boolean;
+  onSubmit: () => void;
+  //form facility assistant
+  form: IForm;
+  setForm: <T>(field: string, value: T) => void;
+  resetForm: () => void;
+
+  // modal
+  setModalControll: <T>(field: string, value: T) => void;
+  resetModalControll: () => void;
+  modalControll: {
+    formFacilityAsisten: boolean;
+  };
 }
 
 export default function useFacilityAssistant(): IUseFacilityAssistant {
@@ -45,12 +59,23 @@ export default function useFacilityAssistant(): IUseFacilityAssistant {
     isValidating,
   } = useSWR(
     `${BASE_URL}${paramString}`,
-    (url) => fetchData<ApiResponseType<IFacilityAssistant[]>>(url, { method: 'GET' }),
+    (url) => fetchData<ApiResponseType<IFacilityAssistant[]>>(url, { method: "GET" }),
     swrConfig
   );
 
   const [isReady, setIsReady] = useState<boolean>(false);
-  const [currentFacilityAssistant, setCurrentFacilityAssistant] = useState<IFacilityAssistant | null>(null);
+  const [modalControll, setModalControll, resetModalControll] = useForm({
+    formFacilityAsisten: false,
+  });
+  const [form, setForm, resetForm, setBulkForm] = useForm<IForm>({
+    id: "",
+    category: null,
+    staff: null,
+  });
+  const [loadingForm, setLoadingForm] = useState<boolean>(false);
+
+  const [currentFacilityAssistant, setCurrentFacilityAssistant] =
+    useState<IFacilityAssistant | null>(null);
 
   const assistants = responseData?.data?.items || [];
   const isLoading = !responseData;
@@ -59,22 +84,29 @@ export default function useFacilityAssistant(): IUseFacilityAssistant {
 
   const insert = async (payload: ICreateFacilityAssitantPayload) => {
     createFacilityAssistant(payload)
-      .then(() => {
+      .then((res) => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil menambahkan Asisten Fasilitas`,
           },
         });
         mutate();
+        resetModalControll();
+        resetForm();
+        setLoadingForm(false);
+        return res;
       })
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err.message || '',
+            severity: "error",
+            content: err.message || "",
           },
         });
+      })
+      .finally(() => {
+        setLoadingForm(false);
       });
   };
 
@@ -84,7 +116,7 @@ export default function useFacilityAssistant(): IUseFacilityAssistant {
       .then(() => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil menghapus Asisten Fasilitas`,
           },
         });
@@ -93,36 +125,85 @@ export default function useFacilityAssistant(): IUseFacilityAssistant {
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
+      })
+      .finally(() => {
+        setLoadingForm(false);
       });
   };
 
-  const update = async (id: number, payload: ICreateFacilityAssitantPayload) => {
-    updateFacilityAssistant(id, payload)
-      .then(() => {
+  const update = async (payload: ICreateFacilityAssitantPayload) => {
+    updateFacilityAssistant(form.id, payload)
+      .then((res) => {
         setAlert({
           message: {
-            severity: 'success',
+            severity: "success",
             content: `Berhasil mengedit asisten Fasilitas`,
           },
         });
         mutate();
+        resetModalControll();
+        resetForm();
+        setLoadingForm(false);
+        return res;
       })
       .catch((err: FetcherResponseError) => {
         setAlert({
           message: {
-            severity: 'error',
-            content: err?.message || '',
+            severity: "error",
+            content: err?.message || "",
           },
         });
+      })
+      .finally(() => {
+        setLoadingForm(false);
       });
+  };
+
+  const inquiry = async (id: string): Promise<IFacilityAssistant | null | undefined> => {
+    try {
+      setModalControll("formFacilityAsisten", true);
+      const data = await getFacilityAssitantsById(id);
+      if (data) {
+        setBulkForm({
+          id: String(data.id),
+          category: {
+            value: String(data.facility_category.id),
+            label: data.facility_category.name,
+          },
+          staff: {
+            value: String(data.contact.id),
+            label: data.contact.first_name + " " + data.contact.last_name,
+          },
+        });
+      }
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: "error",
+          content: error?.message || "Terjadi kesalahan",
+        },
+      });
+      setModalControll("formFacilityAsisten", false);
+      return null;
+    }
   };
 
   const reload = (): void => {
     mutate();
+  };
+
+  const onSubmit = () => {
+    const payload = {
+      staff_id: String(form.staff?.value),
+      facility_category_id: String(form.category?.value),
+    };
+
+    form.id ? update(payload) : insert(payload);
   };
 
   useEffect(() => {
@@ -133,16 +214,24 @@ export default function useFacilityAssistant(): IUseFacilityAssistant {
 
   return {
     meta,
-    insert,
     remove,
-    update,
     setCurrentFacilityAssistant,
     currentFacilityAssistant,
     assistants,
     reload,
+    inquiry,
     isLoading,
     isReady,
     isValidating,
     isError,
+    onSubmit,
+    // form facility assistant
+    form,
+    setForm,
+    resetForm,
+    // modal
+    modalControll,
+    setModalControll,
+    resetModalControll,
   };
 }

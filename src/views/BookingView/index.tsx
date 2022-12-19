@@ -2,7 +2,9 @@ import CardTable from "@components/cards/CardTable";
 import Confirmation from "@components/dialog/Confirmation";
 import FormStatusBooking from "@components/dialog/ModalBooking/FormStatusBooking";
 import { TabItem } from "@components/TabBar";
-import { TableBooking } from "@components/tables/TableBooking";
+import { TableBooking, createBookingLabel } from "@components/tables/TableBooking";
+import DetailDialog from "@components/dialog/DetailDialog";
+import useDetail from "@components/dialog/DetailDialog/hooks/useDetail";
 import useConfirmation from "@hooks/useConfirmation";
 import { IBooking } from "@types";
 import { useRouter } from "next/router";
@@ -14,6 +16,8 @@ import { MyAnimatedButtonProps } from "@components/buttons/AnimatedButton";
 import Add from "@mui/icons-material/Add";
 import Cached from "@mui/icons-material/Cached";
 import FormBooking from "@components/dialog/ModalBooking/FormBooking";
+import { fDateTime } from "@utils/formatTime";
+
 
 const ActionButton = dynamic(() => import("@components/buttons/ActionButton"), {
   ssr: false,
@@ -29,6 +33,7 @@ const BookingTableView = () => {
     isError,
     reload,
     insert,
+    inquiry,
     // modal state
     setModalControll,
     modalControll,
@@ -85,6 +90,10 @@ const BookingTableView = () => {
   const [tabIndex, setTabIndex] = useState<string | number>("");
   const [searchKeyword, setSearchKeyword] = useState("");
   const [selectedBooking, setSelectedBooking] = useState<IBooking | null>(null);
+
+  const [showDetail, setShowDetail] = useState(false);
+  const [loadingDetail, setLoadingDetail] = useState(false);
+  const { detail, setDetail, removeDetail } = useDetail();
 
   const actionButton: Array<MyAnimatedButtonProps> = [
     {
@@ -153,6 +162,88 @@ const BookingTableView = () => {
   const handleClose = (): void => {
     resetModalControll();
     resetForm();
+  };
+
+  const handleCloseDetail = () => {
+    setShowDetail(false);
+    removeDetail();
+  };
+
+  const handleClickDetail = (id: number) => {
+    setShowDetail(true);
+    setLoadingDetail(true);
+
+    // console.log("id ==>", id);
+
+    inquiry(String(id))
+      .then((data) => {
+        setLoadingDetail(false);
+        console.log("data booking ==>", data);
+
+        if (data?.id === 0) {
+          // console.log("error data ==>", data);
+          return;
+        }
+
+        setDetail({
+          title: data?.code || '-',
+          thumbnail: data?.facility?.pictures?.length && data?.facility?.pictures?.length > 0 ? data?.facility.pictures[0] : "",
+          datas: [
+            {
+              label: "Kode Booking",
+              value: data?.code || '-'
+            },
+            {
+              label: "Status",
+              value: data?.status || '-'
+            },
+            {
+              label: "Deskripsi",
+              value: data?.description || '-'
+            },
+            // {
+            //   label: "Pemesan",
+            //   value: data?.contact ? `${data.contact.first_name} ${data?.contact.last_name}` : '-'
+            // },
+            {
+              label: "Tanggal Booking",
+              value: data?.created_at ? fDateTime(data.created_at as unknown as string) : '-'
+            },
+            {
+              label: "Tanggal Penggunaan",
+              value: `${data?.start ? fDateTime(data.start as unknown as string) : ''} - ${data?.end ? fDateTime(data.end as unknown as string) : ''}`
+            },
+            {
+              label: "Status",
+              value: data?.status ? createBookingLabel(data.status) : '-'
+            },
+            {
+              label: "Harga",
+              value: String(data?.price)
+            },
+            {
+              label: "Tanggal Slot",
+              value: data?.slot_date || '-'
+            },
+            {
+              label: "Penalti",
+              value: String(data?.penalty)
+            },
+            {
+              label: "Kode Fasilitas",
+              value: data?.facility?.code || '-'
+            },
+            {
+              label: "Nama Fasilitas",
+              value: data?.facility?.name || '-'
+            }
+          ]
+        });
+      })
+      .catch((err) => {
+        setLoadingDetail(false);
+        console.log("error tenant ==>", err);
+      });
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -228,6 +319,8 @@ const BookingTableView = () => {
             isLoading={isLoading}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onClickDetail={handleClickDetail}
+
           />
         </CardTable>
       </Section>
@@ -266,6 +359,16 @@ const BookingTableView = () => {
         // formError={formError}
         />
       </Suspense>
+
+      <DetailDialog
+        title={detail.title}
+        loading={false}
+        dialogTitle="Detail Booking"
+        thumbnail={detail.thumbnail}
+        datas={detail.datas}
+        visible={showDetail}
+        onClose={handleCloseDetail}
+      />
     </>
   );
 };

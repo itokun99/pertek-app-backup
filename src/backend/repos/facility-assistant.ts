@@ -1,16 +1,33 @@
-import { NextApiRequest } from 'next';
-import { Endpoint } from '../../config/apiEndpoint';
-import { apiRequest } from '../../lib/apiCall';
-import { createRequestParams } from '../../lib/urllib';
-import { ApiResponseType, IFacilityAssistant } from '@general-types';
+import { NextApiRequest } from "next";
+import { Endpoint } from "../../config/apiEndpoint";
+import { apiRequest } from "../../lib/apiCall";
+import { createRequestParams } from "../../lib/urllib";
+import { ApiResponseType, IFacilityAssistant } from "@general-types";
 
 export async function getFacilityAssistant(
   req: NextApiRequest
 ): Promise<[Response, ApiResponseType<IFacilityAssistant>]> {
   const params = createRequestParams(req.query);
-  const response = await apiRequest({ req, url: `${Endpoint.FacilityAssistant}?${params}`, method: 'GET' });
+  const response = await apiRequest({
+    req,
+    url: `${Endpoint.FacilityAssistant}?${params}`,
+    method: "GET",
+  });
   const responseBody: ApiResponseType<IFacilityAssistant> = await response.json();
 
+  return [response, responseBody];
+}
+
+export async function getFacilityAssistantById(
+  req: NextApiRequest
+): Promise<[Response, IFacilityAssistant & { message: string }]> {
+  const { id } = req.query;
+  const response = await apiRequest({
+    req,
+    url: `${Endpoint.FacilityAssistant}/${id}`,
+    method: "GET",
+  });
+  const responseBody: IFacilityAssistant & { message: string } = await response.json();
   return [response, responseBody];
 }
 
@@ -20,7 +37,7 @@ export async function createFacilityAssistant(
   const apiResponse = await apiRequest({
     req,
     url: Endpoint.FacilityAssistant,
-    method: 'POST',
+    method: "POST",
     body: req.body,
   });
   const responseBody = await apiResponse.json();
@@ -35,7 +52,7 @@ export async function updateFacilityAssistant(
   const apiResponse = await apiRequest({
     req,
     url: `${Endpoint.FacilityAssistant}/${id}`,
-    method: 'PUT',
+    method: "PUT",
     body: req.body,
   });
   const responseBody = await apiResponse.json();
@@ -50,7 +67,7 @@ export async function deleteFacilityAssistant(
   const apiResponse = await apiRequest({
     req,
     url: `${Endpoint.FacilityAssistant}/${id}`,
-    method: 'DELETE',
+    method: "DELETE",
   });
   const responseBody = await apiResponse.json();
 

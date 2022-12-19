@@ -11,6 +11,7 @@ import {
   ICreateBookingPayload,
   updateBooking,
   updateBookingState,
+  getBookingById,
 } from "@service/booking";
 import { ApiResponseType, IBooking } from "@types";
 import { createUrlParamFromObj } from "@utils/helper";
@@ -42,6 +43,7 @@ export interface IUseBooking {
   setForm: <T>(field: string, value: T) => void;
   resetForm: () => void;
   loadingForm: boolean;
+  inquiry: (id: string) => Promise<IBooking | null | undefined>;
 }
 
 export default function useBooking(): IUseBooking {
@@ -185,6 +187,22 @@ export default function useBooking(): IUseBooking {
       });
   };
 
+  const inquiry = async (id: string): Promise<IBooking | null | undefined> => {
+    try {
+      const data = await getBookingById(String(id));
+      return data;
+    } catch (err) {
+      const error = err as FetcherResponseError;
+      setAlert({
+        message: {
+          severity: 'error',
+          content: error?.message || 'Terjadi kesalahan',
+        },
+      });
+      return null;
+    }
+  };
+
   //   create reload function
   const reload = () => {
     mutate();
@@ -203,6 +221,7 @@ export default function useBooking(): IUseBooking {
     update,
     remove,
     reload,
+    inquiry,
     updateStatus,
     isError,
     isLoading,

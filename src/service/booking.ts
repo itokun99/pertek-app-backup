@@ -1,3 +1,4 @@
+import { IBooking } from "@general-types";
 import { ApiProxyEndpoint } from "../config/apiProxyEndpoint";
 import { fetchData } from "../lib/dataFetcher";
 
@@ -82,6 +83,18 @@ export async function updateBookingState(id: number, payload: IUpdateBookingStat
 export async function getBooking(payload: ICreateBookingPayload) {
   const { data, error } = await fetchData<{ message: string }>(BOOKING_URL, {
     body: JSON.stringify(payload),
+    method: "GET",
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+}
+
+export async function getBookingById(id: string): Promise<IBooking | undefined> {
+  const { data, error } = await fetchData<IBooking>(`${BOOKING_URL}?id=${id}`, {
     method: "GET",
   });
 
